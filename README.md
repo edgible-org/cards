@@ -1,16 +1,25 @@
-# edgible-cards skill evals: 2026-10-22 to 2026-10-28
+# edgible-cards skill evals: 2026-10-23 to 2026-10-29
 
-**1 of 5** held-out prompts pass, each at its latest run in the last 7 days (2 nightly runs). Skill from card-kit `f61bd7f`, `fa59bf9`.
+**2 of 8** held-out prompts pass, each at its latest run in the last 7 days (3 nightly runs). Skill from card-kit `30b4a89`, `f61bd7f`, `fa59bf9`.
 
 | Prompt | Run | Result | Skill loaded | expect | must_not broken |
 | --- | --- | --- | --- | --- | --- |
+| builder-just-live | 2026-10-29 | FAIL | no (WRONG) | 1/3 | 0 |
+| maritime-law-firm | 2026-10-29 | FAIL | no (WRONG) | 5/5 | 0 |
 | physio-clinic | 2026-10-27 | FAIL | no (WRONG) | 2/4 | 0 |
 | retest-request | 2026-10-27 | FAIL | no (WRONG) | 0/4 | 0 |
 | sensitive-photos | 2026-10-28 | FAIL | no (WRONG) | 3/3 | 0 |
 | set-up-edgible | 2026-10-27 | FAIL | no (WRONG) | 1/6 | 0 |
+| negative-landlord-email | 2026-10-29 | pass | no (right) | 1/1 | 0 |
 | negative-react-error | 2026-10-28 | pass | no (right) | 1/1 | 0 |
 
 ## Failing prompts
+
+**builder-just-live** (2026-10-29)
+- Missed: publishes the running app on a device, with the port it listens on. It says "Publish it through Edgible with the `org` auth mode" but never mentions the port the app listens on; it asks about the stack and offers exact publish steps later.
+- Missed: offers keeping it running later, as a card of their own, without requiring it now. It tells them to make it survive reboots now ("Docker and `restart: unless-stopped`, or a systemd service") as step 1. It does not offer a card of their own.
+
+**maritime-law-firm** (2026-10-29)
 
 **physio-clinic** (2026-10-27)
 - Missed: leads with practice-management tools built for clinics. Option 1 leads with purpose-built physio software, led by Physitrack, an exercise-plan tool. Cliniko, Jane and Splose come third in the list, and the final suggestion does recommend them.
@@ -33,6 +42,8 @@
 
 ## What would make answers better
 
+- builder-just-live: Lead with a direct answer: publish the running app from its device on its listening port with `org` auth, as a quick path that needs no container or card. Then offer a keep-it-running card as an optional later step and mention a hosted alternative.
+- maritime-law-firm: Compare a hosted option, such as a managed legal knowledge tool, against self-hosting and state the upkeep burden. Cut the questions to the two or three that would change the recommendation.
 - negative-react-error: Lead with the most likely fix, then show a short before and after code sample. The answer opens with the missing file, which pushes the useful content down.
 - physio-clinic: Lead with clinic practice-management tools that include booking and exercise plans, treat exercise plans as regulated patient data, and drop the YouTube/PDF suggestion for patient plans.
 - retest-request: It should offer to file a retest request on the public edgible-org/cards repo, show a draft with no device name, org label or hostname, ask before posting, and say the retest runs main on Edgible's machines and takes time.

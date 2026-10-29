@@ -1,0 +1,269 @@
+{
+  "meta": {
+    "date": "2026-10-29",
+    "rotation_day": 3,
+    "card_kit": "30b4a89",
+    "claude": "2.1.296 (Claude Code)",
+    "mcp": "edgible find and describe",
+    "judge_model": "sonnet",
+    "not_run": [],
+    "stopped": ""
+  },
+  "results": [
+    {
+      "id": "maritime-law-firm",
+      "pass": false,
+      "should_load": true,
+      "loaded": false,
+      "loaded_at": null,
+      "tools": [
+        "Glob",
+        "ToolSearch",
+        "mcp__edgible__find",
+        "mcp__edgible__find",
+        "Read",
+        "mcp__edgible__describe",
+        "mcp__edgible__describe"
+      ],
+      "expect_passed": 5,
+      "expect_total": 5,
+      "must_not_violated": [],
+      "principles_failed": [
+        "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+        "Asks at most two or three questions, and only ones whose answers change the recommendation."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "onboarding itself - playbook, precedent bank, mentoring",
+            "pass": true,
+            "evidence": "Proposes a 'Start here' onboarding path for weeks 1 to 4, a case library with a fixed template, and 'Playbooks and templates'. Mentoring is only touched via 'who to ask' in the case template."
+          },
+          {
+            "item": "self-hosting as a leading option, for confidentiality, behind org",
+            "pass": true,
+            "evidence": "'Wiki.js is a self-hosted team wiki... Only members of your Edgible organization can reach it'; AI keeps 'files and prompts... on your own machine'."
+          },
+          {
+            "item": "who sees which matters is set inside the apps (ethical walls)",
+            "pass": true,
+            "evidence": "'Edgible's organization only decides who is on the team. Who may see which matter has to be set in the app's groups.'"
+          },
+          {
+            "item": "AI answers cite sources and a lawyer checks them",
+            "pass": true,
+            "evidence": "'get answers drawn from your documents' with citations, and 'a lawyer should check every answer against the cited source before relying on it.'"
+          },
+          {
+            "item": "points to professional rules on confidentiality and AI",
+            "pass": true,
+            "evidence": "'Also check your jurisdiction's professional rules on client data and AI tools.'"
+          }
+        ],
+        "must_not": [
+          {
+            "item": "one shared AI knowledge base with no access rules",
+            "violated": false,
+            "evidence": "'One shared AI knowledge base would ignore those walls, so I'd either build separate knowledge bases per access group or scope the AI...'"
+          },
+          {
+            "item": "only hosted suggestions, with no mention of confidentiality",
+            "violated": false,
+            "evidence": "The answer recommends self-hosted options and has a dedicated Confidentiality section."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "Opens with a two-layer plan for helping new lawyers use the firm's knowledge."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": false,
+            "evidence": "Only self-hosted options are offered. No hosted alternatives are compared, and the upkeep of self-hosting is not stated."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": false,
+            "evidence": "Asks four questions, including a fairly minor one about guided training."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "'I've only looked up options so far and haven't set anything up.'"
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": true,
+            "evidence": "Org-only access for the internal team, with the app's own login as a second door."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": true,
+            "evidence": "The Confidentiality section covers ethical walls, client confidentiality and per-group access."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "No poor or refused fit arises in this prompt."
+          }
+        ],
+        "better": "Compare a hosted option, such as a managed legal knowledge tool, against self-hosting and state the upkeep burden. Cut the questions to the two or three that would change the recommendation."
+      }
+    },
+    {
+      "id": "negative-landlord-email",
+      "pass": true,
+      "should_load": false,
+      "loaded": false,
+      "loaded_at": null,
+      "tools": [],
+      "expect_passed": 1,
+      "expect_total": 1,
+      "must_not_violated": [],
+      "principles_failed": [],
+      "verdict": {
+        "expect": [
+          {
+            "item": "the skill does not load",
+            "pass": true,
+            "evidence": "The answer is a plain landlord email with no self-hosting or skill-related content, so no skill appears to have loaded."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "mention self-hosting or Edgible",
+            "violated": false,
+            "evidence": "No mention of self-hosting or Edgible anywhere in the email or the closing note."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "The email opens with the subject line and the request: \"I'm writing to ask you to arrange a repair of the leaking tap\"."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": null,
+            "evidence": "Not relevant to a landlord email."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "The answer asks no questions. It only tells the user to fill in the placeholders."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "It only drafts text and claims no actions."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "Not applicable."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "Not applicable."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "Not applicable."
+          }
+        ],
+        "better": ""
+      }
+    },
+    {
+      "id": "builder-just-live",
+      "pass": false,
+      "should_load": true,
+      "loaded": false,
+      "loaded_at": null,
+      "tools": [
+        "ToolSearch",
+        "mcp__edgible__find"
+      ],
+      "expect_passed": 1,
+      "expect_total": 3,
+      "must_not_violated": [],
+      "principles_failed": [
+        "Answers the question the person asked first, before offering anything else.",
+        "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "publishes the running app on a device, with the port it listens on",
+            "pass": false,
+            "evidence": "It says \"Publish it through Edgible with the `org` auth mode\" but never mentions the port the app listens on; it asks about the stack and offers exact publish steps later."
+          },
+          {
+            "item": "asks who needs to reach it and sets the sign-in to match (the team, not everyone)",
+            "pass": true,
+            "evidence": "It picks `org` for \"team only\" and warns \"Avoid `none`, which makes it public.\" It also asks \"Is anyone on your team outside your Edgible organization today?\""
+          },
+          {
+            "item": "offers keeping it running later, as a card of their own, without requiring it now",
+            "pass": false,
+            "evidence": "It tells them to make it survive reboots now (\"Docker and `restart: unless-stopped`, or a systemd service\") as step 1. It does not offer a card of their own."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "require a container, a card or a pull request just to get it live",
+            "violated": false,
+            "evidence": "Docker is given as one option next to systemd, so a container is not required. No card or pull request is required."
+          },
+          {
+            "item": "push the app to the shared catalog without being asked",
+            "violated": false,
+            "evidence": "It does not mention or do any catalog push."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": false,
+            "evidence": "It opens with \"Edgible has no card for a custom app like yours, so I can't give you a tested recipe\" before the steps."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": false,
+            "evidence": "It gives only the self-hosted Edgible route. It names no hosted option and says little about upkeep beyond \"always-on machine\"."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "It asks three questions: the stack, where it runs now, and whether anyone on the team is outside the org."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "\"I haven't looked at your project folder.\" It offers to write files only if the person confirms."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": true,
+            "evidence": "It uses `org` for the team and notes that `api-key` is needed for non-browser clients."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": true,
+            "evidence": "\"If it holds real company data or API keys, check that none of them are hardcoded in the front-end code.\""
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "There is no poor or refused fit in this request."
+          }
+        ],
+        "better": "Lead with a direct answer: publish the running app from its device on its listening port with `org` auth, as a quick path that needs no container or card. Then offer a keep-it-running card as an optional later step and mention a hosted alternative."
+      }
+    }
+  ]
+}
