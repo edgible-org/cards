@@ -45,6 +45,10 @@ Running something yourself only makes sense if you know what's yours and that it
 
 A card's app may be written by a person, with an AI's help, or entirely by an AI. Cards do not label that. They show who answers for the card: a person or an organisation (the steward), or that nobody does. Running or testing a card needs an Edgible account that a person created, and a person at Edgible reads a card before it is listed, so there is always a human responsible for what is here.
 
+## Who runs this
+
+Edgible runs the catalog, and Stefano Picozzi, a co-founder of Edgible, looks after it. He has worked on software infrastructure for most of his career. He reads each card before it is listed, runs it on Edgible's test machines, and decides what stays and what is taken down. To reach him, or anyone at Edgible, use [the contact form](https://www.edgible.ai/contact/).
+
 ## Why "cards" and not a catalog
 
 We thought about building a catalog of apps for a long time. The trouble is that a catalog is a promise: every app in it works, stays up to date, and is supported. Keeping that promise for every app out there would be a full-time job, and a fragile one.
