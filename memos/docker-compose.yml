@@ -1,0 +1,45 @@
+# Compose file for the memos card.
+# The host port, ORG_LABEL and the admin's name come from card.env. The admin's password is
+# made on this machine by memos-secrets, at first start, and never leaves it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: memos
+
+services:
+  # Makes the admin's password (card.yml secrets:) if it does not exist yet, as a file in the
+  # volume memos-secrets, then exits. It never changes it after. prepare.sh uses it.
+  memos-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        MEMOS_ADMIN_PASSWORD=openssl rand -hex 16
+    volumes:
+      - memos-secrets:/run/card-secrets
+
+  memos:
+    image: ${MEMOS_IMAGE:-neosmemo/memos:0.31.0}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${MEMOS_PORT:?set MEMOS_PORT in card.env}:5230"
+    environment:
+      MEMOS_MODE: prod
+      # The address people reach it by, for links and the phone apps.
+      MEMOS_INSTANCE_URL: ${MEMOS_URL:-https://memos.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+    volumes:
+      # The SQLite database and uploaded files.
+      - memos-data:/var/opt/memos
+    depends_on:
+      memos-secrets:
+        condition: service_completed_successfully
+    # The image has no healthcheck of its own.
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:5230/api/v1/instance/profile"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+volumes:
+  memos-data: {}
+  memos-secrets: {}
