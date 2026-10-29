@@ -1,0 +1,51 @@
+# Compose file for the keeper-sh card.
+# The host port, ORG_LABEL and the sign-up limit come from card.env. The session-signing secret
+# and the key that encrypts stored CalDAV passwords are made on this machine by keeper-sh-secrets,
+# at first start, and never leave it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: keeper-sh
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume keeper-sh-secrets, then exits. It never changes one that exists.
+  keeper-sh-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        KEEPER_AUTH_SECRET=openssl rand -base64 32
+        KEEPER_ENCRYPTION_KEY=openssl rand -base64 32
+    volumes:
+      - keeper-sh-secrets:/run/card-secrets
+
+  # The standalone image runs the web app, API, scheduler, worker, Redis and PostgreSQL in one
+  # container. Keeper reads its secrets only from the environment, so it starts through the
+  # loader, which sets them from the secret files and then runs the image's own /init.
+  keeper-sh:
+    image: ${KEEPER_SH_IMAGE:-ghcr.io/ridafkih/keeper-standalone:2.28}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${KEEPER_SH_PORT:?set KEEPER_SH_PORT in card.env}:80"
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
+    command:
+      - >-
+        export BETTER_AUTH_SECRET="$$KEEPER_AUTH_SECRET" ENCRYPTION_KEY="$$KEEPER_ENCRYPTION_KEY"
+        && exec /init
+    environment:
+      # The address people reach it by. Without it, sign-in fails Keeper's CSRF check.
+      BETTER_AUTH_URL: ${KEEPER_SH_URL:-https://keeper-sh.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      TRUSTED_ORIGINS: ${KEEPER_SH_URL:-https://keeper-sh.${ORG_LABEL}.${EDGIBLE_DOMAIN:-edgible.app}}
+      # Empty lets anyone make an account; a comma-separated list of email domains limits it.
+      REGISTRATION_EMAIL_DOMAINS: ${KEEPER_SH_SIGNUP_DOMAINS:-}
+    volumes:
+      - keeper-sh-secrets:/run/card-secrets:ro
+      # The PostgreSQL data: accounts, calendar sources and sync state.
+      - keeper-sh-data:/var/lib/postgresql/data
+    depends_on:
+      keeper-sh-secrets:
+        condition: service_completed_successfully
+
+volumes:
+  keeper-sh-data: {}
+  keeper-sh-secrets: {}
