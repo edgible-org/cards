@@ -1,0 +1,43 @@
+# Compose file for the frigate card.
+# The host port comes from card.env. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: frigate
+
+services:
+  # Puts the starting config.yml into the frigate-config volume if none is there yet, then
+  # exits. It never changes a config after, so edits made in the interface stay.
+  frigate-seed:
+    image: ghcr.io/blakeblackshear/frigate:0.17.1
+    restart: "no"
+    entrypoint: ["sh", "-c", "[ -f /config/config.yml ] || cp /seed/config.yml /config/config.yml"]
+    volumes:
+      - frigate-config:/config
+      - ./config.yml:/seed/config.yml:ro
+
+  frigate:
+    image: ${FRIGATE_IMAGE:-ghcr.io/blakeblackshear/frigate:0.17.1}
+    restart: unless-stopped
+    shm_size: 256mb
+    stop_grace_period: 30s
+    ports:
+      # Port 5000 has no login of its own: only Edgible's org sign-in stands in front of it.
+      - "127.0.0.1:${FRIGATE_PORT:?set FRIGATE_PORT in card.env}:5000"
+    volumes:
+      - frigate-config:/config
+      - frigate-media:/media/frigate
+    tmpfs:
+      - /tmp/cache:size=1g
+    depends_on:
+      frigate-seed:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs -o /dev/null http://127.0.0.1:5000/api/version"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+
+volumes:
+  frigate-config: {}
+  frigate-media: {}
