@@ -49,6 +49,8 @@ A card's app may be written by a person, with an AI's help, or entirely by an AI
 
 Edgible runs the catalog, and Stefano Picozzi, a co-founder of Edgible, looks after it. He has worked on software infrastructure for most of his career. He reads each card before it is listed, runs it on Edgible's test machines, and decides what stays and what is taken down. To reach him, or anyone at Edgible, use [the contact form](https://www.edgible.ai/contact/).
 
+The catalog is open: everything here is MIT-licensed, and a card runs on any server, not only on Edgible. We want self-hosting to be a first-class choice, something anyone can do well, and the cards are how we share what works. Edgible, the company, runs the catalog, and its AI skill and tools use the same cards. Running a card on Edgible is the easiest way to get it online and looked after.
+
 ## Why "cards" and not a catalog
 
 We thought about building a catalog of apps for a long time. The trouble is that a catalog is a promise: every app in it works, stays up to date, and is supported. Keeping that promise for every app out there would be a full-time job, and a fragile one.
