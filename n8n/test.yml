@@ -1,11 +1,11 @@
-tested: 2026-10-28
+tested: 2026-10-29
 result: pass
-card-kit: "ff2df20"
-edgible-cli: 1.4.12
-files: sha256:b04cf9a269636594
+card-kit: "3654450"
+edgible-cli: 1.4.29
+files: sha256:5020eac11654d8b2
 machine: darwin/arm64, docker 29.4.3
 images:
-  - docker.n8n.io/n8nio/n8n:2.41.4@sha256:3cd1d3a03f5e059a0757d8c95823ff09ef61d3b6bf7fcb4ac3ac5fd5303b6c6d
+  - docker.n8n.io/n8nio/n8n:2.46.1@sha256:67cb2970ded37cc40a8f91ce3325f44e88a1bf58e0f75d1fa2e0a5f6fc8a972a
   - n8nio/runners:2.41.4@sha256:2797b628d7f87363b40a5b0d4d7e8a2ee960918d7f9ab9849fbb8be94f29ca16
   - postgres:18@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6
 image_facts:
@@ -20,8 +20,8 @@ steps:
   teardown: pass
 measured:
   workhorse:
-    memory: 739 MB
-    images: 615 MB
-    data: 74 MB
-duration: 3m
-by: agent
+    memory: 760 MB
+    images: 662 MB
+    data: 76 MB
+duration: 4m
+by: ci
