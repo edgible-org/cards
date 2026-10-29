@@ -9,11 +9,15 @@ name: bump-test
 # The fleet machines can publish apps, so this runs only for Renovate's own branches in this
 # repo: never a fork, never anyone else. A bump of an image shared by several cards tests each
 # of them (card-secrets is in many), one job per group of cards that publish the same app name.
+#
+# It runs on a push to a renovate/ branch, not on a pull request. A pull request from a fork
+# (a new card from an outside contributor) would start a run of this workflow too, which
+# GitHub holds for approval and then reports as failed when the pull request is merged, and
+# emails the contributor about. A push to a renovate/ branch cannot come from a fork.
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
-    paths: ["*/docker-compose.yml"]
+  push:
+    branches: ["renovate/**"]
 
 permissions:
   contents: write         # commit test.yml to the bump branch
@@ -22,7 +26,7 @@ permissions:
 
 # A new push to the branch waits for a running test instead of cancelling it half way.
 concurrency:
-  group: bump-test-${{ github.event.pull_request.number }}
+  group: bump-test-${{ github.ref_name }}
   cancel-in-progress: false
 
 env:
@@ -34,9 +38,7 @@ defaults:
 
 jobs:
   plan:
-    if: >-
-      github.actor == 'renovate[bot]' &&
-      github.event.pull_request.head.repo.full_name == github.repository
+    if: github.actor == 'renovate[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     outputs:
@@ -60,13 +62,12 @@ jobs:
           gh api "repos/$GITHUB_REPOSITORY/actions/runners" --paginate \
             --jq '.runners[] | select(.status == "online") | [.labels[].name]' | jq -s . > machines.json
 
-      - name: Plan the cards this PR touches
+      - name: Plan the cards this branch touches
         id: plan
-        env:
-          BASE: ${{ github.event.pull_request.base.sha }}
         run: |
           set -euo pipefail
           cd cards
+          BASE=$(git merge-base origin/main HEAD)
           cards=$(git diff --name-only "$BASE" HEAD | sed -nE 's|^([a-z0-9-]+)/docker-compose\.yml$|\1|p' | sort -u | tr '\n' ' ')
           echo "cards touched: $cards"
           mkdir ../status
@@ -93,7 +94,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: cards
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.ref_name }}
 
       - name: Fetch card-kit
         run: |
@@ -121,7 +122,7 @@ jobs:
         if: steps.test.outputs.passed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-          BRANCH: ${{ github.event.pull_request.head.ref }}
+          BRANCH: ${{ github.ref_name }}
           CARDS: ${{ matrix.cards }}
         run: |
           set -euo pipefail
@@ -144,10 +145,12 @@ jobs:
         if: steps.test.outputs.passed == 'false'
         env:
           GH_TOKEN: ${{ github.token }}
-          PR: ${{ github.event.pull_request.number }}
+          BRANCH: ${{ github.ref_name }}
           CARDS: ${{ matrix.cards }}
         run: |
-          gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body "test-card failed for: $CARDS. The run, with the failing step: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          # The pull request for this branch: Renovate opens it right after the push, so it may not exist yet.
+          PR=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$BRANCH" --state open --json number --jq '.[0].number // empty')
+          [ -n "$PR" ] && gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body "test-card failed for: $CARDS. The run, with the failing step: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           exit 1
 
       - name: Clean up
