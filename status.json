@@ -1,9 +1,9 @@
 {
   "bloglite": {
     "result": "pass",
-    "tested": "2026-10-27",
-    "edgible-cli": "1.4.12",
-    "files": "sha256:5ad701e0af10dece",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:d96f7b4272eccebf",
     "device": "osxdevice"
   },
   "canary": {
@@ -14,10 +14,17 @@
     "device": "osxdevice"
   },
   "ci": {
+    "result": "fail",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:6746ffcd9d4da123",
+    "device": "osxdevice"
+  },
+  "club-noticeboard": {
     "result": "pass",
-    "tested": "2026-10-27",
-    "edgible-cli": "1.4.12",
-    "files": "sha256:a1754383944e3c70",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:0c9f94ee09cf20f7",
     "device": "osxdevice"
   },
   "docmost": {
@@ -29,16 +36,16 @@
   },
   "ech0": {
     "result": "pass",
-    "tested": "2026-10-27",
-    "edgible-cli": "1.4.12",
-    "files": "sha256:5c1499b1bd9b2762",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:46fd736eaef929d7",
     "device": "osxdevice"
   },
   "edgible-agent": {
     "result": "pass",
-    "tested": "2026-10-28",
+    "tested": "2026-10-29",
     "edgible-cli": "1.4.29",
-    "files": "sha256:0af34d853706b3f0",
+    "files": "sha256:f4205c33e0a1ba12",
     "device": "osxdevice"
   },
   "edgible-connector": {
@@ -57,23 +64,30 @@
   },
   "gitea": {
     "result": "pass",
-    "tested": "2026-10-27",
-    "edgible-cli": "1.4.12",
-    "files": "sha256:456403ac3f1d60c2",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:6f98e9bc3a2549a3",
     "device": "osxdevice"
   },
   "immich": {
     "result": "pass",
-    "tested": "2026-10-28",
+    "tested": "2026-10-29",
     "edgible-cli": "1.4.29",
-    "files": "sha256:2472bc5884086f25",
+    "files": "sha256:b45760bd53146d91",
     "device": "osxdevice"
   },
   "jellyfin": {
     "result": "pass",
-    "tested": "2026-10-27",
-    "edgible-cli": "1.4.12",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
     "files": "sha256:1b5c123363b08c0b",
+    "device": "osxdevice"
+  },
+  "leafwiki": {
+    "result": "pass",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:880509c93b15f323",
     "device": "osxdevice"
   },
   "linkding": {
@@ -85,9 +99,9 @@
   },
   "litellm": {
     "result": "pass",
-    "tested": "2026-10-28",
+    "tested": "2026-10-29",
     "edgible-cli": "1.4.29",
-    "files": "sha256:85e0ec09ddc19012",
+    "files": "sha256:2755457b1184e937",
     "device": "osxdevice"
   },
   "mcp-bridge": {
@@ -104,23 +118,24 @@
     "device": "osxdevice"
   },
   "minecraft": {
-    "result": "pass",
-    "tested": "2026-10-12",
-    "edgible-cli": "1.4.6",
-    "files": "sha256:6046352d46e423c6"
+    "result": "fail",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:8271b156a5690d81",
+    "device": "osxdevice"
   },
   "miniflux": {
     "result": "pass",
-    "tested": "2026-10-28",
+    "tested": "2026-10-29",
     "edgible-cli": "1.4.29",
-    "files": "sha256:45d00a1877b0b25e",
+    "files": "sha256:9cc3fa2cfd3ffe2c",
     "device": "osxdevice"
   },
   "n8n": {
     "result": "pass",
-    "tested": "2026-10-28",
+    "tested": "2026-10-29",
     "edgible-cli": "1.4.29",
-    "files": "sha256:b04cf9a269636594",
+    "files": "sha256:5020eac11654d8b2",
     "device": "osxdevice"
   },
   "ollama-osx": {
@@ -132,30 +147,37 @@
   },
   "openclaw": {
     "result": "pass",
-    "tested": "2026-10-28",
+    "tested": "2026-10-29",
     "edgible-cli": "1.4.29",
-    "files": "sha256:a89ee55425bb8ca5",
+    "files": "sha256:0ba92658d5313095",
+    "device": "osxdevice"
+  },
+  "otter-wiki": {
+    "result": "pass",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:40b09f6077bce654",
     "device": "osxdevice"
   },
   "owncloud": {
     "result": "pass",
-    "tested": "2026-10-27",
-    "edgible-cli": "1.4.12",
-    "files": "sha256:35d9f92e9a28522d",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:a21f6d20d6caeee5",
     "device": "osxdevice"
   },
   "rallly": {
-    "result": "pass",
-    "tested": "2026-10-27",
-    "edgible-cli": "1.4.12",
-    "files": "sha256:e098025e4806b68b",
+    "result": "fail",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:01f2e85a0ceff7e1",
     "device": "osxdevice"
   },
   "static-site": {
     "result": "pass",
-    "tested": "2026-10-27",
-    "edgible-cli": "1.4.12",
-    "files": "sha256:3da8e0e52a0df4e9",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:15f9cc6260c33fd9",
     "device": "osxdevice"
   },
   "stirling-pdf": {
@@ -180,9 +202,9 @@
   },
   "uptime-kuma": {
     "result": "pass",
-    "tested": "2026-10-26",
-    "edgible-cli": "1.4.12",
-    "files": "sha256:a91b802be389bcbb",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:6073051ca9c1c430",
     "device": "osxdevice"
   },
   "vaultwarden": {
@@ -192,11 +214,32 @@
     "files": "sha256:9aabf1dc061135fb",
     "device": "osxdevice"
   },
+  "wiki-go": {
+    "result": "pass",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:cb04c68943febd7e",
+    "device": "osxdevice"
+  },
+  "wiki-js": {
+    "result": "pass",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:890acc94d27afc8f",
+    "device": "osxdevice"
+  },
   "wordpress": {
     "result": "pass",
-    "tested": "2026-10-27",
-    "edgible-cli": "1.4.12",
-    "files": "sha256:85ac0fdb7431c974",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:5f9d729dff4f2304",
+    "device": "osxdevice"
+  },
+  "xwiki": {
+    "result": "pass",
+    "tested": "2026-10-29",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:811270a23b0b0121",
     "device": "osxdevice"
   }
 }
