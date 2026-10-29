@@ -1,0 +1,46 @@
+# Compose file for the domoticz card.
+# The host ports, ORG_LABEL and the admin's name come from card.env. The admin's password is
+# made on this machine by domoticz-secrets, at first start, and never leaves it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: domoticz
+
+services:
+  # Makes the admin's password (card.yml secrets:) if it does not exist yet, as a file in the
+  # volume domoticz-secrets, then exits. It never changes it after. prepare.sh uses it.
+  domoticz-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        DOMOTICZ_ADMIN_PASSWORD=openssl rand -hex 16
+    volumes:
+      - domoticz-secrets:/run/card-secrets
+
+  domoticz:
+    image: ${DOMOTICZ_IMAGE:-domoticz/domoticz:2026.3}
+    restart: unless-stopped
+    ports:
+      # One process on two host ports, both on 127.0.0.1: Edgible's web server on this machine
+      # is the one proxy in front. The first is published on org, the second on none.
+      - "127.0.0.1:${DOMOTICZ_PORT:?set DOMOTICZ_PORT in card.env}:8080"
+      - "127.0.0.1:${DOMOTICZ_APP_PORT:?set DOMOTICZ_APP_PORT in card.env}:8080"
+    environment:
+      TZ: ${DOMOTICZ_TZ:-UTC}
+    volumes:
+      # The database, plugins, scripts and backups.
+      - domoticz-data:/opt/domoticz/userdata
+    depends_on:
+      domoticz-secrets:
+        condition: service_completed_successfully
+    # The image has no healthcheck of its own. The start page is public.
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -o /dev/null http://127.0.0.1:8080/"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+volumes:
+  domoticz-data: {}
+  domoticz-secrets: {}
