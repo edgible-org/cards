@@ -1,0 +1,27 @@
+tested: 2026-10-30
+result: pass
+card-kit: "1cc7c95"
+edgible-cli: 1.4.29
+files: sha256:880cf8d5664841d0
+machine: darwin/arm64, docker 29.4.3
+images:
+  - ghcr.io/blakeblackshear/frigate:0.17.1@sha256:1724960349dad0bd2ae8ec884171a6fd5755a4dc242a0e66cadbda9c0e85c99b
+image_facts:
+  ghcr.io/blakeblackshear/frigate:0.17.1: {user: "root", archs: ["amd64", "arm64"], healthcheck: true}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    frigate: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"events": 0}
+measured:
+  frigate:
+    memory: 736 MB
+    images: 2.9 GB
+    data: 295 KB
+duration: 6m
+by: agent
+notes: frigate's port 5000 was taken on the test machine, so it was tested on 5001.
