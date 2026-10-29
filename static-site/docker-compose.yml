@@ -9,7 +9,7 @@ services:
   # Downloads the site from STATIC_SITE_SOURCE and puts each new version live. It runs as
   # the image's own user, not root, and only Caddy reads what it writes.
   static-site-sync:
-    image: curlimages/curl:8.22.0
+    image: curlimages/curl:8.23.0
     restart: unless-stopped
     entrypoint: ["sh", "/sync.sh"]
     environment:
