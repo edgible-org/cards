@@ -7,7 +7,7 @@ name: minecraft
 
 services:
   minecraft:
-    image: itzg/minecraft-server:2026.9.2
+    image: itzg/minecraft-server:2026.10.1
     restart: unless-stopped
     ports:
       - "127.0.0.1:${MC_JAVA_PORT:?set MC_JAVA_PORT in card.env}:25565"
