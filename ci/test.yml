@@ -1,13 +1,15 @@
-tested: 2026-10-11
+tested: 2026-10-29
 result: pass
-card-kit: "e011965"
-edgible-cli: 1.4.6
-files: sha256:34e3e0c39db9c001
+card-kit: "e24fb87"
+edgible-cli: 1.4.29
+files: sha256:6746ffcd9d4da123
 machine: darwin/arm64, docker 29.4.3
 images:
   - docker.gitea.com/act_runner:5.0.0@sha256:328b8dad8de80a19dab6c5c61292c1d624cd3460c25a5c0067e95c11318657ca
-  - gitea/gitea:28.1.0@sha256:f505a0d3a41323b786e05942fc7a4075e07ae7c169fd9485649aa55ee543a21a
+  - gitea/gitea:28.2.0@sha256:30777c91280d973fa02be48b1ade735bd6859e8f6f7af3b4444d519437852504
   - postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+image_facts:
+  gitea/gitea:28.1.0: {user: "root", archs: ["amd64", "arm64", "riscv64"], healthcheck: false}
 steps:
   check-env: pass
   start: pass
@@ -21,13 +23,13 @@ steps:
   teardown: pass
 measured:
   forge:
-    memory: 165 MB
+    memory: 153 MB
     images: 184 MB
     data: 58 MB
   runner:
-    memory: 16 MB
+    memory: 31 MB
     images: 19 MB
     data: 8 KB
-duration: 4m
-by: agent
-notes: gitea's port 3003 was taken on the test machine, so it was tested on 3004. gitea-ssh's port 22222 was taken on the test machine, so it was tested on 22223. gitea is taken in the test org, so it was published as test-gitea. gitea-ssh is taken in the test org, so it was published as test-gitea-ssh.
+duration: 5m
+by: ci
+notes: gitea's port 3003 was taken on the test machine, so it was tested on 3004.
