@@ -135,6 +135,8 @@ services:
       - openclaw-card-secrets:/run/card-secrets:ro
       # Your own files, read-only, for the notes server; an empty volume when OPENCLAW_NOTES_DIR is unset.
       - ${OPENCLAW_NOTES_DIR:-openclaw-notes}:/notes:ro
+      # And in the agent's workspace, where its own file tools look first, so a path like notes/ works too.
+      - ${OPENCLAW_NOTES_DIR:-openclaw-notes}:/home/node/.openclaw/workspace/notes:ro
     healthcheck:
       test: ["CMD", "node", "dist/docker-healthcheck.js"]
       interval: 30s
