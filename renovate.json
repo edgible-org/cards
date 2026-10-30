@@ -16,6 +16,16 @@
   ],
   "packageRules": [
     {
+      "description": "Minor, patch and digest bumps merge themselves once the bump-test and cards checks pass; a major waits for a yes below",
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest",
+        "pin"
+      ],
+      "automerge": true
+    },
+    {
       "description": "A major version can need a data migration, so it waits for a yes on the dependency dashboard",
       "matchUpdateTypes": [
         "major"
@@ -26,5 +36,6 @@
   "ignoreDeps": [
     "website-site",
     "website-strapi"
-  ]
+  ],
+  "platformAutomerge": true
 }
