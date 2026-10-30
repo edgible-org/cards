@@ -14,8 +14,8 @@
     "device": "osxdevice"
   },
   "ci": {
-    "result": "fail",
-    "tested": "2026-10-29",
+    "result": "pass",
+    "tested": "2026-10-30",
     "edgible-cli": "1.4.29",
     "files": "sha256:6746ffcd9d4da123",
     "device": "osxdevice"
@@ -34,6 +34,13 @@
     "files": "sha256:ea5bb164d467d04d",
     "device": "osxdevice"
   },
+  "domoticz": {
+    "result": "pass",
+    "tested": "2026-10-30",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:0afb832b89cc13d3",
+    "device": "osxdevice"
+  },
   "ech0": {
     "result": "pass",
     "tested": "2026-10-29",
@@ -43,9 +50,9 @@
   },
   "edgible-agent": {
     "result": "pass",
-    "tested": "2026-10-29",
+    "tested": "2026-10-30",
     "edgible-cli": "1.4.29",
-    "files": "sha256:f4205c33e0a1ba12",
+    "files": "sha256:8a62ba0f22a50dba",
     "device": "osxdevice"
   },
   "edgible-connector": {
@@ -60,6 +67,13 @@
     "tested": "2026-10-28",
     "edgible-cli": "1.4.29",
     "files": "sha256:4a70f9ef69fb26de",
+    "device": "osxdevice"
+  },
+  "frigate": {
+    "result": "pass",
+    "tested": "2026-10-30",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:880cf8d5664841d0",
     "device": "osxdevice"
   },
   "gitea": {
@@ -81,6 +95,13 @@
     "tested": "2026-10-29",
     "edgible-cli": "1.4.29",
     "files": "sha256:1b5c123363b08c0b",
+    "device": "osxdevice"
+  },
+  "keeper-sh": {
+    "result": "pass",
+    "tested": "2026-10-30",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:be7027f253859692",
     "device": "osxdevice"
   },
   "leafwiki": {
@@ -112,14 +133,21 @@
   },
   "mcp-signin": {
     "result": "pass",
-    "tested": "2026-10-27",
-    "edgible-cli": "1.4.12",
+    "tested": "2026-10-30",
+    "edgible-cli": "1.4.29",
     "files": "sha256:0be7a5e20c079bb8",
+    "device": "osxdevice"
+  },
+  "memos": {
+    "result": "pass",
+    "tested": "2026-10-30",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:7108e43bff510bb7",
     "device": "osxdevice"
   },
   "minecraft": {
     "result": "fail",
-    "tested": "2026-10-29",
+    "tested": "2026-10-30",
     "edgible-cli": "1.4.29",
     "files": "sha256:8271b156a5690d81",
     "device": "osxdevice"
@@ -167,8 +195,8 @@
     "device": "osxdevice"
   },
   "rallly": {
-    "result": "fail",
-    "tested": "2026-10-29",
+    "result": "pass",
+    "tested": "2026-10-30",
     "edgible-cli": "1.4.29",
     "files": "sha256:01f2e85a0ceff7e1",
     "device": "osxdevice"
