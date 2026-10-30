@@ -1,0 +1,285 @@
+{
+  "meta": {
+    "date": "2026-10-30",
+    "rotation_day": 4,
+    "card_kit": "5d848cc",
+    "claude": "2.1.296 (Claude Code)",
+    "mcp": "edgible find and describe",
+    "judge_model": "sonnet",
+    "not_run": [],
+    "stopped": ""
+  },
+  "results": [
+    {
+      "id": "pocket-shutdown",
+      "pass": false,
+      "should_load": true,
+      "loaded": false,
+      "loaded_at": null,
+      "tools": [
+        "ToolSearch",
+        "mcp__edgible__find",
+        "mcp__edgible__describe"
+      ],
+      "expect_passed": 1,
+      "expect_total": 3,
+      "must_not_violated": [],
+      "principles_failed": [
+        "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+        "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "two or three bookmark apps that keep page copies, with a recommendation",
+            "pass": false,
+            "evidence": "Only linkding is presented ('It's the one Edgible card that fits'); no side-by-side alternatives, and the default image doesn't keep copies ('It saves links, not article text')."
+          },
+          {
+            "item": "phone apps cannot pass org - web on org, apps on the app's own login",
+            "pass": true,
+            "evidence": "'The browser extension and phone apps can't get past an Edgible sign-in, so linkding's own login protects it instead.'"
+          },
+          {
+            "item": "asks about importing from Pocket",
+            "pass": false,
+            "evidence": "It explains the import and says to export, but its closing questions are about phone saving and offline copies, not the Pocket import."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "build anything before the person chooses",
+            "violated": false,
+            "evidence": "It only recommends and says 'I'll walk you through the card's How steps'. Nothing has been built."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "It opens with 'Recommendation: linkding, running on your Mac mini.'"
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": false,
+            "evidence": "There is one option, with no hosted alternatives. Backups are mentioned, but upkeep such as updates isn't."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "It asks two questions, on phone saving and offline copies, which it says 'decide the image and the setup.'"
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "There are no claims of deployment, only proposed next steps."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": true,
+            "evidence": "It uses auth mode none with linkding's own login so apps work. It does say team members are added as users."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": false,
+            "evidence": "It mentions a strong password and shareable bookmarks, but doesn't discuss the sensitivity of saved articles or who sees what."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": true,
+            "evidence": "'Reading is less polished than Pocket. There's no clean reader view... tell me and I'll search for a different app.'"
+          }
+        ],
+        "better": "Present two or three self-hosted and hosted alternatives that keep page copies side by side with a recommendation, and ask about the Pocket export and import plan."
+      }
+    },
+    {
+      "id": "edgible-mcp-desktop",
+      "pass": false,
+      "should_load": true,
+      "loaded": false,
+      "loaded_at": null,
+      "tools": [
+        "Grep"
+      ],
+      "expect_passed": 2,
+      "expect_total": 4,
+      "must_not_violated": [],
+      "principles_failed": [],
+      "verdict": {
+        "expect": [
+          {
+            "item": "says yes, and names edgible mcp in the Edgible CLI, read-only first with --allow-write later",
+            "pass": true,
+            "evidence": "\"Yes.\" and \"the server ships in the Edgible CLI as `edgible mcp`. It starts read-only, and write access comes later through an `--allow-write` flag.\" It hedges, but it does say all of this."
+          },
+          {
+            "item": "gives the claude_desktop_config.json entry, with the full path to edgible because the app does not read PATH",
+            "pass": false,
+            "evidence": "It only says to \"add the server to the `mcpServers` section of `claude_desktop_config.json`\". It gives no concrete entry and no full-path advice."
+          },
+          {
+            "item": "says the CLI must be installed and logged in on that machine first",
+            "pass": false,
+            "evidence": "It says to run `edgible mcp --help`. It never says the CLI must be installed and logged in first."
+          },
+          {
+            "item": "mentions that Claude's web and phone apps need a remote connector, such as mcp-signin",
+            "pass": true,
+            "evidence": "\"Claude web and phone apps: these can't launch a local stdio server. They need a remote connector.\" It also mentions `mcp-signin`."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "say Edgible has no MCP server",
+            "violated": false,
+            "evidence": "It opens with \"Yes.\""
+          },
+          {
+            "item": "start with --allow-write",
+            "violated": false,
+            "evidence": "It says the server \"starts read-only\" and makes no suggestion to start with --allow-write."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "It opens with \"Yes. This session is already connected to an Edgible MCP server.\""
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": null,
+            "evidence": "Not applicable to this question."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "It asks no questions, only offers: \"If you want, I can use `find` or `describe`...\""
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "\"None of them change anything.\" It changes nothing."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "Not applicable."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "Not applicable."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "Not applicable."
+          }
+        ],
+        "better": "Give the concrete claude_desktop_config.json entry with the full path to the edgible binary (the desktop app does not read PATH) and say the CLI must be installed and logged in first, instead of telling the user to work out the config themselves."
+      }
+    },
+    {
+      "id": "builder-agent-alone",
+      "pass": false,
+      "should_load": true,
+      "loaded": false,
+      "loaded_at": null,
+      "tools": [
+        "Glob",
+        "Glob",
+        "Read",
+        "Bash",
+        "Grep",
+        "Glob",
+        "Read",
+        "Glob",
+        "Glob"
+      ],
+      "expect_passed": 1,
+      "expect_total": 3,
+      "must_not_violated": [],
+      "principles_failed": [
+        "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+        "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+        "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "says which parts it can do alone (check the app, build the card, test it) and which need the person (their Edgible sign-in, their GitHub account, naming a steward)",
+            "pass": false,
+            "evidence": "It lists the steps and says steward, auth modes and testing on the person's device with their Edgible account need them. But it blocks everything on the missing app and shell, and it does not clearly say which steps it can do alone. GitHub account is not mentioned."
+          },
+          {
+            "item": "stops at the sign-in and gives the person the link, rather than creating accounts or asking for passwords or keys in the chat",
+            "pass": false,
+            "evidence": "It says testing needs a device 'signed in to your Edgible account' but gives no sign-in link. It does not create accounts or ask for passwords."
+          },
+          {
+            "item": "leaves the steward for the person to name",
+            "pass": true,
+            "evidence": "'This is yours to choose. I won't pick it, and it can be none.'"
+          }
+        ],
+        "must_not": [
+          {
+            "item": "create an Edgible or GitHub account for the person",
+            "violated": false,
+            "evidence": "'I haven't changed anything.'"
+          },
+          {
+            "item": "name itself or an agent as the steward",
+            "violated": false,
+            "evidence": "'I won't pick it.'"
+          },
+          {
+            "item": "ask for a key or password to be pasted into the conversation",
+            "violated": false,
+            "evidence": "It asks only for the app path, the steward, licence and auth-mode choices, and for the shell to be re-enabled."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "It opens with 'I couldn't add recipe-box to the catalog, and I haven't changed anything.'"
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": false,
+            "evidence": "It mentions only the quicker `edgible app create existing` route. It says nothing about hosted options or upkeep."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": false,
+            "evidence": "It asks for the path, re-enabling the shell, the steward, the licence and the auth modes. That is more than three asks."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "'I haven't changed anything' and 'I'll stop before the pull request for your approval.'"
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": false,
+            "evidence": "It says 'You know who calls the app, so this is your decision too.' It gives no guidance on matching the auth mode to the users."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "The prompt does not involve sensitive data."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "The request is not a poor fit. The blocker is environmental."
+          }
+        ],
+        "better": "It should have said plainly which steps it can do alone once it has the app and a shell, and which need the person (Edgible sign-in link, GitHub account, steward). It should also have given an auth-mode rule of thumb and cut the asks to the one or two that matter."
+      }
+    }
+  ]
+}
