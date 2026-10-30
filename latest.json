@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-29T21:33:13+00:00",
+ "generated": "2026-10-30T19:25:16+00:00",
  "repo": "edgible-org/cards",
  "site": "https://cards.edgible.org",
  "jobs": [
@@ -9,8 +9,8 @@
    "state": "ok",
    "count": 1,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/40854271347",
-   "at": "2026-10-29T10:01:51Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41038167519",
+   "at": "2026-10-30T10:05:30Z"
   },
   {
    "workflow": "skill-evals",
@@ -18,17 +18,17 @@
    "state": "ok",
    "count": 1,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/40935282116",
-   "at": "2026-10-29T18:55:07Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41107807550",
+   "at": "2026-10-30T18:32:29Z"
   },
   {
    "workflow": "grow",
    "name": "Grow",
-   "state": "running",
-   "count": 2,
+   "state": "ok",
+   "count": 4,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/40936672931",
-   "at": "2026-10-29T19:04:08Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41108065662",
+   "at": "2026-10-30T18:34:18Z"
   },
   {
    "workflow": "regression",
@@ -36,8 +36,8 @@
    "state": "fail",
    "count": 1,
    "failed": 1,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/40936687023",
-   "at": "2026-10-29T19:04:13Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41108110681",
+   "at": "2026-10-30T18:34:38Z"
   },
   {
    "workflow": "site",
@@ -45,78 +45,95 @@
    "state": "running",
    "count": 10,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/40958718001",
-   "at": "2026-10-29T21:32:58Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41115073095",
+   "at": "2026-10-30T19:25:00Z"
   }
  ],
  "cards": {
-  "total": 39,
-  "with_status": 35,
-  "passing": 32,
+  "total": 42,
+  "with_status": 39,
+  "passing": 38,
   "failing": [
-   "ci",
-   "minecraft",
-   "rallly"
+   "minecraft"
   ],
-  "tested_24h": 27,
+  "tested_24h": 28,
   "oldest": [
    "stirling-pdf",
-   17
+   18
   ],
   "no_test_yet": [
    "accounts",
    "assistant",
-   "memos",
    "website"
   ]
  },
  "regression_issues": [
   {
-   "number": 238,
-   "title": "Regression: rallly fails",
-   "url": "https://github.com/edgible-org/cards/issues/238",
-   "days": 0
-  },
-  {
    "number": 237,
    "title": "Regression: minecraft fails",
    "url": "https://github.com/edgible-org/cards/issues/237",
    "days": 0
-  },
-  {
-   "number": 236,
-   "title": "Regression: ci fails",
-   "url": "https://github.com/edgible-org/cards/issues/236",
-   "days": 0
   }
  ],
  "images": {
-  "cards_with_fixable": 33,
+  "cards_with_fixable": 37,
   "worst": [
    {
-    "card": "linkding",
-    "count": 206
+    "card": "domoticz",
+    "count": 256
    },
    {
-    "card": "wiki-js",
-    "count": 128
+    "card": "frigate",
+    "count": 235
+   },
+   {
+    "card": "linkding",
+    "count": 213
    },
    {
     "card": "immich",
-    "count": 128
+    "count": 170
    },
    {
-    "card": "uptime-kuma",
-    "count": 83
-   },
-   {
-    "card": "teamdesk",
-    "count": 79
+    "card": "wiki-js",
+    "count": 129
    }
   ],
-  "scanned": 50
+  "scanned": 54
  },
  "queue": [
+  {
+   "number": 246,
+   "title": "Update ghcr.io/blakeblackshear/frigate Docker tag to v0.18.2",
+   "url": "https://github.com/edgible-org/cards/pull/246",
+   "kind": "image bump",
+   "state": "ready",
+   "why": "its test passed on a device; merge it"
+  },
+  {
+   "number": 245,
+   "title": "Update domoticz/domoticz Docker tag to v2026.4",
+   "url": "https://github.com/edgible-org/cards/pull/245",
+   "kind": "image bump",
+   "state": "ready",
+   "why": "its test passed on a device; merge it"
+  },
+  {
+   "number": 244,
+   "title": "Update ghcr.io/openclaw/openclaw Docker tag to v2026.10.9",
+   "url": "https://github.com/edgible-org/cards/pull/244",
+   "kind": "image bump",
+   "state": "hold",
+   "why": "merge conflict; for a bump, tick its rebase box on the PR"
+  },
+  {
+   "number": 243,
+   "title": "Update docker.n8n.io/n8nio/n8n Docker tag to v2.46.2",
+   "url": "https://github.com/edgible-org/cards/pull/243",
+   "kind": "image bump",
+   "state": "ready",
+   "why": "its test passed on a device; merge it"
+  },
   {
    "number": 225,
    "title": "Remove the club-noticeboard card",
@@ -126,15 +143,34 @@
    "why": "needs a person"
   }
  ],
- "card_kit_prs": [],
+ "card_kit_prs": [
+  {
+   "number": 152,
+   "title": "Needs map: add merged agent-made cards",
+   "url": "https://github.com/edgible-org/card-kit/pull/152"
+  }
+ ],
  "grow": {
   "made": [
    {
-    "title": "New app card: memos",
-    "url": "https://github.com/edgible-org/cards/pull/235"
+    "title": "New app card: keeper-sh",
+    "url": "https://github.com/edgible-org/cards/pull/242"
+   },
+   {
+    "title": "New app card: frigate",
+    "url": "https://github.com/edgible-org/cards/pull/241"
+   },
+   {
+    "title": "New app card: domoticz",
+    "url": "https://github.com/edgible-org/cards/pull/240"
    }
   ],
-  "could_not_make": [],
+  "could_not_make": [
+   {
+    "title": "App request: home-assistant",
+    "url": "https://github.com/edgible-org/cards/issues/239"
+   }
+  ],
   "agent_prs_open": 0
  },
  "upstream": {
@@ -147,6 +183,11 @@
    "image": "gitea/gitea:28.1.0"
   },
   {
+   "card": "domoticz",
+   "topic": "healthcheck",
+   "image": "domoticz/domoticz:2026.3"
+  },
+  {
    "card": "edgible-agent",
    "topic": "secret-files",
    "image": "ghcr.io/openclaw/openclaw:2026.10.5"
@@ -155,6 +196,11 @@
    "card": "gitea",
    "topic": "healthcheck",
    "image": "gitea/gitea:28.1.0"
+  },
+  {
+   "card": "keeper-sh",
+   "topic": "secret-files",
+   "image": "ghcr.io/ridafkih/keeper-standalone:2.28"
   },
   {
    "card": "leafwiki",
@@ -228,5 +274,5 @@
   }
  ],
  "skill_evals_report": "https://github.com/edgible-org/cards/issues/17",
- "summary": "Last night's regression tested 27 cards on osxdevice, and 24 passed. ci, minecraft, and rallly failed, and those three failures are the one thing that needs you: issues #236, #237, and #238, each of which closes itself if its card passes tonight."
+ "summary": "Last night three new cards were added (domoticz, frigate, keeper-sh), and 38 of 39 cards passed the regression run. Minecraft failed on osxdevice, and its issue will close itself if it passes tonight. The one thing that needs you is the home-assistant app request (#239), which the grow job could not build: pick it up or close it."
 }
