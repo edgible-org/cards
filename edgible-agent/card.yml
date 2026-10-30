@@ -28,6 +28,9 @@ data:
     # OpenClaw's secrets, made on the device: the Gateway token and its key for the AI gateway.
     openclaw-card-secrets:
       class: irreplaceable
+    # Empty unless OPENCLAW_NOTES_DIR names a folder, which is mounted in its place, read-only.
+    openclaw-notes:
+      class: cache
     # From the litellm card: the AI gateway's keys, budgets and spend, and its own secrets.
     litellm-db-data:
       class: irreplaceable

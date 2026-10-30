@@ -23,6 +23,8 @@ x-openclaw-env: &openclaw-env
   # A shared AI gateway's key for this agent, by reference (edgible-mcp's gateway_key); empty, the
   # agent uses its own key on the gateway in this pattern.
   OPENCLAW_MODEL_KEY: ${OPENCLAW_MODEL_KEY:-}
+  # npx's cache, kept in the agent's data so the notes server is fetched once, not at every start.
+  npm_config_cache: /home/node/.openclaw/npm-cache
   TERM: xterm-256color
   TZ: ${OPENCLAW_TZ:-UTC}
 
@@ -61,6 +63,8 @@ services:
       OPENCLAW_MODEL_URL: ${OPENCLAW_MODEL_URL:-http://litellm:4000/v1}
       EDGIBLE_MCP_URL: http://edgible-mcp:8000/mcp
       EDGIBLE_SKILL: "1"
+      # Set OPENCLAW_NOTES_DIR (a folder on this machine) to give the agent read-only access to it.
+      OPENCLAW_NOTES: ${OPENCLAW_NOTES_DIR:+1}
     entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c", 'export CUSTOM_API_KEY="$${OPENCLAW_MODEL_KEY:-$$LITELLM_KEY_AGENT}"; exec sh /setup.sh']
     depends_on:
       openclaw-secrets:
@@ -129,6 +133,10 @@ services:
       - openclaw-data:/home/node/.openclaw
       - openclaw-secrets:/home/node/.config/openclaw
       - openclaw-card-secrets:/run/card-secrets:ro
+      # Your own files, read-only, for the notes server; an empty volume when OPENCLAW_NOTES_DIR is unset.
+      - ${OPENCLAW_NOTES_DIR:-openclaw-notes}:/notes:ro
+      # And in the agent's workspace, where its own file tools look first, so a path like notes/ works too.
+      - ${OPENCLAW_NOTES_DIR:-openclaw-notes}:/home/node/.openclaw/workspace/notes:ro
     healthcheck:
       test: ["CMD", "node", "dist/docker-healthcheck.js"]
       interval: 30s
@@ -255,5 +263,6 @@ volumes:
   edgible-mcp-login: {}
   edgible-mcp-data: {}
   openclaw-card-secrets: {}
+  openclaw-notes: {}
   litellm-db-data: {}
   litellm-secrets: {}

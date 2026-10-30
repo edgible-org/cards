@@ -10,6 +10,9 @@
 #                            ollama/<tag> at OPENCLAW_FALLBACK_URL, such as ollama-osx's
 #   EDGIBLE_MCP_URL          Edgible's MCP tools (edgible-mcp), added as the server "edgible"
 #   EDGIBLE_SKILL            1: the edgible-cards skill from card-kit, for judgment
+#   OPENCLAW_NOTES           1: a folder of your own files, /notes in the Gateway's container,
+#                            added as the MCP server "notes" (the filesystem server) with its
+#                            read-only tools only
 # Later starts re-apply only who may reach the Gateway (its address, the proxy in front, and the
 # sign-in mode), so changing OPENCLAW_URL or OPENCLAW_USERS takes effect at the next start. Change
 # other settings afterwards with openclaw-cli, which shares the Gateway's processes (see the README).
@@ -91,6 +94,13 @@ fi
 if [ -n "${EDGIBLE_MCP_URL:-}" ]; then
   # The Gateway reaches it on this Compose network; this one-shot container may not, so no probe.
   oc mcp add edgible --url "$EDGIBLE_MCP_URL" --transport streamable-http --header "X-MCP-User=OpenClaw" --no-probe
+fi
+if [ "${OPENCLAW_NOTES:-0}" = 1 ]; then
+  # The Gateway starts this server itself, from its own container, so no probe from here: this
+  # one-shot container has no /notes. The filter hides the write tools; the folder is also
+  # mounted read-only, so a write fails even if a client asks the server directly.
+  oc mcp add notes --command npx --arg -y --arg @modelcontextprotocol/server-filesystem@2.1.0 --arg /notes --no-probe
+  oc mcp tools notes --include read_text_file,read_multiple_files,list_directory,list_directory_with_sizes,directory_tree,search_files,get_file_info,list_allowed_directories
 fi
 if [ "${EDGIBLE_SKILL:-0}" = 1 ]; then
   skill=$(mktemp -d)
