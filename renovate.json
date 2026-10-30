@@ -37,5 +37,8 @@
     "website-site",
     "website-strapi"
   ],
-  "platformAutomerge": true
+  "platformAutomerge": true,
+  "gitIgnoredAuthors": [
+    "actions@github.com"
+  ]
 }
