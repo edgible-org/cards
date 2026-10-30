@@ -18,7 +18,7 @@ services:
       - domoticz-secrets:/run/card-secrets
 
   domoticz:
-    image: ${DOMOTICZ_IMAGE:-domoticz/domoticz:2026.3}
+    image: ${DOMOTICZ_IMAGE:-domoticz/domoticz:2026.4}
     restart: unless-stopped
     ports:
       # One process on two host ports, both on 127.0.0.1: Edgible's web server on this machine
