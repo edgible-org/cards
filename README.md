@@ -1,13 +1,16 @@
-# edgible-cards skill evals: 2026-10-24 to 2026-10-30
+# edgible-cards skill evals: 2026-10-25 to 2026-10-31
 
-**2 of 11** held-out prompts pass, each at its latest run in the last 7 days (4 nightly runs). Skill from card-kit `30b4a89`, `5d848cc`, `f61bd7f`, `fa59bf9`.
+**2 of 14** held-out prompts pass, each at its latest run in the last 7 days (5 nightly runs). Skill from card-kit `30b4a89`, `5d848cc`, `8f3a4ae`, `f61bd7f`, `fa59bf9`.
 
 | Prompt | Run | Result | Skill loaded | expect | must_not broken |
 | --- | --- | --- | --- | --- | --- |
 | builder-agent-alone | 2026-10-30 | FAIL | no (WRONG) | 1/3 | 0 |
 | builder-just-live | 2026-10-29 | FAIL | no (WRONG) | 1/3 | 0 |
+| builder-secrets-in-repo | 2026-10-31 | FAIL | no (WRONG) | 3/3 | 0 |
 | edgible-mcp-desktop | 2026-10-30 | FAIL | no (WRONG) | 2/4 | 0 |
 | maritime-law-firm | 2026-10-29 | FAIL | no (WRONG) | 5/5 | 0 |
+| marketing-site-cost | 2026-10-31 | FAIL | no (WRONG) | 2/3 | 0 |
+| mcp-from-phone | 2026-10-31 | FAIL | no (WRONG) | 1/4 | 0 |
 | physio-clinic | 2026-10-27 | FAIL | no (WRONG) | 2/4 | 0 |
 | pocket-shutdown | 2026-10-30 | FAIL | no (WRONG) | 1/3 | 0 |
 | retest-request | 2026-10-27 | FAIL | no (WRONG) | 0/4 | 0 |
@@ -26,11 +29,21 @@
 - Missed: publishes the running app on a device, with the port it listens on. It says "Publish it through Edgible with the `org` auth mode" but never mentions the port the app listens on; it asks about the stack and offers exact publish steps later.
 - Missed: offers keeping it running later, as a card of their own, without requiring it now. It tells them to make it survive reboots now ("Docker and `restart: unless-stopped`, or a systemd service") as step 1. It does not offer a card of their own.
 
+**builder-secrets-in-repo** (2026-10-31)
+
 **edgible-mcp-desktop** (2026-10-30)
 - Missed: gives the claude_desktop_config.json entry, with the full path to edgible because the app does not read PATH. It only says to "add the server to the `mcpServers` section of `claude_desktop_config.json`". It gives no concrete entry and no full-path advice.
 - Missed: says the CLI must be installed and logged in on that machine first. It says to run `edgible mcp --help`. It never says the CLI must be installed and logged in first.
 
 **maritime-law-firm** (2026-10-29)
+
+**marketing-site-cost** (2026-10-31)
+- Missed: the wordpress card on a small cloud server for a CMS, with the upkeep stated. WordPress is offered on shared hosting at "$3–10/month" with "you have to handle updates and security yourself", so upkeep is stated. But it is not on a small cloud server; the VPS is mentioned separately and without WordPress.
+
+**mcp-from-phone** (2026-10-31)
+- Missed: recommends mcp-signin in front of the server, signing in with Edgible, with the server itself unpublished. Mentions Edgible only as one option among several and never mentions mcp-signin or keeping the server unpublished.
+- Missed: the connector URL ends in /mcp and the OAuth fields stay empty. Says only "Enter the server's public HTTPS URL." It doesn't mention /mcp or leaving the OAuth fields empty.
+- Missed: asks who else should get in, or mentions MCP_SIGNIN_USERS. The closing question asks about stdio vs HTTP, Docker vs bare, and auth. It doesn't ask who else should get access.
 
 **physio-clinic** (2026-10-27)
 - Missed: leads with practice-management tools built for clinics. Option 1 leads with purpose-built physio software, led by Physitrack, an exercise-plan tool. Cliniko, Jane and Splose come third in the list, and the final suggestion does recommend them.
@@ -59,8 +72,11 @@
 
 - builder-agent-alone: It should have said plainly which steps it can do alone once it has the app and a shell, and which need the person (Edgible sign-in link, GitHub account, steward). It should also have given an auth-mode rule of thumb and cut the asks to the one or two that matter.
 - builder-just-live: Lead with a direct answer: publish the running app from its device on its listening port with `org` auth, as a quick path that needs no container or card. Then offer a keep-it-running card as an optional later step and mention a hosted alternative.
+- builder-secrets-in-repo: State outright that a Stripe key sitting in a repo should be treated as exposed and rotated now, rather than only if it was committed or shared, and list every secret the card needs with where each one comes from.
 - edgible-mcp-desktop: Give the concrete claude_desktop_config.json entry with the full path to the edgible binary (the desktop app does not read PATH) and say the CLI must be installed and logged in first, instead of telling the user to work out the config themselves.
 - maritime-law-firm: Compare a hosted option, such as a managed legal knowledge tool, against self-hosting and state the upkeep burden. Cut the questions to the two or three that would change the recommendation.
+- marketing-site-cost: Ask up front whether the site is static or edited through a CMS, then pair each branch with its fit: free static hosting, or WordPress on a small cloud server with the upkeep spelled out.
+- mcp-from-phone: Recommend putting mcp-signin in front of the unpublished notes server with Edgible sign-in, give the connector URL ending in /mcp with the OAuth fields left empty, and ask who else should have access (MCP_SIGNIN_USERS).
 - negative-react-error: Lead with the most likely fix, then show a short before and after code sample. The answer opens with the missing file, which pushes the useful content down.
 - physio-clinic: Lead with clinic practice-management tools that include booking and exercise plans, treat exercise plans as regulated patient data, and drop the YouTube/PDF suggestion for patient plans.
 - pocket-shutdown: Present two or three self-hosted and hosted alternatives that keep page copies side by side with a recommendation, and ask about the Pocket export and import plan.
