@@ -15,16 +15,17 @@ services:
     environment:
       EULA: ${MINECRAFT_EULA:?read https://www.minecraft.net/eula and set MINECRAFT_EULA in card.env}
       TYPE: PAPER
-      VERSION: "26.2"
+      VERSION: "26.3"
       MEMORY: 2G
       MOTD: ${MINECRAFT_MOTD:-Game night}
       # A TCP or UDP app has no auth mode, so the game decides who plays:
       # online mode checks every Java account, and only whitelisted players get in.
       ONLINE_MODE: "TRUE"
       ENABLE_WHITELIST: "TRUE"
+      # Plugins are pinned: a new Geyser can change how Bedrock players connect (see prepare.sh).
       PLUGINS: |
-        https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot
-        https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot
+        https://download.geysermc.org/v2/projects/geyser/versions/2.12.1/builds/1279/downloads/spigot
+        https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/141/downloads/spigot
     volumes:
       - minecraft-data:/data
 
