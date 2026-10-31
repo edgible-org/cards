@@ -1,0 +1,30 @@
+# Compose file for the qdrant card: a vector database. The host port comes from card.env.
+# Qdrant listens on 127.0.0.1 only; Edgible's api-key check is what keeps strangers out. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+# An app on the same machine can skip Edgible and call http://127.0.0.1:<QDRANT_PORT>, or
+# http://qdrant:6333 on a shared Compose network.
+
+name: qdrant
+
+services:
+  qdrant:
+    image: ${QDRANT_IMAGE:-qdrant/qdrant:v1.20.0}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${QDRANT_PORT:?set QDRANT_PORT in card.env}:6333"
+    environment:
+      # Snapshots live in the data volume, so one backup holds everything.
+      QDRANT__STORAGE__SNAPSHOTS_PATH: /qdrant/storage/snapshots
+      QDRANT__TELEMETRY_DISABLED: "true"
+    volumes:
+      - qdrant-data:/qdrant/storage
+    # The image has no healthcheck and may have no curl: ask /readyz over a plain TCP socket.
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/6333 && printf \"GET /readyz HTTP/1.0\\r\\n\\r\\n\" >&3 && head -n1 <&3 | grep -q 200'"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+volumes:
+  qdrant-data: {}
