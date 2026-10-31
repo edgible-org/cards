@@ -1,0 +1,63 @@
+# Compose file for the home-assistant card.
+# The host ports, ORG_LABEL and the admin's name come from card.env. The admin's password is
+# made on this machine by home-assistant-secrets, at first start, and never leaves it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: home-assistant
+
+services:
+  # Makes the admin's password (card.yml secrets:) if it does not exist yet, as a file in the
+  # volume home-assistant-secrets, then exits. It never changes it after. prepare.sh uses it.
+  home-assistant-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        HOME_ASSISTANT_ADMIN_PASSWORD=openssl rand -hex 16
+    volumes:
+      - home-assistant-secrets:/run/card-secrets
+
+  # Writes the first configuration.yaml, only when there is none: Home Assistant refuses
+  # requests that come through a reverse proxy until it is told to trust one. Edgible's web
+  # server on this machine reaches the container from Docker's address ranges.
+  home-assistant-init:
+    image: ${HOME_ASSISTANT_IMAGE:-ghcr.io/home-assistant/home-assistant:2026.10.4}
+    restart: "no"
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        if [ ! -e /config/configuration.yaml ]; then
+          printf '%s\n' 'default_config:' '' 'http:' '  use_x_forwarded_for: true' '  trusted_proxies:' '    - 127.0.0.1' '    - ::1' '    - 172.16.0.0/12' '    - 192.168.0.0/16' '    - 10.0.0.0/8' > /config/configuration.yaml
+        fi
+    volumes:
+      - home-assistant-config:/config
+
+  home-assistant:
+    image: ${HOME_ASSISTANT_IMAGE:-ghcr.io/home-assistant/home-assistant:2026.10.4}
+    restart: unless-stopped
+    ports:
+      # One process on two host ports, both on 127.0.0.1: Edgible's web server on this machine
+      # is the one proxy in front. The first is published on org, the second on none.
+      - "127.0.0.1:${HOME_ASSISTANT_PORT:?set HOME_ASSISTANT_PORT in card.env}:8123"
+      - "127.0.0.1:${HOME_ASSISTANT_APP_PORT:?set HOME_ASSISTANT_APP_PORT in card.env}:8123"
+    environment:
+      TZ: ${HOME_ASSISTANT_TZ:-UTC}
+    volumes:
+      # The configuration, database, and every integration's settings.
+      - home-assistant-config:/config
+    depends_on:
+      home-assistant-init:
+        condition: service_completed_successfully
+      home-assistant-secrets:
+        condition: service_completed_successfully
+    # The image has no healthcheck of its own. The manifest is public.
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -o /dev/null http://127.0.0.1:8123/manifest.json"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+
+volumes:
+  home-assistant-config: {}
+  home-assistant-secrets: {}
