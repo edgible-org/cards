@@ -9,7 +9,7 @@ services:
   mcp-bridge:
     # Supergateway serves a stdio MCP server over Streamable HTTP. The -uvx image has
     # Node (npx) and Python with uv (uvx), so it runs servers from npm and from PyPI.
-    image: supercorp/supergateway:4.1.0-uvx
+    image: supercorp/supergateway:4.2.1-uvx
     restart: unless-stopped
     ports:
       - "127.0.0.1:${MCP_BRIDGE_PORT:?set MCP_BRIDGE_PORT in card.env}:8000"
