@@ -146,10 +146,10 @@
     "device": "osxdevice"
   },
   "minecraft": {
-    "result": "fail",
-    "tested": "2026-10-30",
+    "result": "pass",
+    "tested": "2026-10-31",
     "edgible-cli": "1.4.29",
-    "files": "sha256:8271b156a5690d81",
+    "files": "sha256:e8c8472f43ffcb39",
     "device": "osxdevice"
   },
   "miniflux": {
