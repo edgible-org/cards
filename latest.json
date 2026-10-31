@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-30T19:25:16+00:00",
+ "generated": "2026-10-31T18:10:14+00:00",
  "repo": "edgible-org/cards",
  "site": "https://cards.edgible.org",
  "jobs": [
@@ -9,35 +9,35 @@
    "state": "ok",
    "count": 1,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/41038167519",
-   "at": "2026-10-30T10:05:30Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41189795903",
+   "at": "2026-10-31T09:42:41Z"
   },
   {
    "workflow": "skill-evals",
    "name": "Skill evals",
    "state": "ok",
-   "count": 1,
+   "count": 2,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/41107807550",
-   "at": "2026-10-30T18:32:29Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41225485883",
+   "at": "2026-10-31T17:38:11Z"
   },
   {
    "workflow": "grow",
    "name": "Grow",
    "state": "ok",
-   "count": 4,
+   "count": 3,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/41108065662",
-   "at": "2026-10-30T18:34:18Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41225573535",
+   "at": "2026-10-31T17:39:19Z"
   },
   {
    "workflow": "regression",
    "name": "Cards regression",
-   "state": "fail",
-   "count": 1,
+   "state": "ok",
+   "count": 4,
    "failed": 1,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/41108110681",
-   "at": "2026-10-30T18:34:38Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41225595147",
+   "at": "2026-10-31T17:39:36Z"
   },
   {
    "workflow": "site",
@@ -45,21 +45,19 @@
    "state": "running",
    "count": 10,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/41115073095",
-   "at": "2026-10-30T19:25:00Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41228043017",
+   "at": "2026-10-31T18:09:58Z"
   }
  ],
  "cards": {
-  "total": 42,
-  "with_status": 39,
-  "passing": 38,
-  "failing": [
-   "minecraft"
-  ],
-  "tested_24h": 28,
+  "total": 43,
+  "with_status": 40,
+  "passing": 40,
+  "failing": [],
+  "tested_24h": 16,
   "oldest": [
-   "stirling-pdf",
-   18
+   "vaultwarden",
+   4
   ],
   "no_test_yet": [
    "accounts",
@@ -67,28 +65,21 @@
    "website"
   ]
  },
- "regression_issues": [
-  {
-   "number": 237,
-   "title": "Regression: minecraft fails",
-   "url": "https://github.com/edgible-org/cards/issues/237",
-   "days": 0
-  }
- ],
+ "regression_issues": [],
  "images": {
-  "cards_with_fixable": 37,
+  "cards_with_fixable": 38,
   "worst": [
    {
     "card": "domoticz",
-    "count": 256
+    "count": 251
    },
    {
     "card": "frigate",
-    "count": 235
+    "count": 240
    },
    {
     "card": "linkding",
-    "count": 213
+    "count": 208
    },
    {
     "card": "immich",
@@ -96,10 +87,10 @@
    },
    {
     "card": "wiki-js",
-    "count": 129
+    "count": 135
    }
   ],
-  "scanned": 54
+  "scanned": 55
  },
  "queue": [
   {
@@ -123,14 +114,6 @@
    "title": "Update ghcr.io/openclaw/openclaw Docker tag to v2026.10.9",
    "url": "https://github.com/edgible-org/cards/pull/244",
    "kind": "image bump",
-   "state": "hold",
-   "why": "merge conflict; for a bump, tick its rebase box on the PR"
-  },
-  {
-   "number": 243,
-   "title": "Update docker.n8n.io/n8nio/n8n Docker tag to v2.46.2",
-   "url": "https://github.com/edgible-org/cards/pull/243",
-   "kind": "image bump",
    "state": "ready",
    "why": "its test passed on a device; merge it"
   },
@@ -145,32 +128,34 @@
  ],
  "card_kit_prs": [
   {
-   "number": 152,
+   "number": 160,
    "title": "Needs map: add merged agent-made cards",
-   "url": "https://github.com/edgible-org/card-kit/pull/152"
+   "url": "https://github.com/edgible-org/card-kit/pull/160"
+  },
+  {
+   "number": 159,
+   "title": "edgible-mcp 0.7.23: deploy cards with a different container port; refuse a move that would leave data behind",
+   "url": "https://github.com/edgible-org/card-kit/pull/159"
+  },
+  {
+   "number": 158,
+   "title": "edgible-cards skill: Windows path with VirtualBox, Multipass and Ubuntu 26.04",
+   "url": "https://github.com/edgible-org/card-kit/pull/158"
+  },
+  {
+   "number": 157,
+   "title": "edgible-cards skill: ask whether the machine is always-on, detect it, offer to set it",
+   "url": "https://github.com/edgible-org/card-kit/pull/157"
   }
  ],
  "grow": {
   "made": [
    {
-    "title": "New app card: keeper-sh",
-    "url": "https://github.com/edgible-org/cards/pull/242"
-   },
-   {
-    "title": "New app card: frigate",
-    "url": "https://github.com/edgible-org/cards/pull/241"
-   },
-   {
-    "title": "New app card: domoticz",
-    "url": "https://github.com/edgible-org/cards/pull/240"
+    "title": "New app card: home-assistant",
+    "url": "https://github.com/edgible-org/cards/pull/257"
    }
   ],
-  "could_not_make": [
-   {
-    "title": "App request: home-assistant",
-    "url": "https://github.com/edgible-org/cards/issues/239"
-   }
-  ],
+  "could_not_make": [],
   "agent_prs_open": 0
  },
  "upstream": {
@@ -196,6 +181,11 @@
    "card": "gitea",
    "topic": "healthcheck",
    "image": "gitea/gitea:28.1.0"
+  },
+  {
+   "card": "home-assistant",
+   "topic": "healthcheck",
+   "image": "ghcr.io/home-assistant/home-assistant:2026.10.4"
   },
   {
    "card": "keeper-sh",
@@ -274,5 +264,5 @@
   }
  ],
  "skill_evals_report": "https://github.com/edgible-org/cards/issues/17",
- "summary": "Last night three new cards were added (domoticz, frigate, keeper-sh), and 38 of 39 cards passed the regression run. Minecraft failed on osxdevice, and its issue will close itself if it passes tonight. The one thing that needs you is the home-assistant app request (#239), which the grow job could not build: pick it up or close it."
+ "summary": "Last night the home-assistant card was added, seven others were changed, and all 16 cards the regression tested passed. Nothing needs you today. The one figure to keep in view is that only 2 of 14 held-out skill-eval prompts passed this week, but the report asks for no action on it."
 }
