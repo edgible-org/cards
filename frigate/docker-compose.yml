@@ -8,7 +8,7 @@ services:
   # Puts the starting config.yml into the frigate-config volume if none is there yet, then
   # exits. It never changes a config after, so edits made in the interface stay.
   frigate-seed:
-    image: ghcr.io/blakeblackshear/frigate:0.17.1
+    image: ghcr.io/blakeblackshear/frigate:0.18.2
     restart: "no"
     entrypoint: ["sh", "-c", "[ -f /config/config.yml ] || cp /seed/config.yml /config/config.yml"]
     volumes:
@@ -16,7 +16,7 @@ services:
       - ./config.yml:/seed/config.yml:ro
 
   frigate:
-    image: ${FRIGATE_IMAGE:-ghcr.io/blakeblackshear/frigate:0.17.1}
+    image: ${FRIGATE_IMAGE:-ghcr.io/blakeblackshear/frigate:0.18.2}
     restart: unless-stopped
     shm_size: 256mb
     stop_grace_period: 30s
