@@ -29,9 +29,9 @@
   },
   "docmost": {
     "result": "pass",
-    "tested": "2026-10-28",
+    "tested": "2026-10-31",
     "edgible-cli": "1.4.29",
-    "files": "sha256:ea5bb164d467d04d",
+    "files": "sha256:e483f4a570c943bc",
     "device": "osxdevice"
   },
   "domoticz": {
@@ -43,9 +43,9 @@
   },
   "ech0": {
     "result": "pass",
-    "tested": "2026-10-29",
+    "tested": "2026-10-31",
     "edgible-cli": "1.4.29",
-    "files": "sha256:46fd736eaef929d7",
+    "files": "sha256:d9e30b96573ad8f4",
     "device": "osxdevice"
   },
   "edgible-agent": {
@@ -81,6 +81,13 @@
     "tested": "2026-10-29",
     "edgible-cli": "1.4.29",
     "files": "sha256:6f98e9bc3a2549a3",
+    "device": "osxdevice"
+  },
+  "home-assistant": {
+    "result": "pass",
+    "tested": "2026-10-31",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:4f9d9ed26159524c",
     "device": "osxdevice"
   },
   "immich": {
@@ -127,9 +134,10 @@
   },
   "mcp-bridge": {
     "result": "pass",
-    "tested": "2026-10-12",
-    "edgible-cli": "1.4.6",
-    "files": "sha256:098b9afbd66d64de"
+    "tested": "2026-10-31",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:749c0fefdef0365b",
+    "device": "osxdevice"
   },
   "mcp-signin": {
     "result": "pass",
@@ -161,9 +169,9 @@
   },
   "n8n": {
     "result": "pass",
-    "tested": "2026-10-29",
+    "tested": "2026-10-31",
     "edgible-cli": "1.4.29",
-    "files": "sha256:5020eac11654d8b2",
+    "files": "sha256:2ef17ce6deec9693",
     "device": "osxdevice"
   },
   "ollama-osx": {
@@ -182,9 +190,9 @@
   },
   "otter-wiki": {
     "result": "pass",
-    "tested": "2026-10-29",
+    "tested": "2026-10-31",
     "edgible-cli": "1.4.29",
-    "files": "sha256:40b09f6077bce654",
+    "files": "sha256:91e73e8626980625",
     "device": "osxdevice"
   },
   "owncloud": {
@@ -210,9 +218,10 @@
   },
   "stirling-pdf": {
     "result": "pass",
-    "tested": "2026-10-12",
-    "edgible-cli": "1.4.6",
-    "files": "sha256:ee91144ca0dac6f1"
+    "tested": "2026-10-31",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:fcdc1f2e1c862460",
+    "device": "osxdevice"
   },
   "teamdesk": {
     "result": "pass",
