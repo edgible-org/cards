@@ -7,7 +7,7 @@ name: accounts
 
 services:
   logto:
-    image: svhd/logto:1.44.0
+    image: svhd/logto:1.45.0
     entrypoint:
       [
         "sh",
