@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-31T18:10:14+00:00",
+ "generated": "2026-11-01T19:31:58+00:00",
  "repo": "edgible-org/cards",
  "site": "https://cards.edgible.org",
  "jobs": [
@@ -9,35 +9,35 @@
    "state": "ok",
    "count": 1,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/41189795903",
-   "at": "2026-10-31T09:42:41Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41297846517",
+   "at": "2026-11-01T10:31:17Z"
   },
   {
    "workflow": "skill-evals",
    "name": "Skill evals",
    "state": "ok",
-   "count": 2,
+   "count": 1,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/41225485883",
-   "at": "2026-10-31T17:38:11Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41336348762",
+   "at": "2026-11-01T18:23:11Z"
   },
   {
    "workflow": "grow",
    "name": "Grow",
-   "state": "ok",
-   "count": 3,
+   "state": "running",
+   "count": 8,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/41225573535",
-   "at": "2026-10-31T17:39:19Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41341652864",
+   "at": "2026-11-01T19:25:25Z"
   },
   {
    "workflow": "regression",
    "name": "Cards regression",
    "state": "ok",
-   "count": 4,
-   "failed": 1,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/41225595147",
-   "at": "2026-10-31T17:39:36Z"
+   "count": 3,
+   "failed": 0,
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41338714249",
+   "at": "2026-11-01T18:51:05Z"
   },
   {
    "workflow": "site",
@@ -45,19 +45,19 @@
    "state": "running",
    "count": 10,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/41228043017",
-   "at": "2026-10-31T18:09:58Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41342181532",
+   "at": "2026-11-01T19:31:44Z"
   }
  ],
  "cards": {
-  "total": 43,
-  "with_status": 40,
-  "passing": 40,
+  "total": 45,
+  "with_status": 42,
+  "passing": 42,
   "failing": [],
-  "tested_24h": 16,
+  "tested_24h": 17,
   "oldest": [
    "vaultwarden",
-   4
+   5
   ],
   "no_test_yet": [
    "accounts",
@@ -67,15 +67,11 @@
  },
  "regression_issues": [],
  "images": {
-  "cards_with_fixable": 38,
+  "cards_with_fixable": 40,
   "worst": [
    {
-    "card": "domoticz",
-    "count": 251
-   },
-   {
     "card": "frigate",
-    "count": 240
+    "count": 286
    },
    {
     "card": "linkding",
@@ -88,34 +84,30 @@
    {
     "card": "wiki-js",
     "count": 135
+   },
+   {
+    "card": "home-assistant",
+    "count": 91
    }
   ],
-  "scanned": 55
+  "scanned": 57
  },
  "queue": [
   {
-   "number": 246,
-   "title": "Update ghcr.io/blakeblackshear/frigate Docker tag to v0.18.2",
-   "url": "https://github.com/edgible-org/cards/pull/246",
-   "kind": "image bump",
-   "state": "ready",
-   "why": "its test passed on a device; merge it"
+   "number": 277,
+   "title": "New app card: photoprism",
+   "url": "https://github.com/edgible-org/cards/pull/277",
+   "kind": "new card",
+   "state": "review",
+   "why": "checks: 2 to look at. its test passed on a device; read the card, then merge or close"
   },
   {
-   "number": 245,
-   "title": "Update domoticz/domoticz Docker tag to v2026.4",
-   "url": "https://github.com/edgible-org/cards/pull/245",
-   "kind": "image bump",
-   "state": "ready",
-   "why": "its test passed on a device; merge it"
-  },
-  {
-   "number": 244,
-   "title": "Update ghcr.io/openclaw/openclaw Docker tag to v2026.10.9",
-   "url": "https://github.com/edgible-org/cards/pull/244",
-   "kind": "image bump",
-   "state": "ready",
-   "why": "its test passed on a device; merge it"
+   "number": 276,
+   "title": "New app card: linkwarden",
+   "url": "https://github.com/edgible-org/cards/pull/276",
+   "kind": "new card",
+   "state": "review",
+   "why": "checks: 1 to look at. its test passed on a device; read the card, then merge or close"
   },
   {
    "number": 225,
@@ -126,42 +118,51 @@
    "why": "needs a person"
   }
  ],
- "card_kit_prs": [
-  {
-   "number": 160,
-   "title": "Needs map: add merged agent-made cards",
-   "url": "https://github.com/edgible-org/card-kit/pull/160"
-  },
-  {
-   "number": 159,
-   "title": "edgible-mcp 0.7.23: deploy cards with a different container port; refuse a move that would leave data behind",
-   "url": "https://github.com/edgible-org/card-kit/pull/159"
-  },
-  {
-   "number": 158,
-   "title": "edgible-cards skill: Windows path with VirtualBox, Multipass and Ubuntu 26.04",
-   "url": "https://github.com/edgible-org/card-kit/pull/158"
-  },
-  {
-   "number": 157,
-   "title": "edgible-cards skill: ask whether the machine is always-on, detect it, offer to set it",
-   "url": "https://github.com/edgible-org/card-kit/pull/157"
-  }
- ],
+ "card_kit_prs": [],
  "grow": {
   "made": [
    {
-    "title": "New app card: home-assistant",
-    "url": "https://github.com/edgible-org/cards/pull/257"
+    "title": "New app card: photoprism",
+    "url": "https://github.com/edgible-org/cards/pull/277"
+   },
+   {
+    "title": "New app card: linkwarden",
+    "url": "https://github.com/edgible-org/cards/pull/276"
+   },
+   {
+    "title": "New app card: arize-phoenix",
+    "url": "https://github.com/edgible-org/cards/pull/267"
+   },
+   {
+    "title": "New app card: qdrant",
+    "url": "https://github.com/edgible-org/cards/pull/265"
    }
   ],
-  "could_not_make": [],
-  "agent_prs_open": 0
+  "could_not_make": [
+   {
+    "title": "App request: speaches",
+    "url": "https://github.com/edgible-org/cards/issues/272"
+   },
+   {
+    "title": "App request: localai",
+    "url": "https://github.com/edgible-org/cards/issues/271"
+   },
+   {
+    "title": "App request: speaches",
+    "url": "https://github.com/edgible-org/cards/issues/270"
+   }
+  ],
+  "agent_prs_open": 2
  },
  "upstream": {
   "draft": 11
  },
  "upstream_candidates": [
+  {
+   "card": "arize-phoenix",
+   "topic": "healthcheck",
+   "image": "arizephoenix/phoenix:version-21.0.0-debug"
+  },
   {
    "card": "ci",
    "topic": "healthcheck",
@@ -228,6 +229,11 @@
    "image": "redimp/otterwiki:2.25.0"
   },
   {
+   "card": "qdrant",
+   "topic": "healthcheck",
+   "image": "qdrant/qdrant:v1.20.0"
+  },
+  {
    "card": "static-site",
    "topic": "healthcheck",
    "image": "caddy:2.11.7-alpine"
@@ -264,5 +270,5 @@
   }
  ],
  "skill_evals_report": "https://github.com/edgible-org/cards/issues/17",
- "summary": "Last night the home-assistant card was added, seven others were changed, and all 16 cards the regression tested passed. Nothing needs you today. The one figure to keep in view is that only 2 of 14 held-out skill-eval prompts passed this week, but the report asks for no action on it."
+ "summary": "Overnight, the cards regression passed all 17 cards it tested, and the grow job added arize-phoenix and qdrant, though it could not make three app requests and one run is still in progress. The skill evals ran successfully, but only 2 of 16 held-out prompts pass this week. The one thing that needs you is the two new card pull requests, photoprism and linkwarden, which are waiting for you to merge or close them."
 }
