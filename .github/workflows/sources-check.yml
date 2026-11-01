@@ -1,0 +1,53 @@
+name: sources-check
+
+# Monthly: check that the places we find apps are still in good order (card-kit's
+# skills/edgible-cards/sources.yaml and the needs map's candidates). It reports and never edits:
+# one issue is opened, kept up to date while there are findings, and closed when there are none.
+# The AI scout that searches for new sources is a later step; see HOW-IT-WORKS.md.
+
+on:
+  schedule:
+    - cron: "23 4 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency: sources-check
+
+env:
+  CARD_KIT_REF: main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch card-kit
+        run: git clone -q --depth 1 --branch "$CARD_KIT_REF" https://github.com/edgible-org/card-kit.git card-kit
+      - name: Check
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: card-kit/run check-sources --out sources-report.md
+      - name: Open, update or close the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          title="Sources and candidates need a look"
+          gh label create sources-check --color 0E8A16 --description "Monthly check of where apps are found" 2>/dev/null || true
+          existing=$(gh issue list --label sources-check --state open --json number --jq '.[0].number // empty')
+          if head -1 sources-report.md | grep -q '^0 things'; then
+            if [ -n "$existing" ]; then
+              gh issue close "$existing" --comment "The latest check found nothing to look at."
+            fi
+            exit 0
+          fi
+          if [ -n "$existing" ]; then
+            gh issue edit "$existing" --body-file sources-report.md
+          else
+            gh issue create --title "$title" --label sources-check --body-file sources-report.md
+          fi
+          { echo '```'; cat sources-report.md; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
