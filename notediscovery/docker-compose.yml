@@ -1,0 +1,28 @@
+# Compose file for the notediscovery card: a Markdown note library with search and an MCP endpoint.
+# The host port comes from card.env. NoteDiscovery listens on 127.0.0.1 only and has no login of
+# its own here: Edgible's org sign-in and api-key check are what keep strangers out. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: notediscovery
+
+services:
+  notediscovery:
+    image: ${NOTEDISCOVERY_IMAGE:-ghcr.io/gamosoft/notediscovery:0.33.0}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${NOTEDISCOVERY_PORT:?set NOTEDISCOVERY_PORT in card.env}:8000"
+    environment:
+      TZ: ${NOTEDISCOVERY_TZ:-UTC}
+      # The MCP endpoint at /mcp is off by default.
+      MCP_ENABLED: "true"
+    volumes:
+      - notediscovery-data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+
+volumes:
+  notediscovery-data: {}
