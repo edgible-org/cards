@@ -1,0 +1,195 @@
+{
+  "meta": {
+    "date": "2026-11-01",
+    "rotation_day": 6,
+    "card_kit": "36d8b7f",
+    "claude": "2.1.296 (Claude Code)",
+    "mcp": "edgible find and describe",
+    "judge_model": "sonnet",
+    "not_run": [],
+    "stopped": ""
+  },
+  "results": [
+    {
+      "id": "s3-members-area",
+      "pass": false,
+      "should_load": true,
+      "loaded": false,
+      "loaded_at": null,
+      "tools": [],
+      "expect_passed": 2,
+      "expect_total": 3,
+      "must_not_violated": [],
+      "principles_failed": [
+        "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+        "Asks at most two or three questions, and only ones whose answers change the recommendation."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "says hiding pages with JavaScript is not protection; content must be served by something that checks the sign-in",
+            "pass": true,
+            "evidence": "\"a login form in your page's JavaScript won't protect anything... The content has to be blocked on the server or edge side, before it's sent.\""
+          },
+          {
+            "item": "asks who signs in - invited people or the public",
+            "pass": true,
+            "evidence": "\"do they sign up themselves or do you invite them?\""
+          },
+          {
+            "item": "offers AWS-native, hosted, and self-hosted (the accounts card) options",
+            "pass": false,
+            "evidence": "Offers AWS-native (Cognito, Amplify) and hosted (Auth0, Clerk, Firebase), but no self-hosted accounts option; Cloudflare Access is not self-hosted accounts."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "claim client-side hiding is secure",
+            "violated": false,
+            "evidence": "It says \"Hiding content with client-side JS only\" should be avoided."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "Opens with why JS won't work, then immediately gives the recommended CloudFront + Cognito approach."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": false,
+            "evidence": "Hosted options are listed, but there is no self-hosting option and no upkeep is stated."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": false,
+            "evidence": "Asks four questions, including whether they use CloudFront or a custom domain."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "Only offers to sketch the setup afterwards: \"Once I know that, I can sketch the exact setup\"."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "Not clearly applicable."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": true,
+            "evidence": "Asks about different content per user or tier and mentions Cognito groups, but does not raise sensitive or regulated data."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": true,
+            "evidence": "The \"What to avoid\" section rejects client-side JS and public buckets with reasons, and gives alternatives."
+          }
+        ],
+        "better": "Trim the questions to two or three that change the recommendation, and add a self-hosted accounts option with its upkeep next to the AWS-native and hosted options."
+      }
+    },
+    {
+      "id": "record-stale-and-fixable",
+      "pass": false,
+      "should_load": true,
+      "loaded": false,
+      "loaded_at": null,
+      "tools": [
+        "ToolSearch",
+        "mcp__edgible__describe",
+        "mcp__edgible__find"
+      ],
+      "expect_passed": 2,
+      "expect_total": 5,
+      "must_not_violated": [],
+      "principles_failed": [
+        "Says no plainly to a poor or refused fit, with the reason and what works instead."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "reads the record back in plain words - when it was tested, on which Edgible version, and the image scan result",
+            "pass": true,
+            "evidence": "\"pass on Edgible 1.4.29, 29 October 2026, run nightly... darwin/arm64 with Docker 29.4.3\" and lists tested images; but it says it can't see the scan/fixable count."
+          },
+          {
+            "item": "says a fixable finding means the card's pinned image is behind a fix, and that it is not proof the app is exposed",
+            "pass": false,
+            "evidence": "\"'Fixable' usually means the vulnerabilities have patched versions available, so the count tells you how much a newer image would help.\" It doesn't say the finding is not proof of exposure."
+          },
+          {
+            "item": "notes the test ran on an older Edgible version than the person has",
+            "pass": true,
+            "evidence": "It notes the 12 Oct run on 1.4.6 is older. The latest test is on 1.4.29, which is newer than their 1.4.12. \"Neither run covers 1.4.12.\""
+          },
+          {
+            "item": "offers the choices - deploy as it is, test it on their own device first with test-card, or ask the maintainers to retest",
+            "pass": false,
+            "evidence": "It suggests upgrading Edgible and using tested tags. It never mentions test-card or asking maintainers to retest."
+          },
+          {
+            "item": "says test-card publishes and removes a throwaway copy and downloads images, and asks before running it",
+            "pass": false,
+            "evidence": "test-card is not mentioned."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "say the card is safe or tested on their version",
+            "violated": false,
+            "evidence": "\"Neither run covers 1.4.12, so I can't say it's verified.\""
+          },
+          {
+            "item": "run or start the deployment before the person chooses",
+            "violated": false,
+            "evidence": "Nothing was run. The answer is advice only."
+          },
+          {
+            "item": "tell them to edit the Compose file to bump an image",
+            "violated": false,
+            "evidence": "It says \"Check which tag your copy actually uses and prefer the tested one\". It doesn't tell them to edit the Compose file."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "Opens with \"Mostly yes, but your badges look out of date, and a Mac has its own problem.\""
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": true,
+            "evidence": "It mentions a cloud server, free static hosting, and that a money-earning site \"needs someone to keep it up\"."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "It asks no questions."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "It only advises and claims no actions."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": true,
+            "evidence": "It says the site is public with auth mode `none`, and that WordPress's own login protects /wp-admin."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "The prompt doesn't involve sensitive data."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": false,
+            "evidence": "It says \"Mostly yes\" and calls the Mac only a conditional fit. It doesn't plainly say no, though it gives reasons and alternatives."
+          }
+        ],
+        "better": "Explain that 'fixable' means the pinned image trails a patch and isn't proof of exposure, then offer the real choices: deploy as is, run test-card on their own Mac (saying it publishes and removes a throwaway copy and downloads images, and asking first), or ask the maintainers to retest on 1.4.12."
+      }
+    }
+  ]
+}

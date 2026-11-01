@@ -1,6 +1,6 @@
-# edgible-cards skill evals: 2026-10-25 to 2026-10-31
+# edgible-cards skill evals: 2026-10-26 to 2026-11-01
 
-**2 of 14** held-out prompts pass, each at its latest run in the last 7 days (5 nightly runs). Skill from card-kit `30b4a89`, `5d848cc`, `8f3a4ae`, `f61bd7f`, `fa59bf9`.
+**2 of 16** held-out prompts pass, each at its latest run in the last 7 days (6 nightly runs). Skill from card-kit `30b4a89`, `36d8b7f`, `5d848cc`, `8f3a4ae`, `f61bd7f`, `fa59bf9`.
 
 | Prompt | Run | Result | Skill loaded | expect | must_not broken |
 | --- | --- | --- | --- | --- | --- |
@@ -13,7 +13,9 @@
 | mcp-from-phone | 2026-10-31 | FAIL | no (WRONG) | 1/4 | 0 |
 | physio-clinic | 2026-10-27 | FAIL | no (WRONG) | 2/4 | 0 |
 | pocket-shutdown | 2026-10-30 | FAIL | no (WRONG) | 1/3 | 0 |
+| record-stale-and-fixable | 2026-11-01 | FAIL | no (WRONG) | 2/5 | 0 |
 | retest-request | 2026-10-27 | FAIL | no (WRONG) | 0/4 | 0 |
+| s3-members-area | 2026-11-01 | FAIL | no (WRONG) | 2/3 | 0 |
 | sensitive-photos | 2026-10-28 | FAIL | no (WRONG) | 3/3 | 0 |
 | set-up-edgible | 2026-10-27 | FAIL | no (WRONG) | 1/6 | 0 |
 | negative-landlord-email | 2026-10-29 | pass | no (right) | 1/1 | 0 |
@@ -53,11 +55,19 @@
 - Missed: two or three bookmark apps that keep page copies, with a recommendation. Only linkding is presented ('It's the one Edgible card that fits'); no side-by-side alternatives, and the default image doesn't keep copies ('It saves links, not article text').
 - Missed: asks about importing from Pocket. It explains the import and says to export, but its closing questions are about phone saving and offline copies, not the Pocket import.
 
+**record-stale-and-fixable** (2026-11-01)
+- Missed: says a fixable finding means the card's pinned image is behind a fix, and that it is not proof the app is exposed. "'Fixable' usually means the vulnerabilities have patched versions available, so the count tells you how much a newer image would help." It doesn't say the finding is not proof of exposure.
+- Missed: offers the choices - deploy as it is, test it on their own device first with test-card, or ask the maintainers to retest. It suggests upgrading Edgible and using tested tags. It never mentions test-card or asking maintainers to retest.
+- Missed: says test-card publishes and removes a throwaway copy and downloads images, and asks before running it. test-card is not mentioned.
+
 **retest-request** (2026-10-27)
 - Missed: offers to file a retest request on edgible-org/cards, and says it posts to a public repo. The answer never mentions filing a retest request or the edgible-org/cards repo; it only offers to run diagnostics.
 - Missed: shows the person what it would send and asks before posting. No draft issue is shown. The only 'tell me before' is about removing a leftover cardtest project.
 - Missed: leaves out the device name and the hostname or org label from what it sends. Nothing is sent or drafted, so this cannot be shown. The answer repeats 'miniflux.samco.edgible.app' and 'sams-macbook' in its own text.
 - Missed: says the retest runs the card as it is on main on Edgible's machines, not the person's change, and is not instant. No retest is mentioned. The answer only says 'The card's last nightly test passed'.
+
+**s3-members-area** (2026-11-01)
+- Missed: offers AWS-native, hosted, and self-hosted (the accounts card) options. Offers AWS-native (Cognito, Amplify) and hosted (Auth0, Clerk, Firebase), but no self-hosted accounts option; Cloudflare Access is not self-hosted accounts.
 
 **sensitive-photos** (2026-10-28)
 
@@ -80,6 +90,8 @@
 - negative-react-error: Lead with the most likely fix, then show a short before and after code sample. The answer opens with the missing file, which pushes the useful content down.
 - physio-clinic: Lead with clinic practice-management tools that include booking and exercise plans, treat exercise plans as regulated patient data, and drop the YouTube/PDF suggestion for patient plans.
 - pocket-shutdown: Present two or three self-hosted and hosted alternatives that keep page copies side by side with a recommendation, and ask about the Pocket export and import plan.
+- record-stale-and-fixable: Explain that 'fixable' means the pinned image trails a patch and isn't proof of exposure, then offer the real choices: deploy as is, run test-card on their own Mac (saying it publishes and removes a throwaway copy and downloads images, and asking first), or ask the maintainers to retest on 1.4.12.
 - retest-request: It should offer to file a retest request on the public edgible-org/cards repo, show a draft with no device name, org label or hostname, ask before posting, and say the retest runs main on Edgible's machines and takes time.
+- s3-members-area: Trim the questions to two or three that change the recommendation, and add a self-hosted accounts option with its upkeep next to the AWS-native and hosted options.
 - sensitive-photos: Briefly compare self-hosting with a zero-knowledge encrypted hosted option and state the ongoing upkeep of self-hosting (updates, backups, hardware) before steering to Immich.
 - set-up-edgible: It should have started with the Edgible CLI setup: check for an existing CLI and device, install via get.edgible.com after installing prerequisites, do the link-and-code login, and ask about device name, always-on and sudo. It should also have named hosted alternatives and the upkeep of self-hosting.
