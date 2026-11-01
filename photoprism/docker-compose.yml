@@ -1,0 +1,83 @@
+# Compose file for the photoprism card.
+# The host port, ORG_LABEL and the admin's name come from card.env. The passwords are made on
+# this machine by photoprism-secrets, at first start, and never leave it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: photoprism
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume photoprism-secrets, then exits. It never changes one that exists.
+  photoprism-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        PHOTOPRISM_DB_PASSWORD=openssl rand -hex 16
+        PHOTOPRISM_ADMIN_PASSWORD=openssl rand -hex 16
+    volumes:
+      - photoprism-secrets:/run/card-secrets
+
+  photoprism:
+    image: photoprism/photoprism:260601
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${PHOTOPRISM_PORT:?set PHOTOPRISM_PORT in card.env}:2342"
+    environment:
+      PHOTOPRISM_AUTH_MODE: password
+      PHOTOPRISM_ADMIN_USER: ${PHOTOPRISM_ADMIN_USER:-admin}
+      PHOTOPRISM_ADMIN_PASSWORD_FILE: /run/card-secrets/PHOTOPRISM_ADMIN_PASSWORD
+      # The address people reach it by, for links and the phone apps. Edgible gives it HTTPS.
+      PHOTOPRISM_SITE_URL: ${PHOTOPRISM_URL:-https://photoprism.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}/
+      PHOTOPRISM_DISABLE_TLS: "true"
+      PHOTOPRISM_HTTP_PORT: "2342"
+      PHOTOPRISM_DATABASE_DRIVER: mysql
+      PHOTOPRISM_DATABASE_SERVER: photoprism-db:3306
+      PHOTOPRISM_DATABASE_NAME: photoprism
+      PHOTOPRISM_DATABASE_USER: photoprism
+      PHOTOPRISM_DATABASE_PASSWORD_FILE: /run/card-secrets/PHOTOPRISM_DB_PASSWORD
+      PHOTOPRISM_DISABLE_TELEMETRY: "true"
+    volumes:
+      # The photos, including those uploaded from phones over WebDAV.
+      - photoprism-originals:/photoprism/originals
+      # Settings, sidecar files, and the thumbnail cache.
+      - photoprism-storage:/photoprism/storage
+      - photoprism-secrets:/run/card-secrets:ro
+    depends_on:
+      photoprism-secrets:
+        condition: service_completed_successfully
+      photoprism-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "photoprism", "status"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 60s
+
+  photoprism-db:
+    image: mariadb:11.8.9
+    restart: unless-stopped
+    command: --innodb-buffer-pool-size=512M --transaction-isolation=READ-COMMITTED --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=512 --innodb-rollback-on-timeout=OFF --innodb-lock-wait-timeout=120
+    environment:
+      MARIADB_DATABASE: photoprism
+      MARIADB_USER: photoprism
+      MARIADB_PASSWORD_FILE: /run/card-secrets/PHOTOPRISM_DB_PASSWORD
+      MARIADB_RANDOM_ROOT_PASSWORD: "1"
+    volumes:
+      - photoprism-db-data:/var/lib/mysql
+      - photoprism-secrets:/run/card-secrets:ro
+    depends_on:
+      photoprism-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  photoprism-originals: {}
+  photoprism-storage: {}
+  photoprism-db-data: {}
+  photoprism-secrets: {}
