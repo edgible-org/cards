@@ -1,0 +1,84 @@
+# Compose file for the passbolt card.
+# The host port, ORG_LABEL and the mail settings come from card.env. The database password is
+# made on this machine by passbolt-secrets, at first start, and never leaves it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: passbolt
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume passbolt-secrets, then exits. It never changes one that exists.
+  passbolt-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        PASSBOLT_DB_PASSWORD=openssl rand -hex 16
+    volumes:
+      - passbolt-secrets:/run/card-secrets
+
+  passbolt:
+    image: passbolt/passbolt:5.8.0-1-ce-non-root
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${PASSBOLT_PORT:?set PASSBOLT_PORT in card.env}:8080"
+    # Passbolt reads its database password from the environment only, so this reads it from the
+    # secrets volume and then starts the image's own entrypoint.
+    entrypoint:
+      - sh
+      - -c
+      - 'DATASOURCES_DEFAULT_PASSWORD=$$(cat /run/card-secrets/PASSBOLT_DB_PASSWORD) exec /docker-entrypoint.sh'
+    environment:
+      APP_FULL_BASE_URL: ${PASSBOLT_URL:-https://passbolt.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      DATASOURCES_DEFAULT_HOST: passbolt-db
+      DATASOURCES_DEFAULT_USERNAME: passbolt
+      DATASOURCES_DEFAULT_DATABASE: passbolt
+      # Nobody may register themselves: the admin invites each person by email.
+      PASSBOLT_REGISTRATION_PUBLIC: "false"
+      EMAIL_DEFAULT_FROM: ${PASSBOLT_EMAIL_FROM:-passbolt@localhost}
+      EMAIL_TRANSPORT_DEFAULT_HOST: ${PASSBOLT_SMTP_HOST:-localhost}
+      EMAIL_TRANSPORT_DEFAULT_PORT: ${PASSBOLT_SMTP_PORT:-25}
+      EMAIL_TRANSPORT_DEFAULT_TLS: ${PASSBOLT_SMTP_TLS:-false}
+      EMAIL_TRANSPORT_DEFAULT_USERNAME: ${PASSBOLT_SMTP_USERNAME:-}
+      EMAIL_TRANSPORT_DEFAULT_PASSWORD: ${PASSBOLT_SMTP_PASSWORD:-}
+    volumes:
+      - passbolt-gpg:/etc/passbolt/gpg
+      - passbolt-jwt:/etc/passbolt/jwt
+      - passbolt-secrets:/run/card-secrets:ro
+    depends_on:
+      passbolt-secrets:
+        condition: service_completed_successfully
+      passbolt-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -o /dev/null http://127.0.0.1:8080/healthcheck/status.json"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 90s
+
+  passbolt-db:
+    image: mariadb:11.8.5
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: passbolt
+      MARIADB_USER: passbolt
+      MARIADB_PASSWORD_FILE: /run/card-secrets/PASSBOLT_DB_PASSWORD
+      MARIADB_RANDOM_ROOT_PASSWORD: "1"
+    volumes:
+      - passbolt-db-data:/var/lib/mysql
+      - passbolt-secrets:/run/card-secrets:ro
+    depends_on:
+      passbolt-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  passbolt-db-data: {}
+  passbolt-gpg: {}
+  passbolt-jwt: {}
+  passbolt-secrets: {}
