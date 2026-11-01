@@ -1,0 +1,30 @@
+tested: 2026-11-02
+result: pass
+card-kit: "36d8b7f"
+edgible-cli: 1.4.29
+files: sha256:afa1b864fa336b86
+machine: darwin/arm64, docker 29.4.3
+images:
+  - ghcr.io/gamosoft/notediscovery:0.33.0@sha256:f2e7a8cc7f24568e17a17628351b7f43712a65e0c4df87afa22e69ca43250c8c
+image_facts:
+  ghcr.io/gamosoft/notediscovery:0.33.0: {user: "root", archs: ["amd64", "arm64"], healthcheck: true}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    notediscovery: pass
+    notediscovery-mcp: pass
+  checks:
+    notes-and-mcp: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"notes": 0}
+measured:
+  notediscovery:
+    memory: 50 MB
+    images: 64 MB
+    data: 4 KB
+duration: 3m
+by: agent
+notes: notediscovery's port 8000 was taken on the test machine, so it was tested on 8001. notediscovery-mcp's port 8000 was taken on the test machine, so it was tested on 8001.
