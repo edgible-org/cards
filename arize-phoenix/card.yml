@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: arize-phoenix
+  description: Arize Phoenix, LLM traces and evals in one container, the dashboard behind org and the trace ingestion behind an api-key
+  type: app
+  added: 2026-10-31
+  homepage: https://arize.com/docs/phoenix
+  license: Elastic-2.0
+  steward: edgible-org
+
+applications:
+  - name: arize-phoenix
+    what: Phoenix dashboard, traces, prompts and evals
+    from: arizephoenix/phoenix:version-21.0.0-debug
+    port: 6006
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [org]
+    place: arize-phoenix
+
+  - name: arize-phoenix-ingest
+    what: Phoenix OpenTelemetry trace ingestion over HTTP, same process as arize-phoenix
+    from: arizephoenix/phoenix:version-21.0.0-debug
+    port: 6006
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [api-key]
+    place: arize-phoenix
+
+data:
+  volumes:
+    # The SQLite database: every trace, span, prompt, dataset and eval.
+    arize-phoenix-data:
+      class: irreplaceable
+  fingerprint:
+    service: arize-phoenix
+    command: >-
+      /usr/bin/python3 -c "import json,os,sqlite3;p=os.environ['PHOENIX_WORKING_DIR']+'/phoenix.db';
+      c=sqlite3.connect('file:'+p+'?mode=ro',uri=True) if os.path.exists(p) else None;
+      q=lambda t:(c.execute('select count(*) from '+t).fetchone()[0] if c else 0);
+      print(json.dumps({'spans':q('spans'),'traces':q('traces')}))"
+
+places:
+  arize-phoenix:
+    memory: 1 GB
+    disk: 2 GB
+    arch: [amd64, arm64]
+    gpu: none

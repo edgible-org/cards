@@ -1,0 +1,34 @@
+# Compose file for the arize-phoenix card.
+# The host port comes from card.env. Phoenix needs no password or key of its own here: Edgible
+# gates both hostnames (org for the dashboard, api-key for ingestion). Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: arize-phoenix
+
+services:
+  arize-phoenix:
+    # The -debug build is the only one with a shell, which the card's data fingerprint needs.
+    image: arizephoenix/phoenix:version-21.0.0-debug
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${ARIZE_PHOENIX_PORT:?set ARIZE_PHOENIX_PORT in card.env}:6006"
+    environment:
+      PHOENIX_WORKING_DIR: /phoenix-data
+      # The image sets PATH without /busybox, where the -debug build keeps sh, so the data fingerprint's
+      # `sh -c` could not start. This is the image's PATH plus /busybox.
+      PATH: /usr/local/bin:/usr/bin:/bin:/busybox:/phoenix/.venv/bin
+      # Edgible is the sign-in. Phoenix's own auth would otherwise turn on for a non-loopback bind.
+      PHOENIX_ENABLE_AUTH: "false"
+      # Days to keep traces; 0 keeps them forever.
+      PHOENIX_DEFAULT_RETENTION_POLICY_DAYS: ${ARIZE_PHOENIX_RETENTION_DAYS:-0}
+    volumes:
+      - arize-phoenix-data:/phoenix-data
+    healthcheck:
+      test: ["CMD", "/usr/bin/python3", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:6006/healthz', timeout=4)"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+volumes:
+  arize-phoenix-data: {}
