@@ -1,0 +1,27 @@
+tested: 2026-11-01
+result: pass
+card-kit: "31b0182"
+edgible-cli: 1.4.29
+files: sha256:74dd88b86c075080
+machine: darwin/arm64, docker 29.4.3
+images:
+  - arizephoenix/phoenix:version-21.0.0-debug@sha256:0d5939418ad608c36a3e1616b913d853ca098a2921eb775342ea5ab2688a7a48
+image_facts:
+  arizephoenix/phoenix:version-21.0.0-debug: {user: "0", archs: ["amd64", "arm64"], healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    arize-phoenix: pass
+    arize-phoenix-ingest: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"spans": 0, "traces": 0}
+measured:
+  arize-phoenix:
+    memory: 482 MB
+    images: 323 MB
+    data: 1 MB
+duration: 3m
+by: agent
