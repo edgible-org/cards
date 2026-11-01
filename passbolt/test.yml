@@ -1,0 +1,30 @@
+tested: 2026-11-02
+result: pass
+card-kit: "36d8b7f"
+edgible-cli: 1.4.29
+files: sha256:5216e89f51b3c6c7
+machine: darwin/arm64, docker 29.4.3
+images:
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - mariadb:11.8.5@sha256:345fa26d595e8c7fe298e0c4098ed400356f502458769c8902229b3437d6da2b
+  - passbolt/passbolt:5.8.0-1-ce-non-root@sha256:0977089131ced9c157a967148d94b5b7a0f03df0643be79814cdfe77874289c0
+image_facts:
+  passbolt/passbolt:5.8.0-1-ce-non-root: {user: "www-data", archs: [], healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    passbolt: pass
+  checks:
+    passbolt-answers: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"users": 1, "resources": 0}
+measured:
+  passbolt:
+    memory: 189 MB
+    images: 264 MB
+    data: 173 MB
+duration: 3m
+by: agent
