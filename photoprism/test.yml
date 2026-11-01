@@ -1,0 +1,30 @@
+tested: 2026-11-02
+result: pass
+card-kit: "36d8b7f"
+edgible-cli: 1.4.29
+files: sha256:8547557d6c055ecc
+machine: darwin/arm64, docker 29.4.3
+images:
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - mariadb:11.8.9@sha256:6422478cb8e159f080fb1d8ccf65101e26fe51385787fde7d16c3b165a331f15
+  - photoprism/photoprism:260601@sha256:650c6ad5a6517ea95671eedb0f2a9c49f05729a1d95809fcf01533b96149582e
+image_facts:
+  photoprism/photoprism:260601: {user: "root", archs: ["amd64", "arm64"], healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    photoprism: pass
+  checks:
+    admin-signs-in: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"photos": 0, "files": 0}
+measured:
+  photoprism:
+    memory: 361 MB
+    images: 1.1 GB
+    data: 174 MB
+duration: 8m
+by: agent
