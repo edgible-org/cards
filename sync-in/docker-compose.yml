@@ -1,0 +1,84 @@
+# Compose file for the sync-in card.
+# The host port, ORG_LABEL and the admin's name come from card.env. The database passwords, the
+# token secrets and the admin's password are made on this machine by sync-in-secrets, at first
+# start, and never leave it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: sync-in
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume sync-in-secrets, then exits. It never changes one that exists.
+  sync-in-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        SYNC_IN_DB_PASSWORD=openssl rand -hex 16
+        SYNC_IN_DB_ROOT_PASSWORD=openssl rand -hex 16
+        SYNC_IN_ACCESS_SECRET=openssl rand -hex 32
+        SYNC_IN_REFRESH_SECRET=openssl rand -hex 32
+        SYNC_IN_ENCRYPTION_KEY=openssl rand -hex 32
+        SYNC_IN_ADMIN_PASSWORD=openssl rand -hex 16
+    volumes:
+      - sync-in-secrets:/run/card-secrets
+
+  sync-in:
+    image: ${SYNC_IN_IMAGE:-syncin/server:2.6.2}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${SYNC_IN_PORT:?set SYNC_IN_PORT in card.env}:8080"
+    # Sync-in reads its settings from SYNCIN_* variables, which the loader's secrets fill in
+    # here before the image's own start command runs. The admin is made at the first start.
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
+    command:
+      - >-
+        export SYNCIN_MYSQL_URL="mysql://sync_in:$$SYNC_IN_DB_PASSWORD@sync-in-db:3306/sync_in"
+        SYNCIN_AUTH_TOKEN_ACCESS_SECRET="$$SYNC_IN_ACCESS_SECRET"
+        SYNCIN_AUTH_TOKEN_REFRESH_SECRET="$$SYNC_IN_REFRESH_SECRET"
+        SYNCIN_AUTH_ENCRYPTIONKEY="$$SYNC_IN_ENCRYPTION_KEY"
+        INIT_ADMIN_PASSWORD="$$SYNC_IN_ADMIN_PASSWORD"
+        && exec ./entrypoint.sh ./sync-in-server.sh
+    environment:
+      # The address people and the sync clients reach it by.
+      SYNCIN_SERVER_PUBLICURL: ${SYNC_IN_URL:-https://sync-in.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      INIT_ADMIN: "true"
+      INIT_ADMIN_LOGIN: ${SYNC_IN_ADMIN_USER:-admin}
+    volumes:
+      # Everyone's files, and the app's own data.
+      - sync-in-data:/app/data
+      - sync-in-secrets:/run/card-secrets:ro
+    depends_on:
+      sync-in-db:
+        condition: service_healthy
+
+  sync-in-db:
+    image: mariadb:11.8.3
+    restart: unless-stopped
+    command:
+      - --innodb_ft_cache_size=16000000
+      - --max-allowed-packet=1G
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_uca1400_ai_ci
+    environment:
+      MARIADB_DATABASE: sync_in
+      MARIADB_USER: sync_in
+      MARIADB_PASSWORD_FILE: /run/card-secrets/SYNC_IN_DB_PASSWORD
+      MARIADB_ROOT_PASSWORD_FILE: /run/card-secrets/SYNC_IN_DB_ROOT_PASSWORD
+    volumes:
+      - sync-in-db-data:/var/lib/mysql
+      - sync-in-secrets:/run/card-secrets:ro
+    depends_on:
+      sync-in-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+volumes:
+  sync-in-data: {}
+  sync-in-db-data: {}
+  sync-in-secrets: {}
