@@ -132,6 +132,13 @@
     "files": "sha256:e69db8a4dba066ed",
     "device": "osxdevice"
   },
+  "linkwarden": {
+    "result": "pass",
+    "tested": "2026-11-02",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:c4c4be89fcf732d8",
+    "device": "osxdevice"
+  },
   "litellm": {
     "result": "pass",
     "tested": "2026-10-29",
@@ -169,9 +176,9 @@
   },
   "miniflux": {
     "result": "pass",
-    "tested": "2026-10-29",
+    "tested": "2026-11-02",
     "edgible-cli": "1.4.29",
-    "files": "sha256:9cc3fa2cfd3ffe2c",
+    "files": "sha256:a2885323af735817",
     "device": "osxdevice"
   },
   "n8n": {
@@ -179,6 +186,13 @@
     "tested": "2026-10-31",
     "edgible-cli": "1.4.29",
     "files": "sha256:2ef17ce6deec9693",
+    "device": "osxdevice"
+  },
+  "notediscovery": {
+    "result": "pass",
+    "tested": "2026-11-02",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:afa1b864fa336b86",
     "device": "osxdevice"
   },
   "ollama-osx": {
@@ -196,10 +210,10 @@
     "device": "osxdevice"
   },
   "otter-wiki": {
-    "result": "pass",
-    "tested": "2026-10-31",
+    "result": "fail",
+    "tested": "2026-11-02",
     "edgible-cli": "1.4.29",
-    "files": "sha256:91e73e8626980625",
+    "files": "sha256:9b43b521ee7c757e",
     "device": "osxdevice"
   },
   "owncloud": {
@@ -207,6 +221,20 @@
     "tested": "2026-10-29",
     "edgible-cli": "1.4.29",
     "files": "sha256:a21f6d20d6caeee5",
+    "device": "osxdevice"
+  },
+  "passbolt": {
+    "result": "pass",
+    "tested": "2026-11-02",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:7badac1fc1874013",
+    "device": "osxdevice"
+  },
+  "photoprism": {
+    "result": "pass",
+    "tested": "2026-11-02",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:8547557d6c055ecc",
     "device": "osxdevice"
   },
   "qdrant": {
@@ -218,9 +246,9 @@
   },
   "rallly": {
     "result": "pass",
-    "tested": "2026-10-30",
+    "tested": "2026-11-02",
     "edgible-cli": "1.4.29",
-    "files": "sha256:01f2e85a0ceff7e1",
+    "files": "sha256:2a501ecc2aeb8830",
     "device": "osxdevice"
   },
   "static-site": {
@@ -235,6 +263,13 @@
     "tested": "2026-10-31",
     "edgible-cli": "1.4.29",
     "files": "sha256:fcdc1f2e1c862460",
+    "device": "osxdevice"
+  },
+  "sync-in": {
+    "result": "pass",
+    "tested": "2026-11-02",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:c03b2ae8cbffa9f6",
     "device": "osxdevice"
   },
   "teamdesk": {
