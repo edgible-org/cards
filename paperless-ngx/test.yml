@@ -1,0 +1,32 @@
+tested: 2026-11-03
+result: pass
+card-kit: "9cf8f87"
+edgible-cli: 1.4.29
+files: sha256:e7bc089a94bd0549
+machine: darwin/arm64, docker 29.4.3
+images:
+  - docker.io/valkey/valkey:9@sha256:3add1a336a920ea54770a001ab6feb3da5fceea96a40373a3a2cd469b815f0b7
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - ghcr.io/paperless-ngx/paperless-ngx:3.4.1@sha256:1a08d8dfc2b51a08de09652dd86ad4d0c611c362382f944533ad38b73125fbc4
+  - postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+image_facts:
+  ghcr.io/paperless-ngx/paperless-ngx:3.4.1: {user: "root", archs: ["amd64", "arm64"], healthcheck: true}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    paperless-ngx: pass
+  checks:
+    admin-signs-in: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"users": 2, "documents": 0}
+measured:
+  paperless-ngx:
+    memory: 695 MB
+    images: 941 MB
+    data: 54 MB
+duration: 8m
+by: agent
+notes: paperless-ngx's port 8000 was taken on the test machine, so it was tested on 8001.

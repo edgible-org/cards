@@ -1,0 +1,88 @@
+# Compose file for the paperless-ngx card.
+# The host port, ORG_LABEL and the admin's name come from card.env. The passwords and keys are
+# made on this machine by paperless-ngx-secrets, at first start, and never leave it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+# Paperless makes the admin itself at its first start, from PAPERLESS_ADMIN_USER and the secret
+# PAPERLESS_NGX_ADMIN_PASSWORD, so there is no setup page to leave open.
+
+name: paperless-ngx
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume paperless-ngx-secrets, then exits. It never changes one that exists.
+  paperless-ngx-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        PAPERLESS_NGX_DB_PASSWORD=openssl rand -hex 16
+        PAPERLESS_NGX_SECRET_KEY=openssl rand -hex 32
+        PAPERLESS_NGX_ADMIN_PASSWORD=openssl rand -hex 16
+    volumes:
+      - paperless-ngx-secrets:/run/card-secrets
+
+  paperless-ngx:
+    image: ghcr.io/paperless-ngx/paperless-ngx:3.4.1
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${PAPERLESS_NGX_PORT:?set PAPERLESS_NGX_PORT in card.env}:8000"
+    environment:
+      PAPERLESS_REDIS: redis://paperless-ngx-redis:6379
+      PAPERLESS_DBHOST: paperless-ngx-db
+      PAPERLESS_DBNAME: paperless
+      PAPERLESS_DBUSER: paperless
+      PAPERLESS_DBPASS_FILE: /run/card-secrets/PAPERLESS_NGX_DB_PASSWORD
+      PAPERLESS_SECRET_KEY_FILE: /run/card-secrets/PAPERLESS_NGX_SECRET_KEY
+      PAPERLESS_ADMIN_USER: ${PAPERLESS_NGX_ADMIN_USER:-admin}
+      PAPERLESS_ADMIN_PASSWORD_FILE: /run/card-secrets/PAPERLESS_NGX_ADMIN_PASSWORD
+      PAPERLESS_URL: ${PAPERLESS_NGX_URL:-https://paperless-ngx.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      PAPERLESS_OCR_LANGUAGE: ${PAPERLESS_NGX_OCR_LANGUAGE:-eng}
+      PAPERLESS_TIME_ZONE: ${PAPERLESS_NGX_TIME_ZONE:-UTC}
+    volumes:
+      - paperless-ngx-data:/usr/src/paperless/data
+      - paperless-ngx-media:/usr/src/paperless/media
+      - paperless-ngx-consume:/usr/src/paperless/consume
+      - paperless-ngx-secrets:/run/card-secrets:ro
+    depends_on:
+      paperless-ngx-secrets:
+        condition: service_completed_successfully
+      paperless-ngx-db:
+        condition: service_healthy
+      paperless-ngx-redis:
+        condition: service_healthy
+    # The image's own healthcheck applies.
+
+  paperless-ngx-db:
+    image: postgres:17.11-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: paperless
+      POSTGRES_USER: paperless
+      POSTGRES_PASSWORD_FILE: /run/card-secrets/PAPERLESS_NGX_DB_PASSWORD
+    volumes:
+      - paperless-ngx-db-data:/var/lib/postgresql/data
+      - paperless-ngx-secrets:/run/card-secrets:ro
+    depends_on:
+      paperless-ngx-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U paperless -d paperless"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  paperless-ngx-redis:
+    image: docker.io/valkey/valkey:9@sha256:3add1a336a920ea54770a001ab6feb3da5fceea96a40373a3a2cd469b815f0b7
+    restart: unless-stopped
+    healthcheck:
+      test: redis-cli ping | grep -q PONG || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  paperless-ngx-data: {}
+  paperless-ngx-media: {}
+  paperless-ngx-consume: {}
+  paperless-ngx-db-data: {}
+  paperless-ngx-secrets: {}
