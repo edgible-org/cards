@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>arize-phoenix: Arize Phoenix, LLM traces and evals in one container, the dashboard behind org and the trace ingestion behind an api-key | Edgible cards</title>
+<meta name="description" content="Arize Phoenix, LLM traces and evals in one container, the dashboard behind org and the trace ingestion behind an api-key">
+<link rel="canonical" href="https://cards.edgible.org/arize-phoenix/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="arize-phoenix: Arize Phoenix, LLM traces and evals in one container, the dashboard behind org and the trace ingestion behind an api-key">
+<meta property="og:description" content="Arize Phoenix, LLM traces and evals in one container, the dashboard behind org and the trace ingestion behind an api-key">
+<meta property="og:url" content="https://cards.edgible.org/arize-phoenix/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../style.css?v=85ea94ea">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="../"><img src="../assets/images/edgible-logo-white.png" alt="Edgible" width="107" height="24"><span>Cards</span></a>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../about/">About</a><a href="../ai/">With AI</a><a class="ext" href="https://www.edgible.ai/playbooks/" target="_blank" rel="noopener noreferrer">Playbooks<span class="sr-only"> (opens in a new tab)</span></a><a href="../#app-cards">Apps</a><a href="../#pattern-cards">Patterns</a><a href="../needs/">Needs</a><a class="ext" href="https://www.edgible.ai/add-your-app/" target="_blank" rel="noopener noreferrer">Add your app<span class="sr-only"> (opens in a new tab)</span></a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../">Cards</a> / arize-phoenix</p>
+<h1 class="with-icon"><span class="icon placeholder" style="width:56px;height:56px" aria-hidden="true"></span><span>arize-phoenix</span></h1>
+<p class="lead">Arize Phoenix, LLM traces and evals in one container, the dashboard behind org and the trace ingestion behind an api-key</p>
+<p class="meta"><span class="kind">App card</span><span class="pill pass" title="Latest lifecycle test on a real Edgible serving device">passed 2026-11-01, Edgible 1.4.29</span><span class="pill fit" title="Self-hosting fit, from facts about the app. Starts as a non-root user: no, starts as root (arizephoenix/phoenix:version-21.0.0-debug)"><svg class="ring" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7.86 1.57A5.50 5.50 0 0 1 12.13 8.97" fill="none" stroke="currentColor" stroke-width="2.00" opacity="1"/><path d="M11.27 10.46A5.50 5.50 0 0 1 2.73 10.46" fill="none" stroke="currentColor" stroke-width="2.00" opacity=".22"/><path d="M1.87 8.97A5.50 5.50 0 0 1 6.14 1.57" fill="none" stroke="currentColor" stroke-width="2.00" opacity="1"/></svg>fit 2/3</span><span class="added">Added 31 October 2026</span><span class="license">License Elastic-2.0</span><span class="steward">Stewarded by <a class="ext" href="https://github.com/edgible-org" target="_blank" rel="noopener noreferrer">edgible-org<span class="sr-only"> (opens in a new tab)</span></a></span><a class="ext" href="https://arize.com/docs/phoenix" target="_blank" rel="noopener noreferrer">App home page<span class="sr-only"> (opens in a new tab)</span></a><a class="ext" href="https://github.com/edgible-org/cards/tree/main/arize-phoenix" target="_blank" rel="noopener noreferrer">Source on GitHub<span class="sr-only"> (opens in a new tab)</span></a></p>
+
+<h2>Apps</h2>
+<div class="scroll"><table><thead><tr><th>App</th><th>What</th><th>Who can reach it</th><th>Place</th></tr></thead><tbody><tr><td><code>arize-phoenix</code></td><td>Phoenix dashboard, traces, prompts and evals</td><td>org login</td><td><code>arize-phoenix</code></td></tr><tr><td><code>arize-phoenix-ingest</code></td><td>Phoenix OpenTelemetry trace ingestion over HTTP, same process as arize-phoenix</td><td>API key</td><td><code>arize-phoenix</code></td></tr></tbody></table></div>
+<h2>Machine</h2>
+<p>A place is one serving device. Minimum recommended for each:</p>
+<div class="scroll"><table><thead><tr><th>Place</th><th>Memory</th><th>Disk</th><th>Architecture</th><th>GPU</th></tr></thead><tbody><tr><td><code>arize-phoenix</code></td><td>1 GB</td><td>2 GB</td><td>amd64, arm64</td><td>none</td></tr></tbody></table></div>
+<h2>First start</h2><p>The first start downloads the app's images: about <strong>323 MB</strong>, a minute or two on a typical home connection. That time is the download from the app's registry, not Edgible, and it happens once: later starts and upgrades reuse the images and fetch only what changed.</p>
+<h2>What it keeps</h2><div class="scroll"><table><thead><tr><th>Volume</th><th>What it is</th></tr></thead><tbody><tr><td><code>arize-phoenix-data</code></td><td>yours alone: backed up, and checked after a restore or a move</td></tr></tbody></table></div><p>After a restore or a move, a quick count shows the data arrived, with nothing read but numbers and dates.</p>
+
+<h2>Self-hosting fit</h2><div class="fit-box"><svg class="ring" width="48" height="48" viewBox="0 0 48 48" aria-hidden="true"><path d="M27.14 4.18A20.07 20.07 0 0 1 42.74 31.19" fill="none" stroke="currentColor" stroke-width="6.86" opacity="1"/><path d="M39.60 36.63A20.07 20.07 0 0 1 8.40 36.63" fill="none" stroke="currentColor" stroke-width="6.86" opacity=".22"/><path d="M5.26 31.19A20.07 20.07 0 0 1 20.86 4.18" fill="none" stroke="currentColor" stroke-width="6.86" opacity="1"/></svg><p><strong>2 of 3</strong> checks passed. Each is a fact about the app, not an opinion: <a class="ext" href="https://github.com/edgible-org/card-kit/blob/main/card-fit.py" target="_blank" rel="noopener noreferrer">how they are decided<span class="sr-only"> (opens in a new tab)</span></a>.</p></div><ul class="fit-list"><li class="fit-yes"><span class="mark">✓</span><strong>Has a health check</strong> <span>in the card&#x27;s Compose file</span></li><li class="fit-no"><span class="mark">✗</span><strong>Starts as a non-root user</strong> <span>starts as root (arizephoenix/phoenix:version-21.0.0-debug)</span></li><li class="fit-yes"><span class="mark">✓</span><strong>Builds for arm64 and amd64</strong> <span>amd64, arm64</span></li></ul>
+
+<h2>Needs it answers</h2><ul><li><a href="../needs/llm-observability-and-evaluation/">LLM observability and evaluation</a></li></ul>
+<article class="readme">
+<h2 id="why">Why</h2>
+<p>Once an AI app is live, you cannot see what it sends to the model, what comes back, or what it costs. Hosted tracing services take every prompt and response. <a class="ext" href="https://arize.com/docs/phoenix" target="_blank" rel="noopener noreferrer">Arize Phoenix<span class="sr-only"> (opens in a new tab)</span></a> records OpenTelemetry traces, lets you evaluate prompts and models, and keeps the prompt logs in one container with a SQLite file on a machine you own.</p>
+<h2 id="what">What</h2>
+<p>One process on two hostnames, both port <code>6006</code>. <code>arize-phoenix</code> is the dashboard, behind <code>org</code>, because a person in a browser reads the traces. <code>arize-phoenix-ingest</code> takes traces from your AI apps over OpenTelemetry HTTP (<code>/v1/traces</code>), on <code>api-key</code>, because it is another machine calling an API: make one key per app. Phoenix's own sign-in is off, since Edgible does it. Be aware that a key on the ingestion hostname reaches the whole Phoenix process, so give keys only to apps you trust. The gRPC port <code>4317</code> is not published. Prompts and responses are stored as sent: if they hold personal, health or client data, the logs are that data and follow its rules, so set <code>ARIZE_PHOENIX_RETENTION_DAYS</code> to keep them only as long as needed.</p>
+<p>Every trace, span, prompt, dataset and eval is in the SQLite file in the volume <code>arize-phoenix-data</code>. Minimum recommended for the place <code>arize-phoenix</code>: 1 GB of memory and 2 GB of disk, on an arm64 or amd64 machine, with no GPU.</p>
+<p>The Compose file is <a class="ext" href="https://github.com/edgible-org/cards/blob/main/arize-phoenix/docker-compose.yml" target="_blank" rel="noopener noreferrer">docker-compose.yml<span class="sr-only"> (opens in a new tab)</span></a>, the settings <a class="ext" href="https://github.com/edgible-org/cards/blob/main/arize-phoenix/card.env" target="_blank" rel="noopener noreferrer">card.env<span class="sr-only"> (opens in a new tab)</span></a>, the card <a class="ext" href="https://github.com/edgible-org/cards/blob/main/arize-phoenix/card.yml" target="_blank" rel="noopener noreferrer">card.yml<span class="sr-only"> (opens in a new tab)</span></a>.</p>
+<h2 id="how">How</h2>
+<p>Five steps. Edit <a class="ext" href="https://github.com/edgible-org/cards/blob/main/arize-phoenix/card.env" target="_blank" rel="noopener noreferrer">card.env<span class="sr-only"> (opens in a new tab)</span></a> before you start.</p>
+<h3 id="1-fetch">1. Fetch</h3>
+<pre><code class="language-bash">mkdir -p arize-phoenix
+curl -fsSL https://github.com/edgible-org/cards/archive/refs/heads/main.tar.gz \
+  | tar -xz --strip-components=2 -C arize-phoenix cards-main/arize-phoenix
+</code></pre>
+<h3 id="2-edit-cardenv">2. Edit card.env</h3>
+<p>Set <code>DEVICE</code> to a name <code>edgible device list</code> prints. Change <code>ARIZE_PHOENIX_PORT</code> only if 6006 is taken, and <code>ARIZE_PHOENIX_RETENTION_DAYS</code> to limit how long traces are kept.</p>
+<pre><code class="language-bash">nano arize-phoenix/card.env
+</code></pre>
+<h3 id="3-check">3. Check</h3>
+<pre><code class="language-bash">curl -fsSLo check-env.py https://raw.githubusercontent.com/edgible-org/card-kit/main/check-env.py
+python3 check-env.py arize-phoenix
+</code></pre>
+<p>It fills each empty secret and moves a taken port, as lines to paste. Run it again until it says <code>no conflicts</code>.</p>
+<h3 id="4-start">4. Start</h3>
+<pre><code class="language-bash">docker compose --env-file arize-phoenix/card.env -f arize-phoenix/docker-compose.yml pull
+docker compose --env-file arize-phoenix/card.env -f arize-phoenix/docker-compose.yml up -d --wait
+docker compose --env-file arize-phoenix/card.env -f arize-phoenix/docker-compose.yml ps
+</code></pre>
+<p>The first start downloads the app's images from the registries named in the Compose file, which takes longer for a larger app. <code>pull</code> does that download on its own, so you can see it. The time is the download, not Edgible, and it happens once: later starts and upgrades reuse the images on the machine and fetch only what changed. <code>--wait</code> returns when each service is running, and healthy when it has a healthcheck. </p>
+<h3 id="5-publish">5. Publish</h3>
+<pre><code class="language-bash">set -euo pipefail
+set -a
+. arize-phoenix/card.env
+set +a
+device_id=$(edgible device list --json | jq -er --arg name &quot;$DEVICE&quot; '
+  map(select(.name == $name))
+  | if length == 1 then .[0].id
+    else error(&quot;need exactly one device named &quot; + $name + &quot; (&quot; + (map(.status + &quot; &quot; + .id) | join(&quot;, &quot;)) + &quot;)&quot;)
+    end
+')
+edgible app create existing \
+  --non-interactive \
+  --name arize-phoenix \
+  --port &quot;$ARIZE_PHOENIX_PORT&quot; \
+  --protocol https \
+  --auth-modes org \
+  --device-id &quot;$device_id&quot;
+edgible app create existing \
+  --non-interactive \
+  --name arize-phoenix-ingest \
+  --port &quot;$ARIZE_PHOENIX_PORT&quot; \
+  --protocol https \
+  --auth-modes api-key \
+  --device-id &quot;$device_id&quot;
+edgible app list
+</code></pre>
+<p><strong>Without Edgible:</strong> only Publish is Edgible's. The app listens on <code>127.0.0.1</code> at the port in <code>card.env</code>, so any reverse proxy or tunnel on the machine, such as Caddy, nginx, Cloudflare Tunnel or Tailscale, can publish it instead, and sign-in is then that tool's to provide. Every other step stays the same.</p>
+<h2 id="verify">Verify</h2>
+<p><code>arize-phoenix</code> uses <code>org</code>.</p>
+<pre><code class="language-bash">curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' &quot;https://&lt;arize-phoenix hostname&gt;&quot;
+</code></pre>
+<p>That prints <code>302</code> and an <code>edgible.com/application-access/</code> address, so the org sign-in is in front. The dashboard opens after Edgible's sign-in.</p>
+<p><code>arize-phoenix-ingest</code> uses <code>api-key</code>. Without a key, it answers <code>401</code>.</p>
+<pre><code class="language-bash">curl -sS -o /dev/null -w '%{http_code}\n' &quot;https://&lt;arize-phoenix-ingest hostname&gt;&quot;
+</code></pre>
+<p>Make a key with <code>edgible app api-keys create --app arize-phoenix-ingest --name my-app</code>, and point your app's OpenTelemetry exporter at <code>https://&lt;ingest hostname&gt;/v1/traces</code> with the key in its headers. Its traces then appear in the dashboard.</p>
+<p>The rest of the setup is in the <a class="ext" href="https://arize.com/docs/phoenix" target="_blank" rel="noopener noreferrer">Phoenix docs<span class="sr-only"> (opens in a new tab)</span></a>.</p>
+<h2 id="tear-down">Tear down</h2>
+<p>Four steps, in this order. Step 1 runs wherever <code>edgible</code> is logged in. Steps 2 to 4 run on the machine that runs the containers. Steps 2 and 3 read <code>card.env</code>, so keep it until step 4.</p>
+<h3 id="1-unpublish">1. Unpublish</h3>
+<pre><code class="language-bash">edgible app delete arize-phoenix --yes
+edgible app delete arize-phoenix-ingest --yes
+</code></pre>
+<h3 id="2-stop">2. Stop</h3>
+<pre><code class="language-bash">docker compose --env-file arize-phoenix/card.env -f arize-phoenix/docker-compose.yml down
+</code></pre>
+<h3 id="3-delete-the-data">3. Delete the data</h3>
+<p>Skip this step to keep the data. The loop copies each volume to a <code>.tgz</code> file in this directory first.</p>
+<pre><code class="language-bash">for volume in $(docker volume ls -q --filter label=com.docker.compose.project=arize-phoenix); do
+  docker run --rm -v &quot;$volume:/data:ro&quot; -v &quot;$PWD:/backup&quot; alpine tar -czf &quot;/backup/$volume.tgz&quot; -C /data .
+done
+docker compose --env-file arize-phoenix/card.env -f arize-phoenix/docker-compose.yml down --volumes
+</code></pre>
+<h3 id="4-remove-the-card">4. Remove the card</h3>
+<pre><code class="language-bash">rm -rf arize-phoenix
+</code></pre>
+</article>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../about/">About</a> &middot; <a href="../ai/">With AI</a> &middot; <a class="ext" href="https://www.edgible.ai/playbooks/" target="_blank" rel="noopener noreferrer">Playbooks<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a href="../sources/">Sources</a></span><span><a class="ext" href="https://www.edgible.ai/add-your-app/" target="_blank" rel="noopener noreferrer">Add your app<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-02 from edgible-org/cards 9288d44 -->
+</footer>
+</body>
+</html>

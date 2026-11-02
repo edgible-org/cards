@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>domoticz: Domoticz, a home automation hub for lights, switches and sensors, kept on your own machine, with a web interface and phone apps | Edgible cards</title>
+<meta name="description" content="Domoticz, a home automation hub for lights, switches and sensors, kept on your own machine, with a web interface and phone apps">
+<link rel="canonical" href="https://cards.edgible.org/domoticz/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="domoticz: Domoticz, a home automation hub for lights, switches and sensors, kept on your own machine, with a web interface and phone apps">
+<meta property="og:description" content="Domoticz, a home automation hub for lights, switches and sensors, kept on your own machine, with a web interface and phone apps">
+<meta property="og:url" content="https://cards.edgible.org/domoticz/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../style.css?v=85ea94ea">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="../"><img src="../assets/images/edgible-logo-white.png" alt="Edgible" width="107" height="24"><span>Cards</span></a>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../about/">About</a><a href="../ai/">With AI</a><a class="ext" href="https://www.edgible.ai/playbooks/" target="_blank" rel="noopener noreferrer">Playbooks<span class="sr-only"> (opens in a new tab)</span></a><a href="../#app-cards">Apps</a><a href="../#pattern-cards">Patterns</a><a href="../needs/">Needs</a><a class="ext" href="https://www.edgible.ai/add-your-app/" target="_blank" rel="noopener noreferrer">Add your app<span class="sr-only"> (opens in a new tab)</span></a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../">Cards</a> / domoticz</p>
+<h1 class="with-icon"><img class="icon" src="../domoticz/icon.png" alt="" width="56" height="56" loading="lazy"><span>domoticz</span></h1>
+<p class="lead">Domoticz, a home automation hub for lights, switches and sensors, kept on your own machine, with a web interface and phone apps</p>
+<p class="meta"><span class="kind">App card</span><span class="pill pass" title="Latest lifecycle test on a real Edgible serving device">passed 2026-11-01, Edgible 1.4.29</span><span class="pill fit" title="Self-hosting fit, from facts about the app. Starts as a non-root user: no, starts as root (domoticz/domoticz:2026.3)"><svg class="ring" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7.86 1.57A5.50 5.50 0 0 1 12.43 6.14" fill="none" stroke="currentColor" stroke-width="2.00" opacity="1"/><path d="M12.43 7.86A5.50 5.50 0 0 1 7.86 12.43" fill="none" stroke="currentColor" stroke-width="2.00" opacity="1"/><path d="M6.14 12.43A5.50 5.50 0 0 1 1.57 7.86" fill="none" stroke="currentColor" stroke-width="2.00" opacity=".22"/><path d="M1.57 6.14A5.50 5.50 0 0 1 6.14 1.57" fill="none" stroke="currentColor" stroke-width="2.00" opacity="1"/></svg>fit 3/4</span><span class="added">Added 29 October 2026</span><span class="license">License GPL-3.0-only</span><span class="steward">Stewarded by <a class="ext" href="https://github.com/edgible-org" target="_blank" rel="noopener noreferrer">edgible-org<span class="sr-only"> (opens in a new tab)</span></a></span><a class="ext" href="https://www.domoticz.com/" target="_blank" rel="noopener noreferrer">App home page<span class="sr-only"> (opens in a new tab)</span></a><a class="ext" href="https://github.com/edgible-org/cards/tree/main/domoticz" target="_blank" rel="noopener noreferrer">Source on GitHub<span class="sr-only"> (opens in a new tab)</span></a></p>
+
+<h2>Apps</h2>
+<div class="scroll"><table><thead><tr><th>App</th><th>What</th><th>Who can reach it</th><th>Place</th></tr></thead><tbody><tr><td><code>domoticz</code></td><td>Domoticz&#x27;s web interface, behind the Edgible sign-in</td><td>org login</td><td><code>domoticz</code></td></tr><tr><td><code>domoticz-app</code></td><td>The same Domoticz, for its phone apps, which have only Domoticz&#x27;s own login</td><td>open to anyone</td><td><code>domoticz</code></td></tr></tbody></table></div>
+<h2>Machine</h2>
+<p>A place is one serving device. Minimum recommended for each:</p>
+<div class="scroll"><table><thead><tr><th>Place</th><th>Memory</th><th>Disk</th><th>Architecture</th><th>GPU</th></tr></thead><tbody><tr><td><code>domoticz</code></td><td>256 MB</td><td>1 GB</td><td>amd64, arm64</td><td>none</td></tr></tbody></table></div>
+<h2>First start</h2><p>The first start downloads the app's images: about <strong>146 MB</strong>, a minute or two on a typical home connection. That time is the download from the app's registry, not Edgible, and it happens once: later starts and upgrades reuse the images and fetch only what changed.</p>
+<h2>What it keeps</h2><div class="scroll"><table><thead><tr><th>Volume</th><th>What it is</th></tr></thead><tbody><tr><td><code>domoticz-data</code></td><td>yours alone: backed up, and checked after a restore or a move</td></tr><tr><td><code>domoticz-secrets</code></td><td>yours alone: backed up, and checked after a restore or a move</td></tr></tbody></table></div><p>After a restore or a move, a quick count shows the data arrived, with nothing read but numbers and dates.</p>
+<h2>What it protects</h2><ul><li><strong>For you:</strong> <code>DOMOTICZ_ADMIN_PASSWORD</code>: the admin&#x27;s first sign-in, set by prepare.sh; change it under Setup, Users after. Made on your machine too, where the <code>show</code> command in the README prints it.</li></ul>
+<h2>Self-hosting fit</h2><div class="fit-box"><svg class="ring" width="48" height="48" viewBox="0 0 48 48" aria-hidden="true"><path d="M27.14 4.18A20.07 20.07 0 0 1 43.82 20.86" fill="none" stroke="currentColor" stroke-width="6.86" opacity="1"/><path d="M43.82 27.14A20.07 20.07 0 0 1 27.14 43.82" fill="none" stroke="currentColor" stroke-width="6.86" opacity="1"/><path d="M20.86 43.82A20.07 20.07 0 0 1 4.18 27.14" fill="none" stroke="currentColor" stroke-width="6.86" opacity=".22"/><path d="M4.18 20.86A20.07 20.07 0 0 1 20.86 4.18" fill="none" stroke="currentColor" stroke-width="6.86" opacity="1"/></svg><p><strong>3 of 4</strong> checks passed. Each is a fact about the app, not an opinion: <a class="ext" href="https://github.com/edgible-org/card-kit/blob/main/card-fit.py" target="_blank" rel="noopener noreferrer">how they are decided<span class="sr-only"> (opens in a new tab)</span></a>.</p></div><ul class="fit-list"><li class="fit-yes"><span class="mark">✓</span><strong>Secrets kept out of card.env</strong> <span>made on the device: DOMOTICZ_ADMIN_PASSWORD</span></li><li class="fit-yes"><span class="mark">✓</span><strong>Reads secrets from files</strong> <span>reads them from files itself</span></li><li class="fit-no"><span class="mark">✗</span><strong>Starts as a non-root user</strong> <span>starts as root (domoticz/domoticz:2026.3)</span></li><li class="fit-yes"><span class="mark">✓</span><strong>Builds for arm64 and amd64</strong> <span>amd64, arm, arm64</span></li></ul>
+
+<h2>Needs it answers</h2><ul><li><a href="../needs/internet-of-things-iot/">Internet of Things (IoT)</a></li></ul>
+<article class="readme">
+<h2 id="why">Why</h2>
+<p>Home automation is usually a vendor's app and cloud: each brand of light, plug and sensor has its own, and they stop working when the vendor's service does. <a class="ext" href="https://www.domoticz.com/" target="_blank" rel="noopener noreferrer">Domoticz<span class="sr-only"> (opens in a new tab)</span></a> is one hub on a machine you own that monitors and switches lights, plugs, thermometers, energy and water meters and more, from many brands, with timers and rules, and keeps working with no cloud. This card runs it and makes it reachable from outside the home.</p>
+<h2 id="what">What</h2>
+<p>One Domoticz container with its database in one volume, on two hostnames of the same process. <code>domoticz</code> is the web interface, on <code>org</code>, so only members of your Edgible organization reach it. <code>domoticz-app</code> is on <code>none</code>, because Domoticz's phone apps cannot pass an Edgible sign-in; Domoticz's own login is the protection there, and <code>prepare.sh</code> makes the admin before Publish, so nobody else can. Use <code>domoticz</code> in a browser, and give <code>domoticz-app</code> only to the phone apps, or leave it unpublished if you need none. This card passes no USB devices to the container, so a USB radio such as a Z-Wave stick is out of reach; devices on the network (MQTT, Hue, Shelly, Tasmota and others) work. Domoticz runs as root in its image.</p>
+<p>The database, plugins, scripts and backups are in the <code>domoticz-data</code> volume; the admin's password is in <code>domoticz-secrets</code>. Minimum recommended for the place <code>domoticz</code>: 256 MB of memory and 1 GB of disk, on an arm64 or amd64 machine, with no GPU.</p>
+<p>The Compose file is <a class="ext" href="https://github.com/edgible-org/cards/blob/main/domoticz/docker-compose.yml" target="_blank" rel="noopener noreferrer">docker-compose.yml<span class="sr-only"> (opens in a new tab)</span></a>, the settings <a class="ext" href="https://github.com/edgible-org/cards/blob/main/domoticz/card.env" target="_blank" rel="noopener noreferrer">card.env<span class="sr-only"> (opens in a new tab)</span></a>, the card <a class="ext" href="https://github.com/edgible-org/cards/blob/main/domoticz/card.yml" target="_blank" rel="noopener noreferrer">card.yml<span class="sr-only"> (opens in a new tab)</span></a>.</p>
+<h2 id="how">How</h2>
+<p>Five steps. Edit <a class="ext" href="https://github.com/edgible-org/cards/blob/main/domoticz/card.env" target="_blank" rel="noopener noreferrer">card.env<span class="sr-only"> (opens in a new tab)</span></a> before you start.</p>
+<h3 id="1-fetch">1. Fetch</h3>
+<pre><code class="language-bash">mkdir -p domoticz
+curl -fsSL https://github.com/edgible-org/cards/archive/refs/heads/main.tar.gz \
+  | tar -xz --strip-components=2 -C domoticz cards-main/domoticz
+</code></pre>
+<h3 id="2-edit-cardenv">2. Edit card.env</h3>
+<p>Set <code>DEVICE</code> and <code>ORG_LABEL</code>. Set <code>DOMOTICZ_TZ</code> to your time zone, for timers. <code>DOMOTICZ_ADMIN_USER</code> is the admin's name.</p>
+<pre><code class="language-bash">nano domoticz/card.env
+</code></pre>
+<h3 id="3-check">3. Check</h3>
+<pre><code class="language-bash">curl -fsSLo check-env.py https://raw.githubusercontent.com/edgible-org/card-kit/main/check-env.py
+python3 check-env.py domoticz
+</code></pre>
+<p>It moves a taken port, as lines to paste. Run it again until it says <code>no conflicts</code>.</p>
+<h3 id="4-start">4. Start</h3>
+<pre><code class="language-bash">docker compose --env-file domoticz/card.env -f domoticz/docker-compose.yml pull
+docker compose --env-file domoticz/card.env -f domoticz/docker-compose.yml up -d --wait
+docker compose --env-file domoticz/card.env -f domoticz/docker-compose.yml ps
+</code></pre>
+<p>The first start downloads the app's images from the registries named in the Compose file, which takes longer for a larger app. <code>pull</code> does that download on its own, so you can see it. The time is the download, not Edgible, and it happens once: later starts and upgrades reuse the images on the machine and fetch only what changed. <code>--wait</code> returns when each service is running, and healthy when it has a healthcheck. </p>
+<pre><code class="language-bash">sh domoticz/prepare.sh
+</code></pre>
+<p><a class="ext" href="https://github.com/edgible-org/cards/blob/main/domoticz/prepare.sh" target="_blank" rel="noopener noreferrer">prepare.sh<span class="sr-only"> (opens in a new tab)</span></a> is:</p>
+<pre><code class="language-sh">#!/bin/sh
+# Prepare for the domoticz card: make the admin before Domoticz is public.
+# A new Domoticz lets its first visitor create the admin account.
+# Run it after Start and before Publish, from the directory that holds domoticz/:
+#   sh domoticz/prepare.sh
+set -eu
+cd &quot;$(dirname &quot;$0&quot;)&quot;
+set -a; . ./card.env; set +a
+COMPOSE=${COMPOSE:-docker compose --env-file card.env -f docker-compose.yml}
+
+# The admin's password is the human secret domoticz-secrets made on this machine.
+PASSWORD=$($COMPOSE run --rm --no-deps domoticz-secrets show DOMOTICZ_ADMIN_PASSWORD)
+B=&quot;http://127.0.0.1:$DOMOTICZ_PORT/json.htm&quot;
+out=$(mktemp); trap 'rm -f &quot;$out&quot;' EXIT
+
+# Domoticz takes the password as its MD5 hash.
+if command -v md5sum &gt;/dev/null 2&gt;&amp;1; then
+  HASH=$(printf %s &quot;$PASSWORD&quot; | md5sum | cut -d' ' -f1)
+else
+  HASH=$(printf %s &quot;$PASSWORD&quot; | md5 -q)
+fi
+
+curl -fsS &quot;$B?type=command&amp;param=getsetuprequired&quot; -o &quot;$out&quot;
+if grep -Eq '&quot;SetupRequired&quot; *: *true' &quot;$out&quot;; then
+  curl -fsS -G &quot;$B&quot; -o &quot;$out&quot; --data-urlencode type=command --data-urlencode param=setupwizardcreateadmin \
+    --data-urlencode &quot;username=$DOMOTICZ_ADMIN_USER&quot; --data-urlencode &quot;password=$HASH&quot;
+  grep -Eq '&quot;status&quot; *: *&quot;OK&quot;' &quot;$out&quot; || { echo &quot;making the admin failed: $(cat &quot;$out&quot;)&quot;; exit 1; }
+fi
+
+# Fail closed: a caller with no sign-in, as Edgible's gateway is to Domoticz, must get nothing.
+curl -s &quot;$B?type=command&amp;param=getusers&quot; -o &quot;$out&quot; || true
+if grep -Eq '&quot;status&quot; *: *&quot;OK&quot;' &quot;$out&quot;; then
+  echo &quot;Domoticz answers without a sign-in; do not publish it. Check Setup, Settings, Local Networks.&quot;
+  exit 1
+fi
+echo &quot;the admin exists and Domoticz asks for a sign-in; sign in as $DOMOTICZ_ADMIN_USER with DOMOTICZ_ADMIN_PASSWORD&quot;
+</code></pre>
+<p>Sign in as the admin with the password from the <code>show</code> command in Verify, and change it under Setup, Users. Add family members there too, with the rights you want them to have.</p>
+<h3 id="5-publish">5. Publish</h3>
+<pre><code class="language-bash">set -euo pipefail
+set -a
+. domoticz/card.env
+set +a
+device_id=$(edgible device list --json | jq -er --arg name &quot;$DEVICE&quot; '
+  map(select(.name == $name))
+  | if length == 1 then .[0].id
+    else error(&quot;need exactly one device named &quot; + $name + &quot; (&quot; + (map(.status + &quot; &quot; + .id) | join(&quot;, &quot;)) + &quot;)&quot;)
+    end
+')
+edgible app create existing \
+  --non-interactive \
+  --name domoticz \
+  --port &quot;$DOMOTICZ_PORT&quot; \
+  --protocol https \
+  --auth-modes org \
+  --device-id &quot;$device_id&quot;
+edgible app create existing \
+  --non-interactive \
+  --name domoticz-app \
+  --port &quot;$DOMOTICZ_APP_PORT&quot; \
+  --protocol https \
+  --auth-modes none \
+  --device-id &quot;$device_id&quot;
+edgible app list
+</code></pre>
+<p><strong>Without Edgible:</strong> only Publish is Edgible's. The app listens on <code>127.0.0.1</code> at the port in <code>card.env</code>, so any reverse proxy or tunnel on the machine, such as Caddy, nginx, Cloudflare Tunnel or Tailscale, can publish it instead, and sign-in is then that tool's to provide. Every other step stays the same.</p>
+<h2 id="verify">Verify</h2>
+<p><code>domoticz</code> uses <code>org</code>.</p>
+<pre><code class="language-bash">curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' &quot;https://&lt;domoticz hostname&gt;&quot;
+</code></pre>
+<p>That prints <code>302</code> and an <code>edgible.com/application-access/</code> address, so the org sign-in is in front. Open the address, sign in to Edgible, then to Domoticz as <code>DOMOTICZ_ADMIN_USER</code> with the password <code>domoticz-secrets</code> made: run <code>docker compose --env-file domoticz/card.env -f domoticz/docker-compose.yml run --rm --no-deps domoticz-secrets show DOMOTICZ_ADMIN_PASSWORD</code>.</p>
+<p><code>domoticz-app</code> uses <code>none</code>.</p>
+<pre><code class="language-bash">curl -sS -o /dev/null -w '%{http_code}\n' &quot;https://&lt;domoticz-app hostname&gt;&quot;
+</code></pre>
+<p>Answers with Domoticz's own sign-in page, open to the internet, so its login is the protection. In the phone app, give it this address and the same sign-in.</p>
+<p>The rest of the setup is in the <a class="ext" href="https://wiki.domoticz.com/" target="_blank" rel="noopener noreferrer">Domoticz wiki docs<span class="sr-only"> (opens in a new tab)</span></a>.</p>
+<h2 id="tear-down">Tear down</h2>
+<p>Four steps, in this order. Step 1 runs wherever <code>edgible</code> is logged in. Steps 2 to 4 run on the machine that runs the containers. Steps 2 and 3 read <code>card.env</code>, so keep it until step 4.</p>
+<h3 id="1-unpublish">1. Unpublish</h3>
+<pre><code class="language-bash">edgible app delete domoticz --yes
+edgible app delete domoticz-app --yes
+</code></pre>
+<h3 id="2-stop">2. Stop</h3>
+<pre><code class="language-bash">docker compose --env-file domoticz/card.env -f domoticz/docker-compose.yml down
+</code></pre>
+<h3 id="3-delete-the-data">3. Delete the data</h3>
+<p>Skip this step to keep the data. The loop copies each volume to a <code>.tgz</code> file in this directory first.</p>
+<pre><code class="language-bash">for volume in $(docker volume ls -q --filter label=com.docker.compose.project=domoticz); do
+  docker run --rm -v &quot;$volume:/data:ro&quot; -v &quot;$PWD:/backup&quot; alpine tar -czf &quot;/backup/$volume.tgz&quot; -C /data .
+done
+docker compose --env-file domoticz/card.env -f domoticz/docker-compose.yml down --volumes
+</code></pre>
+<h3 id="4-remove-the-card">4. Remove the card</h3>
+<pre><code class="language-bash">rm -rf domoticz
+</code></pre>
+</article>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../about/">About</a> &middot; <a href="../ai/">With AI</a> &middot; <a class="ext" href="https://www.edgible.ai/playbooks/" target="_blank" rel="noopener noreferrer">Playbooks<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a href="../sources/">Sources</a></span><span><a class="ext" href="https://www.edgible.ai/add-your-app/" target="_blank" rel="noopener noreferrer">Add your app<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-02 from edgible-org/cards 9288d44 -->
+</footer>
+</body>
+</html>
