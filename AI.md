@@ -47,6 +47,8 @@ Your agent doesn't stop at "there's no card for that":
 
 If it can't make a card pass, it offers to open an issue instead, with what it tried. A fix to an existing card goes the same way.
 
+Built the app yourself? [Add your app](ADD-YOUR-APP.md) shows the whole path, from your app to a card anyone can run.
+
 ## What it always asks you first
 
 - Publishing an admin or personal page open to anyone.
