@@ -13,7 +13,7 @@ If you tried to build it, say where you got stuck.
 
 ## Add a card
 
-**Wrote the app yourself?** Start at [Add your app](https://www.edgible.ai/add-your-app/). The edgible-cards skill runs card-kit's `check-app` on your app, tells you what a card needs (required and nice to have), and helps you build what is missing before you write the card. You can run it yourself: `python3 ../card-kit/check-app.py <your app's folder> --image <name:tag> --steward <your GitHub name>`.
+**Wrote the app yourself?** Start at [Add your app](ADD-YOUR-APP.md). The edgible-cards skill runs card-kit's `check-app` on your app, tells you what a card needs (required and nice to have), and helps you build what is missing before you write the card. You can run it yourself: `python3 ../card-kit/check-app.py <your app's folder> --image <name:tag> --steward <your GitHub name>`.
 
 You need Docker. To test a card, which every app card must be, you also need an Edgible account with a serving device and the `edgible` CLI logged in. `test-card` runs the whole lifecycle on that device.
 
