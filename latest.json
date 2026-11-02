@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-01T19:31:58+00:00",
+ "generated": "2026-11-02T23:04:40+00:00",
  "repo": "edgible-org/cards",
  "site": "https://cards.edgible.org",
  "jobs": [
@@ -9,8 +9,8 @@
    "state": "ok",
    "count": 1,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/41297846517",
-   "at": "2026-11-01T10:31:17Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41435323695",
+   "at": "2026-11-02T11:15:13Z"
   },
   {
    "workflow": "skill-evals",
@@ -18,46 +18,48 @@
    "state": "ok",
    "count": 1,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/41336348762",
-   "at": "2026-11-01T18:23:11Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41535807748",
+   "at": "2026-11-02T22:16:16Z"
   },
   {
    "workflow": "grow",
    "name": "Grow",
    "state": "running",
-   "count": 8,
+   "count": 4,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/41341652864",
-   "at": "2026-11-01T19:25:25Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41540499506",
+   "at": "2026-11-02T22:49:42Z"
   },
   {
    "workflow": "regression",
    "name": "Cards regression",
-   "state": "ok",
-   "count": 3,
-   "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/41338714249",
-   "at": "2026-11-01T18:51:05Z"
+   "state": "fail",
+   "count": 1,
+   "failed": 1,
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41538236712",
+   "at": "2026-11-02T22:33:14Z"
   },
   {
    "workflow": "site",
    "name": "Site build",
    "state": "running",
-   "count": 10,
+   "count": 6,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/41342181532",
-   "at": "2026-11-01T19:31:44Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/41542480520",
+   "at": "2026-11-02T23:04:25Z"
   }
  ],
  "cards": {
-  "total": 45,
-  "with_status": 42,
-  "passing": 42,
-  "failing": [],
+  "total": 50,
+  "with_status": 47,
+  "passing": 46,
+  "failing": [
+   "otter-wiki"
+  ],
   "tested_24h": 17,
   "oldest": [
    "vaultwarden",
-   5
+   6
   ],
   "no_test_yet": [
    "accounts",
@@ -65,10 +67,21 @@
    "website"
   ]
  },
- "regression_issues": [],
+ "regression_issues": [
+  {
+   "number": 293,
+   "title": "Regression: otter-wiki fails",
+   "url": "https://github.com/edgible-org/cards/issues/293",
+   "days": 0
+  }
+ ],
  "images": {
-  "cards_with_fixable": 40,
+  "cards_with_fixable": 45,
   "worst": [
+   {
+    "card": "photoprism",
+    "count": 371
+   },
    {
     "card": "frigate",
     "count": 286
@@ -82,32 +95,28 @@
     "count": 170
    },
    {
-    "card": "wiki-js",
-    "count": 135
-   },
-   {
-    "card": "home-assistant",
-    "count": 91
+    "card": "passbolt",
+    "count": 157
    }
   ],
-  "scanned": 57
+  "scanned": 62
  },
  "queue": [
   {
-   "number": 277,
-   "title": "New app card: photoprism",
-   "url": "https://github.com/edgible-org/cards/pull/277",
-   "kind": "new card",
-   "state": "review",
-   "why": "checks: 2 to look at. its test passed on a device; read the card, then merge or close"
-  },
-  {
-   "number": 276,
-   "title": "New app card: linkwarden",
-   "url": "https://github.com/edgible-org/cards/pull/276",
+   "number": 291,
+   "title": "New app card: freshrss",
+   "url": "https://github.com/edgible-org/cards/pull/291",
    "kind": "new card",
    "state": "review",
    "why": "checks: 1 to look at. its test passed on a device; read the card, then merge or close"
+  },
+  {
+   "number": 290,
+   "title": "New app card: paperless-ngx",
+   "url": "https://github.com/edgible-org/cards/pull/290",
+   "kind": "new card",
+   "state": "review",
+   "why": "checks: nothing found. its test passed on a device; read the card, then merge or close"
   },
   {
    "number": 225,
@@ -118,38 +127,28 @@
    "why": "needs a person"
   }
  ],
- "card_kit_prs": [],
+ "card_kit_prs": [
+  {
+   "number": 175,
+   "title": "Needs map: add merged agent-made cards",
+   "url": "https://github.com/edgible-org/card-kit/pull/175"
+  }
+ ],
  "grow": {
   "made": [
    {
-    "title": "New app card: photoprism",
-    "url": "https://github.com/edgible-org/cards/pull/277"
+    "title": "New app card: freshrss",
+    "url": "https://github.com/edgible-org/cards/pull/291"
    },
    {
-    "title": "New app card: linkwarden",
-    "url": "https://github.com/edgible-org/cards/pull/276"
-   },
-   {
-    "title": "New app card: arize-phoenix",
-    "url": "https://github.com/edgible-org/cards/pull/267"
-   },
-   {
-    "title": "New app card: qdrant",
-    "url": "https://github.com/edgible-org/cards/pull/265"
+    "title": "New app card: paperless-ngx",
+    "url": "https://github.com/edgible-org/cards/pull/290"
    }
   ],
   "could_not_make": [
    {
-    "title": "App request: speaches",
-    "url": "https://github.com/edgible-org/cards/issues/272"
-   },
-   {
-    "title": "App request: localai",
-    "url": "https://github.com/edgible-org/cards/issues/271"
-   },
-   {
-    "title": "App request: speaches",
-    "url": "https://github.com/edgible-org/cards/issues/270"
+    "title": "App request: MediaMTX",
+    "url": "https://github.com/edgible-org/cards/issues/292"
    }
   ],
   "agent_prs_open": 2
@@ -204,6 +203,11 @@
    "image": "ghcr.io/perber/leafwiki:v0.14.2"
   },
   {
+   "card": "linkwarden",
+   "topic": "secret-files",
+   "image": "ghcr.io/linkwarden/linkwarden:v2.16.3"
+  },
+  {
    "card": "litellm",
    "topic": "healthcheck",
    "image": "ghcr.io/berriai/litellm:v1.106.2"
@@ -229,6 +233,16 @@
    "image": "redimp/otterwiki:2.25.0"
   },
   {
+   "card": "passbolt",
+   "topic": "healthcheck",
+   "image": "passbolt/passbolt:5.8.0-1-ce-non-root"
+  },
+  {
+   "card": "photoprism",
+   "topic": "healthcheck",
+   "image": "photoprism/photoprism:260601"
+  },
+  {
    "card": "qdrant",
    "topic": "healthcheck",
    "image": "qdrant/qdrant:v1.20.0"
@@ -237,6 +251,11 @@
    "card": "static-site",
    "topic": "healthcheck",
    "image": "caddy:2.11.7-alpine"
+  },
+  {
+   "card": "sync-in",
+   "topic": "secret-files",
+   "image": "syncin/server:2.6.2"
   },
   {
    "card": "umami",
@@ -270,5 +289,5 @@
   }
  ],
  "skill_evals_report": "https://github.com/edgible-org/cards/issues/17",
- "summary": "Overnight, the cards regression passed all 17 cards it tested, and the grow job added arize-phoenix and qdrant, though it could not make three app requests and one run is still in progress. The skill evals ran successfully, but only 2 of 16 held-out prompts pass this week. The one thing that needs you is the two new card pull requests, photoprism and linkwarden, which are waiting for you to merge or close them."
+ "summary": "Last night the card regression passed 46 of 47 cards, with only otter-wiki failing (issue #293, which closes itself if tonight's run passes). The grow job opened two new card PRs but could not make a card for MediaMTX. The one thing that needs you is deciding on the two new card PRs, #290 (paperless-ngx) and #291 (freshrss), by merging them or closing them with a note."
 }
