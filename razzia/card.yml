@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: razzia
+  description: Razzia, a Kahoot-style quiz game you host for a room of players who join from their phones
+  type: app
+  added: 2026-11-02
+  homepage: https://github.com/Ralex91/Razzia
+  license: MIT
+
+applications:
+  - name: razzia
+    what: Razzia, the host screen and the players' phones
+    from: ghcr.io/ralex91/razzia:4.0.2
+    port: 3000
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [none]
+    place: razzia
+
+secrets:
+  RAZZIA_MANAGER_PASSWORD:
+    kind: human
+    make: openssl rand -hex 16
+    for: the host's sign-in, to create quizzes and start games
+  RAZZIA_JWT_SECRET:
+    kind: internal
+    use: signing
+    make: openssl rand -hex 32
+
+data:
+  volumes:
+    razzia-config:
+      class: irreplaceable
+    razzia-secrets:
+      class: irreplaceable
+  fingerprint:
+    service: razzia
+    command: 'printf ''{"quizzes": %s}\n'' "$(ls /app/config/quizz 2>/dev/null | grep -c ''\.json$'' || true)"'
+
+places:
+  razzia:
+    memory: 256 MB
+    disk: 1 GB
+    arch: [amd64, arm64]
+    gpu: none
