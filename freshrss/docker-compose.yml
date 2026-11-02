@@ -1,0 +1,68 @@
+# Compose file for the freshrss card.
+# The host port, ORG_LABEL and the admin's name come from card.env. The admin's two passwords
+# are made on this machine by freshrss-secrets, at first start, and never leave it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+# The image has no healthcheck of its own, so this file adds one on the start page.
+
+name: freshrss
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume freshrss-secrets, then exits. It never changes one that exists.
+  freshrss-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        FRESHRSS_ADMIN_PASSWORD=openssl rand -hex 16
+        FRESHRSS_API_PASSWORD=openssl rand -hex 16
+    volumes:
+      - freshrss-secrets:/run/card-secrets
+
+  freshrss:
+    image: ${FRESHRSS_IMAGE:-freshrss/freshrss:1.30.1}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${FRESHRSS_PORT:?set FRESHRSS_PORT in card.env}:80"
+    # FreshRSS makes the install and the admin at its first start from FRESHRSS_INSTALL and
+    # FRESHRSS_USER, whose $VARIABLES its entrypoint expands. So it starts through the loader,
+    # which puts the secret files in the environment first, then runs the image's own
+    # entrypoint and start command (the CMD below is the image's, without its OIDC switch).
+    entrypoint: ["sh", "/run/card-secrets/.load", "./Docker/entrypoint.sh"]
+    command:
+      - sh
+      - -c
+      - '([ -z "$$CRON_MIN" ] || cron) && . /etc/apache2/envvars && exec apache2 -D FOREGROUND'
+    environment:
+      TZ: ${FRESHRSS_TZ:-UTC}
+      # Refreshes every feed at these minutes of the hour.
+      CRON_MIN: ${FRESHRSS_CRON_MIN:-7,37}
+      # The first start only. Sign-up is closed: nobody else gets an account unless the admin
+      # adds one in FreshRSS.
+      FRESHRSS_INSTALL: |-
+        --api-enabled
+        --base-url ${FRESHRSS_URL:-https://freshrss.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+        --db-type sqlite
+        --default-user ${FRESHRSS_ADMIN_USER:?set FRESHRSS_ADMIN_USER in card.env}
+        --language en
+      FRESHRSS_USER: |-
+        --user ${FRESHRSS_ADMIN_USER}
+        --password $$FRESHRSS_ADMIN_PASSWORD
+        --api-password $$FRESHRSS_API_PASSWORD
+        --language en
+    volumes:
+      - freshrss-data:/var/www/FreshRSS/data
+      - freshrss-secrets:/run/card-secrets:ro
+    depends_on:
+      freshrss-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1/i/') === false ? 1 : 0);"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+volumes:
+  freshrss-data: {}
+  freshrss-secrets: {}

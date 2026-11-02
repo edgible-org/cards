@@ -1,0 +1,30 @@
+tested: 2026-11-03
+result: pass
+card-kit: "9cf8f87"
+edgible-cli: 1.4.29
+files: sha256:c40b0ff71a2be6e6
+machine: darwin/arm64, docker 29.4.3
+images:
+  - freshrss/freshrss:1.30.1@sha256:48b63b9bc3d042a1301c32971b01af8841c7f059b452589c5bf77f475ba44c61
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+image_facts:
+  freshrss/freshrss:1.30.1: {user: "root", archs: ["amd64", "arm", "arm64"], healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    freshrss: pass
+    freshrss-app: pass
+  checks:
+    api-signs-in: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"users": 1, "feeds": 1}
+measured:
+  freshrss:
+    memory: 27 MB
+    images: 95 MB
+    data: 1 MB
+duration: 3m
+by: agent
