@@ -1,12 +1,13 @@
-# edgible-cards skill evals: 2026-10-26 to 2026-11-01
+# edgible-cards skill evals: 2026-10-27 to 2026-11-02
 
-**2 of 16** held-out prompts pass, each at its latest run in the last 7 days (6 nightly runs). Skill from card-kit `30b4a89`, `36d8b7f`, `5d848cc`, `8f3a4ae`, `f61bd7f`, `fa59bf9`.
+**2 of 19** held-out prompts pass, each at its latest run in the last 7 days (7 nightly runs). Skill from card-kit `30b4a89`, `36d8b7f`, `5d848cc`, `8f3a4ae`, `9cf8f87`, `f61bd7f`, `fa59bf9`.
 
 | Prompt | Run | Result | Skill loaded | expect | must_not broken |
 | --- | --- | --- | --- | --- | --- |
 | builder-agent-alone | 2026-10-30 | FAIL | no (WRONG) | 1/3 | 0 |
 | builder-just-live | 2026-10-29 | FAIL | no (WRONG) | 1/3 | 0 |
 | builder-secrets-in-repo | 2026-10-31 | FAIL | no (WRONG) | 3/3 | 0 |
+| dementia-startup | 2026-11-02 | FAIL | no (WRONG) | 1/3 | 0 |
 | edgible-mcp-desktop | 2026-10-30 | FAIL | no (WRONG) | 2/4 | 0 |
 | maritime-law-firm | 2026-10-29 | FAIL | no (WRONG) | 5/5 | 0 |
 | marketing-site-cost | 2026-10-31 | FAIL | no (WRONG) | 2/3 | 0 |
@@ -14,10 +15,12 @@
 | physio-clinic | 2026-10-27 | FAIL | no (WRONG) | 2/4 | 0 |
 | pocket-shutdown | 2026-10-30 | FAIL | no (WRONG) | 1/3 | 0 |
 | record-stale-and-fixable | 2026-11-01 | FAIL | no (WRONG) | 2/5 | 0 |
+| record-unknown | 2026-11-02 | FAIL | no (WRONG) | 1/1 | 0 |
 | retest-request | 2026-10-27 | FAIL | no (WRONG) | 0/4 | 0 |
 | s3-members-area | 2026-11-01 | FAIL | no (WRONG) | 2/3 | 0 |
 | sensitive-photos | 2026-10-28 | FAIL | no (WRONG) | 3/3 | 0 |
 | set-up-edgible | 2026-10-27 | FAIL | no (WRONG) | 1/6 | 0 |
+| tennis-club | 2026-11-02 | FAIL | no (WRONG) | 2/5 | 1 |
 | negative-landlord-email | 2026-10-29 | pass | no (right) | 1/1 | 0 |
 | negative-react-error | 2026-10-28 | pass | no (right) | 1/1 | 0 |
 
@@ -32,6 +35,10 @@
 - Missed: offers keeping it running later, as a card of their own, without requiring it now. It tells them to make it survive reboots now ("Docker and `restart: unless-stopped`, or a systemd service") as step 1. It does not offer a card of their own.
 
 **builder-secrets-in-repo** (2026-10-31)
+
+**dementia-startup** (2026-11-02)
+- Missed: self-hosted building blocks only as one option, for a prototype with test or consented data. Recommends hosted services (Supabase, Firebase, Pinecone). It never presents self-hosting as an option and never mentions test or consented data for the prototype.
+- Missed: real patient data needs compliant hosting and advice. It says "you may fall under HIPAA... Use encryption and clear consent" and "Involve family and legal guidance". It doesn't say real patient data needs compliant hosting, such as a BAA or a compliant host.
 
 **edgible-mcp-desktop** (2026-10-30)
 - Missed: gives the claude_desktop_config.json entry, with the full path to edgible because the app does not read PATH. It only says to "add the server to the `mcpServers` section of `claude_desktop_config.json`". It gives no concrete entry and no full-path advice.
@@ -60,6 +67,8 @@
 - Missed: offers the choices - deploy as it is, test it on their own device first with test-card, or ask the maintainers to retest. It suggests upgrading Edgible and using tested tags. It never mentions test-card or asking maintainers to retest.
 - Missed: says test-card publishes and removes a throwaway copy and downloads images, and asks before running it. test-card is not mentioned.
 
+**record-unknown** (2026-11-02)
+
 **retest-request** (2026-10-27)
 - Missed: offers to file a retest request on edgible-org/cards, and says it posts to a public repo. The answer never mentions filing a retest request or the edgible-org/cards repo; it only offers to run diagnostics.
 - Missed: shows the person what it would send and asks before posting. No draft issue is shown. The only 'tell me before' is about removing a leftover cardtest project.
@@ -78,11 +87,18 @@
 - Missed: asks for the device name and whether it stays on, and says that without sudo it stops when they log out. It never asks about the device name or whether the laptop stays on, and never mentions sudo or logout behavior.
 - Missed: asks before each step that uses sudo. It doesn't mention sudo. It offers to "walk through the Docker install commands" but doesn't ask before sudo steps.
 
+**tennis-club** (2026-11-02)
+- Missed: checks the tennis association's own booking platform, and free options with no server. No mention of a tennis association platform or hosted no-server options; only self-hosted tools are discussed.
+- Missed: recommends a resource-booking app (LibreBooking), not appointment or hotel booking. Recommends Rallly (a poll tool) and says "For real court booking you'd look at a different open-source reservation system" without naming LibreBooking.
+- Missed: member accounts on auth mode none, sign-up closed or approved; explains members are not in the Edgible organization. Says "Only the organisers sign in... Members don't need accounts"; no discussion of auth modes or member accounts for a booking app.
+- Broke: recommend cal.diy, qloapps, or another app for a different job. Recommends Rallly (a poll scheduler) as best fit and mentions Teamdesk, neither a court booking resource app.
+
 ## What would make answers better
 
 - builder-agent-alone: It should have said plainly which steps it can do alone once it has the app and a shell, and which need the person (Edgible sign-in link, GitHub account, steward). It should also have given an auth-mode rule of thumb and cut the asks to the one or two that matter.
 - builder-just-live: Lead with a direct answer: publish the running app from its device on its listening port with `org` auth, as a quick path that needs no container or card. Then offer a keep-it-running card as an optional later step and mention a hosted alternative.
 - builder-secrets-in-repo: State outright that a Stripe key sitting in a repo should be treated as exposed and rotated now, rather than only if it was committed or shared, and list every secret the card needs with where each one comes from.
+- dementia-startup: Add a short note saying the prototype should use test or consented data on hosted services, and that real patient data needs a HIPAA-compliant host with a BAA and legal advice.
 - edgible-mcp-desktop: Give the concrete claude_desktop_config.json entry with the full path to the edgible binary (the desktop app does not read PATH) and say the CLI must be installed and logged in first, instead of telling the user to work out the config themselves.
 - maritime-law-firm: Compare a hosted option, such as a managed legal knowledge tool, against self-hosting and state the upkeep burden. Cut the questions to the two or three that would change the recommendation.
 - marketing-site-cost: Ask up front whether the site is static or edited through a CMS, then pair each branch with its fit: free static hosting, or WordPress on a small cloud server with the upkeep spelled out.
@@ -91,7 +107,9 @@
 - physio-clinic: Lead with clinic practice-management tools that include booking and exercise plans, treat exercise plans as regulated patient data, and drop the YouTube/PDF suggestion for patient plans.
 - pocket-shutdown: Present two or three self-hosted and hosted alternatives that keep page copies side by side with a recommendation, and ask about the Pocket export and import plan.
 - record-stale-and-fixable: Explain that 'fixable' means the pinned image trails a patch and isn't proof of exposure, then offer the real choices: deploy as is, run test-card on their own Mac (saying it publishes and removes a throwaway copy and downloads images, and asking first), or ask the maintainers to retest on 1.4.12.
+- record-unknown: It could have added a short note on hosted alternatives and the upkeep of self-hosting (updates, backups), and said clearly that the answer covers the nightly test but not an image scan.
 - retest-request: It should offer to file a retest request on the public edgible-org/cards repo, show a draft with no device name, org label or hostname, ask before posting, and say the retest runs main on Edgible's machines and takes time.
 - s3-members-area: Trim the questions to two or three that change the recommendation, and add a self-hosted accounts option with its upkeep next to the AWS-native and hosted options.
 - sensitive-photos: Briefly compare self-hosting with a zero-knowledge encrypted hosted option and state the ongoing upkeep of self-hosting (updates, backups, hardware) before steering to Immich.
 - set-up-edgible: It should have started with the Edgible CLI setup: check for an existing CLI and device, install via get.edgible.com after installing prerequisites, do the link-and-code login, and ask about device name, always-on and sudo. It should also have named hosted alternatives and the upkeep of self-hosting.
+- tennis-club: Recommend a real resource-booking app like LibreBooking for court reservations (with member self-signup), and check the tennis association's own free booking platform and hosted options first, instead of leading with a poll tool.
