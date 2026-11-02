@@ -9,7 +9,7 @@ images:
   - mariadb:11.8.5@sha256:345fa26d595e8c7fe298e0c4098ed400356f502458769c8902229b3437d6da2b
   - passbolt/passbolt:5.8.0-1-ce-non-root@sha256:0977089131ced9c157a967148d94b5b7a0f03df0643be79814cdfe77874289c0
 image_facts:
-  passbolt/passbolt:5.8.0-1-ce-non-root: {user: "www-data", archs: [], healthcheck: false}
+  passbolt/passbolt:5.8.0-1-ce-non-root: {user: "www-data", archs: ["amd64", "arm", "arm64"], healthcheck: false}
 steps:
   check-env: pass
   start: pass
