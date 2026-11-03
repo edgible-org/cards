@@ -54,6 +54,12 @@ Your assistant checks these for you. They're here so you know what it's looking 
 
 It offers to build each missing piece, such as an image for both kinds of computer, or a setting read from a file instead of the code. You make the calls. Two are yours alone: the licence, and who answers for the card.
 
+**No image yet?** Most apps people build don't have one, and a card needs one: a packaged copy of your app that anyone can download and run. Your AI sets up GitHub to build it for you, under your own name, each time you tag a release:
+
+> My app has no image yet. Set up GitHub to build one.
+
+It adds one file to your repository, asks you before it pushes anything, and checks the result. After that, a new version is just a new tag.
+
 ## 4. Let it write the card
 
 > Write the card for my app.
