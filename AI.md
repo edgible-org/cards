@@ -6,13 +6,25 @@ With an AI agent, such as Claude Code, you don't need to know which app you want
 
 ## What you need
 
-- **An AI agent that runs commands on your machine.** We test with Claude Code. The skill is in the open Agent Skills format, so other agents that read it should be able to use it too, but we haven't measured how well yet.
-- **Edgible on that machine:** the `edgible` CLI, logged in, with the machine added as a serving device. [Start here](https://guides.edgible.com/guides/start-here/index.html) if you haven't yet.
-- **Docker**, for most cards. A native card, such as [ollama-osx](ollama-osx), runs without it.
+- **An AI agent that runs commands on your machine.** We recommend Claude Code. The skill is in the open Agent Skills format, so it also works with Codex and other agents that read skills, and we're measuring how well each one does.
+- **A computer that stays on.** Your agent sets up Edgible on it, and Docker for the cards that need it.
 
-## Install the skill
+## Get started
 
-The skill is what teaches your agent about cards. For Claude Code:
+Say these to your agent, one at a time. [Get Edgible running](playbooks/get-edgible-running.md) walks through them.
+
+> Install the Edgible skill from github.com/edgible-org/card-kit
+
+The skill is what teaches your agent about cards. To check it's there, ask: "What can you do with Edgible cards?"
+
+> Set up Edgible on this computer so I can run my own apps.
+
+It checks your computer, helps you make a free account, and asks before anything changes.
+
+<details>
+<summary>Installing the skill by hand</summary>
+
+<p>For Claude Code:</p>
 
 ```bash
 git clone https://github.com/edgible-org/card-kit.git ~/.card-kit
@@ -20,7 +32,9 @@ mkdir -p ~/.claude/skills
 ln -s ~/.card-kit/skills/edgible-cards ~/.claude/skills/edgible-cards
 ```
 
-`git -C ~/.card-kit pull` keeps it up to date. For another agent, put the `edgible-cards` folder where that agent reads skills. To check it's there, ask: "What can you do with Edgible cards?"
+<p><code>git -C ~/.card-kit pull</code> keeps it up to date. For another agent, put the <code>edgible-cards</code> folder where that agent reads skills.</p>
+
+</details>
 
 ## Ask in your own words
 
