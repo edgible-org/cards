@@ -50,4 +50,8 @@ The chapters:
   5. <span class="ico sm" aria-hidden="true"><svg><use href="../icons.svg#data"/></svg></span>[Give your agent your own files](../give-your-agent-your-files/)
   6. <span class="ico sm" aria-hidden="true"><svg><use href="../icons.svg#map"/></svg></span>[Choosing between them](../choosing-between-them/)
 
+On its own, with no Edgible needed to start:
+
+- **<span class="ico sm" aria-hidden="true"><svg><use href="../icons.svg#cube"/></svg></span>[A coding agent in a box](../a-coding-agent-in-a-box/):** an open-source coding agent (OpenCode) in a virtual machine you can reset in seconds, with its own budget from your AI gateway.
+
 New here? Start at [all the playbooks](../), or go straight to [Get Edgible running](../get-edgible-running/).
