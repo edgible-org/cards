@@ -6,7 +6,7 @@ With an AI agent, such as Claude Code, you don't need to know which app you want
 
 ## What you need
 
-- **An AI agent that runs commands on your machine.** We recommend Claude Code. The skill is in the open Agent Skills format, so it also works with Codex and other agents that read skills, and we're measuring how well each one does.
+- **An AI agent that runs commands on your machine.** For the first setup, run it on the computer that will run your apps (in Cursor, a local agent, not a cloud one); after that, you can look after your apps from anywhere. We recommend Claude Code. The skill is in the open Agent Skills format, so it also works with Codex and other agents that read skills, and we're measuring how well each one does.
 - **A computer that stays on.** Your agent sets up Edgible on it, and Docker for the cards that need it.
 
 ## Get started
