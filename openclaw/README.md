@@ -2,7 +2,7 @@
 
 ## Why
 
-[OpenClaw](https://openclaw.ai) is the open-source AI agent most people are trying: it chats, remembers, runs commands, edits files and works through messaging apps. It holds your keys and has a shell, so it belongs on a machine you are willing to hand it, and its Control UI is an admin console that should never sit open on the internet. This card runs it from OpenClaw's own image, with the Gateway on this machine's loopback only and the Control UI reached through Edgible behind your organisation's sign-in. It follows Edgible's [OpenClaw on Edgible](https://guides.edgible.com/guides/openclaw-on-edgible/) guide.
+[OpenClaw](https://openclaw.ai) is the open-source AI agent most people are trying: it chats, remembers, runs commands, edits files and works through messaging apps. It holds your keys and has a shell, so it belongs on a machine you are willing to hand it, and its Control UI is an admin console that should never sit open on the internet. This card runs it from OpenClaw's own image, with the Gateway on this machine's loopback only and the Control UI reached through Edgible behind your organisation's sign-in.
 
 ## What
 

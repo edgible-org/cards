@@ -94,6 +94,6 @@ sudo edgible install --device-name minipc --yes
 edgible agent status
 ```
 
-The full walk-through is Edgible's [Start here](https://guides.edgible.com/) guide.
+For accounts, downloads and help, see [edgible.com](https://edgible.com/).
 
 </details>
