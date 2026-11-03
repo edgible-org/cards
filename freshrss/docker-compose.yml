@@ -20,7 +20,7 @@ services:
       - freshrss-secrets:/run/card-secrets
 
   freshrss:
-    image: ${FRESHRSS_IMAGE:-freshrss/freshrss:1.30.1}
+    image: ${FRESHRSS_IMAGE:-freshrss/freshrss:1.30.4}
     restart: unless-stopped
     ports:
       - "127.0.0.1:${FRESHRSS_PORT:?set FRESHRSS_PORT in card.env}:80"
