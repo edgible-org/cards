@@ -19,7 +19,7 @@ services:
       - vaultwarden-secrets:/run/card-secrets
 
   vaultwarden:
-    image: vaultwarden/server:1.37.4
+    image: vaultwarden/server:1.37.5
     restart: unless-stopped
     ports:
       - "127.0.0.1:${VAULTWARDEN_PORT:?set VAULTWARDEN_PORT in card.env}:80"
