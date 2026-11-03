@@ -15,7 +15,7 @@ Say these to your agent, one at a time. [Get Edgible running](playbooks/get-edgi
 
 > Install the Edgible skill from github.com/edgible-org/card-kit
 
-The skill is what teaches your agent about cards. To check it's there, ask: "What can you do with Edgible cards?"
+The skill is what teaches your agent about cards. To check it's there, ask: "What can you do with Edgible cards?" To get the latest version later, ask: "Update the Edgible skill."
 
 > Set up Edgible on this computer so I can run my own apps.
 
@@ -32,7 +32,7 @@ mkdir -p ~/.claude/skills
 ln -s ~/.card-kit/skills/edgible-cards ~/.claude/skills/edgible-cards
 ```
 
-<p><code>git -C ~/.card-kit pull</code> keeps it up to date. For another agent, put the <code>edgible-cards</code> folder where that agent reads skills.</p>
+<p>For another agent, put the <code>edgible-cards</code> folder where that agent reads skills. To update by hand, run <code>git -C ~/.card-kit pull</code>, then start a new chat.</p>
 
 </details>
 
