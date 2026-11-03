@@ -32,7 +32,7 @@ mkdir -p ~/.claude/skills
 ln -s ~/.card-kit/skills/edgible-cards ~/.claude/skills/edgible-cards
 ```
 
-<p>For another agent, put the <code>edgible-cards</code> folder where that agent reads skills. To update by hand, run <code>git -C ~/.card-kit pull</code>, then start a new chat.</p>
+<p>For Cursor, Codex, Windows and other agents, see <a href="https://github.com/edgible-org/card-kit#install-the-skill">Install the skill</a> in card-kit. To update by hand, run <code>git -C ~/.card-kit pull</code>, then start a new chat.</p>
 
 </details>
 
