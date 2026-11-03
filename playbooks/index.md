@@ -18,6 +18,8 @@ Pick a path. Each starts with [Get Edgible running](get-edgible-running/).
 <a class="path" href="edgible-for-contributors/"><svg viewBox="0 0 200 74" aria-hidden="true"><rect x="2" y="2" width="196" height="70" rx="9" class="mf"/><circle cx="22" cy="37" r="14" class="md"/><g transform="translate(22 37)" class="og"><circle cy="-4" r="3.5"/><path d="M-7 8Q-7 2 0 2Q7 2 7 8"/></g><circle cx="53" cy="37" r="14" class="md"/><g transform="translate(53 37)" class="og"><rect x="-6" y="-8" width="12" height="16" rx="2"/><path d="M-3-3H3M-3 1H1"/></g><circle cx="84" cy="37" r="14" class="md"/><g transform="translate(84 37)" class="og"><circle cx="-5" cy="-6" r="2"/><circle cx="-5" cy="6" r="2"/><circle cx="5" cy="-2" r="2"/><path d="M-5-4V4M5 0Q5 3-5 3"/></g><circle cx="115" cy="37" r="14" class="md"/><g transform="translate(115 37)" class="og"><path d="M-6 0L-2 4L6-5"/></g><circle cx="146" cy="37" r="14" class="md"/><g transform="translate(146 37)" class="og"><circle cx="-4" cy="-4" r="3"/><circle cx="4.5" cy="-3" r="2.5"/><path d="M-10 8Q-10 2-4 2Q2 2 2 8M3 3Q10 2 10 8"/></g><circle cx="177" cy="37" r="14" class="md"/><g transform="translate(177 37)" class="og"><path d="M0 7L-7 0A4 4 0 0 1 0-5A4 4 0 0 1 7 0Z"/></g></svg><h2>Edgible for Contributors</h2><p>Built an app? Turn it into a card, test it on your own Edgible, and share it so anyone can run it.</p><span class="go">Two chapters →</span></a>
 </div>
 
+Prefer to do it by hand? Install Edgible from [edgible.com](https://edgible.com/), then pick a [card](../) and follow its README.
+
 Start here:
 
 - **<span class="ico sm" aria-hidden="true"><svg><use href="icons.svg#machine"/></svg></span>[Get Edgible running](get-edgible-running/):** the first chapter of every playbook.
