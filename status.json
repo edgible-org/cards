@@ -49,17 +49,17 @@
     "device": "osxdevice"
   },
   "ech0": {
-    "result": "pass",
-    "tested": "2026-10-31",
+    "result": "fail",
+    "tested": "2026-11-04",
     "edgible-cli": "1.4.29",
-    "files": "sha256:d9e30b96573ad8f4",
+    "files": "sha256:4795480acb400313",
     "device": "osxdevice"
   },
   "edgible-agent": {
     "result": "pass",
-    "tested": "2026-11-01",
+    "tested": "2026-11-04",
     "edgible-cli": "1.4.29",
-    "files": "sha256:02df6eee32fa3659",
+    "files": "sha256:d54c34f1911dafb8",
     "device": "osxdevice"
   },
   "edgible-connector": {
@@ -74,6 +74,13 @@
     "tested": "2026-11-01",
     "edgible-cli": "1.4.29",
     "files": "sha256:57b7aec6cb1897f2",
+    "device": "osxdevice"
+  },
+  "freshrss": {
+    "result": "pass",
+    "tested": "2026-11-04",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:09cbd0eb2252670a",
     "device": "osxdevice"
   },
   "frigate": {
@@ -183,9 +190,9 @@
   },
   "n8n": {
     "result": "pass",
-    "tested": "2026-10-31",
+    "tested": "2026-11-04",
     "edgible-cli": "1.4.29",
-    "files": "sha256:2ef17ce6deec9693",
+    "files": "sha256:cade48c3b2e130c4",
     "device": "osxdevice"
   },
   "notediscovery": {
@@ -204,14 +211,14 @@
   },
   "openclaw": {
     "result": "pass",
-    "tested": "2026-11-01",
+    "tested": "2026-11-04",
     "edgible-cli": "1.4.29",
-    "files": "sha256:b727acce1b64b719",
+    "files": "sha256:16693e317d3de25d",
     "device": "osxdevice"
   },
   "otter-wiki": {
-    "result": "fail",
-    "tested": "2026-11-02",
+    "result": "pass",
+    "tested": "2026-11-04",
     "edgible-cli": "1.4.29",
     "files": "sha256:9b43b521ee7c757e",
     "device": "osxdevice"
@@ -221,6 +228,13 @@
     "tested": "2026-10-29",
     "edgible-cli": "1.4.29",
     "files": "sha256:a21f6d20d6caeee5",
+    "device": "osxdevice"
+  },
+  "paperless-ngx": {
+    "result": "pass",
+    "tested": "2026-11-04",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:79bbd8232e22ae8d",
     "device": "osxdevice"
   },
   "passbolt": {
@@ -249,6 +263,13 @@
     "tested": "2026-11-02",
     "edgible-cli": "1.4.29",
     "files": "sha256:2a501ecc2aeb8830",
+    "device": "osxdevice"
+  },
+  "razzia": {
+    "result": "pass",
+    "tested": "2026-11-04",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:a3ea967220e5c021",
     "device": "osxdevice"
   },
   "static-site": {
@@ -295,9 +316,9 @@
   },
   "vaultwarden": {
     "result": "pass",
-    "tested": "2026-10-27",
-    "edgible-cli": "1.4.12",
-    "files": "sha256:9aabf1dc061135fb",
+    "tested": "2026-11-04",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:7de09c4494beafa5",
     "device": "osxdevice"
   },
   "wiki-go": {
