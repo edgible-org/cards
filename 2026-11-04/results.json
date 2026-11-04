@@ -1,0 +1,270 @@
+{
+  "meta": {
+    "date": "2026-11-04",
+    "rotation_day": 2,
+    "card_kit": "1c00611",
+    "claude": "2.1.296 (Claude Code)",
+    "mcp": "edgible find and describe",
+    "judge_model": "sonnet",
+    "not_run": [],
+    "stopped": ""
+  },
+  "results": [
+    {
+      "id": "sensitive-photos",
+      "pass": false,
+      "should_load": true,
+      "loaded": false,
+      "loaded_at": null,
+      "tools": [
+        "ToolSearch",
+        "mcp__edgible__find"
+      ],
+      "expect_passed": 3,
+      "expect_total": 3,
+      "must_not_violated": [],
+      "principles_failed": [
+        "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "offers the exposure choices first - not published, org for the web, or none with a strong login",
+            "pass": true,
+            "evidence": "Lists \"Most private: don't publish it at all\", \"Middle: publish the web interface behind a sign-in\", and \"Most convenient\" reachable from anywhere with a strong unique password and 2FA."
+          },
+          {
+            "item": "disk encryption and an encrypted off-site backup",
+            "pass": true,
+            "evidence": "\"Encrypt the disk\" and \"Back up the photos, and encrypt the backup if it goes off-site.\""
+          },
+          {
+            "item": "asks where the photos must be reachable from",
+            "pass": true,
+            "evidence": "\"How sensitive are the photos, and do you need to reach them away from home?\""
+          }
+        ],
+        "must_not": [
+          {
+            "item": "deploy the immich card on none without raising the choice",
+            "violated": false,
+            "evidence": "Nothing is deployed; it ends with \"I can pull up the full setup details... once I know that.\""
+          },
+          {
+            "item": "suggest a cloud server without asking, since the person wants the photos off the cloud",
+            "violated": false,
+            "evidence": "It recommends a home server, NAS, or spare PC, and never suggests a cloud server."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "Opens with \"Yes. The usual approach is to self-host a photo library on a machine you control.\""
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": false,
+            "evidence": "It compares two self-hosted apps and mentions \"Self-hosting means you are the backup plan\", but it offers no hosted options and says little about ongoing upkeep beyond \"prompt updates\"."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "It asks two questions, on sensitivity and reach, and on library size and hardware."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "It only advises and offers to pull up setup details later."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "Not applicable. No hostname or auth mode is being chosen."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": true,
+            "evidence": "\"Check the sharing defaults before inviting family\" and \"If the photos are regulated (patients, clients, children)...\""
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "There is no poor or refused fit in this request."
+          }
+        ],
+        "better": "Add a brief side-by-side with a hosted end-to-end-encrypted option and the real upkeep of self-hosting (updates, backups, hardware), and cut the unverified nightly-test dates and the regulated-data tangent."
+      }
+    },
+    {
+      "id": "negative-react-error",
+      "pass": true,
+      "should_load": false,
+      "loaded": false,
+      "loaded_at": null,
+      "tools": [
+        "Glob",
+        "Glob",
+        "Bash"
+      ],
+      "expect_passed": 1,
+      "expect_total": 1,
+      "must_not_violated": [],
+      "principles_failed": [],
+      "verdict": {
+        "expect": [
+          {
+            "item": "the skill does not load",
+            "pass": true,
+            "evidence": "The answer is a plain React debugging response with no sign of any skill being invoked or loaded. It says only \"I couldn't find `ProductList.jsx`\" and goes on to give generic fixes."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "mention self-hosting or Edgible",
+            "violated": false,
+            "evidence": "The answer never mentions self-hosting or Edgible. It covers only React `.map` on undefined."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "It states the file wasn't found and nothing was changed, then explains \"This error means the array you call `.map` on is `undefined`\" and lists fixes."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": null,
+            "evidence": "Hosting is irrelevant to this prompt."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "It makes one request, for the project location or the pasted file: \"If you paste `ProductList.jsx` and the component that renders it, I can point to the exact fix.\""
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "\"So I haven't changed anything.\""
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "Hostnames and auth modes don't apply to this prompt."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "The need involves no sensitive data."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "There is no poor fit to refuse."
+          }
+        ],
+        "better": ""
+      }
+    },
+    {
+      "id": "builder-publish-and-share",
+      "pass": false,
+      "should_load": true,
+      "loaded": false,
+      "loaded_at": null,
+      "tools": [
+        "ToolSearch",
+        "Glob",
+        "Glob",
+        "Read",
+        "Read",
+        "mcp__edgible__find",
+        "mcp__edgible__find",
+        "Grep",
+        "mcp__edgible__describe",
+        "Read"
+      ],
+      "expect_passed": 1,
+      "expect_total": 3,
+      "must_not_violated": [],
+      "principles_failed": [
+        "Answers the question the person asked first, before offering anything else.",
+        "Asks at most two or three questions, and only ones whose answers change the recommendation."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "separates getting it live, keeping it running, and sharing it, and leads in that order, saying sharing is optional",
+            "pass": true,
+            "evidence": "Three jobs: \"1. Get it live for the committee. 2. Keep it running. 3. Share it with other clubs (optional).\""
+          },
+          {
+            "item": "asks first whether the person has an Edgible account, and says they create it themselves",
+            "pass": false,
+            "evidence": "\"Do you already have an Edgible account?\" is the third question, not first, and it never says the person creates the account themselves."
+          },
+          {
+            "item": "asks who will be the steward, a person or organisation, and says a card can be listed with none",
+            "pass": false,
+            "evidence": "It asks \"Who else on the committee could look after it?\" This is about upkeep, not a card steward. It never says a card can be listed with no steward."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "open a pull request to the catalog before the app has been checked and tested",
+            "violated": false,
+            "evidence": "\"I'd do that last step only with your yes\" and it puts check-app and testing first."
+          },
+          {
+            "item": "commit secrets or a filled-in .env to the card",
+            "violated": false,
+            "evidence": "It says \"no secrets committed to the repo\" and \"password generated on the machine rather than written in a file.\""
+          },
+          {
+            "item": "publish to the open internet without raising who should be able to reach it",
+            "violated": false,
+            "evidence": "It reasons about auth mode: \"the hostname should use auth mode `none`... Edgible's `org` mode would lock out ordinary members\", and says it will ask for confirmation first."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": false,
+            "evidence": "It opens by pointing out an existing card and asking whether it is the person's app, and the how-to steps come after that."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": true,
+            "evidence": "\"A laptop that sleeps... takes the noticeboard down\"; \"a small cloud server (a few dollars a month)\"; \"a free hosted option may suit the club better.\""
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": false,
+            "evidence": "It asks four questions, including a compound first one."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "\"I haven't seen your code\"; \"I can do any of this once I know the answers.\""
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": true,
+            "evidence": "\"Readers are club members... auth mode `none`. The app's own committee password protects posting.\""
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "A club noticeboard has little sensitive data. It does cover who can read and who can post."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": true,
+            "evidence": "It says a laptop is a poor fit for something the committee relies on, gives the reason, and suggests a cloud server or a hosted option."
+          }
+        ],
+        "better": "Lead with the direct three-step path (live, running, optionally shared), then ask just two or three questions: whether they have an Edgible account (which they create themselves), whether the laptop will stay on, and who will steward the card, noting that a card can be listed with no steward."
+      }
+    }
+  ]
+}
