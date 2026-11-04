@@ -7,7 +7,7 @@ name: notediscovery
 
 services:
   notediscovery:
-    image: ${NOTEDISCOVERY_IMAGE:-ghcr.io/gamosoft/notediscovery:0.33.0}
+    image: ${NOTEDISCOVERY_IMAGE:-ghcr.io/gamosoft/notediscovery:0.34.0}
     restart: unless-stopped
     ports:
       - "127.0.0.1:${NOTEDISCOVERY_PORT:?set NOTEDISCOVERY_PORT in card.env}:8000"
