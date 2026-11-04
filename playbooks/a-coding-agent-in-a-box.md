@@ -39,6 +39,8 @@ That last sentence matters. A virtual machine sees none of your files unless you
 
 This uses an Edgible card with no Edgible at all: the card is a tested recipe, and publishing it is a separate, optional last step. The gateway answers only inside the box, so nothing outside can reach it. It makes its own passwords as it starts, and keeps them in the box.
 
+That's the point of a card: a tested recipe anyone can use, with Edgible or without it. Here your assistant reads the card and runs it on its own, and Edgible isn't involved at all.
+
 ## 3. Give the gateway your AI provider's key
 
 Your key goes into the gateway's settings, in the box, typed by you: never into a chat with your assistant. Ask:
@@ -78,6 +80,18 @@ Afterwards, ask your assistant:
 > What has OpenCode spent in opencode-vm's gateway so far?
 
 It answers in dollars, against the budget. When the budget runs out, the gateway refuses the agent's next request, until the next month starts or you raise it.
+
+For scale: in our test, OpenCode with DeepSeek set up Edgible in the box, published a family wiki, checked it was healthy and took it down again, in 60 requests, for about **one and a half cents**. Most of what an agent sends is the conversation so far, again and again, and DeepSeek charges a tenth of the price for what it has seen before.
+
+**Copying text out of OpenCode.** OpenCode takes over the mouse, so dragging selects text for OpenCode, not for your computer. In the Mac's Terminal, press Cmd+R (View, Allow Mouse Reporting) to turn that off, select and copy, then Cmd+R again. In iTerm2, hold Option while you drag. Pasting with Cmd+V works as usual.
+
+## 7. Then put Edgible in the box too
+
+The box is also a safe place to try Edgible itself, starting clean every time. Take a snapshot first, then in OpenCode, with the [Edgible skill](https://github.com/edgible-org/card-kit#install-the-skill) installed (OpenCode won't install a skill when asked, so run its three commands yourself):
+
+> Set up Edgible on this computer so I can run my own apps.
+
+We tested this from start to finish: OpenCode set up Edgible in the box, published a private family wiki, and the wiki came back by itself after the box restarted. Edgible needs an account: when it gives you the sign-in link, open it in a private browser window, in case your browser is signed in to another one. When you're done, put the box back to its snapshot (remove the device from your Edgible account first, so it doesn't linger there as offline).
 
 ## Where Edgible comes in
 
