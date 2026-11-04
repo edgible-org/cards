@@ -6,7 +6,7 @@ With an AI agent, such as Claude Code, you don't need to know which app you want
 
 ## What you need
 
-- **An AI agent that runs commands on your machine.** For the first setup, run it on the computer that will run your apps (in Cursor, a local agent, not a cloud one); after that, you can look after your apps from anywhere. We recommend Claude Code, and we've also tested Cursor end to end: on a Windows laptop, it set up Edgible and published an app from two plain requests. The skill is in the open Agent Skills format, so it also works with Codex and other agents that read skills, and we're measuring how well each one does.
+- **An AI agent that runs commands on your machine.** For the first setup, run it on the computer that will run your apps (in Cursor, a local agent, not a cloud one); after that, you can look after your apps from anywhere. We recommend Claude Code, and we've also tested Cursor end to end: on a Windows laptop, it set up Edgible and published an app from two plain requests. OpenCode with an open model (DeepSeek) did the same in a Linux virtual machine, for about two cents; in OpenCode, install the skill by hand first. The skill is in the open Agent Skills format, so it also works with Codex and other agents that read skills, and we're measuring how well each one does.
 - **A computer that stays on.** Your agent sets up Edgible on it, and Docker for the cards that need it.
 
 ## Get started
