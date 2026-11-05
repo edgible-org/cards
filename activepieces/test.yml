@@ -1,0 +1,32 @@
+tested: 2026-11-06
+result: pass
+card-kit: "ad80064"
+edgible-cli: 1.4.29
+files: sha256:6688349800065d7d
+machine: darwin/arm64, docker 29.4.3
+images:
+  - activepieces/activepieces:0.92.3-hotfix.2@sha256:3aa4093ca5774589a861703f20a22c250891fe31c56edb9a516a7deaeb04b165
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+  - redis:7.4-alpine@sha256:4783bb5c3ecd5a93ce0a779ed2c44d5472043bb2cb7251f5390700748c62e62b
+image_facts:
+  activepieces/activepieces:0.92.3-hotfix.2: {user: "root", archs: ["amd64", "arm64"], healthcheck: true}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    activepieces: pass
+    activepieces-hooks: pass
+  checks:
+    admin-only: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"users": 1, "flows": 0}
+measured:
+  activepieces:
+    memory: 1.1 GB
+    images: 612 MB
+    data: 111 MB
+duration: 3m
+by: agent
