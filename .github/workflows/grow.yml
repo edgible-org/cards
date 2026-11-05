@@ -18,6 +18,9 @@
 # GitHub or Edgible login. This workflow, not the agent, checks the card, tests it, and opens
 # the pull request.
 #
+# A registry's pull rate limit on the fleet machine is not the card's fault: the run fails with no
+# issue, so the app is not ruled out, and the night's chain stops (grow-test's result "infra").
+#
 # It skips the night when MAX_OPEN agent-made pull requests are already waiting for review.
 # PER_NIGHT cards are made in a night, one after another: when a card's pull request or issue is
 # done, the run starts the next with `left` one lower, until none are left. A run started by hand
@@ -183,24 +186,25 @@ jobs:
           rm -rf card-kit work agent-home out pick.json agent.log check.log
           git clone -q --depth 1 https://github.com/edgible-org/card-kit.git card-kit
           # Apps proposed before, as a pull request or an issue, open or closed, are not picked again.
-          proposed=$( { gh pr list --repo "$GITHUB_REPOSITORY" --label agent-card --state all --limit 500 --json title --jq '.[].title'
-                        gh issue list --repo "$GITHUB_REPOSITORY" --label agent-card --state all --limit 500 --json title --jq '.[].title'; } \
-                      | sed -nE 's/^(New app card|App request): //p' | tr '\n' ' ')
-          echo "proposed before: ${proposed:-none}"
+          # One per line, as a name can have spaces in it (Vvveb CMS).
+          mapfile -t proposed < <( { gh pr list --repo "$GITHUB_REPOSITORY" --label agent-card --state all --limit 500 --json title --jq '.[].title'
+                                     gh issue list --repo "$GITHUB_REPOSITORY" --label agent-card --state all --limit 500 --json title --jq '.[].title'; } \
+                                   | sed -nE 's/^(New app card|App request): //p' )
+          echo "proposed before: ${proposed[*]:-none}"
           # Categories a card was proposed for in the last two weeks are skipped, so a night's card is
           # not another of the same kind: a category stays a gap until its card is merged and the
           # needs-map pull request lands, which takes days.
           mapfile -t cats < <( { gh pr list --repo "$GITHUB_REPOSITORY" --label agent-card --state all --limit 100 --json body,createdAt \
                                    --jq '.[] | select(.createdAt > (now - 1209600 | todate)) | (.body | capture("Category: (?<c>[^\n]+)")? | .c) // empty'
                                  gh issue list --repo "$GITHUB_REPOSITORY" --label agent-card --state all --limit 100 --json body,createdAt \
-                                   --jq '.[] | select(.createdAt > (now - 1209600 | todate)) | (.body | capture("category: (?<c>[^)]+)\\)")? | .c) // empty'; } | sort -u )
+                                   --jq '.[] | select(.createdAt > (now - 1209600 | todate)) | (.body | capture("category: (?<c>.+?)\\) and could")? | .c) // empty'; } | sort -u )
           echo "categories skipped: ${cats[*]:-none}"
           if [ -n "$APP" ]; then
             if ! [[ "$APP" =~ ^[A-Za-z0-9\ ._-]+$ ]]; then echo "app: a name, letters, digits, spaces, . _ -" >&2; exit 2; fi
             # The named app, and its needs-map category, so the merged card lands in the map.
             (cd cards && ../card-kit/run pick-app --app "$APP") > pick.json
           else
-            (cd cards && ../card-kit/run pick-app --exclude $proposed --exclude-category ${cats[@]+"${cats[@]}"}) > pick.json || { echo "no gap left to fill"; echo "none=true" >> "$GITHUB_OUTPUT"; exit 0; }
+            (cd cards && ../card-kit/run pick-app --exclude ${proposed[@]+"${proposed[@]}"} --exclude-category ${cats[@]+"${cats[@]}"}) > pick.json || { echo "no gap left to fill"; echo "none=true" >> "$GITHUB_OUTPUT"; exit 0; }
           fi
           jq -r '"category: \(.category)\ncandidates: \([.candidates[].name] | join(", "))"' pick.json
           echo "none=false" >> "$GITHUB_OUTPUT"
@@ -299,7 +303,7 @@ jobs:
           cp tested/NEW-CARD.md work/cards/ 2>/dev/null || true
           # test-card wrote test.yml for the failed run; the fixed card is tested afresh.
           rm -f "work/cards/$CARD/test.yml"
-          cards/.github/scripts/grow-agent.sh "The $CARD card you made did not pass its test on a real serving device. Fix the card, change nothing outside $CARD/, check it again with ../card-kit/run check-cards --untrusted --before-test $CARD/card.yml, and update NEW-CARD.md if the auth modes or app changed. The end of the test's log: $(tail -60 tested/test.log)"
+          cards/.github/scripts/grow-agent.sh "The $CARD card you made did not pass its test on a real serving device. Fix the card, change nothing outside $CARD/, check it again with ../card-kit/run check-cards --untrusted --before-test $CARD/card.yml, and update NEW-CARD.md if the auth modes or app changed. The end of the test's log: $(tail -150 tested/test.log)"
       - name: Check the card, and have the agent fix what the checker finds
         id: check
         run: cards/.github/scripts/grow-check.sh "${{ needs.write.outputs.card }}" | tee -a "$GITHUB_OUTPUT"
@@ -349,8 +353,16 @@ jobs:
           CARD: ${{ needs.write.outputs.card }}
           TEST1: ${{ needs.test-1.outputs.result }}
           TEST2: ${{ needs.test-2.outputs.result }}
+          APP: ${{ inputs.app }}
         run: |
           set -euo pipefail
+          # The machine could not test the card, which says nothing about the card: no issue, so the
+          # app and its category stay open for another night. Failing here stops the night's chain too,
+          # as the next card would meet the same limit, and the daily report shows the failed run.
+          if [ "$TEST1" = infra ] || [ "$TEST2" = infra ]; then
+            echo "::error::A registry refused to give the test machine an image (a pull rate limit). The card was not tested, and no issue was opened."
+            exit 1
+          fi
           gh label create agent-card --repo "$GITHUB_REPOSITORY" --color 5319E7 --description "Made by the nightly grow job" 2>/dev/null || true
           pick=stages/grow-written/pick.json
           # The newest stage that holds each thing: the card that passed, its notes, the last logs.
@@ -422,9 +434,14 @@ jobs:
             python3 .github/scripts/card_verdict.py "$CARD" > ../verdict.md \
               && gh pr comment "$branch" --repo "$GITHUB_REPOSITORY" --body-file ../verdict.md || echo "no automated checks comment"
           else
-            name=${CARD:-$(jq -r '.candidates[0].name' "$pick")}
+            name=${CARD:-$APP}
             {
-              echo "The nightly grow job tried to make an app card for **$name** (category: $category) and could not make one that passes."
+              # A cooldown on the category reads "(category: <name>) and could" from this first line.
+              if [ -n "$name" ]; then
+                echo "The nightly grow job tried to make an app card for **$name** (category: $category) and could not make one that passes."
+              else
+                echo "The nightly grow job looked for an app to make a card for (category: $category) and could not find one to build."
+              fi
               echo
               echo "Offered: $(jq -r '[.candidates[].name] | join(", ")' "$pick")."
               echo
@@ -432,14 +449,21 @@ jobs:
               echo "## Where it stopped"
               echo
               echo '```'
-              if [ -f "$last/test.log" ]; then tail -40 "$last/test.log"
+              if [ -f "$last/test.log" ]; then tail -100 "$last/test.log"
               elif [ -f "$last/check.log" ]; then cat "$last/check.log"
               else tail -c 2000 "$last/agent.log" 2>/dev/null || echo "no log"; fi
               echo '```'
               echo
-              echo "A person can pick this up, or close it. It will not be picked again. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+              if [ -n "$name" ]; then
+                echo "A person can pick this up, or close it. It will not be picked again. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+              else
+                echo "No app is ruled out by this, and the category is tried again after its two-week cooldown. A person can close this. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+              fi
             } > issue.md
-            gh issue create --repo "$GITHUB_REPOSITORY" --title "App request: $name" --label app-request --label agent-card --body-file issue.md
+            # An app is ruled out by its name in an "App request:" title, so a category with nothing
+            # to build has a title of its own: no candidate was tried, so none should be ruled out.
+            if [ -n "$name" ]; then title="App request: $name"; else title="No card for: $category"; fi
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --label app-request --label agent-card --body-file issue.md
           fi
 
   again:
