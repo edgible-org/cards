@@ -48,6 +48,14 @@ jobs:
         # over a day old, and runner logs over three days old; volumes are never touched.
         if: always()
         run: |
+          # Containers left behind: a docker build that hung on 2026-11-04 left a build-step
+          # container running for 28 hours, holding its image. Remove stopped and never-started
+          # ones over a day old; a running one over a day old is only reported.
+          docker container prune -f --filter until=24h >/dev/null 2>&1 || true
+          old=$(docker ps --filter status=running --format '{{.Names}} {{.RunningFor}}' | grep -E '(day|week|month)' || true)
+          if [ -n "$old" ]; then
+            echo "::warning title=Hub container running for over a day::$old"
+          fi
           docker image prune -af --filter until=24h >/dev/null 2>&1 || true
           find "$HOME/actions-runner/_diag" -name '*.log' -mtime +3 -delete 2>/dev/null || true
           free=$(df -Pk / | awk 'NR==2 {print int($4/1048576)}')
