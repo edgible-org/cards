@@ -19,6 +19,11 @@ on:
         description: The artifact to keep the tested card and its logs in
         type: string
         required: true
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: false
+      DOCKERHUB_TOKEN:
+        required: false
     outputs:
       result:
         description: pass, fail, or infra when a registry refused the machine an image, so the card was not tested
@@ -45,6 +50,29 @@ jobs:
         with:
           name: ${{ inputs.from }}
           path: incoming
+      - name: Sign in to Docker Hub
+        # Anonymous pulls share a low limit per address. The sign-in is for this job only, in a config
+        # folder of its own, as a service on a Mac cannot reach the keychain the machine's own config
+        # uses. The token can only read public images, because an agent-written prepare.sh runs on this
+        # machine and could read the folder. Without a working sign-in the job goes on anonymously.
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          if [ -z "$DOCKERHUB_USERNAME" ] || [ -z "$DOCKERHUB_TOKEN" ]; then
+            echo "no Docker Hub secrets: pulling anonymously"; exit 0
+          fi
+          # A new config folder loses the machine's context and Compose plugin, so both are kept.
+          docker_host=$(docker context inspect --format '{{.Endpoints.docker.Host}}')
+          config=$(mktemp -d "${RUNNER_TEMP:-/tmp}/docker-config.XXXXXX")
+          [ -d "$HOME/.docker/cli-plugins" ] && ln -s "$HOME/.docker/cli-plugins" "$config/cli-plugins"
+          if printf '%s' "$DOCKERHUB_TOKEN" | DOCKER_HOST="$docker_host" DOCKER_CONFIG="$config" \
+               docker login -u "$DOCKERHUB_USERNAME" --password-stdin >/dev/null; then
+            echo "signed in to Docker Hub"
+          else
+            echo "::warning::The Docker Hub sign-in failed: pulling anonymously. Check the DOCKERHUB_USERNAME (the Docker ID) and DOCKERHUB_TOKEN secrets."
+          fi
+          { echo "DOCKER_CONFIG=$config"; echo "DOCKER_HOST=$docker_host"; } >> "$GITHUB_ENV"
       - name: Check and test the card
         id: test
         env:
@@ -89,4 +117,6 @@ jobs:
           if-no-files-found: ignore
       - name: Clean up
         if: always()
-        run: rm -rf card-kit out incoming test.log check.log
+        run: |
+          rm -rf card-kit out incoming test.log check.log
+          [ -z "${DOCKER_CONFIG:-}" ] || rm -rf "$DOCKER_CONFIG"
