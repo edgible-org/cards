@@ -21,7 +21,7 @@ on:
         required: true
     outputs:
       result:
-        description: pass or fail
+        description: pass, fail, or infra when a registry refused the machine an image, so the card was not tested
         value: ${{ jobs.test.outputs.result }}
 
 permissions:
@@ -67,6 +67,7 @@ jobs:
             tail -20 ../test.log; result=pass
           else
             tail -40 ../test.log; result=fail
+            if grep -qiE 'pull rate limit|toomanyrequests' ../test.log; then result=infra; fi
           fi
           echo "result=$result" >> "$GITHUB_OUTPUT"
       - name: Keep the tested card and the logs
