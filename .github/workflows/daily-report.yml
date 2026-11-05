@@ -41,6 +41,21 @@ jobs:
     runs-on: [self-hosted, hub]
     timeout-minutes: 20
     steps:
+      - name: Keep the hub's disk free
+        # The hub filled its 19 GB disk on 2026-11-04 (Docker images and runner logs), and grow,
+        # skill-evals and this report failed with "No space left on device". Runs first, so it
+        # works before the checkout needs space. Removes only images no container uses that are
+        # over a day old, and runner logs over three days old; volumes are never touched.
+        if: always()
+        run: |
+          docker image prune -af --filter until=24h >/dev/null 2>&1 || true
+          find "$HOME/actions-runner/_diag" -name '*.log' -mtime +3 -delete 2>/dev/null || true
+          free=$(df -Pk / | awk 'NR==2 {print int($4/1048576)}')
+          echo "hub disk free: ${free} GB"
+          if [ "$free" -lt 3 ]; then
+            echo "::warning title=Hub disk low::cards-hub has ${free} GB free on / after cleanup"
+          fi
+
       - uses: actions/checkout@v4
         with:
           path: cards
