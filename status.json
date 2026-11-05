@@ -29,7 +29,7 @@
   },
   "club-noticeboard": {
     "result": "pass",
-    "tested": "2026-10-29",
+    "tested": "2026-11-05",
     "edgible-cli": "1.4.29",
     "files": "sha256:0c9f94ee09cf20f7",
     "device": "osxdevice"
@@ -49,17 +49,17 @@
     "device": "osxdevice"
   },
   "ech0": {
-    "result": "fail",
-    "tested": "2026-11-04",
+    "result": "pass",
+    "tested": "2026-11-05",
     "edgible-cli": "1.4.29",
     "files": "sha256:4795480acb400313",
     "device": "osxdevice"
   },
   "edgible-agent": {
     "result": "pass",
-    "tested": "2026-11-04",
+    "tested": "2026-11-05",
     "edgible-cli": "1.4.29",
-    "files": "sha256:d54c34f1911dafb8",
+    "files": "sha256:deec3ee59e7b9751",
     "device": "osxdevice"
   },
   "edgible-connector": {
@@ -127,7 +127,7 @@
   },
   "leafwiki": {
     "result": "pass",
-    "tested": "2026-10-29",
+    "tested": "2026-11-05",
     "edgible-cli": "1.4.29",
     "files": "sha256:880509c93b15f323",
     "device": "osxdevice"
@@ -148,9 +148,9 @@
   },
   "litellm": {
     "result": "pass",
-    "tested": "2026-10-29",
+    "tested": "2026-11-05",
     "edgible-cli": "1.4.29",
-    "files": "sha256:2755457b1184e937",
+    "files": "sha256:be21e6789f62b9f5",
     "device": "osxdevice"
   },
   "mcp-bridge": {
@@ -190,16 +190,16 @@
   },
   "n8n": {
     "result": "pass",
-    "tested": "2026-11-04",
+    "tested": "2026-11-05",
     "edgible-cli": "1.4.29",
-    "files": "sha256:cade48c3b2e130c4",
+    "files": "sha256:77c82989e31ae4bd",
     "device": "osxdevice"
   },
   "notediscovery": {
     "result": "pass",
-    "tested": "2026-11-02",
+    "tested": "2026-11-05",
     "edgible-cli": "1.4.29",
-    "files": "sha256:afa1b864fa336b86",
+    "files": "sha256:742666e4cd32469a",
     "device": "osxdevice"
   },
   "ollama-osx": {
@@ -225,7 +225,7 @@
   },
   "owncloud": {
     "result": "pass",
-    "tested": "2026-10-29",
+    "tested": "2026-11-05",
     "edgible-cli": "1.4.29",
     "files": "sha256:a21f6d20d6caeee5",
     "device": "osxdevice"
@@ -274,7 +274,7 @@
   },
   "static-site": {
     "result": "pass",
-    "tested": "2026-10-29",
+    "tested": "2026-11-05",
     "edgible-cli": "1.4.29",
     "files": "sha256:15f9cc6260c33fd9",
     "device": "osxdevice"
@@ -323,7 +323,7 @@
   },
   "wiki-go": {
     "result": "pass",
-    "tested": "2026-10-29",
+    "tested": "2026-11-05",
     "edgible-cli": "1.4.29",
     "files": "sha256:cb04c68943febd7e",
     "device": "osxdevice"
