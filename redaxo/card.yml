@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: redaxo
+  description: REDAXO, a CMS for small business websites, installed before it goes public, with its editor on a separate org-only hostname
+  type: app
+  added: 2026-11-05
+  homepage: https://www.redaxo.org
+  license: MIT
+  steward: edgible-org
+
+applications:
+  - name: redaxo
+    what: the public website, which REDAXO serves; its editor at /redaxo is on the app's own login here
+    from: friendsofredaxo/redaxo:5
+    database: mariadb:11.8.9
+    port: 8087
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [none]
+    verifyPath: /redaxo/index.php
+    place: redaxo
+
+  - name: redaxo-admin
+    what: REDAXO, same process, for the people who edit the site, behind your org login
+    from: friendsofredaxo/redaxo:5
+    port: 8087
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [org]
+    verifyPath: /redaxo/index.php
+    place: redaxo
+
+secrets:
+  REDAXO_DB_PASSWORD:
+    kind: internal
+    use: password
+    make: openssl rand -hex 16
+    on-move: carry            # MariaDB keeps it in its data, and its root password is random
+  REDAXO_ADMIN_PASSWORD:
+    kind: human
+    make: openssl rand -hex 16
+    for: the admin's sign-in to the editor, made by REDAXO on first start
+
+data:
+  volumes:
+    redaxo-db-data:
+      class: irreplaceable
+      dump:
+        service: redaxo-db
+        command: mariadb-dump -u redaxo -p"$(cat /run/card-secrets/REDAXO_DB_PASSWORD)" --single-transaction redaxo
+        restore: mariadb -u redaxo -p"$(cat /run/card-secrets/REDAXO_DB_PASSWORD)" redaxo
+    redaxo-files:
+      class: irreplaceable        # uploaded media, installed addons, the config
+    redaxo-secrets:
+      class: irreplaceable        # the card's secrets, made on the device: back up with the data
+  fingerprint:
+    service: redaxo-db
+    command: mariadb -N -u redaxo -p"$(cat /run/card-secrets/REDAXO_DB_PASSWORD)" redaxo -e "select json_object('users', (select count(*) from rex_user), 'articles', (select count(*) from rex_article))"
+
+places:
+  redaxo:
+    memory: 512 MB
+    disk: 2 GB
+    arch: [amd64, arm64]
+    gpu: none
