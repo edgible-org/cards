@@ -271,6 +271,9 @@ jobs:
       card: ${{ needs.write.outputs.card }}
       from: grow-written
       to: grow-tested-1
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
   fix:
     needs: [write, test-1]
@@ -330,6 +333,9 @@ jobs:
       card: ${{ needs.write.outputs.card }}
       from: grow-fixed
       to: grow-tested-2
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
   finish:
     needs: [write, test-1, fix, test-2]
