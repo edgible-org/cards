@@ -28,7 +28,7 @@ services:
       start_period: 120s
 
   static-site:
-    image: caddy:2.11.7-alpine
+    image: caddy:2.11.8-alpine
     restart: unless-stopped
     depends_on:
       static-site-sync:
