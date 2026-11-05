@@ -1,0 +1,35 @@
+tested: 2026-11-06
+result: pass
+card-kit: "02b7094"
+edgible-cli: 1.4.29
+files: sha256:dd2ecd3d8791ef8c
+machine: darwin/arm64, docker 29.4.3
+images:
+  - caddy:2.11.8-alpine@sha256:f6228111e5fafa1a5238258d0858e103f10599b8d1659a146e7726681a002bb9
+  - clickhouse/clickhouse-server:26.3.62.3@sha256:de3e47c64078aa196dae2349e048fc98ba81947f651f5c20e06e46baea8ae40a
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - ghcr.io/rybbit-io/rybbit-backend:v2.9.2@sha256:e5fc900b59251f4e43f8caef600b0cfd26a63c7b1732e725900bf4ea2ab8a3d7
+  - ghcr.io/rybbit-io/rybbit-client:v2.9.2@sha256:9beb1cfe74bbb3bf7d7a74cf5d3b07639610637909f0dfafaa87d3a76b91ce2a
+  - postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+  - redis:8.10-alpine@sha256:21090af93f8324db2f0f0f4f38a7c60369d47d917e000c3423d89d2ae2883537
+image_facts:
+  caddy:2.11.8-alpine: {user: "root", healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    rybbit: pass
+    rybbit-analytics: pass
+  checks:
+    rybbit-tracking-only: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"users": 0, "sites": 0}
+measured:
+  rybbit:
+    memory: 2 GB
+    images: 1 GB
+    data: 53 MB
+duration: 6m
+by: agent
