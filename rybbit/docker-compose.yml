@@ -1,0 +1,166 @@
+# Compose file for the rybbit card.
+# The host ports and the dashboard's address come from card.env. The passwords and keys are
+# made on this machine by rybbit-secrets, at first start, and never leave it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: rybbit
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume rybbit-secrets, then exits. It never changes one that exists.
+  rybbit-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        RYBBIT_DB_PASSWORD=openssl rand -hex 16
+        RYBBIT_CLICKHOUSE_PASSWORD=openssl rand -hex 16
+        RYBBIT_AUTH_SECRET=openssl rand -hex 32
+    volumes:
+      - rybbit-secrets:/run/card-secrets
+
+  # Two hostnames, one proxy: 8080 is the dashboard (org), 8081 only what the tracking script
+  # needs (none). See Caddyfile.
+  rybbit:
+    image: caddy:2.11.8-alpine
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${RYBBIT_PORT:?set RYBBIT_PORT in card.env}:8080"
+      - "127.0.0.1:${RYBBIT_ANALYTICS_PORT:?set RYBBIT_ANALYTICS_PORT in card.env}:8081"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      rybbit-backend:
+        condition: service_healthy
+      rybbit-client:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8081/api/script.js"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  rybbit-client:
+    image: ${RYBBIT_CLIENT_IMAGE:-ghcr.io/rybbit-io/rybbit-client:v2.9.2}
+    restart: unless-stopped
+    depends_on:
+      - rybbit-backend
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:3002/"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  # Rybbit reads its settings only from the environment, so it starts through the loader,
+  # which sets them from the secret files and then runs the image's own start command.
+  rybbit-backend:
+    image: ${RYBBIT_BACKEND_IMAGE:-ghcr.io/rybbit-io/rybbit-backend:v2.9.2}
+    restart: unless-stopped
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
+    command:
+      - >-
+        export POSTGRES_PASSWORD="$$RYBBIT_DB_PASSWORD"
+        CLICKHOUSE_PASSWORD="$$RYBBIT_CLICKHOUSE_PASSWORD"
+        BETTER_AUTH_SECRET="$$RYBBIT_AUTH_SECRET"
+        && exec /docker-entrypoint.sh node dist/cluster.js
+    environment:
+      NODE_ENV: production
+      BASE_URL: ${RYBBIT_URL:-https://rybbit.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      DISABLE_SIGNUP: ${RYBBIT_DISABLE_SIGNUP:-false}
+      DISABLE_TELEMETRY: "true"
+      POSTGRES_HOST: rybbit-db
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: rybbit
+      POSTGRES_USER: rybbit
+      CLICKHOUSE_HOST: http://rybbit-clickhouse:8123
+      CLICKHOUSE_DB: analytics
+      REDIS_HOST: rybbit-redis
+      REDIS_PORT: "6379"
+    volumes:
+      - rybbit-secrets:/run/card-secrets:ro
+    depends_on:
+      rybbit-secrets:
+        condition: service_completed_successfully
+      rybbit-db:
+        condition: service_healthy
+      rybbit-clickhouse:
+        condition: service_healthy
+      rybbit-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:3001/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+
+  rybbit-db:
+    image: postgres:17.11-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: rybbit
+      POSTGRES_USER: rybbit
+      POSTGRES_PASSWORD_FILE: /run/card-secrets/RYBBIT_DB_PASSWORD
+    volumes:
+      - rybbit-db-data:/var/lib/postgresql/data
+      - rybbit-secrets:/run/card-secrets:ro
+    depends_on:
+      rybbit-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rybbit -d rybbit"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  # ClickHouse keeps the page views. It takes its password through the loader, and
+  # access management lets Rybbit make its read-only query user at first start.
+  rybbit-clickhouse:
+    image: clickhouse/clickhouse-server:26.3.62.3
+    restart: unless-stopped
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
+    command:
+      - >-
+        export CLICKHOUSE_PASSWORD="$$RYBBIT_CLICKHOUSE_PASSWORD"
+        && exec /entrypoint.sh
+    environment:
+      CLICKHOUSE_DB: analytics
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: "1"
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    volumes:
+      - rybbit-clickhouse-data:/var/lib/clickhouse
+      - ./clickhouse-config.xml:/etc/clickhouse-server/config.d/rybbit.xml:ro
+      - rybbit-secrets:/run/card-secrets:ro
+    depends_on:
+      rybbit-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:8123/ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 20s
+
+  # Sessions and bot checks. Only the backend reaches it, on the card's own network.
+  rybbit-redis:
+    image: redis:8.10-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - rybbit-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+volumes:
+  rybbit-db-data: {}
+  rybbit-clickhouse-data: {}
+  rybbit-redis-data: {}
+  rybbit-secrets: {}

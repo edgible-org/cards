@@ -1,0 +1,12 @@
+<clickhouse>
+    <!-- Quieter ClickHouse: its own diagnostic tables grow without bound on a small disk. -->
+    <logger>
+        <level>warning</level>
+        <console>1</console>
+    </logger>
+    <trace_log remove="1"/>
+    <text_log remove="1"/>
+    <metric_log remove="1"/>
+    <asynchronous_metric_log remove="1"/>
+    <query_thread_log remove="1"/>
+</clickhouse>

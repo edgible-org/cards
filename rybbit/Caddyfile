@@ -1,0 +1,37 @@
+# Caddy for the rybbit card. Edgible gives each hostname its HTTPS, so there is no certificate here.
+{
+	admin off
+	auto_https off
+	servers {
+		# The visitor's address comes from Edgible's gateway, which reaches Caddy from a private address.
+		trusted_proxies static private_ranges
+	}
+}
+
+# The dashboard hostname, behind org: the API to the backend, everything else to the web app.
+:8080 {
+	@backend path /api/* /.well-known/oauth-* /.well-known/openid-configuration*
+	handle @backend {
+		reverse_proxy rybbit-backend:3001
+	}
+	handle {
+		reverse_proxy rybbit-client:3002
+	}
+}
+
+# The tracking hostname, open to every visitor's browser: only what the script needs.
+# No sign-in, sign-up or dashboard API is reachable here.
+:8081 {
+	@tracking {
+		path /api/script.js /api/replay.js /api/metrics.js
+		path /api/track /api/identify
+		path /api/site/tracking-config/*
+		path /api/session-replay/record/*
+	}
+	handle @tracking {
+		reverse_proxy rybbit-backend:3001
+	}
+	handle {
+		respond "Not found" 404
+	}
+}

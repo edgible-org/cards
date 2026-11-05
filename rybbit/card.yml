@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: rybbit
+  description: Rybbit web analytics, the dashboard behind org and the tracking script open
+  type: app
+  added: 2026-11-05
+  homepage: https://rybbit.com
+  license: AGPL-3.0-only
+  steward: edgible-org
+
+applications:
+  - name: rybbit
+    what: Rybbit dashboard and its API, through a small Caddy proxy
+    from: caddy:2.11.8-alpine
+    database: clickhouse/clickhouse-server:26.3.62.3
+    port: 8080
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [org]
+    place: rybbit
+
+  - name: rybbit-analytics
+    what: Rybbit tracking script and page-view endpoint only, the same proxy on a second port
+    from: caddy:2.11.8-alpine
+    port: 8081
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [none]
+    verifyPath: /api/script.js
+    place: rybbit
+
+data:
+  volumes:
+    rybbit-db-data:
+      class: irreplaceable
+      dump:
+        service: rybbit-db
+        command: pg_dump -U rybbit -Fc rybbit
+        restore: pg_restore -U rybbit -d rybbit --clean
+    rybbit-clickhouse-data:
+      class: irreplaceable
+    rybbit-redis-data:
+      class: cache
+    rybbit-secrets:
+      class: irreplaceable
+  fingerprint:
+    service: rybbit-db
+    command: psql -U rybbit -d rybbit -tAc "select json_build_object('users', (select count(*) from \"user\"), 'sites', (select count(*) from sites))"
+
+secrets:
+  RYBBIT_DB_PASSWORD:
+    kind: internal
+    use: password
+    make: openssl rand -hex 16
+    update:
+      service: rybbit-db
+      command: psql -U rybbit -d rybbit -c "ALTER USER rybbit PASSWORD '$RYBBIT_DB_PASSWORD'"
+  RYBBIT_CLICKHOUSE_PASSWORD:
+    kind: internal
+    use: encryption
+    make: openssl rand -hex 16
+  RYBBIT_AUTH_SECRET:
+    kind: internal
+    use: signing
+    make: openssl rand -hex 32
+
+places:
+  rybbit:
+    memory: 2 GB
+    disk: 4 GB
+    arch: [amd64, arm64]
+    gpu: none
