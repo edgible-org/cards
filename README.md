@@ -1,9 +1,10 @@
 # edgible-cards skill evals: 2026-10-31 to 2026-11-06
 
-**2 of 15** held-out prompts pass, each at its latest run in the last 7 days (6 nightly runs). Skill from card-kit `1c00611`, `36d8b7f`, `8f3a4ae`, `92d5d81`, `9cf8f87`, `f6f69fc`.
+**3 of 18** held-out prompts pass, each at its latest run in the last 7 days (6 nightly runs). Skill from card-kit `1c00611`, `36d8b7f`, `8f3a4ae`, `92d5d81`, `9cf8f87`, `f6f69fc`.
 
 | Prompt | Run | Result | Skill loaded | expect | must_not broken |
 | --- | --- | --- | --- | --- | --- |
+| builder-agent-alone | 2026-11-06 | FAIL | yes (right) | 1/3 | 0 |
 | builder-just-live | 2026-11-05 | FAIL | no (WRONG) | 1/3 | 1 |
 | builder-publish-and-share | 2026-11-04 | FAIL | no (WRONG) | 1/3 | 0 |
 | builder-secrets-in-repo | 2026-10-31 | FAIL | no (WRONG) | 3/3 | 0 |
@@ -12,15 +13,21 @@
 | marketing-site-cost | 2026-10-31 | FAIL | no (WRONG) | 2/3 | 0 |
 | mcp-from-phone | 2026-10-31 | FAIL | no (WRONG) | 1/4 | 0 |
 | physio-clinic | 2026-11-06 | FAIL | yes (right) | 3/4 | 0 |
+| pocket-shutdown | 2026-11-06 | FAIL | yes (right) | 1/3 | 0 |
 | record-stale-and-fixable | 2026-11-01 | FAIL | no (WRONG) | 2/5 | 0 |
 | record-unknown | 2026-11-02 | FAIL | no (WRONG) | 1/1 | 0 |
 | s3-members-area | 2026-11-01 | FAIL | no (WRONG) | 2/3 | 0 |
 | sensitive-photos | 2026-11-04 | FAIL | no (WRONG) | 3/3 | 0 |
 | tennis-club | 2026-11-02 | FAIL | no (WRONG) | 2/5 | 1 |
+| edgible-mcp-desktop | 2026-11-06 | pass | yes (right) | 4/4 | 0 |
 | negative-landlord-email | 2026-11-05 | pass | no (right) | 1/1 | 0 |
 | negative-react-error | 2026-11-04 | pass | no (right) | 1/1 | 0 |
 
 ## Failing prompts
+
+**builder-agent-alone** (2026-11-06)
+- Missed: says which parts it can do alone (check the app, build the card, test it) and which need the person (their Edgible sign-in, their GitHub account, naming a steward). It lists the readiness check, card build and test as its work and says the steward, licence and submission are the person's. It never mentions the person's Edgible sign-in or GitHub account as something they must do. It only says testing happens on a machine 'signed in to your own Edgible account'.
+- Missed: stops at the sign-in and gives the person the link, rather than creating accounts or asking for passwords or keys in the chat. It does not create accounts or ask for passwords. It also gives no sign-in link and never reaches the sign-in step.
 
 **builder-just-live** (2026-11-05)
 - Missed: publishes the running app on a device, with the port it listens on. The answer gives only general options and asks "What is the dashboard built with"; it never publishes the app on a device or names a port.
@@ -51,6 +58,10 @@
 **physio-clinic** (2026-11-06)
 - Missed: leads with practice-management tools built for clinics. Leads with generic schedulers (Cal.com, Square, Setmore); practice software like Cliniko/Jane/WriteUpp appears only as the second bullet, and the 'Where I'd start' list does put checking existing software first.
 
+**pocket-shutdown** (2026-11-06)
+- Missed: two or three bookmark apps that keep page copies, with a recommendation. Offers Linkwarden (keeps copies) and linkding (links only, no copies). Only one keeps page copies; it leans toward copies but doesn't clearly recommend one app.
+- Missed: asks about importing from Pocket. It says Pocket can export and both apps can import the file, but it asks no question about importing. Its two questions cover copies versus links and phone versus laptop.
+
 **record-stale-and-fixable** (2026-11-01)
 - Missed: says a fixable finding means the card's pinned image is behind a fix, and that it is not proof the app is exposed. "'Fixable' usually means the vulnerabilities have patched versions available, so the count tells you how much a newer image would help." It doesn't say the finding is not proof of exposure.
 - Missed: offers the choices - deploy as it is, test it on their own device first with test-card, or ask the maintainers to retest. It suggests upgrading Edgible and using tested tags. It never mentions test-card or asking maintainers to retest.
@@ -71,15 +82,18 @@
 
 ## What would make answers better
 
+- builder-agent-alone: Before stopping, it should have said plainly which steps need the person's own Edgible sign-in and GitHub account, and given the sign-in link, so the person can act on those while it waits for the app path.
 - builder-just-live: Skip the "no card" opener and the Docker requirement. Publish the running app directly on the device with its port and an org-only sign-in for the team, then offer a card for keeping it running later as an option.
 - builder-publish-and-share: Lead with the direct three-step path (live, running, optionally shared), then ask just two or three questions: whether they have an Edgible account (which they create themselves), whether the laptop will stay on, and who will steward the card, noting that a card can be listed with no steward.
 - builder-secrets-in-repo: State outright that a Stripe key sitting in a repo should be treated as exposed and rotated now, rather than only if it was committed or shared, and list every secret the card needs with where each one comes from.
 - dementia-startup: Add a short note saying the prototype should use test or consented data on hosted services, and that real patient data needs a HIPAA-compliant host with a BAA and legal advice.
+- edgible-mcp-desktop: Give the OS-specific config file location up front and briefly clarify which option fits a desktop-only user, trimming the card-kit option's extra detail.
 - maritime-law-firm: Cite the professional conduct rules and bar guidance on confidentiality and AI use, compare hosted options honestly with the upkeep of self-hosting, and cut the five questions down to two or three.
 - marketing-site-cost: Ask up front whether the site is static or edited through a CMS, then pair each branch with its fit: free static hosting, or WordPress on a small cloud server with the upkeep spelled out.
 - mcp-from-phone: Recommend putting mcp-signin in front of the unpublished notes server with Edgible sign-in, give the connector URL ending in /mcp with the OAuth fields left empty, and ask who else should have access (MCP_SIGNIN_USERS).
 - negative-landlord-email: The email could be firmer. It could cite the tenant's right to repairs, set a reasonable deadline, and suggest keeping a written record of the request.
 - physio-clinic: Lead with clinic-specific practice-management platforms (Cliniko, Jane, WriteUpp) that bundle booking and home exercise plans under one agreement, rather than starting with generic schedulers.
+- pocket-shutdown: Name one app as the recommendation (for example Linkwarden, which keeps page copies), and ask whether the person has already exported their Pocket library so the import path is confirmed.
 - record-stale-and-fixable: Explain that 'fixable' means the pinned image trails a patch and isn't proof of exposure, then offer the real choices: deploy as is, run test-card on their own Mac (saying it publishes and removes a throwaway copy and downloads images, and asking first), or ask the maintainers to retest on 1.4.12.
 - record-unknown: It could have added a short note on hosted alternatives and the upkeep of self-hosting (updates, backups), and said clearly that the answer covers the nightly test but not an image scan.
 - s3-members-area: Trim the questions to two or three that change the recommendation, and add a self-hosted accounts option with its upkeep next to the AWS-native and hosted options.

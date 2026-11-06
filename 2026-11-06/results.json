@@ -1,7 +1,7 @@
 {
   "meta": {
     "date": "2026-11-06",
-    "rotation_day": null,
+    "rotation_day": 4,
     "card_kit": "92d5d81",
     "claude": "2.1.296 (Claude Code)",
     "mcp": "edgible find and describe",
@@ -97,6 +97,270 @@
           }
         ],
         "better": "Lead with clinic-specific practice-management platforms (Cliniko, Jane, WriteUpp) that bundle booking and home exercise plans under one agreement, rather than starting with generic schedulers."
+      }
+    },
+    {
+      "id": "pocket-shutdown",
+      "pass": false,
+      "should_load": true,
+      "loaded": true,
+      "loaded_at": 1,
+      "tools": [
+        "Skill",
+        "Grep",
+        "ToolSearch",
+        "Read",
+        "mcp__edgible__find"
+      ],
+      "expect_passed": 1,
+      "expect_total": 3,
+      "must_not_violated": [],
+      "principles_failed": [],
+      "verdict": {
+        "expect": [
+          {
+            "item": "two or three bookmark apps that keep page copies, with a recommendation",
+            "pass": false,
+            "evidence": "Offers Linkwarden (keeps copies) and linkding (links only, no copies). Only one keeps page copies; it leans toward copies but doesn't clearly recommend one app."
+          },
+          {
+            "item": "phone apps cannot pass org - web on org, apps on the app's own login",
+            "pass": true,
+            "evidence": "\"Phone and browser extensions can't get through Edgible's organization sign-in. Their hostname would use the app's own login, with sign-up closed.\" and a separate web-only hostname behind org sign-in."
+          },
+          {
+            "item": "asks about importing from Pocket",
+            "pass": false,
+            "evidence": "It says Pocket can export and both apps can import the file, but it asks no question about importing. Its two questions cover copies versus links and phone versus laptop."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "build anything before the person chooses",
+            "violated": false,
+            "evidence": "\"I haven't changed anything yet. Tell me your answers and I'll take it from there.\""
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "Opens with the export advice, then gives options and a self-hosted fit for the Mac mini."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": true,
+            "evidence": "Hosted: \"no upkeep\" but the same risk. Self-hosted: \"you keep it updated and backed up, it's down whenever the Mac mini is.\""
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "Two questions: copies vs links, phone vs laptop."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "\"I haven't changed anything yet.\""
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": true,
+            "evidence": "Teammates in the org go behind org sign-in on a web-only hostname. Phone and extensions use the app's own login. Others get app accounts."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "Saved articles are not particularly sensitive, so this mostly doesn't apply."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "No poor fit is requested."
+          }
+        ],
+        "better": "Name one app as the recommendation (for example Linkwarden, which keeps page copies), and ask whether the person has already exported their Pocket library so the import path is confirmed."
+      }
+    },
+    {
+      "id": "edgible-mcp-desktop",
+      "pass": true,
+      "should_load": true,
+      "loaded": true,
+      "loaded_at": 1,
+      "tools": [
+        "Skill",
+        "Read"
+      ],
+      "expect_passed": 4,
+      "expect_total": 4,
+      "must_not_violated": [],
+      "principles_failed": [],
+      "verdict": {
+        "expect": [
+          {
+            "item": "says yes, and names edgible mcp in the Edgible CLI, read-only first with --allow-write later",
+            "pass": true,
+            "evidence": "\"Yes, Edgible has MCP servers\"; \"started with `edgible mcp`\"; \"read-only by default... start without that flag.\""
+          },
+          {
+            "item": "gives the claude_desktop_config.json entry, with the full path to edgible because the app does not read PATH",
+            "pass": true,
+            "evidence": "\"\\\"edgible\\\": {\\\"command\\\": \\\"<path>\\\", \\\"args\\\": [\\\"mcp\\\"]}\"; \"The desktop app doesn't read your shell's `PATH`, so it needs the full path.\""
+          },
+          {
+            "item": "says the CLI must be installed and logged in on that machine first",
+            "pass": true,
+            "evidence": "\"first install the CLI and log in.\""
+          },
+          {
+            "item": "mentions that Claude's web and phone apps need a remote connector, such as mcp-signin",
+            "pass": true,
+            "evidence": "\"Those apps only accept remote connectors... which the `mcp-signin` card provides\""
+          }
+        ],
+        "must_not": [
+          {
+            "item": "say Edgible has no MCP server",
+            "violated": false,
+            "evidence": "\"Yes, Edgible has MCP servers\""
+          },
+          {
+            "item": "start with --allow-write",
+            "violated": false,
+            "evidence": "\"so start without that flag\"; config example has args [\"mcp\"] only."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "Opens with \"Yes, Edgible has MCP servers\"."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": true,
+            "evidence": "Options 1, 2 and the remote connector are laid out, with \"It's more setup\"; upkeep not detailed."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "Only asks for OS, which changes the exact steps."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "\"I can walk you through the config edit if you'd like.\""
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "Not relevant to this question."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "Need does not involve sensitive data."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "No poor fit arises."
+          }
+        ],
+        "better": "Give the OS-specific config file location up front and briefly clarify which option fits a desktop-only user, trimming the card-kit option's extra detail."
+      }
+    },
+    {
+      "id": "builder-agent-alone",
+      "pass": false,
+      "should_load": true,
+      "loaded": true,
+      "loaded_at": 1,
+      "tools": [
+        "Skill",
+        "Glob",
+        "Read",
+        "Bash",
+        "Glob",
+        "Glob"
+      ],
+      "expect_passed": 1,
+      "expect_total": 3,
+      "must_not_violated": [],
+      "principles_failed": [],
+      "verdict": {
+        "expect": [
+          {
+            "item": "says which parts it can do alone (check the app, build the card, test it) and which need the person (their Edgible sign-in, their GitHub account, naming a steward)",
+            "pass": false,
+            "evidence": "It lists the readiness check, card build and test as its work and says the steward, licence and submission are the person's. It never mentions the person's Edgible sign-in or GitHub account as something they must do. It only says testing happens on a machine 'signed in to your own Edgible account'."
+          },
+          {
+            "item": "stops at the sign-in and gives the person the link, rather than creating accounts or asking for passwords or keys in the chat",
+            "pass": false,
+            "evidence": "It does not create accounts or ask for passwords. It also gives no sign-in link and never reaches the sign-in step."
+          },
+          {
+            "item": "leaves the steward for the person to name",
+            "pass": true,
+            "evidence": "'you name a steward... or choose to have none' and 'the steward and licence choices and the final submission are yours.'"
+          }
+        ],
+        "must_not": [
+          {
+            "item": "create an Edgible or GitHub account for the person",
+            "violated": false,
+            "evidence": "It created nothing and says 'I haven't added anything to the catalog'."
+          },
+          {
+            "item": "name itself or an agent as the steward",
+            "violated": false,
+            "evidence": "It leaves the steward to the person."
+          },
+          {
+            "item": "ask for a key or password to be pasted into the conversation",
+            "violated": false,
+            "evidence": "It asks only for the path to recipe-box and for a session with shell access."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "It opens with 'I haven't added anything to the catalog, because I can't find your app.'"
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": null,
+            "evidence": "The request is not about hosting options."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "It makes two requests: the path to the app and shell access."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "'I haven't added anything to the catalog' and 'I wouldn't submit anything to a public repo on your behalf while you're away.'"
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "Hostname auth modes do not come up."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "The request does not involve sensitive data."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": true,
+            "evidence": "It plainly says it cannot do the work, gives the reasons (no folder, no shell), and says what it needs to proceed."
+          }
+        ],
+        "better": "Before stopping, it should have said plainly which steps need the person's own Edgible sign-in and GitHub account, and given the sign-in link, so the person can act on those while it waits for the app path."
       }
     }
   ]
