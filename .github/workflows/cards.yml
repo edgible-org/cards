@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # to see what a Renovate branch changed
       - uses: actions/checkout@v4
         with:
           repository: edgible-org/card-kit
@@ -21,3 +23,17 @@ jobs:
       # --fresh: a card whose files changed since its test.yml fails, so a test always
       # describes the files it sits beside.
       - run: .card-kit/run check-cards --fresh
+      # A Renovate bump must not merge untested, as its auto-merge waits only on this check. The cards
+      # it touches stay red until bump-test passes and commits their new test.yml. Only those cards,
+      # so that a stale card elsewhere does not hold up every bump.
+      - name: A bump's cards must be tested
+        env:
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+          case "$BRANCH" in renovate/*) ;; *) echo "not a Renovate branch"; exit 0 ;; esac
+          cards=$(git diff --name-only origin/main...HEAD | sed -nE 's|^([a-z0-9-]+)/docker-compose\.yml$|\1/card.yml|p' | sort -u)
+          if [ -z "$cards" ]; then echo "no card's Compose file changed"; exit 0; fi
+          echo "$cards"
+          # shellcheck disable=SC2086
+          .card-kit/run check-cards --strict-fresh $cards
