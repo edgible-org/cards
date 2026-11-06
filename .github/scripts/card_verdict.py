@@ -129,8 +129,9 @@ def main(argv: list[str]) -> int:
     meta = load(card / "card.yml")
     for app in meta.get("applications") or []:
         if isinstance(app, dict) and app.get("published") and "none" in (app.get("authModes") or []):
+            checks = " It has no test/ check at all." if not list((card / "test").glob("*.sh")) else ""
             warn.append(f"`{app.get('name')}` is published with no Edgible login: confirm the app has its own, "
-                        "and that it is meant to be open.")
+                        f"that it is meant to be open, and that a test/ check shows a stranger cannot make an account.{checks}")
     ours = set()
     for f in card.rglob("*"):
         if f.is_file() and f.suffix in (".yml", ".yaml", ".md", ".env", ".sh", "") and f.name != "test.yml" \
