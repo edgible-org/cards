@@ -1,0 +1,45 @@
+name: Sign in to Docker Hub
+description: >-
+  Anonymous pulls share a low limit per address. The credentials are written straight into a config
+  folder for this job, not with docker login: a config with no credentials in it, as an empty folder is,
+  makes Docker use the Mac's keychain, which a runner's service often cannot reach, and then every pull
+  and image lookup fails. So the token is checked first, and if it is not accepted the job keeps the
+  machine's own config. The token can only read public images, as a card's prepare.sh runs on this
+  machine. A job's Clean up step removes the folder. fleet-test does not use this: it runs cards from
+  people outside the project.
+inputs:
+  username:
+    description: DOCKERHUB_USERNAME
+    required: false
+    default: ""
+  token:
+    description: DOCKERHUB_TOKEN
+    required: false
+    default: ""
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        DOCKERHUB_USERNAME: ${{ inputs.username }}
+        DOCKERHUB_TOKEN: ${{ inputs.token }}
+      run: |
+        set -euo pipefail
+        if [ -z "$DOCKERHUB_USERNAME" ] || [ -z "$DOCKERHUB_TOKEN" ]; then
+          echo "no Docker Hub secrets: pulling anonymously"; exit 0
+        fi
+        # Through curl's config on stdin, so the token is not on a command line.
+        code=$(printf 'user = "%s:%s"\n' "$DOCKERHUB_USERNAME" "$DOCKERHUB_TOKEN" | curl -s -m 20 -o /dev/null -w '%{http_code}' -K - \
+               'https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/alpine:pull' || true)
+        if [ "$code" != 200 ]; then
+          echo "::warning::Docker Hub did not accept DOCKERHUB_USERNAME and DOCKERHUB_TOKEN (HTTP $code): pulling anonymously."
+          exit 0
+        fi
+        # A new config folder loses the machine's context and Compose plugin, so both are kept.
+        docker_host=$(docker context inspect --format '{{.Endpoints.docker.Host}}')
+        config=$(mktemp -d "${RUNNER_TEMP:-/tmp}/docker-config.XXXXXX")
+        [ -d "$HOME/.docker/cli-plugins" ] && ln -s "$HOME/.docker/cli-plugins" "$config/cli-plugins"
+        auth=$(printf '%s:%s' "$DOCKERHUB_USERNAME" "$DOCKERHUB_TOKEN" | base64 | tr -d '\n')
+        ( umask 077; printf '{"auths":{"https://index.docker.io/v1/":{"auth":"%s"}}}\n' "$auth" > "$config/config.json" )
+        { echo "DOCKER_CONFIG=$config"; echo "DOCKER_HOST=$docker_host"; } >> "$GITHUB_ENV"
+        echo "signed in to Docker Hub"
