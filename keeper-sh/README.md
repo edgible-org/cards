@@ -26,7 +26,7 @@ curl -fsSL https://github.com/edgible-org/cards/archive/refs/heads/main.tar.gz \
 
 ### 2. Edit card.env
 
-Set `DEVICE` to a name `edgible device list` prints, and `ORG_LABEL`. Set `KEEPER_SH_SIGNUP_DOMAINS` to the email domains allowed to make an account, or leave it empty to let anyone sign up. Change `KEEPER_SH_PORT` only if 8095 is taken. Google and Microsoft calendars need your own OAuth apps, which this card does not set up: iCal links and CalDAV work without them.
+Set `DEVICE` to a name `edgible device list` prints, and `ORG_LABEL`. Set `KEEPER_SH_SIGNUP_DOMAINS` to the email domains allowed to make an account. It is required, because this hostname is public and Keeper lets anyone sign up when the list is empty. Change `KEEPER_SH_PORT` only if 8095 is taken. Google and Microsoft calendars need your own OAuth apps, which this card does not set up: iCal links and CalDAV work without them.
 
 ```bash
 nano keeper-sh/card.env

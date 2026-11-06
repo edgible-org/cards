@@ -1,8 +1,8 @@
-tested: 2026-10-30
+tested: 2026-11-06
 result: pass
-card-kit: "1cc7c95"
+card-kit: "92d5d81"
 edgible-cli: 1.4.29
-files: sha256:be7027f253859692
+files: sha256:9c75f60f6faf873a
 machine: darwin/arm64, docker 29.4.3
 images:
   - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
@@ -15,12 +15,14 @@ steps:
   publish: pass
   verify:
     keeper-sh: pass
+  checks:
+    stranger-cannot-sign-up: pass
   fingerprint: pass
   teardown: pass
 fingerprint: {"users": 0}
 measured:
   keeper-sh:
-    memory: 630 MB
+    memory: 781 MB
     images: 337 MB
     data: 45 MB
 duration: 3m
