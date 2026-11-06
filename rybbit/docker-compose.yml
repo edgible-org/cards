@@ -22,7 +22,7 @@ services:
   # Two hostnames, one proxy: 8080 is the dashboard (org), 8081 only what the tracking script
   # needs (none). See Caddyfile.
   rybbit:
-    image: caddy:2.11.8-alpine
+    image: caddy:2.11.9-alpine
     restart: unless-stopped
     ports:
       - "127.0.0.1:${RYBBIT_PORT:?set RYBBIT_PORT in card.env}:8080"
