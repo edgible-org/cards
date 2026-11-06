@@ -19,6 +19,8 @@ Each image also gets a state, from Renovate's Dependency Dashboard and its open 
   upstream  flagged, on the newest version: only its project can fix it
   ours      flagged, one of Edgible's images: card-kit's own-images-refresh rebuilds it
   needs-you a person has to act, and `note` says how
+  (a major version counts only when a scan shows its image has fewer findings, or cannot compare it:
+  most database majors carry the same findings, and are a data migration for nothing)
   skipped   not scanned on purpose: built on the machine, in Renovate's ignoreDeps
 
 --issues keeps one issue, Image health, that lists only what needs a person, and is closed
@@ -62,7 +64,7 @@ def images_by_card(root: Path, only: list[str]) -> dict[str, set[str]]:
 def scan(ref: str) -> dict:
     cmd = ["docker", "run", "--rm", "-v", f"{CACHE}:/root/.cache", TRIVY, "image", "--quiet",
            "--format", "json", "--severity", "HIGH,CRITICAL", "--ignore-unfixed",
-           "--scanners", "vuln", ref]
+           "--scanners", "vuln", "--timeout", "15m", ref]
     done = subprocess.run(cmd, capture_output=True, text=True)
     if done.returncode != 0:  # usually a registry's passing refusal
         time.sleep(30)
@@ -131,9 +133,24 @@ def renovate_state() -> dict[str, dict[str, str]]:
     return state
 
 
-def add_states(report: dict, previous: dict, renovate: dict, ignored: set[str], today: date) -> None:
+def major_ref(ref: str, target: str) -> str:
+    """The image a major version would be, as Renovate names only the number: the version part of
+    the tag becomes that number, and any suffix stays (postgres:17.11-alpine, v18: postgres:18-alpine)."""
+    name, _, tag = ref.split("@")[0].rpartition(":")
+    number = target.lstrip("v")
+    m = re.match(r"(v?)\d+(?:\.\d+)*(.*)", tag)
+    return f"{name}:{m[1]}{number}{m[2]}" if m else f"{name}:{number}"
+
+
+def counts(findings: list[dict]) -> tuple[int, int]:
+    return len(findings), sum(f["severity"] == "CRITICAL" for f in findings)
+
+
+def add_states(report: dict, previous: dict, renovate: dict, ignored: set[str], today: date,
+               scan_major=scan) -> None:
     """Give each image its state and, when a person has to act, a note. An image's dates follow its
     name, so a bump that does not clear a finding does not restart the clock."""
+    scanned_majors: dict[str, dict] = {}  # several tags can point to one major image
     def earliest(field: str, repo: str) -> str:
         dates = [i[field] for r, i in previous.items() if repo_of(r) == repo and i.get(field)]
         return min(dates, default=today.isoformat())
@@ -168,13 +185,27 @@ def add_states(report: dict, previous: dict, renovate: dict, ignored: set[str], 
         elif update_for(repo, renovate["coming"]):
             item["state"] = "renovate"
         elif major and newer_major(ref, major):
-            item["state"] = "needs-you"
-            item["note"] = (f"major version {major} is available and may fix this; it can need a data "
-                            "migration, so it waits for a yes on the Dependency Dashboard")
+            target = major_ref(ref, major)
+            result = scanned_majors.setdefault(target, scan_major(target))
+            have, have_critical = counts(findings)
+            if "error" in result:
+                item["state"] = "needs-you"
+                item["note"] = (f"major version {major} is available, but `{target}` could not be scanned to "
+                                f"compare with {have} findings now; check its real tag on the Dependency Dashboard")
+            else:
+                new, new_critical = counts(result["findings"])
+                item["major"] = {"image": target, "findings": new, "critical": new_critical}
+                if new < have:
+                    item["state"] = "needs-you"
+                    item["note"] = (f"major version {major} has fewer findings: {have} ({have_critical} critical) now, "
+                                    f"{new} ({new_critical} critical) in `{target}`. It can need a data migration, "
+                                    "so it waits for a yes on the Dependency Dashboard")
+                else:
+                    item["state"] = "upstream"
         else:
             item["state"] = "upstream"
-            if critical and days("critical_since") > CRITICAL_DAYS:
-                item["long_critical"] = days("critical_since")
+        if item["state"] == "upstream" and critical and days("critical_since") > CRITICAL_DAYS:
+            item["long_critical"] = days("critical_since")
 
 
 def sync_issue(report: dict) -> None:
