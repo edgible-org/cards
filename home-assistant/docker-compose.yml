@@ -21,7 +21,7 @@ services:
   # requests that come through a reverse proxy until it is told to trust one. Edgible's web
   # server on this machine reaches the container from Docker's address ranges.
   home-assistant-init:
-    image: ${HOME_ASSISTANT_IMAGE:-ghcr.io/home-assistant/home-assistant:2026.10.4}
+    image: ${HOME_ASSISTANT_IMAGE:-ghcr.io/home-assistant/home-assistant:2026.11.0}
     restart: "no"
     entrypoint: ["sh", "-c"]
     command:
@@ -33,7 +33,7 @@ services:
       - home-assistant-config:/config
 
   home-assistant:
-    image: ${HOME_ASSISTANT_IMAGE:-ghcr.io/home-assistant/home-assistant:2026.10.4}
+    image: ${HOME_ASSISTANT_IMAGE:-ghcr.io/home-assistant/home-assistant:2026.11.0}
     restart: unless-stopped
     ports:
       # One process on two host ports, both on 127.0.0.1: Edgible's web server on this machine
