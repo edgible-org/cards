@@ -2,7 +2,7 @@ tested: 2026-11-06
 result: pass
 card-kit: "ad80064"
 edgible-cli: 1.4.29
-files: sha256:28519e6a6787eb9a
+files: sha256:d33cd3999279bb93
 machine: darwin/arm64, docker 29.4.3
 images:
   - busybox:1.37.0-musl@sha256:f6a95d611e0a8780fabdb2aec43e31275b2720dfefa3e41b16835bfc42454478
@@ -17,12 +17,14 @@ steps:
   publish: pass
   verify:
     seatsurfing: pass
+  checks:
+    no-stranger-sign-up: pass
   fingerprint: pass
   teardown: pass
 fingerprint: {"users": 1, "spaces": 17, "bookings": 0}
 measured:
   seatsurfing:
-    memory: 103 MB
+    memory: 64 MB
     images: 143 MB
     data: 51 MB
 duration: 3m
