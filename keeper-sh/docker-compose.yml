@@ -37,7 +37,7 @@ services:
       BETTER_AUTH_URL: ${KEEPER_SH_URL:-https://keeper-sh.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
       TRUSTED_ORIGINS: ${KEEPER_SH_URL:-https://keeper-sh.${ORG_LABEL}.${EDGIBLE_DOMAIN:-edgible.app}}
       # Empty lets anyone make an account; a comma-separated list of email domains limits it.
-      REGISTRATION_EMAIL_DOMAINS: ${KEEPER_SH_SIGNUP_DOMAINS:-}
+      REGISTRATION_EMAIL_DOMAINS: ${KEEPER_SH_SIGNUP_DOMAINS:?set KEEPER_SH_SIGNUP_DOMAINS in card.env}
     volumes:
       - keeper-sh-secrets:/run/card-secrets:ro
       # The PostgreSQL data: accounts, calendar sources and sync state.
