@@ -1,0 +1,29 @@
+tested: 2026-11-06
+result: pass
+card-kit: "ad80064"
+edgible-cli: 1.4.29
+files: sha256:28519e6a6787eb9a
+machine: darwin/arm64, docker 29.4.3
+images:
+  - busybox:1.37.0-musl@sha256:f6a95d611e0a8780fabdb2aec43e31275b2720dfefa3e41b16835bfc42454478
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - ghcr.io/seatsurfing/backend:1.140.1@sha256:790a13485d5bffdaac68e1fef3d6bc89650634f424622b82f3b989d19812b476
+  - postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+image_facts:
+  ghcr.io/seatsurfing/backend:1.140.1: {user: "65532:65532", archs: ["amd64", "arm64"], healthcheck: true}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    seatsurfing: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"users": 1, "spaces": 17, "bookings": 0}
+measured:
+  seatsurfing:
+    memory: 103 MB
+    images: 143 MB
+    data: 51 MB
+duration: 3m
+by: agent

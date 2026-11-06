@@ -1,0 +1,95 @@
+# Compose file for the seatsurfing card.
+# The host port, ORG_LABEL and the mail settings come from card.env. The database password, the
+# encryption key and the admin's password are made on this machine by seatsurfing-secrets, at
+# first start. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: seatsurfing
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume seatsurfing-secrets, then exits. It never changes one that exists.
+  seatsurfing-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        SEATSURFING_DB_PASSWORD=openssl rand -hex 16
+        SEATSURFING_CRYPT_KEY=openssl rand -hex 16
+        SEATSURFING_ADMIN_PASSWORD=openssl rand -hex 16
+    volumes:
+      - seatsurfing-secrets:/run/card-secrets
+
+  # The app's image has no shell, which the secrets loader needs. This copies a static busybox
+  # into the volume seatsurfing-shell for it, then exits.
+  seatsurfing-shell:
+    image: busybox:1.37.0-musl
+    restart: "no"
+    command:
+      - sh
+      - -c
+      - >-
+        cp /bin/busybox /shell/busybox && cd /shell && for a in sh cat basename; do ln -sf busybox $$a; done
+    volumes:
+      - seatsurfing-shell:/shell
+
+  seatsurfing:
+    image: ghcr.io/seatsurfing/backend:1.140.1
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${SEATSURFING_PORT:?set SEATSURFING_PORT in card.env}:8080"
+    # Seatsurfing reads these only from the environment, so it starts through the loader, which
+    # sets them from the secret files and then runs the image's own start command, ./main.
+    entrypoint: ["/shell/sh", "/run/card-secrets/.load", "/shell/sh", "-c"]
+    command:
+      - >-
+        export POSTGRES_URL="postgres://seatsurfing:$$SEATSURFING_DB_PASSWORD@seatsurfing-db:5432/seatsurfing?sslmode=disable"
+        CRYPT_KEY="$$SEATSURFING_CRYPT_KEY" INIT_ORG_PASS="$$SEATSURFING_ADMIN_PASSWORD" && exec ./main
+    volumes:
+      - seatsurfing-secrets:/run/card-secrets:ro
+      - seatsurfing-shell:/shell:ro
+    environment:
+      PATH: /shell:/usr/local/bin:/usr/bin:/bin
+      PUBLIC_SCHEME: https
+      PUBLIC_PORT: "443"
+      INIT_ORG_NAME: ${SEATSURFING_ORG_NAME:-My Club}
+      DISABLE_ANONYMOUS_USAGE_STATS: "1"
+      MAIL_SENDER_ADDRESS: ${SEATSURFING_SMTP_FROM:-no-reply@seatsurfing.local}
+      SMTP_HOST: ${SEATSURFING_SMTP_HOST:-127.0.0.1}
+      SMTP_PORT: ${SEATSURFING_SMTP_PORT:-587}
+      SMTP_START_TLS: ${SEATSURFING_SMTP_START_TLS:-1}
+      SMTP_AUTH: ${SEATSURFING_SMTP_AUTH:-0}
+      SMTP_AUTH_USER: ${SEATSURFING_SMTP_USER:-}
+      SMTP_AUTH_PASS: ${SEATSURFING_SMTP_PASSWORD:-}
+    depends_on:
+      seatsurfing-db:
+        condition: service_healthy
+      seatsurfing-shell:
+        condition: service_completed_successfully
+      seatsurfing-secrets:
+        condition: service_completed_successfully
+    # The image has its own healthcheck, /app/healthcheck.
+
+  seatsurfing-db:
+    image: postgres:17.11-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: seatsurfing
+      POSTGRES_USER: seatsurfing
+      POSTGRES_PASSWORD_FILE: /run/card-secrets/SEATSURFING_DB_PASSWORD
+    volumes:
+      - seatsurfing-db-data:/var/lib/postgresql/data
+      - seatsurfing-secrets:/run/card-secrets:ro
+    depends_on:
+      seatsurfing-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U seatsurfing -d seatsurfing"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  seatsurfing-db-data: {}
+  seatsurfing-secrets: {}
+  seatsurfing-shell: {}
