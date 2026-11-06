@@ -1,12 +1,12 @@
-tested: 2026-10-29
+tested: 2026-11-06
 result: pass
-card-kit: "3654450"
+card-kit: "92d5d81"
 edgible-cli: 1.4.29
-files: sha256:5020eac11654d8b2
+files: sha256:91aebea8c4faf99a
 machine: darwin/arm64, docker 29.4.3
 images:
-  - docker.n8n.io/n8nio/n8n:2.46.1@sha256:67cb2970ded37cc40a8f91ce3325f44e88a1bf58e0f75d1fa2e0a5f6fc8a972a
-  - n8nio/runners:2.41.4@sha256:2797b628d7f87363b40a5b0d4d7e8a2ee960918d7f9ab9849fbb8be94f29ca16
+  - docker.n8n.io/n8nio/n8n:2.47.2@sha256:83ec9349e09a8efdb51f7e2729f1f83503c038475747a351772ff6b78838f02a
+  - n8nio/runners:2.46.4@sha256:7ae8720b0c2e1c3504cb4386394183ced00fa227697e4fa47f095b0e368827b6
   - postgres:18@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6
 image_facts:
   docker.n8n.io/n8nio/n8n:2.41.4: {user: "node", archs: ["amd64", "arm64"], healthcheck: false}
@@ -17,11 +17,13 @@ steps:
   verify:
     n8n: pass
     n8n-hooks: pass
+  checks:
+    stranger-cannot-take-over: pass
   teardown: pass
 measured:
   workhorse:
-    memory: 760 MB
-    images: 662 MB
-    data: 76 MB
-duration: 4m
-by: ci
+    memory: 794 MB
+    images: 666 MB
+    data: 77 MB
+duration: 3m
+by: agent

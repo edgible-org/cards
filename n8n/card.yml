@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Card
 metadata:
   name: n8n
-  description: Locked editor and open webhook hostname, one n8n process
+  description: n8n with its editor behind org and a webhook hostname open to the services that call it
   type: pattern
   added: 2026-10-05
   steward: edgible-org
