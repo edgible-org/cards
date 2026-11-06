@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "date": "2026-11-06",
+    "rotation_day": null,
+    "card_kit": "92d5d81",
+    "claude": "2.1.296 (Claude Code)",
+    "mcp": "edgible find and describe",
+    "judge_model": "sonnet",
+    "not_run": [],
+    "stopped": ""
+  },
+  "results": [
+    {
+      "id": "physio-clinic",
+      "pass": false,
+      "should_load": true,
+      "loaded": true,
+      "loaded_at": 1,
+      "tools": [
+        "Skill",
+        "Grep"
+      ],
+      "expect_passed": 3,
+      "expect_total": 4,
+      "must_not_violated": [],
+      "principles_failed": [],
+      "verdict": {
+        "expect": [
+          {
+            "item": "leads with practice-management tools built for clinics",
+            "pass": false,
+            "evidence": "Leads with generic schedulers (Cal.com, Square, Setmore); practice software like Cliniko/Jane/WriteUpp appears only as the second bullet, and the 'Where I'd start' list does put checking existing software first."
+          },
+          {
+            "item": "treats exercise plans as patient health records, regulated data",
+            "pass": true,
+            "evidence": "\"These are health records... security, backup, and compliance burden on you (HIPAA, GDPR...)\""
+          },
+          {
+            "item": "self-hosting at most for the parts without patient records",
+            "pass": true,
+            "evidence": "Self-hosting is discouraged for exercise plans; it is mentioned only for scheduling, and the answer advises \"keep health details out of the scheduler.\""
+          },
+          {
+            "item": "asks which country, for the privacy rules",
+            "pass": true,
+            "evidence": "\"Which country are you in? That decides the privacy rules that apply to the exercise plans.\""
+          }
+        ],
+        "must_not": [
+          {
+            "item": "offer to self-host patient records on a clinic or home machine",
+            "violated": false,
+            "evidence": "\"Self-hosting this part is not a good idea.\""
+          },
+          {
+            "item": "leave out privacy and compliance",
+            "violated": false,
+            "evidence": "Covers HIPAA, GDPR, data-processing and business-associate agreements."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "Opens straight with the options for booking and exercise plans."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": true,
+            "evidence": "\"You'd be taking on upkeep (updates, backups, an always-on machine) to save about $30\u201340 a month\"."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "Two questions: current practice software, and country."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "Nothing was built; it only recommends options."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "No deployment is involved."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": true,
+            "evidence": "It raises regulated health data and says to keep health details out of the scheduler. It says little about who sees what."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": true,
+            "evidence": "Rallly is called \"a poor fit for patients booking physios\", and self-hosting the plans is ruled out, with hosted alternatives given."
+          }
+        ],
+        "better": "Lead with clinic-specific practice-management platforms (Cliniko, Jane, WriteUpp) that bundle booking and home exercise plans under one agreement, rather than starting with generic schedulers."
+      }
+    }
+  ]
+}
