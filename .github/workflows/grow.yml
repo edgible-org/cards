@@ -1,7 +1,9 @@
 # Grow the cards: each night, an agent makes one new app card for the first gap in the
 # skill's needs map, and it is tested on a real serving device. A card that passes becomes
-# a pull request for a person to review; one that does not becomes an issue saying how far
-# it got. Nothing is ever merged here. See HOW-IT-WORKS.md.
+# a pull request; one that does not becomes an issue saying how far it got.
+# With the repository secret GROW_PR_TOKEN, the pull request opens with that token, so check-cards
+# runs on it, and merges itself when the check passes, with no person reviewing it (Stefano's
+# decision, 2026-11-07). Without the secret, a person merges it. See HOW-IT-WORKS.md.
 #
 # The work is split by what each part needs (see the build fleet's design):
 #   write   the hub (label hub): the agent writes the card, and check-cards --untrusted runs
@@ -425,8 +427,12 @@ jobs:
           TEST2: ${{ needs.test-2.outputs.result }}
           TEST3: ${{ needs.test-3.outputs.result }}
           APP: ${{ inputs.app }}
+          # A fine-grained token for this repository: Contents and Pull requests, read and write.
+          GROW_PR_TOKEN: ${{ secrets.GROW_PR_TOKEN }}
         run: |
           set -euo pipefail
+          # Not exported: the tools below read a card an agent wrote, and only the gh calls get this.
+          pr_secret=${GROW_PR_TOKEN:-}; unset GROW_PR_TOKEN
           # The machine could not test the card, which says nothing about the card: no issue, so the
           # app and its category stay open for another night. Failing here stops the night's chain too,
           # as the next card would meet the same limit, and the daily report shows the failed run.
@@ -466,7 +472,11 @@ jobs:
             {
               echo "## What"
               echo
-              echo "A new app card, \`$CARD\`, made by the nightly grow job for the first gap in the needs map. **An AI agent made this pull request.** Review it with the checklist below before merging."
+              if [ -n "$pr_secret" ]; then
+                echo "A new app card, \`$CARD\`, made by the nightly grow job for the first gap in the needs map. **An AI agent made this pull request, and it merges itself when check-cards passes, with no person reviewing it.** The checklist below is for looking at it afterwards."
+              else
+                echo "A new app card, \`$CARD\`, made by the nightly grow job for the first gap in the needs map. **An AI agent made this pull request.** Review it with the checklist below before merging."
+              fi
               echo
               echo "Category: $category"
               echo
@@ -496,17 +506,25 @@ jobs:
               echo
               echo "After this is merged, the grow job adds \`$CARD\` to its category in card-kit's needs map. Made by $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID."
             } > ../pr.md
-            gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$branch" \
+            # This workflow's own token starts no other workflow, and GitHub holds a bot's pull request
+            # for approval, so with GROW_PR_TOKEN the pull request is opened with that.
+            if [ -n "$pr_secret" ]; then pr_token=$pr_secret; else pr_token=$GH_TOKEN; fi
+            GH_TOKEN=$pr_token gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$branch" \
               --title "New app card: $CARD" --label agent-card --body-file ../pr.md
-            # A pull request made with this workflow's token starts no other workflow, so the check the
-            # branch needs to merge is started here, as bump-test does for Renovate's branches.
-            gh workflow run cards.yml --repo "$GITHUB_REPOSITORY" --ref "$branch" || echo "could not start the cards check"
+            if [ -z "$pr_secret" ]; then
+              gh workflow run cards.yml --repo "$GITHUB_REPOSITORY" --ref "$branch" || echo "could not start the cards check"
+            fi
             # The mechanical part of the review, as a comment: secrets in git, default passwords, open ports,
             # elevated access, unpinned images, and so on. It names keys, never values. A failure here does not
             # stop the pull request.
             python3 -m pip install -q pyyaml || true
             python3 .github/scripts/card_verdict.py "$CARD" > ../verdict.md \
               && gh pr comment "$branch" --repo "$GITHUB_REPOSITORY" --body-file ../verdict.md || echo "no automated checks comment"
+            # Merges when check-cards passes. A failure here leaves the pull request for a person.
+            if [ -n "$pr_secret" ]; then
+              GH_TOKEN=$pr_secret gh pr merge "$branch" --repo "$GITHUB_REPOSITORY" --auto --squash --delete-branch \
+                || echo "::warning::could not turn on auto-merge for $branch"
+            fi
           else
             name=${CARD:-$APP}
             {
