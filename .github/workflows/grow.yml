@@ -18,7 +18,7 @@
 # GitHub or Edgible login. This workflow, not the agent, checks the card, tests it, and opens
 # the pull request.
 #
-# A fleet machine that cannot fetch an image is not the card's fault: the run fails with no issue,
+# A fleet machine or the platform stopping a test is not the card's fault: the run fails with no issue,
 # so the app is not ruled out, and the night's chain stops (grow-test's result "infra").
 #
 # It skips the night when MAX_OPEN agent-made pull requests are already waiting for review.
@@ -366,7 +366,7 @@ jobs:
           # app and its category stay open for another night. Failing here stops the night's chain too,
           # as the next card would meet the same limit, and the daily report shows the failed run.
           if [ "$TEST1" = infra ] || [ "$TEST2" = infra ]; then
-            echo "::error::The test machine could not fetch an image (a pull rate limit, or Docker's credential helper). The card was not tested, and no issue was opened."
+            echo "::error::The test machine or the platform stopped the test (see test-1 and test-2's logs), so the card was not properly tested. No issue was opened, and the app stays open."
             exit 1
           fi
           gh label create agent-card --repo "$GITHUB_REPOSITORY" --color 5319E7 --description "Made by the nightly grow job" 2>/dev/null || true

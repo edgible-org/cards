@@ -26,7 +26,7 @@ on:
         required: false
     outputs:
       result:
-        description: pass, fail, or infra when the machine could not fetch an image, so the card was not tested
+        description: pass, fail, or infra when the machine or the platform stopped the test, so the card was not properly tested
         value: ${{ jobs.test.outputs.result }}
 
 permissions:
@@ -102,8 +102,8 @@ jobs:
             tail -20 ../test.log; result=pass
           else
             tail -40 ../test.log; result=fail
-            # The machine could not fetch an image: a registry's limit, or Docker's credential helper.
-            if grep -qiE 'pull rate limit|toomanyrequests|error getting credentials' ../test.log; then result=infra; fi
+            # Not the card: a registry's limit, Docker's credential helper, Docker itself, or the platform.
+            if grep -qiE 'pull rate limit|toomanyrequests|error getting credentials|rw layer snapshot not found|cannot connect to the docker daemon|"code": "INTERNAL_ERROR"' ../test.log; then result=infra; fi
           fi
           echo "result=$result" >> "$GITHUB_OUTPUT"
       - name: Keep the tested card and the logs
