@@ -2,7 +2,9 @@
 
 ## Why
 
-Moving work between systems usually goes to a hosted automation service, along with the keys to everything it touches. This card keeps that work on a machine you own. The editor asks for an org login. The webhook address stays open, because GitHub, Stripe, and `curl` cannot complete a browser login.
+Moving work between systems usually goes to a hosted automation service, along with the keys to everything it touches. This card keeps that work on a machine you own. `n8n` asks for an org login. `n8n-hooks` stays open, because GitHub, Stripe, and `curl` cannot complete a browser login.
+
+Both hostnames are the same n8n, and Edgible's auth mode covers a whole hostname. So `n8n-hooks` also shows n8n's own sign-in page, and n8n's login is what protects the editor there, as it does for most self-hosted n8n. Use a strong owner password. The org login adds a second lock only on `n8n`.
 
 ## What
 
@@ -54,9 +56,49 @@ docker compose --env-file n8n/card.env -f n8n/docker-compose.yml ps
 
 If `--wait` stops with `unhealthy`, `logs <service>` with the same `--env-file` and `-f` usually says why.
 
-### 5. Create the owner
+### 5. Make the owner
 
-Open `http://127.0.0.1:5678` and create the n8n owner. This account stays on this machine.
+n8n gives the owner account to whoever sets it up first, and `n8n-hooks` is public, so make it on this machine before Publish. Set `N8N_OWNER_EMAIL` in [card.env](card.env) and generate `N8N_OWNER_PASSWORD`, then:
+
+```bash
+sh n8n/prepare.sh
+```
+
+[prepare.sh](prepare.sh) is:
+
+```sh
+#!/bin/sh
+# Prepare for the n8n card: make the owner on this machine, so a stranger cannot be first to do it.
+# n8n gives the owner account to whoever sets it up first, and n8n-hooks is public.
+# Run it after Start and before Publish, from the directory that holds n8n/:
+#   sh n8n/prepare.sh
+set -eu
+cd "$(dirname "$0")"
+set -a; . ./card.env; set +a
+U="http://127.0.0.1:${N8N_PORT:?set N8N_PORT in card.env}"
+
+settings=
+for _ in $(seq 36); do
+  settings=$(curl -fsS "$U/rest/settings" 2>/dev/null) && break
+  sleep 5
+done
+[ -n "$settings" ] || { echo "n8n did not answer on $U after three minutes" >&2; exit 1; }
+
+# An owner already made, such as when upgrading a running card, stays as it is.
+if ! printf '%s' "$settings" | grep -q '"showSetupOnFirstLoad":true'; then
+  echo "n8n already has an owner: nothing to do"
+  exit 0
+fi
+
+: "${N8N_OWNER_EMAIL:?set N8N_OWNER_EMAIL in card.env}"
+: "${N8N_OWNER_PASSWORD:?set N8N_OWNER_PASSWORD in card.env}"
+body=$(printf '{"email":"%s","firstName":"Owner","lastName":"Admin","password":"%s"}' "$N8N_OWNER_EMAIL" "$N8N_OWNER_PASSWORD")
+code=$(printf '%s' "$body" | curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d @- "$U/rest/owner/setup")
+[ "$code" = 200 ] || { echo "n8n refused the owner with $code: the password needs 8 characters, a number and a capital" >&2; exit 1; }
+echo "Owner $N8N_OWNER_EMAIL made, with the password N8N_OWNER_PASSWORD in card.env"
+```
+
+It prints `Owner <address> made`, or `n8n already has an owner: nothing to do` on a card that is running already. The password stays on this machine, in `card.env`.
 
 ### 6. Publish
 
@@ -102,7 +144,7 @@ edgible app list
 curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<n8n hostname>"
 ```
 
-That prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front. Open the hostname in a browser and sign in. The owner is the account you created on `127.0.0.1:5678`. The rest of the setup is in the [n8n docs](https://docs.n8n.io).
+That prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front. Open the hostname in a browser and sign in. The owner is `N8N_OWNER_EMAIL`, with `N8N_OWNER_PASSWORD`. The rest of the setup is in the [n8n docs](https://docs.n8n.io).
 
 `n8n-hooks` uses `none`.
 
