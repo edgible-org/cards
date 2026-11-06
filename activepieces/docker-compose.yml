@@ -1,0 +1,98 @@
+# Compose file for the activepieces card.
+# The host port and the hostnames come from card.env. The passwords and keys are made on this
+# machine by activepieces-secrets, at first start, and never leave it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: activepieces
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume activepieces-secrets, then exits. It never changes one that exists.
+  activepieces-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        ACTIVEPIECES_DB_PASSWORD=openssl rand -hex 16
+        ACTIVEPIECES_ENCRYPTION_KEY=openssl rand -hex 16
+        ACTIVEPIECES_JWT_SECRET=openssl rand -hex 32
+        ACTIVEPIECES_ADMIN_PASSWORD=printf 'Ap1!%s' "$(openssl rand -hex 12)"
+    volumes:
+      - activepieces-secrets:/run/card-secrets
+
+  activepieces:
+    image: activepieces/activepieces:0.92.3-hotfix.2
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${ACTIVEPIECES_PORT:?set ACTIVEPIECES_PORT in card.env}:80"
+    environment:
+      AP_ENGINE_EXECUTABLE_PATH: dist/packages/engine/main.js
+      AP_ENVIRONMENT: prod
+      AP_EXECUTION_MODE: UNSANDBOXED
+      AP_TELEMETRY_ENABLED: "false"
+      AP_QUEUE_MODE: REDIS
+      AP_DB_TYPE: POSTGRES
+      AP_POSTGRES_HOST: activepieces-db
+      AP_POSTGRES_PORT: "5432"
+      AP_POSTGRES_DATABASE: activepieces
+      AP_POSTGRES_USERNAME: activepieces
+      AP_REDIS_HOST: activepieces-redis
+      AP_REDIS_PORT: "6379"
+      AP_FRONTEND_URL: ${ACTIVEPIECES_URL:-https://activepieces.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      AP_WEBHOOK_URL: ${ACTIVEPIECES_WEBHOOK_URL:-https://activepieces-hooks.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+    # Activepieces reads its settings only from the environment, so it starts through the loader,
+    # which sets them from the secret files and then runs the image's own entrypoint.
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
+    command:
+      - >-
+        export AP_POSTGRES_PASSWORD="$$ACTIVEPIECES_DB_PASSWORD"
+        AP_ENCRYPTION_KEY="$$ACTIVEPIECES_ENCRYPTION_KEY" AP_JWT_SECRET="$$ACTIVEPIECES_JWT_SECRET"
+        && exec ./docker-entrypoint.sh
+    volumes:
+      - activepieces-secrets:/run/card-secrets:ro
+    depends_on:
+      activepieces-db:
+        condition: service_healthy
+      activepieces-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1/api/v1/flags').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 60s
+
+  activepieces-db:
+    image: postgres:17.11-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: activepieces
+      POSTGRES_USER: activepieces
+      POSTGRES_PASSWORD_FILE: /run/card-secrets/ACTIVEPIECES_DB_PASSWORD
+    volumes:
+      - activepieces-db-data:/var/lib/postgresql/data
+      - activepieces-secrets:/run/card-secrets:ro
+    depends_on:
+      activepieces-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U activepieces -d activepieces"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  activepieces-redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    volumes:
+      - activepieces-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  activepieces-db-data: {}
+  activepieces-redis-data: {}
+  activepieces-secrets: {}
