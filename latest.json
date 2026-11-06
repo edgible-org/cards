@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-05T21:26:52+00:00",
+ "generated": "2026-11-06T23:00:50+00:00",
  "repo": "edgible-org/cards",
  "site": "https://cards.edgible.org",
  "jobs": [
@@ -7,71 +7,91 @@
    "workflow": "image-scan",
    "name": "Image scan",
    "state": "ok",
-   "count": 1,
+   "count": 2,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42015219076",
-   "at": "2026-11-05T10:59:24Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42206573167",
+   "at": "2026-11-06T10:57:25Z"
   },
   {
    "workflow": "skill-evals",
    "name": "Skill evals",
    "state": "ok",
-   "count": 1,
+   "count": 2,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42104843325",
-   "at": "2026-11-05T20:35:45Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42283927261",
+   "at": "2026-11-06T19:55:50Z"
   },
   {
    "workflow": "grow",
    "name": "Grow",
-   "state": "running",
-   "count": 4,
-   "failed": 1,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42107956251",
-   "at": "2026-11-05T20:56:09Z"
+   "state": "ok",
+   "count": 10,
+   "failed": 0,
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42300246534",
+   "at": "2026-11-06T21:52:24Z"
   },
   {
    "workflow": "regression",
    "name": "Cards regression",
-   "state": "ok",
-   "count": 3,
-   "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42107972703",
-   "at": "2026-11-05T20:56:16Z"
+   "state": "fail",
+   "count": 10,
+   "failed": 1,
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42286401581",
+   "at": "2026-11-06T20:12:48Z"
   },
   {
    "workflow": "site",
    "name": "Site build",
-   "state": "running",
+   "state": "ok",
    "count": 10,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42112674026",
-   "at": "2026-11-05T21:26:33Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42308808338",
+   "at": "2026-11-06T23:00:11Z"
   }
  ],
  "cards": {
-  "total": 53,
-  "with_status": 50,
-  "passing": 50,
-  "failing": [],
-  "tested_24h": 19,
+  "total": 66,
+  "with_status": 59,
+  "passing": 57,
+  "failing": [
+   "mediamtx",
+   "otter-wiki"
+  ],
+  "tested_24h": 35,
   "oldest": [
    "teamdesk",
-   9
+   10
   ],
   "no_test_yet": [
    "accounts",
    "assistant",
+   "chatwoot",
+   "grafana-mcp",
+   "langflow",
+   "open-webui",
    "website"
   ]
  },
- "regression_issues": [],
+ "regression_issues": [
+  {
+   "number": 389,
+   "title": "Regression: otter-wiki fails",
+   "url": "https://github.com/edgible-org/cards/issues/389",
+   "days": 0
+  },
+  {
+   "number": 388,
+   "title": "Regression: mediamtx fails",
+   "url": "https://github.com/edgible-org/cards/issues/388",
+   "days": 0
+  }
+ ],
  "images": {
-  "cards_with_fixable": 48,
+  "cards_with_fixable": 53,
   "worst": [
    {
     "card": "photoprism",
-    "count": 611
+    "count": 612
    },
    {
     "card": "frigate",
@@ -79,40 +99,88 @@
    },
    {
     "card": "linkding",
-    "count": 262
+    "count": 258
+   },
+   {
+    "card": "immich",
+    "count": 171
    },
    {
     "card": "passbolt",
     "count": 165
-   },
-   {
-    "card": "wiki-js",
-    "count": 138
    }
   ],
-  "scanned": 65
+  "scanned": 78
  },
- "queue": [
-  {
-   "number": 225,
-   "title": "Remove the club-noticeboard card",
-   "url": "https://github.com/edgible-org/cards/pull/225",
-   "kind": "change",
-   "state": "review",
-   "why": "needs a person"
-  }
- ],
+ "queue": [],
  "card_kit_prs": [],
  "grow": {
-  "made": [],
-  "could_not_make": [
+  "made": [
    {
-    "title": "App request: onedev",
-    "url": "https://github.com/edgible-org/cards/issues/336"
+    "title": "New app card: langflow",
+    "url": "https://github.com/edgible-org/cards/pull/387"
    },
    {
-    "title": "App request: rybbit",
-    "url": "https://github.com/edgible-org/cards/issues/334"
+    "title": "New app card: grafana-mcp",
+    "url": "https://github.com/edgible-org/cards/pull/386"
+   },
+   {
+    "title": "New app card: open-webui",
+    "url": "https://github.com/edgible-org/cards/pull/385"
+   },
+   {
+    "title": "New app card: chatwoot",
+    "url": "https://github.com/edgible-org/cards/pull/384"
+   },
+   {
+    "title": "New app card: hi-events",
+    "url": "https://github.com/edgible-org/cards/pull/366"
+   },
+   {
+    "title": "New app card: onedev",
+    "url": "https://github.com/edgible-org/cards/pull/362"
+   },
+   {
+    "title": "New app card: mediamtx",
+    "url": "https://github.com/edgible-org/cards/pull/358"
+   },
+   {
+    "title": "New app card: localai",
+    "url": "https://github.com/edgible-org/cards/pull/357"
+   },
+   {
+    "title": "New app card: speaches",
+    "url": "https://github.com/edgible-org/cards/pull/356"
+   },
+   {
+    "title": "New app card: seatsurfing",
+    "url": "https://github.com/edgible-org/cards/pull/354"
+   },
+   {
+    "title": "New app card: activepieces",
+    "url": "https://github.com/edgible-org/cards/pull/351"
+   },
+   {
+    "title": "New app card: redaxo",
+    "url": "https://github.com/edgible-org/cards/pull/350"
+   },
+   {
+    "title": "New app card: rybbit",
+    "url": "https://github.com/edgible-org/cards/pull/346"
+   }
+  ],
+  "could_not_make": [
+   {
+    "title": "App request: OpenSlides",
+    "url": "https://github.com/edgible-org/cards/issues/365"
+   },
+   {
+    "title": "App request: hi-events",
+    "url": "https://github.com/edgible-org/cards/issues/355"
+   },
+   {
+    "title": "App request: redaxo",
+    "url": "https://github.com/edgible-org/cards/issues/347"
    }
   ],
   "agent_prs_open": 0
@@ -122,9 +190,29 @@
  },
  "upstream_candidates": [
   {
+   "card": "activepieces",
+   "topic": "secret-files",
+   "image": "activepieces/activepieces:0.92.3-hotfix.2"
+  },
+  {
    "card": "arize-phoenix",
    "topic": "healthcheck",
    "image": "arizephoenix/phoenix:version-21.0.0-debug"
+  },
+  {
+   "card": "bloglite",
+   "topic": "healthcheck",
+   "image": "zot.huijzer.xyz/bloglite:3.1.0"
+  },
+  {
+   "card": "chatwoot",
+   "topic": "secret-files",
+   "image": "chatwoot/chatwoot:v4.19.1"
+  },
+  {
+   "card": "chatwoot",
+   "topic": "healthcheck",
+   "image": "chatwoot/chatwoot:v4.19.1"
   },
   {
    "card": "ci",
@@ -157,6 +245,11 @@
    "image": "gitea/gitea:28.1.0"
   },
   {
+   "card": "grafana-mcp",
+   "topic": "healthcheck",
+   "image": "grafana/mcp-grafana:2.2.0"
+  },
+  {
    "card": "home-assistant",
    "topic": "healthcheck",
    "image": "ghcr.io/home-assistant/home-assistant:2026.10.4"
@@ -165,6 +258,16 @@
    "card": "keeper-sh",
    "topic": "secret-files",
    "image": "ghcr.io/ridafkih/keeper-standalone:2.28"
+  },
+  {
+   "card": "langflow",
+   "topic": "secret-files",
+   "image": "langflowai/langflow:1.11.0"
+  },
+  {
+   "card": "langflow",
+   "topic": "healthcheck",
+   "image": "langflowai/langflow:1.11.0"
   },
   {
    "card": "leafwiki",
@@ -195,6 +298,16 @@
    "card": "memos",
    "topic": "healthcheck",
    "image": "neosmemo/memos:0.31.0"
+  },
+  {
+   "card": "onedev",
+   "topic": "healthcheck",
+   "image": "1dev/server:17.1.2"
+  },
+  {
+   "card": "open-webui",
+   "topic": "secret-files",
+   "image": "ghcr.io/open-webui/open-webui:v0.12.5"
   },
   {
    "card": "openclaw",
@@ -230,6 +343,26 @@
    "card": "razzia",
    "topic": "healthcheck",
    "image": "ghcr.io/ralex91/razzia:4.0.2"
+  },
+  {
+   "card": "redaxo",
+   "topic": "secret-files",
+   "image": "friendsofredaxo/redaxo:5"
+  },
+  {
+   "card": "rybbit",
+   "topic": "healthcheck",
+   "image": "caddy:2.11.8-alpine"
+  },
+  {
+   "card": "seatsurfing",
+   "topic": "secret-files",
+   "image": "ghcr.io/seatsurfing/backend:1.140.1"
+  },
+  {
+   "card": "speaches",
+   "topic": "healthcheck",
+   "image": "ghcr.io/speaches-ai/speaches:0.9.0-rc.3-cpu"
   },
   {
    "card": "static-site",
@@ -273,5 +406,5 @@
   }
  ],
  "skill_evals_report": "https://github.com/edgible-org/cards/issues/17",
- "summary": "Last night every job finished, and all 50 cards passed their latest regression test, though one grow run is still in progress and an earlier one failed. The skill evals are weak, with only 2 of 17 held-out prompts passing. The one thing that needs you is that the grow job could not build cards for onedev (issue 336) or rybbit (issue 334), so pick those up or close them."
+ "summary": "Last night the cards regression tested 35 cards, and mediamtx and otter-wiki failed; the grow job added 13 new cards but could not make three requested apps (OpenSlides, hi-events, and redaxo). Nothing needs you tonight, since the two failing issues close themselves if they pass on the next run. The one thing that needs you is deciding on the three app requests: pick them up or close them."
 }
