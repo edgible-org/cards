@@ -23,7 +23,7 @@ services:
   # The app's image has no shell, which the secrets loader needs. This copies a static busybox
   # into the volume seatsurfing-shell for it, then exits.
   seatsurfing-shell:
-    image: busybox:1.37.0-musl
+    image: busybox:1.38.0-musl
     restart: "no"
     command:
       - sh
