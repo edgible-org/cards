@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: chatwoot
+  description: Chatwoot, a support inbox with a website chat widget and bots for chat apps, with sign-up closed
+  type: app
+  added: 2026-11-06
+  homepage: https://www.chatwoot.com
+  license: MIT
+  steward: edgible-org
+
+applications:
+  - name: chatwoot
+    what: Chatwoot chat widget for visitors, and agents who sign in
+    from: chatwoot/chatwoot:v4.19.1
+    database: pgvector/pgvector:0.8.1-pg17
+    port: 3000
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [none]
+    place: chatwoot
+
+secrets:
+  CHATWOOT_DB_PASSWORD:
+    kind: internal
+    use: password
+    make: openssl rand -hex 16
+    update:
+      service: chatwoot-db
+      command: psql -U chatwoot -d chatwoot -c "ALTER USER chatwoot PASSWORD '$CHATWOOT_DB_PASSWORD'"
+  CHATWOOT_SECRET_KEY_BASE:
+    kind: internal
+    use: signing
+    make: openssl rand -hex 64
+  CHATWOOT_ADMIN_PASSWORD:
+    kind: human
+    make: printf 'Cw-%s1' "$(openssl rand -hex 12)"
+    for: the admin's first sign-in, set by prepare.sh when it makes the account
+  CHATWOOT_SMTP_PASSWORD:
+    kind: external
+    from: your mail provider, with CHATWOOT_SMTP_USERNAME
+    required: false
+
+data:
+  volumes:
+    chatwoot-db-data:
+      class: irreplaceable
+      dump:
+        service: chatwoot-db
+        command: pg_dump -U "$POSTGRES_USER" -Fc "$POSTGRES_DB"
+        restore: pg_restore -U "$POSTGRES_USER" -d "$POSTGRES_DB" --clean
+    chatwoot-storage:
+      class: irreplaceable
+    chatwoot-redis-data:
+      class: cache
+    chatwoot-secrets:
+      class: irreplaceable
+  fingerprint:
+    service: chatwoot-db
+    command: psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -tAc "select json_build_object('users', (select count(*) from users), 'conversations', (select count(*) from conversations))"
+
+places:
+  chatwoot:
+    memory: 3 GB
+    disk: 5 GB
+    arch: [amd64, arm64]
+    gpu: none
