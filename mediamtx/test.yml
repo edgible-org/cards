@@ -1,0 +1,24 @@
+tested: 2026-11-06
+result: pass
+card-kit: "ad80064"
+edgible-cli: 1.4.29
+files: sha256:72764d3ba4a76483
+machine: darwin/arm64, docker 29.4.3
+images:
+  - bluenviron/mediamtx:1.16.0@sha256:78fb91112975390f150b128ee9781190f1a043a59dbc92607332f2d85126d851
+image_facts:
+  bluenviron/mediamtx:1.16.0: {user: "root", healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    mediamtx: pass
+  teardown: pass
+measured:
+  mediamtx:
+    memory: 1 MB
+    images: 27 MB
+    data: 1 KB
+duration: 3m
+by: agent

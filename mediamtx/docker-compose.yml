@@ -1,0 +1,29 @@
+# Compose file for the mediamtx card: one MediaMTX server. Cameras and encoders publish to it
+# on the home network (RTSP, RTMP, SRT) with the publisher login from card.env; anyone on that
+# network can read a stream. Only the HLS port is published through Edgible, behind org sign-in.
+# Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: mediamtx
+
+services:
+  mediamtx:
+    image: bluenviron/mediamtx:1.16.0
+    restart: unless-stopped
+    ports:
+      # HLS, for Edgible to publish: only this machine can reach it directly.
+      - "127.0.0.1:${MEDIAMTX_PORT:?set MEDIAMTX_PORT in card.env}:8888"
+      # Ingest and playback for the home network.
+      - "${MEDIAMTX_RTSP_PORT:?set MEDIAMTX_RTSP_PORT in card.env}:8554"
+      - "${MEDIAMTX_RTMP_PORT:?set MEDIAMTX_RTMP_PORT in card.env}:1935"
+      - "${MEDIAMTX_SRT_PORT:?set MEDIAMTX_SRT_PORT in card.env}:8890/udp"
+    environment:
+      # WebRTC needs its own UDP media port, which Edgible does not publish.
+      MTX_WEBRTC: "no"
+      MTX_RTSPTRANSPORTS: "[tcp]"
+      # Anyone may read a stream; only the publisher login may send one.
+      MTX_AUTHINTERNALUSERS_0_USER: any
+      MTX_AUTHINTERNALUSERS_0_PERMISSIONS_0_ACTION: read
+      MTX_AUTHINTERNALUSERS_1_USER: publisher
+      MTX_AUTHINTERNALUSERS_1_PASS: ${MEDIAMTX_PUBLISH_PASSWORD:?set MEDIAMTX_PUBLISH_PASSWORD in card.env}
+      MTX_AUTHINTERNALUSERS_1_PERMISSIONS_0_ACTION: publish
