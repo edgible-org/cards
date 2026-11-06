@@ -1,8 +1,8 @@
-tested: 2026-11-02
+tested: 2026-11-06
 result: pass
-card-kit: "36d8b7f"
+card-kit: "92d5d81"
 edgible-cli: 1.4.29
-files: sha256:8547557d6c055ecc
+files: sha256:bff23b3e94054411
 machine: darwin/arm64, docker 29.4.3
 images:
   - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
@@ -18,13 +18,14 @@ steps:
     photoprism: pass
   checks:
     admin-signs-in: pass
+    stranger-cannot-get-in: pass
   fingerprint: pass
   teardown: pass
 fingerprint: {"photos": 0, "files": 0}
 measured:
   photoprism:
-    memory: 361 MB
+    memory: 670 MB
     images: 1.1 GB
     data: 174 MB
-duration: 8m
+duration: 3m
 by: agent
