@@ -187,7 +187,7 @@ def ops_data() -> dict:
     kit = [{"number": p["number"], "title": p["title"], "url": p["url"]} for p in prs(KIT, "--state", "open")]
     made = [{"title": p["title"], "url": p["url"]} for p in agent_prs("all")
             if when(p["createdAt"]) >= SINCE]
-    unmade = [{"title": i["title"], "url": i["url"]} for i in issues("--label", "agent-card", "--state", "all")
+    unmade = [{"title": i["title"], "url": i["url"]} for i in issues("--label", "agent-card", "--state", "open")
               if when(i["createdAt"]) >= SINCE]
     upstream = {}
     for f in sorted((ROOT / "upstream").glob("*.md")):
@@ -291,7 +291,7 @@ def main() -> int:
     # Grow
     gr = runs("grow")
     new_prs = [p for p in agent_prs("all") if when(p["createdAt"]) >= SINCE]
-    new_issues = [i for i in issues("--label", "agent-card", "--state", "all") if when(i["createdAt"]) >= SINCE]
+    new_issues = [i for i in issues("--label", "agent-card", "--state", "open") if when(i["createdAt"]) >= SINCE]
     queue = agent_prs("open")
     body += ["## Grow", ""]
     if not gr:
