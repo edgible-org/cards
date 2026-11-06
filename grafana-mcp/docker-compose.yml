@@ -1,0 +1,34 @@
+# Compose file for the grafana-mcp card.
+# The host port, the Grafana to reach and its token come from card.env. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: grafana-mcp
+
+services:
+  grafana-mcp:
+    image: grafana/mcp-grafana:2.2.0
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${GRAFANA_MCP_PORT:?set GRAFANA_MCP_PORT in card.env}:8000"
+    # The image starts with the sse transport. This serves Streamable HTTP instead, and
+    # GRAFANA_MCP_ARGS (read-only by default) adds the rest of the server's flags. The server
+    # answers 403 to any Host header but loopback, so --allowed-hosts '*' lets the published
+    # hostname through: the port is bound to loopback and Edgible refuses a request without a
+    # valid key before it gets here. /healthz is served on a loopback-only side port.
+    entrypoint:
+      - sh
+      - -c
+      - exec /app/mcp-grafana --transport streamable-http --address 0.0.0.0:8000 --allowed-hosts '*' --healthz-address 127.0.0.1:8081 $$GRAFANA_MCP_ARGS
+    environment:
+      GRAFANA_URL: ${GRAFANA_MCP_URL:?set GRAFANA_MCP_URL in card.env}
+      GRAFANA_SERVICE_ACCOUNT_TOKEN: ${GRAFANA_MCP_SERVICE_ACCOUNT_TOKEN:?set GRAFANA_MCP_SERVICE_ACCOUNT_TOKEN in card.env}
+      GRAFANA_MCP_ARGS: ${GRAFANA_MCP_ARGS:---disable-write}
+    # So a Grafana on this machine can be reached as http://host.docker.internal:3000.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8081 && printf 'GET /healthz HTTP/1.0\\r\\n\\r\\n' >&3 && head -n1 <&3 | grep -q 200"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
