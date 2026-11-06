@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: hi-events
+  description: Hi.Events event pages and ticket booking, open to the public and managed by the organizers who sign in
+  type: app
+  added: 2026-11-06
+  homepage: https://hi.events
+  license: AGPL-3.0-only
+  steward: edgible-org
+
+applications:
+  - name: hi-events
+    what: Hi.Events site, for the people who book and for the organizers who sign in
+    from: daveearley/hi.events-all-in-one:v2.0.0
+    database: postgres:17.11-alpine
+    port: 8123
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [none]
+    place: hi-events
+
+secrets:
+  HI_EVENTS_DB_PASSWORD:
+    kind: internal
+    use: password
+    make: openssl rand -hex 16
+    update:
+      service: hi-events-db
+      command: psql -U hievents -d hievents -c "ALTER USER hievents PASSWORD '$HI_EVENTS_DB_PASSWORD'"
+  HI_EVENTS_APP_KEY:
+    kind: internal
+    use: encryption
+    make: echo "base64:$(openssl rand -base64 32)"
+  HI_EVENTS_JWT_SECRET:
+    kind: internal
+    use: signing
+    make: openssl rand -base64 32
+  HI_EVENTS_ADMIN_PASSWORD:
+    kind: human
+    make: openssl rand -hex 16
+    for: the organizer's first sign-in
+  HI_EVENTS_SMTP_PASSWORD:
+    kind: external
+    from: your mail provider, with HI_EVENTS_SMTP_USER
+    required: false
+
+data:
+  volumes:
+    hi-events-db-data:
+      class: irreplaceable
+      dump:
+        service: hi-events-db
+        command: pg_dump -U hievents -Fc hievents
+        restore: pg_restore -U hievents -d hievents --clean
+    hi-events-storage:
+      class: irreplaceable
+    hi-events-secrets:
+      class: irreplaceable
+    hi-events-redis-data:
+      class: rebuildable
+  fingerprint:
+    service: hi-events-db
+    command: psql -U hievents -d hievents -tAc "select json_build_object('users', (select count(*) from users), 'events', (select count(*) from events))"
+
+places:
+  hi-events:
+    memory: 1 GB
+    disk: 4 GB
+    arch: [amd64, arm64]
+    gpu: none
