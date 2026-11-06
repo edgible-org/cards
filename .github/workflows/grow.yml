@@ -498,6 +498,9 @@ jobs:
             } > ../pr.md
             gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$branch" \
               --title "New app card: $CARD" --label agent-card --body-file ../pr.md
+            # A pull request made with this workflow's token starts no other workflow, so the check the
+            # branch needs to merge is started here, as bump-test does for Renovate's branches.
+            gh workflow run cards.yml --repo "$GITHUB_REPOSITORY" --ref "$branch" || echo "could not start the cards check"
             # The mechanical part of the review, as a comment: secrets in git, default passwords, open ports,
             # elevated access, unpinned images, and so on. It names keys, never values. A failure here does not
             # stop the pull request.
