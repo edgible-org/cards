@@ -1,0 +1,29 @@
+tested: 2026-11-07
+result: pass
+card-kit: "92d5d81"
+edgible-cli: 1.4.29
+files: sha256:1ffc97199286e42c
+machine: darwin/arm64, docker 29.4.3
+images:
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - ghcr.io/open-webui/open-webui:v0.12.5@sha256:03443b8de6b617da9d900edd09b4bf1cb0ddbfdcba6afb42c548336a0b821ded
+image_facts:
+  ghcr.io/open-webui/open-webui:v0.12.5: {user: "0:0", archs: ["amd64", "arm64"], healthcheck: true}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    open-webui: pass
+  checks:
+    stranger-cannot-register: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"users": 1, "chats": 0}
+measured:
+  open-webui:
+    memory: 1.2 GB
+    images: 1.5 GB
+    data: 1.1 GB
+duration: 15m
+by: agent
