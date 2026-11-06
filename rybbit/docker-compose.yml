@@ -117,7 +117,7 @@ services:
   # ClickHouse keeps the page views. It takes its password through the loader, and
   # access management lets Rybbit make its read-only query user at first start.
   rybbit-clickhouse:
-    image: clickhouse/clickhouse-server:26.3.62.3
+    image: clickhouse/clickhouse-server:26.10.3.7
     restart: unless-stopped
     entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
     command:
