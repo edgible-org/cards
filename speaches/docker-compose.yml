@@ -1,0 +1,26 @@
+# Compose file for the speaches card: speech to text and text to speech. The host port comes from card.env.
+# Speaches listens on 127.0.0.1 only; Edgible's api-key and org checks are what keep strangers out. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+# An app on the same machine can skip Edgible and call http://127.0.0.1:<SPEACHES_PORT>/v1, or
+# http://speaches:8000/v1 on a shared Compose network.
+
+name: speaches
+
+services:
+  speaches:
+    image: ${SPEACHES_IMAGE:-ghcr.io/speaches-ai/speaches:0.9.0-rc.3-cpu}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${SPEACHES_PORT:?set SPEACHES_PORT in card.env}:8000"
+    volumes:
+      # Models are downloaded here on request, so one backup holds everything.
+      - speaches-models:/home/ubuntu/.cache/huggingface/hub
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://127.0.0.1:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+volumes:
+  speaches-models: {}
