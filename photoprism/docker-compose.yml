@@ -19,7 +19,7 @@ services:
       - photoprism-secrets:/run/card-secrets
 
   photoprism:
-    image: photoprism/photoprism:260601
+    image: photoprism/photoprism:261029
     restart: unless-stopped
     ports:
       - "127.0.0.1:${PHOTOPRISM_PORT:?set PHOTOPRISM_PORT in card.env}:2342"
