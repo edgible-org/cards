@@ -1,0 +1,65 @@
+# Compose file for the open-webui card.
+# The host port, the model addresses and the admin's email come from card.env. The admin's
+# password and the signing key are made on this machine by open-webui-secrets, at first start.
+# Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+# Open WebUI makes the admin on its first start and closes sign-up then, so nobody can claim it.
+
+name: open-webui
+
+services:
+  # Makes the card's secrets (card.yml secrets:) that do not exist yet, one file each in the
+  # volume open-webui-secrets, then exits. It never changes one that exists.
+  open-webui-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        OPEN_WEBUI_SECRET_KEY=openssl rand -hex 32
+        OPEN_WEBUI_ADMIN_PASSWORD=openssl rand -hex 16
+    volumes:
+      - open-webui-secrets:/run/card-secrets
+
+  open-webui:
+    image: ${OPEN_WEBUI_IMAGE:-ghcr.io/open-webui/open-webui:v0.12.5}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${OPEN_WEBUI_PORT:?set OPEN_WEBUI_PORT in card.env}:8080"
+    # Open WebUI reads these only from the environment, so it starts through the loader.
+    entrypoint: ["sh", "/run/card-secrets/.load"]
+    command:
+      - sh
+      - -c
+      - >-
+        export WEBUI_SECRET_KEY="$$OPEN_WEBUI_SECRET_KEY" WEBUI_ADMIN_PASSWORD="$$OPEN_WEBUI_ADMIN_PASSWORD"
+        && exec bash start.sh
+    environment:
+      WEBUI_URL: ${OPEN_WEBUI_URL:-https://open-webui.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      WEBUI_ADMIN_EMAIL: ${OPEN_WEBUI_ADMIN_EMAIL:-admin@example.com}
+      WEBUI_ADMIN_NAME: Admin
+      ENABLE_SIGNUP: "false"
+      ENABLE_OPENAI_API: ${OPEN_WEBUI_ENABLE_OPENAI_API:-false}
+      OPENAI_API_BASE_URL: ${OPEN_WEBUI_OPENAI_API_BASE_URL:-https://api.openai.com/v1}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OLLAMA_BASE_URL: ${OPEN_WEBUI_OLLAMA_URL:-http://host.docker.internal:11434}
+      SCARF_NO_ANALYTICS: "true"
+      DO_NOT_TRACK: "true"
+      ANONYMIZED_TELEMETRY: "false"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - open-webui-data:/app/backend/data
+      - open-webui-secrets:/run/card-secrets:ro
+    depends_on:
+      open-webui-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+
+volumes:
+  open-webui-data: {}
+  open-webui-secrets: {}
