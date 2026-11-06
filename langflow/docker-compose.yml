@@ -1,0 +1,79 @@
+# Compose file for the langflow card.
+# The host port comes from card.env. The passwords and keys are made on this machine by
+# langflow-secrets, at first start, and never leave it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: langflow
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume langflow-secrets, then exits. It never changes one that exists.
+  langflow-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        LANGFLOW_DB_PASSWORD=openssl rand -hex 16
+        LANGFLOW_SECRET_KEY=openssl rand -hex 32
+        LANGFLOW_ADMIN_PASSWORD=printf 'Lf1!%s' "$(openssl rand -hex 12)"
+    volumes:
+      - langflow-secrets:/run/card-secrets
+
+  langflow:
+    image: langflowai/langflow:1.11.0
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${LANGFLOW_PORT:?set LANGFLOW_PORT in card.env}:7860"
+    environment:
+      LANGFLOW_DO_NOT_TRACK: "true"
+      LANGFLOW_CONFIG_DIR: /app/langflow
+      # No automatic sign-in, an admin made at start, and any other account made inactive until
+      # the admin turns it on: a stranger on the open hostname cannot get in.
+      LANGFLOW_AUTO_LOGIN: "false"
+      LANGFLOW_SUPERUSER: admin
+      LANGFLOW_NEW_USER_IS_ACTIVE: "false"
+    # Langflow reads its settings from the environment, so it starts through the loader, which
+    # sets them from the secret files and then runs the command.
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
+    command:
+      - >-
+        export LANGFLOW_SECRET_KEY="$$LANGFLOW_SECRET_KEY"
+        LANGFLOW_SUPERUSER_PASSWORD="$$LANGFLOW_ADMIN_PASSWORD"
+        LANGFLOW_DATABASE_URL="postgresql://langflow:$$LANGFLOW_DB_PASSWORD@langflow-db:5432/langflow"
+        && exec python -m langflow run --host 0.0.0.0 --port 7860
+    volumes:
+      - langflow-secrets:/run/card-secrets:ro
+      - langflow-data:/app/langflow
+    depends_on:
+      langflow-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:7860/health_check', timeout=4).status == 200 else 1)\""]
+      interval: 10s
+      timeout: 6s
+      retries: 24
+      start_period: 90s
+
+  langflow-db:
+    image: postgres:17.11-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: langflow
+      POSTGRES_USER: langflow
+      POSTGRES_PASSWORD_FILE: /run/card-secrets/LANGFLOW_DB_PASSWORD
+    volumes:
+      - langflow-db-data:/var/lib/postgresql/data
+      - langflow-secrets:/run/card-secrets:ro
+    depends_on:
+      langflow-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U langflow -d langflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  langflow-db-data: {}
+  langflow-data: {}
+  langflow-secrets: {}
