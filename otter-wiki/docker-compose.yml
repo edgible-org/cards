@@ -20,7 +20,7 @@ services:
       - otter-wiki-secrets:/run/card-secrets
 
   otter-wiki:
-    image: ${OTTER_WIKI_IMAGE:-redimp/otterwiki:2.26.2}
+    image: ${OTTER_WIKI_IMAGE:-redimp/otterwiki:2.26.3}
     restart: unless-stopped
     ports:
       - "127.0.0.1:${OTTER_WIKI_PORT:?set OTTER_WIKI_PORT in card.env}:80"
