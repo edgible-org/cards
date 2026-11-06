@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: onedev
+  description: OneDev, your own Git forge with code review, issues and CI/CD, with Git over HTTPS and SSH
+  type: app
+  added: 2026-11-05
+  homepage: https://onedev.io
+  license: MIT
+
+applications:
+  - name: onedev
+    what: OneDev web, API, and Git over HTTPS
+    from: 1dev/server:17.1.2
+    database: postgres:17.11-alpine
+    port: 6610
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [none]
+    place: onedev
+
+  - name: onedev-ssh
+    what: Git over SSH, same process as onedev
+    from: 1dev/server:17.1.2
+    port: 22611
+    protocol: tcp
+    subtype: existing
+    published: true
+    authModes: [none]
+    place: onedev
+
+data:
+  volumes:
+    onedev-data:
+      class: irreplaceable
+    onedev-db-data:
+      class: irreplaceable
+      dump:
+        service: onedev-db
+        command: pg_dump -U onedev -Fc onedev
+        restore: pg_restore -U onedev -d onedev --clean
+    onedev-secrets:
+      class: irreplaceable
+  fingerprint:
+    service: onedev-db
+    command: psql -U onedev -d onedev -tAc "select json_build_object('users', (select count(*) from o_user), 'projects', (select count(*) from o_project))"
+
+secrets:
+  ONEDEV_DB_PASSWORD:
+    kind: internal
+    use: password
+    make: openssl rand -hex 16
+    update:
+      service: onedev-db
+      command: psql -U onedev -d onedev -c "ALTER USER onedev PASSWORD '$ONEDEV_DB_PASSWORD'"
+  ONEDEV_ADMIN_PASSWORD:
+    kind: human
+    make: openssl rand -hex 16
+    for: the admin's first sign-in
+
+places:
+  onedev:
+    memory: 1.5 GB
+    disk: 2 GB
+    arch: [amd64, arm64]
+    gpu: none
