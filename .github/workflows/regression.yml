@@ -134,6 +134,12 @@ jobs:
                "card-kit $(git -C card-kit rev-parse --short HEAD)," \
                "edgible $(edgible --version)"
 
+      - name: Sign in to Docker Hub
+        uses: ./cards/.github/actions/docker-hub-sign-in
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          token: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Test ${{ matrix.cards }}
         env:
           CARDS: ${{ matrix.cards }}
@@ -161,7 +167,10 @@ jobs:
 
       - name: Clean up
         if: always()
-        run: rm -rf result
+        run: |
+          rm -rf result
+          # Only the folder the sign-in made: without one, DOCKER_CONFIG is the machine's own.
+          case "${DOCKER_CONFIG:-}" in "${RUNNER_TEMP:-/nonexistent}"/docker-config.*) rm -rf "$DOCKER_CONFIG" ;; esac
 
   collect:
     needs: [plan, test]

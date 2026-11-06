@@ -104,6 +104,12 @@ jobs:
           echo "cards $(git -C cards rev-parse --short HEAD), card-kit $(git -C card-kit rev-parse --short HEAD), edgible $(edgible --version)"
           echo "docker: config ${DOCKER_CONFIG:-unset (~/.docker)}, context $(docker context show 2>&1), credsStore $(jq -r '.credsStore // "none"' "${DOCKER_CONFIG:-$HOME/.docker}/config.json" 2>&1)"
 
+      - name: Sign in to Docker Hub
+        uses: ./cards/.github/actions/docker-hub-sign-in
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          token: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Test ${{ matrix.cards }}
         id: test
         env:
@@ -155,4 +161,7 @@ jobs:
 
       - name: Clean up
         if: always()
-        run: rm -rf result
+        run: |
+          rm -rf result
+          # Only the folder the sign-in made: without one, DOCKER_CONFIG is the machine's own.
+          case "${DOCKER_CONFIG:-}" in "${RUNNER_TEMP:-/nonexistent}"/docker-config.*) rm -rf "$DOCKER_CONFIG" ;; esac

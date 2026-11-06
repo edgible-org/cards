@@ -51,35 +51,10 @@ jobs:
           name: ${{ inputs.from }}
           path: incoming
       - name: Sign in to Docker Hub
-        # Anonymous pulls share a low limit per address. The credentials are written straight into a
-        # config folder for this job, not with docker login: a config with no credentials in it, as an
-        # empty folder is, makes Docker use the Mac's keychain, which a runner's service often cannot
-        # reach, and then every pull and image lookup fails. So the token is checked first, and if it is
-        # not accepted the job keeps the machine's own config, as it did before this step.
-        # The token can only read public images, as an agent-written prepare.sh runs on this machine.
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          if [ -z "$DOCKERHUB_USERNAME" ] || [ -z "$DOCKERHUB_TOKEN" ]; then
-            echo "no Docker Hub secrets: pulling anonymously"; exit 0
-          fi
-          # Through curl's config on stdin, so the token is not on a command line.
-          code=$(printf 'user = "%s:%s"\n' "$DOCKERHUB_USERNAME" "$DOCKERHUB_TOKEN" | curl -s -m 20 -o /dev/null -w '%{http_code}' -K - \
-                 'https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/alpine:pull' || true)
-          if [ "$code" != 200 ]; then
-            echo "::warning::Docker Hub did not accept DOCKERHUB_USERNAME and DOCKERHUB_TOKEN (HTTP $code): pulling anonymously."
-            exit 0
-          fi
-          # A new config folder loses the machine's context and Compose plugin, so both are kept.
-          docker_host=$(docker context inspect --format '{{.Endpoints.docker.Host}}')
-          config=$(mktemp -d "${RUNNER_TEMP:-/tmp}/docker-config.XXXXXX")
-          [ -d "$HOME/.docker/cli-plugins" ] && ln -s "$HOME/.docker/cli-plugins" "$config/cli-plugins"
-          auth=$(printf '%s:%s' "$DOCKERHUB_USERNAME" "$DOCKERHUB_TOKEN" | base64 | tr -d '\n')
-          ( umask 077; printf '{"auths":{"https://index.docker.io/v1/":{"auth":"%s"}}}\n' "$auth" > "$config/config.json" )
-          { echo "DOCKER_CONFIG=$config"; echo "DOCKER_HOST=$docker_host"; } >> "$GITHUB_ENV"
-          echo "signed in to Docker Hub"
+        uses: ./cards/.github/actions/docker-hub-sign-in
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          token: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Check and test the card
         id: test
         env:
@@ -103,7 +78,7 @@ jobs:
           else
             tail -40 ../test.log; result=fail
             # Not the card: a registry's limit, Docker's credential helper, Docker itself, or the platform.
-            if grep -qiE 'pull rate limit|toomanyrequests|error getting credentials|rw layer snapshot not found|cannot connect to the docker daemon|"code": "INTERNAL_ERROR"' ../test.log; then result=infra; fi
+            if grep -qiE 'pull rate limit|toomanyrequests|429 too many requests|error getting credentials|rw layer snapshot not found|cannot connect to the docker daemon|"code": "INTERNAL_ERROR"' ../test.log; then result=infra; fi
           fi
           echo "result=$result" >> "$GITHUB_OUTPUT"
       - name: Keep the tested card and the logs
