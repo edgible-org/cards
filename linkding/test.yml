@@ -1,8 +1,8 @@
-tested: 2026-10-27
+tested: 2026-11-06
 result: pass
-card-kit: "ea4b037"
-edgible-cli: 1.4.12
-files: sha256:e69db8a4dba066ed
+card-kit: "92d5d81"
+edgible-cli: 1.4.29
+files: sha256:7946bfe9eb0c5263
 machine: darwin/arm64, docker 29.4.3
 images:
   - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
@@ -17,11 +17,12 @@ steps:
     linkding: pass
   checks:
     admin-signs-in: pass
+    stranger-cannot-get-in: pass
   teardown: pass
 measured:
   linkding:
-    memory: 188 MB
+    memory: 243 MB
     images: 147 MB
     data: 438 KB
 duration: 3m
-by: ci
+by: agent

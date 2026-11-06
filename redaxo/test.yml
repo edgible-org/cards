@@ -1,8 +1,8 @@
 tested: 2026-11-06
 result: pass
-card-kit: "ad80064"
+card-kit: "92d5d81"
 edgible-cli: 1.4.29
-files: sha256:d114bec7e93cf3cc
+files: sha256:aec2f2ee50a5166c
 machine: darwin/arm64, docker 29.4.3
 images:
   - friendsofredaxo/redaxo:5@sha256:34144244f37dcd410e59437219a4425fab8a506bb4e12cf3892985c127e1cbd3
@@ -17,13 +17,14 @@ steps:
     redaxo-admin: pass
   checks:
     admin-signs-in: pass
+    stranger-cannot-get-in: pass
   fingerprint: pass
   teardown: pass
 fingerprint: {"users": 1, "articles": 0}
 measured:
   redaxo:
-    memory: 244 MB
+    memory: 237 MB
     images: 374 MB
     data: 197 MB
-duration: 5m
+duration: 3m
 by: agent

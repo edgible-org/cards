@@ -1,8 +1,8 @@
-tested: 2026-10-30
+tested: 2026-11-06
 result: pass
-card-kit: "55a2f23"
+card-kit: "92d5d81"
 edgible-cli: 1.4.29
-files: sha256:5d3d5f3593feb960
+files: sha256:9a5d408d635b16f2
 machine: darwin/arm64, docker 29.4.3
 images:
   - domoticz/domoticz:2026.4@sha256:ece392300d055395cac0b4edea4451b31f765ff5339e5597ca77371be8d7e93a
@@ -18,13 +18,14 @@ steps:
     domoticz-app: pass
   checks:
     admin-signs-in: pass
+    stranger-cannot-get-in: pass
   fingerprint: pass
   teardown: pass
 fingerprint: {"users": 1, "devices": 0}
 measured:
   domoticz:
-    memory: 14 MB
+    memory: 51 MB
     images: 146 MB
     data: 2 MB
-duration: 4m
-by: ci
+duration: 3m
+by: agent

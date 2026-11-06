@@ -1,8 +1,8 @@
-tested: 2026-10-29
+tested: 2026-11-06
 result: pass
-card-kit: "747e0c9"
+card-kit: "92d5d81"
 edgible-cli: 1.4.29
-files: sha256:5f9d729dff4f2304
+files: sha256:b6fc340834c37450
 machine: darwin/arm64, docker 29.4.3
 images:
   - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
@@ -18,11 +18,12 @@ steps:
     wordpress: pass
   checks:
     admin-signs-in: pass
+    stranger-cannot-get-in: pass
   teardown: pass
 measured:
   wordpress:
-    memory: 247 MB
+    memory: 326 MB
     images: 377 MB
     data: 292 MB
-duration: 5m
-by: ci
+duration: 4m
+by: agent
