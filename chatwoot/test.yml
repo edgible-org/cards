@@ -1,0 +1,32 @@
+tested: 2026-11-07
+result: pass
+card-kit: "92d5d81"
+edgible-cli: 1.4.29
+files: sha256:3ab47244823cc8cb
+machine: darwin/arm64, docker 29.4.3
+images:
+  - chatwoot/chatwoot:v4.19.1@sha256:a0d571a3a2f78f4fa4b1d7c21a53309c0184068d6021b3664ab37788faef04c1
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - pgvector/pgvector:0.8.1-pg17@sha256:3e8b3adfd27b5707128f60956f62a793c3c9326ea8cfaf0eab7adccb5d700b21
+  - redis:7.4-alpine@sha256:4783bb5c3ecd5a93ce0a779ed2c44d5472043bb2cb7251f5390700748c62e62b
+image_facts:
+  chatwoot/chatwoot:v4.19.1: {user: "root", archs: ["amd64", "arm64"], healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    chatwoot: pass
+  checks:
+    admin-signs-in: pass
+    stranger-cannot-sign-up: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"users": 1, "conversations": 0}
+measured:
+  chatwoot:
+    memory: 1 GB
+    images: 1.7 GB
+    data: 78 MB
+duration: 3m
+by: agent
