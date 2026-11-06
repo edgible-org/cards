@@ -9,6 +9,7 @@
 #   test-1  a fleet machine (label edgible-test): checks the card again, then test-card
 #   fix     the hub, only if test-1 failed: the agent fixes the card from the test's log
 #   test-2  a fleet machine, only after a fix
+#   fix-2, test-3  the same again, if test-2 failed: a fix often uncovers the next problem
 #   finish  GitHub's own runners: the pull request from the test that passed, or an issue
 # The card passes between them as workflow artifacts.
 #
@@ -341,8 +342,71 @@ jobs:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
+  fix-2:
+    # A fix often uncovers the next problem, so a card has a second one.
+    needs: [write, test-2]
+    if: always() && needs.test-2.result == 'success' && needs.test-2.outputs.result == 'fail'
+    runs-on: [self-hosted, hub]
+    timeout-minutes: 120
+    outputs:
+      ready: ${{ steps.check.outputs.ready }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: cards
+      - uses: actions/download-artifact@v4
+        with:
+          name: grow-tested-2
+          path: tested
+      - name: Fix the card from the test's log
+        env:
+          CARD: ${{ needs.write.outputs.card }}
+        run: |
+          set -euo pipefail
+          rm -rf card-kit work agent-home out agent.log check.log
+          git clone -q --depth 1 https://github.com/edgible-org/card-kit.git card-kit
+          mkdir -p work && cp -R cards work/cards
+          cp -R "tested/$CARD" "work/cards/$CARD"
+          cp tested/NEW-CARD.md work/cards/ 2>/dev/null || true
+          # test-card wrote test.yml for the failed run; the fixed card is tested afresh.
+          rm -f "work/cards/$CARD/test.yml"
+          cards/.github/scripts/grow-agent.sh "The $CARD card you made did not pass its test on a real serving device. Fix the card, change nothing outside $CARD/, check it again with ../card-kit/run check-cards --untrusted --before-test $CARD/card.yml, and update NEW-CARD.md if the auth modes or app changed. The end of the test's log: $(tail -150 tested/test.log)"
+      - name: Check the card, and have the agent fix what the checker finds
+        id: check
+        run: cards/.github/scripts/grow-check.sh "${{ needs.write.outputs.card }}" | tee -a "$GITHUB_OUTPUT"
+      - name: Keep the fixed card
+        if: always()
+        env:
+          CARD: ${{ needs.write.outputs.card }}
+        run: |
+          mkdir -p out
+          cp -R "work/cards/$CARD" out/ 2>/dev/null || true
+          cp work/cards/NEW-CARD.md out/ 2>/dev/null || true
+          cp agent.log check.log out/ 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grow-fixed-2
+          path: out/
+          if-no-files-found: ignore
+      - name: Clean up
+        if: always()
+        run: rm -rf work agent-home card-kit out tested agent.log check.log
+
+  test-3:
+    needs: [write, fix-2]
+    if: always() && needs.fix-2.result == 'success' && needs.fix-2.outputs.ready == 'true'
+    uses: ./.github/workflows/grow-test.yml
+    with:
+      card: ${{ needs.write.outputs.card }}
+      from: grow-fixed-2
+      to: grow-tested-3
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
   finish:
-    needs: [write, test-1, fix, test-2]
+    needs: [write, test-1, fix, test-2, fix-2, test-3]
     if: always() && needs.write.result == 'success' && needs.write.outputs.go == 'true'
     runs-on: ubuntu-latest
     steps:
@@ -359,23 +423,24 @@ jobs:
           CARD: ${{ needs.write.outputs.card }}
           TEST1: ${{ needs.test-1.outputs.result }}
           TEST2: ${{ needs.test-2.outputs.result }}
+          TEST3: ${{ needs.test-3.outputs.result }}
           APP: ${{ inputs.app }}
         run: |
           set -euo pipefail
           # The machine could not test the card, which says nothing about the card: no issue, so the
           # app and its category stay open for another night. Failing here stops the night's chain too,
           # as the next card would meet the same limit, and the daily report shows the failed run.
-          if [ "$TEST1" = infra ] || [ "$TEST2" = infra ]; then
+          if [ "$TEST1" = infra ] || [ "$TEST2" = infra ] || [ "$TEST3" = infra ]; then
             echo "::error::The test machine or the platform stopped the test (see test-1 and test-2's logs), so the card was not properly tested. No issue was opened, and the app stays open."
             exit 1
           fi
           gh label create agent-card --repo "$GITHUB_REPOSITORY" --color 5319E7 --description "Made by the nightly grow job" 2>/dev/null || true
           pick=stages/grow-written/pick.json
           # The newest stage that holds each thing: the card that passed, its notes, the last logs.
-          if [ "$TEST2" = pass ]; then passed=stages/grow-tested-2; elif [ "$TEST1" = pass ]; then passed=stages/grow-tested-1; else passed=; fi
+          if [ "$TEST3" = pass ]; then passed=stages/grow-tested-3; elif [ "$TEST2" = pass ]; then passed=stages/grow-tested-2; elif [ "$TEST1" = pass ]; then passed=stages/grow-tested-1; else passed=; fi
           # In the order the stages ran, newest first (not ls, which sorts by name).
           last=; notes=
-          for stage in grow-tested-2 grow-fixed grow-tested-1 grow-written; do
+          for stage in grow-tested-3 grow-fixed-2 grow-tested-2 grow-fixed grow-tested-1 grow-written; do
             [ -z "$last" ] && [ -d "stages/$stage" ] && last=stages/$stage
             [ -z "$notes" ] && [ -f "stages/$stage/NEW-CARD.md" ] && notes=stages/$stage/NEW-CARD.md
           done
