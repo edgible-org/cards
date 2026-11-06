@@ -74,6 +74,13 @@ jobs:
             read -ra ids <<< "$ONLY"
             args=(--only "${ids[@]}" --judge-model sonnet)
           fi
+          # Install tonight's skill as a person would have it: a session can only load an installed
+          # skill, and --add-dir in run-evals gives it the files, not the skill.
+          mkdir -p ~/.claude/skills
+          if [ -e ~/.claude/skills/edgible-cards ] && [ ! -L ~/.claude/skills/edgible-cards ]; then
+            echo "::error::~/.claude/skills/edgible-cards is a real folder, so tonight's skill cannot be linked there"; exit 1
+          fi
+          ln -sfn "$PWD/card-kit/skills/edgible-cards" ~/.claude/skills/edgible-cards
           day=$(date -u +%F)
           # 0: every prompt passed; 1: some failed, which is what the report is for;
           # 2: stopped early, such as at the subscription's usage limit.
