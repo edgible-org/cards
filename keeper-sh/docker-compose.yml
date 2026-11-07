@@ -23,7 +23,7 @@ services:
   # container. Keeper reads its secrets only from the environment, so it starts through the
   # loader, which sets them from the secret files and then runs the image's own /init.
   keeper-sh:
-    image: ${KEEPER_SH_IMAGE:-ghcr.io/ridafkih/keeper-standalone:2.28}
+    image: ${KEEPER_SH_IMAGE:-ghcr.io/ridafkih/keeper-standalone:2.29}
     restart: unless-stopped
     ports:
       - "127.0.0.1:${KEEPER_SH_PORT:?set KEEPER_SH_PORT in card.env}:80"
