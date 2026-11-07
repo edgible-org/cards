@@ -141,16 +141,18 @@ jobs:
             git -c user.name="cards bump-test" -c user.email="actions@github.com" \
               commit -q -m "test.yml for the image bump: $CARDS"
             # Other jobs of this PR may push first.
+            pushed=false
             for try in 1 2 3; do
               git pull -q --rebase origin "$BRANCH"
               if [ -n "$PUSH_TOKEN" ]; then
                 # checkout's stored sign-in would win over the token in the address, so it is cleared for this push.
-                git -c "http.https://github.com/.extraheader=" push -q "https://x-access-token:${PUSH_TOKEN}@github.com/$GITHUB_REPOSITORY.git" "HEAD:$BRANCH" && break
+                git -c "http.https://github.com/.extraheader=" push -q "https://x-access-token:${PUSH_TOKEN}@github.com/$GITHUB_REPOSITORY.git" "HEAD:$BRANCH" && { pushed=true; break; }
               else
-                git push -q origin "HEAD:$BRANCH" && break
+                git push -q origin "HEAD:$BRANCH" && { pushed=true; break; }
               fi
               sleep $((try * 5))
             done
+            [ "$pushed" = true ] || { echo "::error::the test passed, but its test.yml could not be pushed, so this bump cannot merge"; exit 1; }
           fi
           # A push made with the workflow token starts no workflow, so run `cards` on the branch.
           gh workflow run cards.yml --ref "$BRANCH" || true
