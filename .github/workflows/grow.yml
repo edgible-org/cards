@@ -2,7 +2,8 @@
 # skill's needs map, and it is tested on a real serving device. A card that passes becomes
 # a pull request; one that does not becomes an issue saying how far it got.
 # With the repository secret GROW_PR_TOKEN, the pull request opens with that token, so check-cards
-# runs on it, and merges itself when the check passes, with no person reviewing it (Stefano's
+# runs on it. If the automated checks find nothing, it merges itself when check-cards passes, with no
+# person reviewing it; with a warning, such as a public hostname, it waits for a person (Stefano's
 # decision, 2026-11-07). Without the secret, a person merges it. See HOW-IT-WORKS.md.
 #
 # The work is split by what each part needs (see the build fleet's design):
@@ -59,7 +60,7 @@ concurrency:
 
 env:
   MAX_OPEN: 6
-  PER_NIGHT: 5
+  PER_NIGHT: 3
   ATTEMPTS: 3
 
 defaults:
@@ -473,7 +474,7 @@ jobs:
               echo "## What"
               echo
               if [ -n "$pr_secret" ]; then
-                echo "A new app card, \`$CARD\`, made by the nightly grow job for the first gap in the needs map. **An AI agent made this pull request, and it merges itself when check-cards passes, with no person reviewing it.** The checklist below is for looking at it afterwards."
+                echo "A new app card, \`$CARD\`, made by the nightly grow job for the first gap in the needs map. **An AI agent made this pull request.** If the automated checks find nothing, it merges itself once check-cards passes, with no person reviewing it. With a warning, it waits for a person, who reviews it with the checklist below."
               else
                 echo "A new app card, \`$CARD\`, made by the nightly grow job for the first gap in the needs map. **An AI agent made this pull request.** Review it with the checklist below before merging."
               fi
@@ -520,8 +521,9 @@ jobs:
             python3 -m pip install -q pyyaml || true
             python3 .github/scripts/card_verdict.py "$CARD" > ../verdict.md \
               && gh pr comment "$branch" --repo "$GITHUB_REPOSITORY" --body-file ../verdict.md || echo "no automated checks comment"
-            # Merges when check-cards passes. A failure here leaves the pull request for a person.
-            if [ -n "$pr_secret" ]; then
+            # Only a card the automated checks found nothing in merges itself, when check-cards passes.
+            # A warning, a checker that did not run, or a failure here leaves it for a person.
+            if [ -n "$pr_secret" ] && grep -q 'Automated checks: nothing found' ../verdict.md 2>/dev/null; then
               GH_TOKEN=$pr_secret gh pr merge "$branch" --repo "$GITHUB_REPOSITORY" --auto --squash --delete-branch \
                 || echo "::warning::could not turn on auto-merge for $branch"
             fi
