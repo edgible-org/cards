@@ -1,0 +1,56 @@
+# Compose file for the ntfy card.
+# The host port and ORG_LABEL come from card.env. The admin's password is made on this
+# machine by ntfy-secrets, at first start, and never leaves it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+# Then run prepare.sh, which makes the admin, before you publish.
+
+name: ntfy
+
+services:
+  # Makes the admin's password (card.yml secrets:) if it does not exist yet, as a file in the
+  # volume ntfy-secrets, then exits. It never changes it after.
+  ntfy-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        NTFY_ADMIN_PASSWORD=openssl rand -base64 24
+    volumes:
+      - ntfy-secrets:/run/card-secrets
+
+  ntfy:
+    image: binwiederhier/ntfy:v2.37.2
+    restart: unless-stopped
+    command: serve
+    ports:
+      - "127.0.0.1:${NTFY_PORT:?set NTFY_PORT in card.env}:80"
+    environment:
+      NTFY_BASE_URL: ${NTFY_URL:-https://ntfy.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      NTFY_CACHE_FILE: /var/lib/ntfy/cache.db
+      NTFY_ATTACHMENT_CACHE_DIR: /var/lib/ntfy/attachments
+      # Turning on the auth file turns on access control. Nobody may read or publish
+      # to any topic until the admin grants it: each sender and phone gets its own
+      # login or token.
+      NTFY_AUTH_FILE: /var/lib/ntfy/auth.db
+      NTFY_AUTH_DEFAULT_ACCESS: deny-all
+      # Nobody makes their own account on a public hostname.
+      NTFY_ENABLE_SIGNUP: "false"
+      NTFY_ENABLE_LOGIN: "true"
+      # Behind Edgible's gateway: without this, every visitor shares one rate limit.
+      NTFY_BEHIND_PROXY: "true"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:80/v1/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - ntfy-data:/var/lib/ntfy
+      - ntfy-secrets:/run/card-secrets:ro
+    depends_on:
+      ntfy-secrets:
+        condition: service_completed_successfully
+
+volumes:
+  ntfy-data: {}
+  ntfy-secrets: {}
