@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-06T23:00:50+00:00",
+ "generated": "2026-11-07T18:46:32+00:00",
  "repo": "edgible-org/cards",
  "site": "https://cards.edgible.org",
  "jobs": [
@@ -7,10 +7,10 @@
    "workflow": "image-scan",
    "name": "Image scan",
    "state": "ok",
-   "count": 2,
+   "count": 1,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42206573167",
-   "at": "2026-11-06T10:57:25Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42363231612",
+   "at": "2026-11-07T10:16:12Z"
   },
   {
    "workflow": "skill-evals",
@@ -18,26 +18,26 @@
    "state": "ok",
    "count": 2,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42283927261",
-   "at": "2026-11-06T19:55:50Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42398981015",
+   "at": "2026-11-07T17:59:20Z"
   },
   {
    "workflow": "grow",
    "name": "Grow",
    "state": "ok",
-   "count": 10,
+   "count": 8,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42300246534",
-   "at": "2026-11-06T21:52:24Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42399634542",
+   "at": "2026-11-07T18:06:53Z"
   },
   {
    "workflow": "regression",
    "name": "Cards regression",
-   "state": "fail",
-   "count": 10,
+   "state": "ok",
+   "count": 3,
    "failed": 1,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42286401581",
-   "at": "2026-11-06T20:12:48Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42399640570",
+   "at": "2026-11-07T18:06:57Z"
   },
   {
    "workflow": "site",
@@ -45,57 +45,33 @@
    "state": "ok",
    "count": 10,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42308808338",
-   "at": "2026-11-06T23:00:11Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42402894400",
+   "at": "2026-11-07T18:45:54Z"
   }
  ],
  "cards": {
   "total": 66,
-  "with_status": 59,
-  "passing": 57,
-  "failing": [
-   "mediamtx",
-   "otter-wiki"
-  ],
-  "tested_24h": 35,
+  "with_status": 63,
+  "passing": 63,
+  "failing": [],
+  "tested_24h": 37,
   "oldest": [
-   "teamdesk",
-   10
+   "canary",
+   11
   ],
   "no_test_yet": [
    "accounts",
    "assistant",
-   "chatwoot",
-   "grafana-mcp",
-   "langflow",
-   "open-webui",
    "website"
   ]
  },
- "regression_issues": [
-  {
-   "number": 389,
-   "title": "Regression: otter-wiki fails",
-   "url": "https://github.com/edgible-org/cards/issues/389",
-   "days": 0
-  },
-  {
-   "number": 388,
-   "title": "Regression: mediamtx fails",
-   "url": "https://github.com/edgible-org/cards/issues/388",
-   "days": 0
-  }
- ],
+ "regression_issues": [],
  "images": {
-  "cards_with_fixable": 53,
+  "cards_with_fixable": 62,
   "worst": [
    {
-    "card": "photoprism",
-    "count": 612
-   },
-   {
     "card": "frigate",
-    "count": 287
+    "count": 288
    },
    {
     "card": "linkding",
@@ -103,19 +79,82 @@
    },
    {
     "card": "immich",
-    "count": 171
+    "count": 172
    },
    {
     "card": "passbolt",
-    "count": 165
+    "count": 166
+   },
+   {
+    "card": "langflow",
+    "count": 157
    }
   ],
-  "scanned": 78
+  "scanned": 83
  },
- "queue": [],
- "card_kit_prs": [],
+ "queue": [
+  {
+   "number": 406,
+   "title": "New app card: ntfy",
+   "url": "https://github.com/edgible-org/cards/pull/406",
+   "kind": "new card",
+   "state": "review",
+   "why": "checks: 1 to look at. its test passed on a device; read the card, then merge or close"
+  },
+  {
+   "number": 402,
+   "title": "Update ghcr.io/ridafkih/keeper-standalone Docker tag to v2.29",
+   "url": "https://github.com/edgible-org/cards/pull/402",
+   "kind": "image bump",
+   "state": "hold",
+   "why": "its test has not finished, or did not pass"
+  },
+  {
+   "number": 400,
+   "title": "Update ghcr.io/open-webui/open-webui Docker tag to v0.13.0",
+   "url": "https://github.com/edgible-org/cards/pull/400",
+   "kind": "image bump",
+   "state": "hold",
+   "why": "its test has not finished, or did not pass"
+  },
+  {
+   "number": 399,
+   "title": "Update pgvector/pgvector Docker tag to v0.8.7",
+   "url": "https://github.com/edgible-org/cards/pull/399",
+   "kind": "image bump",
+   "state": "hold",
+   "why": "its test has not finished, or did not pass"
+  },
+  {
+   "number": 396,
+   "title": "Update owncloud/ocis Docker tag to v8.2.3",
+   "url": "https://github.com/edgible-org/cards/pull/396",
+   "kind": "image bump",
+   "state": "hold",
+   "why": "its test has not finished, or did not pass"
+  },
+  {
+   "number": 395,
+   "title": "Update ghcr.io/berriai/litellm Docker tag to v1.108.2",
+   "url": "https://github.com/edgible-org/cards/pull/395",
+   "kind": "image bump",
+   "state": "hold",
+   "why": "its test has not finished, or did not pass"
+  }
+ ],
+ "card_kit_prs": [
+  {
+   "number": 238,
+   "title": "Needs map: add merged agent-made cards",
+   "url": "https://github.com/edgible-org/card-kit/pull/238"
+  }
+ ],
  "grow": {
   "made": [
+   {
+    "title": "New app card: ntfy",
+    "url": "https://github.com/edgible-org/cards/pull/406"
+   },
    {
     "title": "New app card: langflow",
     "url": "https://github.com/edgible-org/cards/pull/387"
@@ -131,59 +170,15 @@
    {
     "title": "New app card: chatwoot",
     "url": "https://github.com/edgible-org/cards/pull/384"
-   },
-   {
-    "title": "New app card: hi-events",
-    "url": "https://github.com/edgible-org/cards/pull/366"
-   },
-   {
-    "title": "New app card: onedev",
-    "url": "https://github.com/edgible-org/cards/pull/362"
-   },
-   {
-    "title": "New app card: mediamtx",
-    "url": "https://github.com/edgible-org/cards/pull/358"
-   },
-   {
-    "title": "New app card: localai",
-    "url": "https://github.com/edgible-org/cards/pull/357"
-   },
-   {
-    "title": "New app card: speaches",
-    "url": "https://github.com/edgible-org/cards/pull/356"
-   },
-   {
-    "title": "New app card: seatsurfing",
-    "url": "https://github.com/edgible-org/cards/pull/354"
-   },
-   {
-    "title": "New app card: activepieces",
-    "url": "https://github.com/edgible-org/cards/pull/351"
-   },
-   {
-    "title": "New app card: redaxo",
-    "url": "https://github.com/edgible-org/cards/pull/350"
-   },
-   {
-    "title": "New app card: rybbit",
-    "url": "https://github.com/edgible-org/cards/pull/346"
    }
   ],
   "could_not_make": [
    {
-    "title": "App request: OpenSlides",
-    "url": "https://github.com/edgible-org/cards/issues/365"
-   },
-   {
-    "title": "App request: hi-events",
-    "url": "https://github.com/edgible-org/cards/issues/355"
-   },
-   {
-    "title": "App request: redaxo",
-    "url": "https://github.com/edgible-org/cards/issues/347"
+    "title": "App request: syncthing",
+    "url": "https://github.com/edgible-org/cards/issues/403"
    }
   ],
-  "agent_prs_open": 0
+  "agent_prs_open": 1
  },
  "upstream": {
   "draft": 11
@@ -406,5 +401,5 @@
   }
  ],
  "skill_evals_report": "https://github.com/edgible-org/cards/issues/17",
- "summary": "Last night the cards regression tested 35 cards, and mediamtx and otter-wiki failed; the grow job added 13 new cards but could not make three requested apps (OpenSlides, hi-events, and redaxo). Nothing needs you tonight, since the two failing issues close themselves if they pass on the next run. The one thing that needs you is deciding on the three app requests: pick them up or close them."
+ "summary": "Last night all 37 tested cards passed the regression, four new cards were added (chatwoot, grafana-mcp, langflow, open-webui), and the grow job succeeded on every run except that it could not make a card for the syncthing request. The one thing that needs you is that syncthing request: pick it up or close it."
 }
