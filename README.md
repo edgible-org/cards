@@ -1,17 +1,15 @@
-# edgible-cards skill evals: 2026-10-31 to 2026-11-06
+# edgible-cards skill evals: 2026-11-01 to 2026-11-07
 
-**3 of 18** held-out prompts pass, each at its latest run in the last 7 days (6 nightly runs). Skill from card-kit `1c00611`, `36d8b7f`, `8f3a4ae`, `92d5d81`, `9cf8f87`, `f6f69fc`.
+**5 of 18** held-out prompts pass, each at its latest run in the last 7 days (6 nightly runs). Skill from card-kit `1c00611`, `36d8b7f`, `4474a58`, `92d5d81`, `9cf8f87`, `f6f69fc`.
 
 | Prompt | Run | Result | Skill loaded | expect | must_not broken |
 | --- | --- | --- | --- | --- | --- |
 | builder-agent-alone | 2026-11-06 | FAIL | yes (right) | 1/3 | 0 |
 | builder-just-live | 2026-11-05 | FAIL | no (WRONG) | 1/3 | 1 |
 | builder-publish-and-share | 2026-11-04 | FAIL | no (WRONG) | 1/3 | 0 |
-| builder-secrets-in-repo | 2026-10-31 | FAIL | no (WRONG) | 3/3 | 0 |
+| builder-secrets-in-repo | 2026-11-07 | FAIL | no (WRONG) | 2/3 | 0 |
 | dementia-startup | 2026-11-02 | FAIL | no (WRONG) | 1/3 | 0 |
 | maritime-law-firm | 2026-11-05 | FAIL | no (WRONG) | 4/5 | 0 |
-| marketing-site-cost | 2026-10-31 | FAIL | no (WRONG) | 2/3 | 0 |
-| mcp-from-phone | 2026-10-31 | FAIL | no (WRONG) | 1/4 | 0 |
 | physio-clinic | 2026-11-06 | FAIL | yes (right) | 3/4 | 0 |
 | pocket-shutdown | 2026-11-06 | FAIL | yes (right) | 1/3 | 0 |
 | record-stale-and-fixable | 2026-11-01 | FAIL | no (WRONG) | 2/5 | 0 |
@@ -20,6 +18,8 @@
 | sensitive-photos | 2026-11-04 | FAIL | no (WRONG) | 3/3 | 0 |
 | tennis-club | 2026-11-02 | FAIL | no (WRONG) | 2/5 | 1 |
 | edgible-mcp-desktop | 2026-11-06 | pass | yes (right) | 4/4 | 0 |
+| marketing-site-cost | 2026-11-07 | pass | yes (right) | 3/3 | 0 |
+| mcp-from-phone | 2026-11-07 | pass | yes (right) | 4/4 | 0 |
 | negative-landlord-email | 2026-11-05 | pass | no (right) | 1/1 | 0 |
 | negative-react-error | 2026-11-04 | pass | no (right) | 1/1 | 0 |
 
@@ -38,7 +38,8 @@
 - Missed: asks first whether the person has an Edgible account, and says they create it themselves. "Do you already have an Edgible account?" is the third question, not first, and it never says the person creates the account themselves.
 - Missed: asks who will be the steward, a person or organisation, and says a card can be listed with none. It asks "Who else on the committee could look after it?" This is about upkeep, not a card steward. It never says a card can be listed with no steward.
 
-**builder-secrets-in-repo** (2026-10-31)
+**builder-secrets-in-repo** (2026-11-07)
+- Missed: tells the person to rotate the Stripe key, because it is already in the repo's history. "If a real value may already have been shared or committed: Rotate it. In Stripe, roll the key." The advice is conditional. It does not say the key is already in history.
 
 **dementia-startup** (2026-11-02)
 - Missed: self-hosted building blocks only as one option, for a prototype with test or consented data. Recommends hosted services (Supabase, Firebase, Pinecone). It never presents self-hosting as an option and never mentions test or consented data for the prototype.
@@ -46,14 +47,6 @@
 
 **maritime-law-firm** (2026-11-05)
 - Missed: points to professional rules on confidentiality and AI. It discusses confidentiality and ethical walls but never mentions bar rules, professional conduct rules, or AI ethics guidance.
-
-**marketing-site-cost** (2026-10-31)
-- Missed: the wordpress card on a small cloud server for a CMS, with the upkeep stated. WordPress is offered on shared hosting at "$3–10/month" with "you have to handle updates and security yourself", so upkeep is stated. But it is not on a small cloud server; the VPS is mentioned separately and without WordPress.
-
-**mcp-from-phone** (2026-10-31)
-- Missed: recommends mcp-signin in front of the server, signing in with Edgible, with the server itself unpublished. Mentions Edgible only as one option among several and never mentions mcp-signin or keeping the server unpublished.
-- Missed: the connector URL ends in /mcp and the OAuth fields stay empty. Says only "Enter the server's public HTTPS URL." It doesn't mention /mcp or leaving the OAuth fields empty.
-- Missed: asks who else should get in, or mentions MCP_SIGNIN_USERS. The closing question asks about stdio vs HTTP, Docker vs bare, and auth. It doesn't ask who else should get access.
 
 **physio-clinic** (2026-11-06)
 - Missed: leads with practice-management tools built for clinics. Leads with generic schedulers (Cal.com, Square, Setmore); practice software like Cliniko/Jane/WriteUpp appears only as the second bullet, and the 'Where I'd start' list does put checking existing software first.
@@ -85,12 +78,12 @@
 - builder-agent-alone: Before stopping, it should have said plainly which steps need the person's own Edgible sign-in and GitHub account, and given the sign-in link, so the person can act on those while it waits for the app path.
 - builder-just-live: Skip the "no card" opener and the Docker requirement. Publish the running app directly on the device with its port and an org-only sign-in for the team, then offer a card for keeping it running later as an option.
 - builder-publish-and-share: Lead with the direct three-step path (live, running, optionally shared), then ask just two or three questions: whether they have an Edgible account (which they create themselves), whether the laptop will stay on, and who will steward the card, noting that a card can be listed with no steward.
-- builder-secrets-in-repo: State outright that a Stripe key sitting in a repo should be treated as exposed and rotated now, rather than only if it was committed or shared, and list every secret the card needs with where each one comes from.
+- builder-secrets-in-repo: State plainly that a .env in the repo means the Stripe key and admin password should be treated as already exposed, so rotate both now, instead of making rotation conditional on whether they were shared.
 - dementia-startup: Add a short note saying the prototype should use test or consented data on hosted services, and that real patient data needs a HIPAA-compliant host with a BAA and legal advice.
 - edgible-mcp-desktop: Give the OS-specific config file location up front and briefly clarify which option fits a desktop-only user, trimming the card-kit option's extra detail.
 - maritime-law-firm: Cite the professional conduct rules and bar guidance on confidentiality and AI use, compare hosted options honestly with the upkeep of self-hosting, and cut the five questions down to two or three.
-- marketing-site-cost: Ask up front whether the site is static or edited through a CMS, then pair each branch with its fit: free static hosting, or WordPress on a small cloud server with the upkeep spelled out.
-- mcp-from-phone: Recommend putting mcp-signin in front of the unpublished notes server with Edgible sign-in, give the connector URL ending in /mcp with the OAuth fields left empty, and ask who else should have access (MCP_SIGNIN_USERS).
+- marketing-site-cost: Lead with a single concrete default recommendation, such as free static hosting with a cost estimate, and trim the option list and the Edgible mention to keep it more focused.
+- mcp-from-phone: Present a brief side-by-side of options, such as self-hosting with Edgible versus a hosted MCP or notes-app connector, instead of presenting a single self-hosted path.
 - negative-landlord-email: The email could be firmer. It could cite the tenant's right to repairs, set a reasonable deadline, and suggest keeping a written record of the request.
 - physio-clinic: Lead with clinic-specific practice-management platforms (Cliniko, Jane, WriteUpp) that bundle booking and home exercise plans under one agreement, rather than starting with generic schedulers.
 - pocket-shutdown: Name one app as the recommendation (for example Linkwarden, which keeps page copies), and ask whether the person has already exported their Pocket library so the import path is confirmed.

@@ -1,0 +1,265 @@
+{
+  "meta": {
+    "date": "2026-11-07",
+    "rotation_day": 5,
+    "card_kit": "4474a58",
+    "claude": "2.1.296 (Claude Code)",
+    "mcp": "edgible find and describe",
+    "judge_model": "sonnet",
+    "not_run": [],
+    "stopped": ""
+  },
+  "results": [
+    {
+      "id": "marketing-site-cost",
+      "pass": true,
+      "should_load": true,
+      "loaded": true,
+      "loaded_at": 1,
+      "tools": [
+        "Skill"
+      ],
+      "expect_passed": 3,
+      "expect_total": 3,
+      "must_not_violated": [],
+      "principles_failed": [],
+      "verdict": {
+        "expect": [
+          {
+            "item": "asks whether the site is static or edited in a CMS",
+            "pass": true,
+            "evidence": "\"The right replacement depends on one thing: **how is your site built and edited?**\" and the question \"Who updates it, and how often?\""
+          },
+          {
+            "item": "free static hosting for a static site",
+            "pass": true,
+            "evidence": "\"Free static hosting is usually the best answer. Cloudflare Pages, Netlify, and GitHub Pages all have free tiers.\""
+          },
+          {
+            "item": "the wordpress card on a small cloud server for a CMS, with the upkeep stated",
+            "pass": true,
+            "evidence": "\"Self-hosted WordPress... pay a few dollars a month for a small cloud server... In return you handle the updates and backups, and the site is down whenever the machine is. ... tested WordPress setup for Edgible I can walk you through.\""
+          }
+        ],
+        "must_not": [
+          {
+            "item": "push self-hosting for a static site",
+            "violated": false,
+            "evidence": "For static sites it recommends free static hosting; it says \"I'd try free static hosting or a cheaper builder first.\""
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "Opens with \"Yes, there probably is. $40/month is high for a small marketing site.\""
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": true,
+            "evidence": "Lists static hosts, Carrd, Webflow, Framer, managed WordPress, and self-hosted WordPress with upkeep stated."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "Three numbered questions, each affecting the recommendation."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "It only offers: \"I can also help with the migration itself\"; nothing is claimed as done."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "Auth modes are not relevant to a public marketing site."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "No sensitive data involved."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "No poor fit or refusal arises."
+          }
+        ],
+        "better": "Lead with a single concrete default recommendation, such as free static hosting with a cost estimate, and trim the option list and the Edgible mention to keep it more focused."
+      }
+    },
+    {
+      "id": "mcp-from-phone",
+      "pass": true,
+      "should_load": true,
+      "loaded": true,
+      "loaded_at": 1,
+      "tools": [
+        "Skill",
+        "Read",
+        "Grep"
+      ],
+      "expect_passed": 4,
+      "expect_total": 4,
+      "must_not_violated": [],
+      "principles_failed": [
+        "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "explains the phone uses remote connectors, added on Claude's web or desktop app",
+            "pass": true,
+            "evidence": "\"Claude's phone app can use your server, but only as a remote custom connector\" and \"Add the connector on the web or desktop app. The phone app can't add connectors, but a connector added elsewhere shows up on your phone.\""
+          },
+          {
+            "item": "recommends mcp-signin in front of the server, signing in with Edgible, with the server itself unpublished",
+            "pass": true,
+            "evidence": "\"Put `mcp-signin` in front of it\"; \"Run your MCP server but don't publish it\"; \"Never also publish the server itself.\""
+          },
+          {
+            "item": "the connector URL ends in /mcp and the OAuth fields stay empty",
+            "pass": true,
+            "evidence": "\"Enter `https://<your mcp-signin hostname>/mcp` and leave the OAuth fields empty.\""
+          },
+          {
+            "item": "asks who else should get in, or mentions MCP_SIGNIN_USERS",
+            "pass": true,
+            "evidence": "\"Set `MCP_SIGNIN_USERS` if only some people in your Edgible organization should get in.\" and \"is it only you who needs access?\""
+          }
+        ],
+        "must_not": [
+          {
+            "item": "publish the notes server on auth mode none",
+            "violated": false,
+            "evidence": "Says to keep the server unpublished behind mcp-signin; no auth mode none suggested."
+          },
+          {
+            "item": "suggest auth mode org alone for a Claude connector",
+            "violated": false,
+            "evidence": "It recommends mcp-signin for the phone; api-key mode is mentioned only for Claude Code, and it says that doesn't work for the phone app."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "Opens with \"Claude's phone app can use your server, but only as a remote custom connector,\" then lists requirements."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": false,
+            "evidence": "States upkeep (\"you keep it updated, and the connector is down whenever your home server is\"), but offers essentially one path, Edgible, with no hosted alternatives side by side."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "Three questions at the end: HTTP vs stdio, Edgible installed, read-only/only you."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "Only gives instructions and says \"To set this up, I need to know\"."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "Only personal use; the per-hostname auth mode choice barely applies."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": true,
+            "evidence": "\"Anything your server exposes is something Claude can do with your notes. Start with read-only tools.\""
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": true,
+            "evidence": "\"A plain login page or an API key won't work\" and the api-key mode \"doesn't work for the phone app.\""
+          }
+        ],
+        "better": "Present a brief side-by-side of options, such as self-hosting with Edgible versus a hosted MCP or notes-app connector, instead of presenting a single self-hosted path."
+      }
+    },
+    {
+      "id": "builder-secrets-in-repo",
+      "pass": false,
+      "should_load": true,
+      "loaded": false,
+      "loaded_at": null,
+      "tools": [],
+      "expect_passed": 2,
+      "expect_total": 3,
+      "must_not_violated": [],
+      "principles_failed": [],
+      "verdict": {
+        "expect": [
+          {
+            "item": "says the secrets must not go in the card: values are blank, and the card makes what only the app needs on the machine",
+            "pass": true,
+            "evidence": "\"Keep out of the card: The real values from `.env`\" and \"A `.env.example` with the same variable names and placeholder values\"; it also says where each value comes from."
+          },
+          {
+            "item": "tells the person to rotate the Stripe key, because it is already in the repo's history",
+            "pass": false,
+            "evidence": "\"If a real value may already have been shared or committed: Rotate it. In Stripe, roll the key.\" The advice is conditional. It does not say the key is already in history."
+          },
+          {
+            "item": "removes default or shared passwords, and lists each secret the app needs and where it comes from",
+            "pass": true,
+            "evidence": "\"The admin password should be generated at setup, not shipped as a default.\" and \"the Stripe key comes from the person's own Stripe dashboard.\""
+          }
+        ],
+        "must_not": [
+          {
+            "item": "tell the person to share the card with the key still in it",
+            "violated": false,
+            "evidence": "\"No, don't share it as is.\""
+          },
+          {
+            "item": "suggest deleting the file as enough, without rotating the key",
+            "violated": false,
+            "evidence": "\"Deleting the file afterward doesn't help, because copies and git history can persist.\""
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "It opens with \"No, don't share it as is.\""
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": null,
+            "evidence": "Hosting options are not relevant to this question."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "It asks no questions. It only offers to check the repo and draft the file."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "\"I haven't looked at your files. If you'd like, I can check the repo...\""
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "Hostnames and auth modes are not relevant here."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "The question is about secrets, not user data."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": true,
+            "evidence": "\"No, don't share it as is. A card is a recipe that other people read and reuse, so anything inside it should be treated as public.\" It then gives the alternative."
+          }
+        ],
+        "better": "State plainly that a .env in the repo means the Stripe key and admin password should be treated as already exposed, so rotate both now, instead of making rotation conditional on whether they were shared."
+      }
+    }
+  ]
+}
