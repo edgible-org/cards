@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A coding agent in a box | Edgible cards</title>
+<meta name="description" content="An open-source coding agent with limits you set yourself, on money, on your computer, and on your data, in a virtual machine you can reset in seconds.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/a-coding-agent-in-a-box/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="A coding agent in a box">
+<meta property="og:description" content="An open-source coding agent with limits you set yourself, on money, on your computer, and on your data, in a virtual machine you can reset in seconds.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/a-coding-agent-in-a-box/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=0285f7f6">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../a-coding-agent-in-a-box.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.png" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / a-coding-agent-in-a-box</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#cube"/></svg></span><span>A coding agent in a box</span></h1>
+<p><em>New: tested on a Mac, so <a href="mailto:stefano@edgible.com?subject=Playbook%20feedback">tell us how it goes</a>.</em></p>
+<p>A coding agent is at its most useful when you let it work on its own: write the code, run it, fix what broke, try again. It is also at its most worrying then. It can spend your AI credit in a loop, change files you care about, or send your code somewhere you didn't mean it to go.</p>
+<p>This playbook puts the agent in a box, with three limits you set yourself:</p>
+<ul>
+<li><strong>Money.</strong> The agent never holds your AI provider's key. It gets its own key from your AI gateway, with a budget, say two dollars a month. A runaway loop stops at two dollars, not at your credit card's limit, and you see what every session cost, in real dollars.</li>
+<li><strong>Your computer.</strong> The agent works in a virtual machine, not on your computer. It can't see your files unless you hand them over, and if a session goes badly, you put the box back as it was, in seconds.</li>
+<li><strong>Your data.</strong> By default the code goes to the AI provider you pick. When it mustn't leave your machines, point the agent at a private model instead.</li>
+</ul>
+<p>Everything in the box is open source: <a class="ext" href="https://opencode.ai/" target="_blank" rel="noopener noreferrer">OpenCode<span class="sr-only"> (opens in a new tab)</span></a> for the agent, <a class="ext" href="https://docs.litellm.ai/" target="_blank" rel="noopener noreferrer">LiteLLM<span class="sr-only"> (opens in a new tab)</span></a> for the gateway (the <a class="ext" href="https://github.com/edgible-org/cards/tree/main/litellm" target="_blank" rel="noopener noreferrer">litellm card<span class="sr-only"> (opens in a new tab)</span></a>), Ubuntu, and <a class="ext" href="https://canonical.com/multipass" target="_blank" rel="noopener noreferrer">Multipass<span class="sr-only"> (opens in a new tab)</span></a> for the virtual machine. The examples use DeepSeek for the model, which is inexpensive; any provider the gateway supports works the same way.</p>
+<blockquote>
+<p><strong>What you need</strong></p>
+<ul>
+<li><strong>A computer with 16 GB of memory</strong> or more, and about 30 GB of disk free. The box takes 8 GB while it runs. These steps were tested on a Mac; Multipass also runs on Windows and Linux.</li>
+<li><strong>An AI assistant on that computer,</strong> such as Claude Code or Cursor, to build the box for you. Once the box is built, you use OpenCode inside it.</li>
+<li><strong>An account with an AI provider, and a little credit.</strong> DeepSeek, OpenAI, Anthropic, Google Gemini, Mistral, Groq or OpenRouter will do.</li>
+<li><strong>No Edgible.</strong> The box doesn't need it. <a href="#where-edgible-comes-in">Where Edgible comes in</a> is at the end.</li>
+</ul>
+</blockquote>
+<h2 id="1-make-the-box">1. Make the box</h2>
+<p>Tell your assistant:</p>
+<blockquote>
+<p>Install Multipass if I don't have it, and make an Ubuntu 26.04 virtual machine called opencode-vm, with 8 GB of memory, 4 CPUs and 30 GB of disk. Put Docker, Node and OpenCode in it. Don't share any of my folders with it.</p>
+</blockquote>
+<p>That last sentence matters. A virtual machine sees none of your files unless you share a folder with it, and a shared folder is a door the agent can walk through. Bring code in with <code>git clone</code> instead.</p>
+<h2 id="2-put-the-gateway-in-the-box">2. Put the gateway in the box</h2>
+<blockquote>
+<p>In opencode-vm, set up the litellm card from cards.edgible.org, using its steps up to Start, without Edgible. It should answer only inside the box.</p>
+</blockquote>
+<p>This uses an Edgible card with no Edgible at all: the card is a tested recipe, and publishing it is a separate, optional last step. The gateway answers only inside the box, so nothing outside can reach it. It makes its own passwords as it starts, and keeps them in the box.</p>
+<p>That's the point of a card: a tested recipe anyone can use, with Edgible or without it. Here your assistant reads the card and runs it on its own, and Edgible isn't involved at all.</p>
+<h2 id="3-give-the-gateway-your-ai-providers-key">3. Give the gateway your AI provider's key</h2>
+<p>Your key goes into the gateway's settings, in the box, typed by you: never into a chat with your assistant. Ask:</p>
+<blockquote>
+<p>Where in opencode-vm do I put my DeepSeek key for the gateway?</p>
+</blockquote>
+<p>Then open a terminal on the box (<code>multipass shell opencode-vm</code>), open the file it names, paste your key after <code>DEEPSEEK_API_KEY=</code>, save, and tell your assistant you're done. It restarts the gateway so the key is read, and checks a model answers.</p>
+<h2 id="4-give-the-agent-its-own-key-with-a-budget">4. Give the agent its own key, with a budget</h2>
+<blockquote>
+<p>In opencode-vm, make OpenCode its own gateway key with a budget of two dollars a month, and set OpenCode up to use the gateway's fast and smart models. Don't show me the key.</p>
+</blockquote>
+<p>The agent now asks for <em>fast</em> (everyday work) or <em>smart</em> (harder problems) and never knows which provider answers. You decide what each name means in the gateway, and change it any time, without touching the agent. Your assistant then asks OpenCode one tiny question through the gateway, and checks that the gateway counted what it cost: a fraction of a cent.</p>
+<h2 id="5-save-the-box-as-it-is-now">5. Save the box as it is now</h2>
+<blockquote>
+<p>Stop opencode-vm and save a snapshot of it called clean.</p>
+</blockquote>
+<p>A snapshot is the box as it is right now: the agent, the gateway, your key, nothing else. After a session that went wrong, or to start the next project fresh, put it back:</p>
+<blockquote>
+<p>Put opencode-vm back to its clean snapshot.</p>
+</blockquote>
+<p>Putting it back also takes the gateway back, so it forgets what was spent since. Check the spending first if you want to keep it (next).</p>
+<h2 id="6-use-it-and-see-what-it-cost">6. Use it, and see what it cost</h2>
+<p>Open a terminal on the box, go to your project, and start the agent:</p>
+<pre><code class="language-bash">multipass shell opencode-vm
+git clone https://github.com/you/your-project &amp;&amp; cd your-project
+opencode
+</code></pre>
+<p>Afterwards, ask your assistant:</p>
+<blockquote>
+<p>What has OpenCode spent in opencode-vm's gateway so far?</p>
+</blockquote>
+<p>It answers in dollars, against the budget. When the budget runs out, the gateway refuses the agent's next request, until the next month starts or you raise it.</p>
+<p>For scale: in our test, OpenCode with DeepSeek set up Edgible in the box, published a family wiki, checked it was healthy and took it down again, in 60 requests, for about <strong>one and a half cents</strong>. Most of what an agent sends is the conversation so far, again and again, and DeepSeek charges a tenth of the price for what it has seen before.</p>
+<p><strong>Copying text out of OpenCode.</strong> OpenCode takes over the mouse, so dragging selects text for OpenCode, not for your computer. In the Mac's Terminal, press Cmd+R (View, Allow Mouse Reporting) to turn that off, select and copy, then Cmd+R again. In iTerm2, hold Option while you drag. Pasting with Cmd+V works as usual.</p>
+<h2 id="7-then-put-edgible-in-the-box-too">7. Then put Edgible in the box too</h2>
+<p>The box is also a safe place to try Edgible itself, starting clean every time. Take a snapshot first, then in OpenCode, with the <a class="ext" href="https://github.com/edgible-org/card-kit#install-the-skill" target="_blank" rel="noopener noreferrer">Edgible skill<span class="sr-only"> (opens in a new tab)</span></a> installed (OpenCode won't install a skill when asked, so run its three commands yourself):</p>
+<blockquote>
+<p>Set up Edgible on this computer so I can run my own apps.</p>
+</blockquote>
+<p>We tested this from start to finish: OpenCode set up Edgible in the box, published a private family wiki, and the wiki came back by itself after the box restarted. Edgible needs an account: when it gives you the sign-in link, open it in a private browser window, in case your browser is signed in to another one. When you're done, put the box back to its snapshot (remove the device from your Edgible account first, so it doesn't linger there as offline).</p>
+<h2 id="where-edgible-comes-in">Where Edgible comes in</h2>
+<p>Everything above works without Edgible. Add it when you want the box to reach further:</p>
+<ul>
+<li><strong>One gateway for all your agents.</strong> Run the gateway on a machine that stays on instead of in the box, and publish it with Edgible: every agent you use, on every machine, gets its own key and budget from one place, with one record of what each spent. See <a href="../your-ai-gateway/">Your AI gateway</a>.</li>
+<li><strong>Show what the agent built.</strong> Publish the app it made, behind Edgible's sign-in, and open it on your phone or send it to someone to try. See <a href="../a-home-for-your-apps/">A home for everything you've built</a>.</li>
+<li><strong>A private model that's bigger than your laptop.</strong> Run the model on a computer with a GPU, publish it with Edgible, and add it to the gateway as <em>private</em>: the code never leaves your machines. See <a href="../a-private-model-for-your-agent/">A private model for your agent</a>.</li>
+</ul>
+<h2 id="what-the-box-doesnt-limit">What the box doesn't limit</h2>
+<ul>
+<li><strong>The internet.</strong> The agent can download packages and visit websites from inside the box. The box protects your computer, not the internet from the agent.</li>
+<li><strong>What you hand it.</strong> A key or a password you paste into the agent's chat is the agent's to use. Give it test keys, not your real ones.</li>
+<li><strong>Where the code goes.</strong> With a hosted model, every file the agent reads goes to that provider. Use a private model for code that mustn't.</li>
+</ul>
+<h2 id="what-youve-just-done">What you've just done</h2>
+<p>You have a coding agent you can let loose: it can't spend more than you allowed, it can't touch the rest of your computer, and you can put it back as it was in seconds. Every part of it is open source, and every part is yours, from the agent to the gateway that keeps its bills honest.</p>
+<details>
+<summary>Prefer to do it by hand?</summary>
+<p>On a Mac with <a class="ext" href="https://brew.sh/" target="_blank" rel="noopener noreferrer">Homebrew<span class="sr-only"> (opens in a new tab)</span></a>; on Windows or Linux, install Multipass from <a class="ext" href="https://canonical.com/multipass" target="_blank" rel="noopener noreferrer">canonical.com/multipass<span class="sr-only"> (opens in a new tab)</span></a>.</p>
+<pre><code class="language-bash">brew install --cask multipass
+multipass launch 26.04 --name opencode-vm --memory 8G --cpus 4 --disk 30G
+multipass shell opencode-vm
+</code></pre>
+<p>In the box:</p>
+<pre><code class="language-bash">sudo apt-get update
+sudo apt-get install -y docker.io docker-compose-v2 nodejs npm git curl jq
+sudo usermod -aG docker ubuntu &amp;&amp; newgrp docker
+sudo npm i -g opencode-ai
+
+mkdir -p litellm
+curl -fsSL https://github.com/edgible-org/cards/archive/refs/heads/main.tar.gz \
+  | tar -xz --strip-components=2 -C litellm cards-main/litellm
+nano litellm/card.env        # paste your key after DEEPSEEK_API_KEY=
+docker compose --env-file litellm/card.env -f litellm/docker-compose.yml up -d --wait
+</code></pre>
+<p>Make OpenCode's key, with a two-dollar monthly budget, straight into a file only you can read:</p>
+<pre><code class="language-bash">umask 077; mkdir -p ~/.config/opencode
+docker exec -i litellm-litellm-1 python3 - &gt; ~/.config/opencode/gateway-key &lt;&lt;'PY'
+import json, urllib.request
+mk = open(&quot;/run/card-secrets/LITELLM_MASTER_KEY&quot;).read().strip()
+body = json.dumps({&quot;key_alias&quot;: &quot;opencode&quot;, &quot;max_budget&quot;: 2, &quot;budget_duration&quot;: &quot;30d&quot;}).encode()
+req = urllib.request.Request(&quot;http://127.0.0.1:4000/key/generate&quot;, data=body,
+    headers={&quot;Authorization&quot;: &quot;Bearer &quot; + mk, &quot;Content-Type&quot;: &quot;application/json&quot;})
+print(json.load(urllib.request.urlopen(req))[&quot;key&quot;], end=&quot;&quot;)
+PY
+</code></pre>
+<p>Point OpenCode at the gateway, in <code>~/.config/opencode/opencode.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;$schema&quot;: &quot;https://opencode.ai/config.json&quot;,
+  &quot;provider&quot;: {
+    &quot;gateway&quot;: {
+      &quot;npm&quot;: &quot;@ai-sdk/openai-compatible&quot;,
+      &quot;name&quot;: &quot;My AI gateway&quot;,
+      &quot;options&quot;: {
+        &quot;baseURL&quot;: &quot;http://127.0.0.1:4000/v1&quot;,
+        &quot;apiKey&quot;: &quot;{file:~/.config/opencode/gateway-key}&quot;
+      },
+      &quot;models&quot;: {
+        &quot;fast&quot;: { &quot;name&quot;: &quot;fast&quot;, &quot;limit&quot;: { &quot;context&quot;: 128000, &quot;output&quot;: 8192 } },
+        &quot;smart&quot;: { &quot;name&quot;: &quot;smart&quot;, &quot;limit&quot;: { &quot;context&quot;: 128000, &quot;output&quot;: 32000 } }
+      }
+    }
+  },
+  &quot;model&quot;: &quot;gateway/fast&quot;
+}
+</code></pre>
+<p>Check it, then see what it cost:</p>
+<pre><code class="language-bash">opencode run &quot;Reply with just the word: ready&quot; &lt; /dev/null
+curl -s http://127.0.0.1:4000/key/info -H &quot;Authorization: Bearer $(cat ~/.config/opencode/gateway-key)&quot; \
+  | jq '.info | {spend, max_budget}'
+</code></pre>
+<p>Save the snapshot, and put the box back later, from your computer (not the box):</p>
+<pre><code class="language-bash">multipass stop opencode-vm
+multipass snapshot opencode-vm --name clean
+multipass restore opencode-vm.clean
+</code></pre>
+</details>
+
+</article>
+<p class="md-source"><a href="../a-coding-agent-in-a-box.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-07 from edgible-org/cards 7e6bc1b -->
+</footer>
+</body>
+</html>

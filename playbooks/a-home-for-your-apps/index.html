@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A home for everything you&#x27;ve built | Edgible cards</title>
+<meta name="description" content="Your agent sets you up your own bookmarks app, and every app you&#x27;ve built goes into it, one tap away on your phone and in every browser.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/a-home-for-your-apps/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="A home for everything you&#x27;ve built">
+<meta property="og:description" content="Your agent sets you up your own bookmarks app, and every app you&#x27;ve built goes into it, one tap away on your phone and in every browser.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/a-home-for-your-apps/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=0285f7f6">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../a-home-for-your-apps.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.png" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / a-home-for-your-apps</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#home"/></svg></span><span>A home for everything you've built</span></h1>
+<p><em>Chapter 6 of <a href="../your-own-ai-agent/">Your own AI agent, from anywhere</a>, the finishing touch. New: tested on our own machines, so <a href="mailto:stefano@edgible.com?subject=Playbook%20feedback">tell us how it goes</a>.</em></p>
+<p>By now you have several apps, each with its own address. This chapter gives them a home: your own bookmarks app, set up by your agent, with every app you've built already in it.</p>
+<p>The app is <strong>linkding</strong>, a small, fast bookmark manager. It works in any browser, has browser extensions, and keeps your bookmarks on your machine instead of in one browser company's sync.</p>
+<h2 id="1-ask-your-agent-to-set-it-up">1. Ask your agent to set it up</h2>
+<p>In your agent, on your computer or your phone:</p>
+<blockquote>
+<p>Set me up somewhere to keep my bookmarks.</p>
+</blockquote>
+<p>It suggests linkding, says why, and asks before it sets anything up. It also asks you to confirm that linkding's address is open to anyone: say yes. Linkding has its own sign-in, and only you will have the password; that's also what lets its browser extension and phone apps reach it. At the end, it gives you linkding's address and a one-time password.</p>
+<h2 id="2-sign-in-and-make-it-yours">2. Sign in, and make it yours</h2>
+<p>Open the address, and sign in as <strong>admin</strong> with that password. Then change the password straight away, under <strong>Settings</strong>. Keep it safe: the one you were given isn't shown again. On a phone, watch for the keyboard capitalising the first letter.</p>
+<h2 id="3-let-claude-bookmark-your-apps">3. Let Claude bookmark your apps</h2>
+<p>Linkding needs to let Claude add bookmarks. In linkding, open <strong>Settings</strong>, then <strong>Integrations</strong>, and copy the <strong>REST API</strong> token. Then switch to Claude, on your phone or computer. Keys always go through Claude, your owner's view, never into your agent's chat:</p>
+<blockquote>
+<p>Bookmark my apps in linkding.</p>
+</blockquote>
+<p>Claude gives you a key link: paste the token there, not in the chat. Then it adds a bookmark for each app you visit, tagged <strong>edgible</strong>: your agent, your gateway's admin, the connector's sign-in page, and linkding itself. The addresses meant for apps rather than people stay out, so the list stays useful.</p>
+<h2 id="4-bookmark-something-of-your-own">4. Bookmark something of your own</h2>
+<p>Save your first bookmark of your own: your agent's address is a good one. Then, any time you add apps:</p>
+<blockquote>
+<p>Refresh my app bookmarks.</p>
+</blockquote>
+<p>New apps appear. If you've removed one, Claude tells you its bookmark is out of date, and leaves you to delete it.</p>
+<h2 id="what-youve-just-done">What you've just done</h2>
+<ul>
+<li><strong>Your agent built you an app.</strong> You asked in plain words, it chose a tested recipe, asked first, and set it up on your machine.</li>
+<li><strong>Everything you've built is one tap away,</strong> on your phone and in every browser, under the <strong>edgible</strong> tag.</li>
+<li><strong>Your bookmarks are yours,</strong> on your machine, not in a browser company's account.</li>
+</ul>
+<p>From here, every app you add gets a home too.</p>
+<p>Want nicer addresses, such as <code>links.yourname.com</code>? See <a href="../use-your-own-domain/">Use your own domain</a>. Curious what you've just built, and how it's kept safe? Read <a href="../under-the-hood/">Under the hood</a>.</p>
+<details>
+<summary>Prefer to do it by hand?</summary>
+<p>Linkding is the <a class="ext" href="https://github.com/edgible-org/cards/tree/main/linkding" target="_blank" rel="noopener noreferrer">linkding card<span class="sr-only"> (opens in a new tab)</span></a>: its README has every step. Add each app's address as a bookmark with the tag <code>edgible</code>; your Edgible console lists them all.</p>
+</details>
+<nav class="chapters"><a class="prev" href="../run-it-from-your-phone/"><span>&larr; Previous</span>Run it from your phone</a><a class="next" href="../take-it-all-down/"><span>Next &rarr;</span>Take it all down</a></nav>
+</article>
+<p class="md-source"><a href="../a-home-for-your-apps.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-07 from edgible-org/cards 7e6bc1b -->
+</footer>
+</body>
+</html>

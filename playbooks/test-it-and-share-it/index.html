@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test it and share it | Edgible cards</title>
+<meta name="description" content="Test your card on your own Edgible, open a pull request, and see it listed with who looks after it, so anyone can run your app.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/test-it-and-share-it/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="Test it and share it">
+<meta property="og:description" content="Test your card on your own Edgible, open a pull request, and see it listed with who looks after it, so anyone can run your app.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/test-it-and-share-it/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=0285f7f6">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../test-it-and-share-it.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.png" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / test-it-and-share-it</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#share"/></svg></span><span>Test it and share it</span></h1>
+<p><em>Chapter 2 of <a href="../edgible-for-contributors/">Edgible for Contributors</a>. <em>New: the prompts are still being run end to end, so <a href="mailto:stefano@edgible.com?subject=Playbook%20feedback">tell us how it goes</a>.</em></em></p>
+<p>Before a card reaches the catalog, it's tested on your own Edgible. Then it goes to us as a pull request, we test it again, and it's listed for everyone.</p>
+<blockquote>
+<p><strong>What you need</strong></p>
+<ul>
+<li>The card from <a href="../make-your-app-a-card/">Make your app a card</a>.</li>
+<li>Edgible on a machine of yours, where the test runs. A spare computer or a small virtual machine will do. Nothing of ours is touched.</li>
+<li>A GitHub account, for the pull request.</li>
+</ul>
+</blockquote>
+<h2 id="1-test-it-on-your-own-edgible">1. Test it on your own Edgible</h2>
+<blockquote>
+<p>Test my card end to end.</p>
+</blockquote>
+<p>Your assistant runs the card's whole life on your machine: check, start, publish, verify, and tear down, the same test our nightly run uses. It shows you the result. If something fails, it fixes it and tests again. The result is saved with the card, and goes into your pull request.</p>
+<h2 id="2-decide-who-answers-for-it">2. Decide who answers for it</h2>
+<p>Every card shows who looks after it. Put your GitHub name on yours and it says <strong>Stewarded by you</strong>: you review changes to it, and fix it if its test fails.</p>
+<p>Prefer not to? It can be listed with <strong>No steward</strong>. It's still tested every night, and if its test fails, it's shown dimmed until it passes.</p>
+<h2 id="3-open-the-pull-request">3. Open the pull request</h2>
+<blockquote>
+<p>Share my card: open a pull request to the Edgible cards.</p>
+</blockquote>
+<p>It asks you first, as it does for anything that leaves your machine. Then it opens the pull request from your own copy of the cards, with the test result in it. Read what it wrote: you're the one asking for it to be listed.</p>
+<h2 id="4-what-happens-next">4. What happens next</h2>
+<p>A person at Edgible reads the card and tests it again on our own machines. That's done by hand, so it isn't instant. Once it's merged, it's listed, and the nightly test keeps checking it.</p>
+<h2 id="what-youve-just-done">What you've just done</h2>
+<ul>
+<li><strong>Anyone can run your app now,</strong> with one prompt to their AI, on a machine of their own.</li>
+<li><strong>It's tested every night,</strong> and when it breaks, someone hears about it.</li>
+<li><strong>It's still yours:</strong> your app, your licence, your repository. The card only says how to run it.</li>
+</ul>
+<p>Stuck, or not sure it's ready? <a class="ext" href="https://github.com/edgible-org/cards/issues/new" target="_blank" rel="noopener noreferrer">Open an issue<span class="sr-only"> (opens in a new tab)</span></a> with what you built and where you got to, or write to us on the <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">contact page<span class="sr-only"> (opens in a new tab)</span></a>.</p>
+<details>
+<summary>Prefer to do it by hand?</summary>
+<p>The test is card-kit's <code>test-card</code>, run on the machine with Edgible, from a clone of your fork of <a class="ext" href="https://github.com/edgible-org/cards" target="_blank" rel="noopener noreferrer">edgible-org/cards<span class="sr-only"> (opens in a new tab)</span></a> with card-kit beside it:</p>
+<pre><code class="language-bash">python3 ../card-kit/test-card.py &lt;name&gt; --device &lt;your-device&gt;
+../card-kit/run check-cards --fresh
+</code></pre>
+<p>Then commit the card with the <code>test.yml</code> it wrote, and open the pull request from your fork. The <a class="ext" href="https://github.com/edgible-org/cards/blob/main/CONTRIBUTING.md#add-a-card" target="_blank" rel="noopener noreferrer">contributing guide<span class="sr-only"> (opens in a new tab)</span></a> has every step.</p>
+</details>
+<nav class="chapters"><a class="prev" href="../make-your-app-a-card/"><span>&larr; Previous</span>Make your app a card</a></nav>
+</article>
+<p class="md-source"><a href="../test-it-and-share-it.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-07 from edgible-org/cards 7e6bc1b -->
+</footer>
+</body>
+</html>

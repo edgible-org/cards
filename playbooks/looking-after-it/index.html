@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Looking after it | Edgible cards</title>
+<meta name="description" content="A playbook for the unglamorous essentials of running your own apps: backing them up, restoring them and proving it worked, and, soon, moving, upgrading and recovering.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/looking-after-it/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="Looking after it">
+<meta property="og:description" content="A playbook for the unglamorous essentials of running your own apps: backing them up, restoring them and proving it worked, and, soon, moving, upgrading and recovering.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/looking-after-it/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=0285f7f6">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../looking-after-it.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.png" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / looking-after-it</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#backup"/></svg></span><span>Looking after it</span></h1>
+<p><em>In progress: two chapters so far, more on the way. The tools are tested on our own machines, and the prompts are still being run end to end, so <a href="mailto:stefano@edgible.com?subject=Playbook%20feedback">tell us how it goes</a>.</em></p>
+<p>Running your own apps means you are the one who looks after them. That's not hard, but it is the part nobody shows you. This playbook is that part, in the same way as the others: you tell your AI assistant what you want, and it does the technical work, asking before anything risky.</p>
+<ul>
+<li><strong>Back it up,</strong> so a dead disk or a mistake doesn't lose anything.</li>
+<li><strong>Restore it, and prove it worked.</strong> A backup you haven't restored is a hope. You'll restore one beside the running app and check that it holds the same data.</li>
+<li><strong>Move an app to another machine,</strong> even a different kind of computer, and check nothing was lost.</li>
+<li><strong>Soon:</strong> upgrade it safely, know when something is wrong, and what to do when the machine dies.</li>
+</ul>
+<h2 id="the-road-map">The road map</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Chapter</th>
+<th>You end up with</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><a href="../back-up-an-app/">Back up an app</a></td>
+<td>A backup of an app and its data, and a plain account of what stopped and for how long</td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="../restore-and-prove-it/">Restore it, and prove it</a></td>
+<td>A copy restored from the backup, checked against it, and the way back if you ever need one</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="../move-an-app/">Move an app to another machine</a></td>
+<td>An app and its data on a different machine, checked against a fingerprint, with the old copy kept until you're sure</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Upgrade an app safely</td>
+<td><em>Coming</em>; for now, back up first and ask your AI what the upgrade changes (see <a href="../edgible-for-operations/#upgrading-for-now">Edgible for Operations</a>)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Know when something is wrong</td>
+<td><em>Coming</em></td>
+</tr>
+<tr>
+<td>6</td>
+<td>When the machine dies</td>
+<td><em>Coming</em></td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-youll-need">What you'll need</h2>
+<ul>
+<li><strong><a href="../get-edgible-running/">Get Edgible running</a> done,</strong> and at least one app running from a card on a machine of yours.</li>
+<li><strong>An AI assistant that can run commands on that machine,</strong> such as Claude Code, with the Edgible skill, as in the first chapter.</li>
+<li><strong>Room for the backup:</strong> a few megabytes for a small app, more for photos. Your assistant checks first.</li>
+</ul>
+<p>One honest limit: the backup tools work on apps whose card describes where their data lives (its <code>data:</code> section). Around half of the catalog's cards do, and more are being added. For one that doesn't yet, your assistant does the same job by hand, and says so.</p>
+<nav class="chapters"><a class="next" href="../back-up-an-app/"><span>Next &rarr;</span>Back up an app</a></nav>
+</article>
+<p class="md-source"><a href="../looking-after-it.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-07 from edgible-org/cards 7e6bc1b -->
+</footer>
+</body>
+</html>

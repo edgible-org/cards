@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Private in your gateway | Edgible cards</title>
+<meta name="description" content="Add your private model to your AI gateway as private and private-smart, with a budget and a spending record like any other model.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/private-in-your-gateway/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="Private in your gateway">
+<meta property="og:description" content="Add your private model to your AI gateway as private and private-smart, with a budget and a spending record like any other model.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/private-in-your-gateway/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=0285f7f6">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../private-in-your-gateway.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.png" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / private-in-your-gateway</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#govern"/></svg></span><span>Private in your gateway</span></h1>
+<p><em>Chapter 3 of <a href="../a-private-model-for-your-agent/">A private model for your agent</a>. Draft: <a href="mailto:stefano@edgible.com?subject=Playbook%20feedback">tell us how it goes</a>.</em></p>
+<p>Your <a href="../your-ai-gateway/">AI gateway</a> already offers models by purpose: <code>fast</code>, <code>smart</code>, <code>best</code>. It also has two private slots, <code>private</code> and <code>private-smart</code>, that have been waiting for a model. This chapter fills them with the one on <code>edgible-gpu</code>.</p>
+<p>Here the second machine earns its keep. The gateway runs on <code>edgible-vm</code>. The model runs on <code>edgible-gpu</code>. The gateway calls it by its Edgible address, with the key from chapter 2, and Edgible checks that key on that computer before the request reaches anything.</p>
+<blockquote>
+<p><strong>What you need</strong></p>
+<ul>
+<li><a href="../your-private-model/">Chapter 2</a> done: the model downloaded, and the key stored as <code>ollama</code>.</li>
+<li>Your gateway from the <a href="../your-ai-gateway/">agent playbook</a>, still called <code>ai-gateway</code>.</li>
+</ul>
+</blockquote>
+<h2 id="1-add-ollama-to-the-gateway">1. Add Ollama to the gateway</h2>
+<p>It's the same sentence you used to add a cloud provider in <a href="../your-ai-gateway/">the gateway chapter</a>. In Claude, on your phone or computer, say:</p>
+<blockquote>
+<p>Add my Ollama on edgible-gpu to the AI gateway, with qwen2.5:7b for private and gpt-oss:20b for private-smart.</p>
+</blockquote>
+<p>Name the models you downloaded in chapter 2, so it never guesses. Claude finds your <code>ollama</code> app's address and the stored <code>ollama</code> key, then tells you what it's about to do and asks, something like:</p>
+<blockquote>
+<p>I'll add Ollama, at your ollama address on edgible-gpu: <strong>private</strong> uses qwen2.5:7b and <strong>private-smart</strong> uses gpt-oss:20b. The key goes to the gateway by reference. The gateway restarts and doesn't answer for about a minute. OK?</p>
+</blockquote>
+<p>Say yes. The key goes from your Edgible account to the gateway, and is never shown or written into a file. Your other providers and keys are untouched, and so are the keys and budgets of the agents that use them.</p>
+<p>Only downloaded one model so far? Leave out <code>private-smart</code>, and say so.</p>
+<h2 id="2-see-that-it-answers">2. See that it answers</h2>
+<p>When the gateway is back, Claude has already asked each purpose it changed a tiny question, and reports, in words like these:</p>
+<blockquote>
+<p>Added Ollama. <strong>private</strong> uses qwen2.5:7b and <strong>private-smart</strong> uses gpt-oss:20b. Both answered a test question, from your GPU computer. To change one, say &quot;make private use …&quot;.</p>
+</blockquote>
+<p>You can ask again any time:</p>
+<blockquote>
+<p>Check my AI gateway answers on private.</p>
+</blockquote>
+<p>It sends one tiny question through the gateway to the model on your GPU computer, and tells you which model answered, how long it took, and what it cost. The first answer after a quiet spell takes longer, while the computer loads the model into memory. Try <code>private-smart</code> the same way: the bigger model takes a little longer to load.</p>
+<h2 id="3-see-what-it-costs">3. See what it costs</h2>
+<blockquote>
+<p>What has my AI gateway spent, by model?</p>
+</blockquote>
+<p><code>private</code> and <code>private-smart</code> appear in the list beside the cloud models, with their questions and tokens counted. We give them a token price, about a cent for every hundred thousand tokens, so budgets still work on them, and it rounds to nearly nothing in the report. Their real cost is your electricity.</p>
+<h2 id="whats-different-about-private">What's different about private</h2>
+<p>Two rules, both on purpose:</p>
+<ul>
+<li><strong><code>private</code> never falls back to a cloud model.</strong> If your GPU computer is asleep or off, <code>private</code> doesn't quietly send your question to a cloud provider. It says it can't answer. A fallback would defeat the point.</li>
+<li><strong><code>private-smart</code> falls back to <code>private</code>,</strong> the smaller model on the same computer, and nowhere else.</li>
+</ul>
+<h2 id="what-youve-just-done">What you've just done</h2>
+<p>You've added a model to your gateway that the world never sees:</p>
+<ul>
+<li><strong>It's one more purpose</strong> in the gateway, picked the same way as <code>fast</code> or <code>smart</code>, with the same per-agent budgets and spending record.</li>
+<li><strong>Your agents don't know or care where it runs.</strong> They ask for <code>private</code>, and the gateway sends them to your GPU computer.</li>
+<li><strong>The key is yours to revoke.</strong> If you ever suspect it, delete that one key in Edgible and make another. Nothing else changes.</li>
+</ul>
+<details>
+<summary>Prefer to do it by hand?</summary>
+<p>What Claude does. The gateway is the <a class="ext" href="https://github.com/edgible-org/cards/tree/main/litellm" target="_blank" rel="noopener noreferrer">litellm card<span class="sr-only"> (opens in a new tab)</span></a>; its README describes both private models and the key.</p>
+<ol>
+<li>In the gateway's <code>card.env</code>, set <code>LITELLM_PRIVATE_MODEL=ollama/qwen2.5:7b</code>, <code>LITELLM_PRIVATE_SMART_MODEL=ollama/gpt-oss:20b</code>, and <code>LITELLM_PRIVATE_URL</code> to your <code>ollama</code> app's address, such as <code>https://ollama.&lt;you&gt;.edgible.app</code>.</li>
+<li>Give it the key as <code>OLLAMA_API_KEY</code>, from the stored <code>ollama</code> secret. The gateway sends it as <code>Authorization: Bearer &lt;key&gt;</code>.</li>
+<li>Restart the gateway, and send a test message to <code>private</code> from its admin page.</li>
+</ol>
+</details>
+<nav class="chapters"><a class="prev" href="../your-private-model/"><span>&larr; Previous</span>Your private model</a><a class="next" href="../private-for-your-agent/"><span>Next &rarr;</span>Private for your agent</a></nav>
+</article>
+<p class="md-source"><a href="../private-in-your-gateway.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-07 from edgible-org/cards 7e6bc1b -->
+</footer>
+</body>
+</html>

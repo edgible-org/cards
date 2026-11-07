@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your agent | Edgible cards</title>
+<meta name="description" content="Your own AI agent, OpenClaw, on your machine, using your AI gateway with its own key and budget, behind your Edgible sign-in.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/your-agent/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="Your agent">
+<meta property="og:description" content="Your own AI agent, OpenClaw, on your machine, using your AI gateway with its own key and budget, behind your Edgible sign-in.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/your-agent/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=0285f7f6">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../your-agent.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.png" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / your-agent</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#chat"/></svg></span><span>Your agent</span></h1>
+<p><em>Chapter 4 of <a href="../your-own-ai-agent/">Your own AI agent, from anywhere</a>. New: tested on our own machines, so <a href="mailto:stefano@edgible.com?subject=Playbook%20feedback">tell us how it goes</a>.</em></p>
+<p>Now the agent itself. It's <strong>OpenClaw</strong>, a popular open-source AI agent: it chats, remembers, researches, and uses tools on your behalf. Yours comes with Edgible's tools and skill built in, so it can also look after your apps, asking you first before it changes anything.</p>
+<p>It runs on your machine, uses your AI gateway with <strong>its own key and its own budget</strong>, and only you can open it.</p>
+<blockquote>
+<p><strong>What you need</strong></p>
+<ul>
+<li><a href="../your-own-ai-agent/">Chapters 1 to 3</a> done: Edgible running, Claude connected, and your AI gateway.</li>
+<li><strong>8 GB of memory</strong> on the machine in all. The agent needs about 4 GB on top of the gateway, and with less, it gets stopped mid-answer.</li>
+</ul>
+</blockquote>
+<h2 id="1-ask-claude-to-set-it-up">1. Ask Claude to set it up</h2>
+<p>In Claude, say:</p>
+<blockquote>
+<p>Set up my own AI agent on my edgible-vm, called my-agent. It should use my AI gateway, with a budget of five dollars a month.</p>
+</blockquote>
+<p>Claude does three things, and asks before each:</p>
+<ul>
+<li><strong>Makes the agent's own gateway key,</strong> with its five-dollar budget. The key goes straight into your Edgible account; neither you nor the agent's settings ever show it.</li>
+<li><strong>Sets the agent up</strong> on your machine, with your gateway as its only way to reach an AI model.</li>
+<li><strong>Locks it to you:</strong> the agent's address opens only after you sign in with your Edgible account.</li>
+</ul>
+<p>At the end, it gives you the agent's address.</p>
+<h2 id="2-meet-your-agent">2. Meet your agent</h2>
+<p>Open the address, and sign in with Edgible. You're in OpenClaw: a chat, with your agent on the other side. Say hello:</p>
+<blockquote>
+<p>What can you do for me?</p>
+</blockquote>
+<p>If the page shows <em>&quot;Proxy client attribution is required.&quot;</em>, reload it once. It means a request reached your agent without Edgible's sign-in having said who you are, and it can happen just after the agent starts. If it stays in one browser while another browser works, that browser is holding an old session for the same address, from an earlier agent you ran there, say: clear this site's cookies and data, or open the page in a private window, and sign in again. Nothing is wrong with your agent.</p>
+<p>Its first answers come from <strong>fast</strong>, your gateway's everyday model. The menu by the message box lets you pick another, such as <strong>smart</strong> for harder questions, or <strong>best</strong> when it really matters.</p>
+<h2 id="3-let-it-look-after-your-apps">3. Let it look after your apps</h2>
+<p>Your agent has Edgible's tools, but they need your permission once. Ask it:</p>
+<blockquote>
+<p>Sign in to Edgible.</p>
+</blockquote>
+<p>It shows a link and a short code, as in chapter 1: open the link, check the code, and approve. Then try:</p>
+<blockquote>
+<p>What's running on my Edgible?</p>
+</blockquote>
+<h2 id="4-ask-what-it-has-spent">4. Ask what it has spent</h2>
+<blockquote>
+<p>What have you spent so far?</p>
+</blockquote>
+<p>It answers with its own spending against its budget, and only its own. It can't see what your other agents spend: that view is yours, in Claude.</p>
+<h2 id="what-youve-just-done">What you've just done</h2>
+<p>You have your own AI agent, and it's well brought up:</p>
+<ul>
+<li><strong>It's yours.</strong> It runs on your machine. Its memory, your files and your conversations stay there.</li>
+<li><strong>Only you can open it,</strong> behind your Edgible sign-in. No password of its own to leak, and no ports open.</li>
+<li><strong>It can't run up a bill.</strong> It has its own key and budget on your gateway. At its limit it stops; it never sees your provider keys, and it can't touch other agents' budgets.</li>
+<li><strong>It knows its own spending,</strong> and you see everyone's.</li>
+<li><strong>It asks before it acts</strong> on your apps, every time.</li>
+</ul>
+<p>Most people trying agents give one a provider key and hope. Yours has guardrails from the first message.</p>
+<details>
+<summary>Prefer to do it by hand?</summary>
+<p>What Claude does, in order. The agent is the <a class="ext" href="https://github.com/edgible-org/cards/tree/main/edgible-agent" target="_blank" rel="noopener noreferrer">edgible-agent card<span class="sr-only"> (opens in a new tab)</span></a> in its shared-gateway mode; its README has every step, and our regression runs it as written.</p>
+<ol>
+<li><strong>Make the agent's gateway key</strong> in the gateway's admin page: Keys, Create key, named after the agent, with a budget of 5 dollars per 30 days, and allowed routes <code>/v1/chat/completions</code>, <code>/v1/models</code> and <code>/key/info</code>, so it can't read anyone else's spending.</li>
+<li><strong>On the machine, the edgible-agent card.</strong> In its <code>card.env</code>: <code>COMPOSE_PROFILES</code> empty (no gateway of its own), <code>OPENCLAW_MODEL_URL</code> set to your gateway's API address ending <code>/v1</code>, <code>OPENCLAW_MODEL_KEY</code> to the key from step 1, <code>OPENCLAW_USERS</code> to the email you sign in to Edgible with, and, to let it change apps, <code>EDGIBLE_MCP_ALLOW_WRITE=1</code> with <code>EDGIBLE_MCP_DEVICES</code> set to this machine. Then Check and Start.</li>
+<li><strong>Publish it</strong> on <code>org</code>.</li>
+<li><strong>Sign its Edgible tools in,</strong> once: the README's <code>edgible auth login --no-browser</code> inside its <code>edgible-mcp</code> container, or ask the agent <em>&quot;Sign in to Edgible&quot;</em>.</li>
+</ol>
+</details>
+<nav class="chapters"><a class="prev" href="../your-ai-gateway/"><span>&larr; Previous</span>Your AI gateway</a><a class="next" href="../run-it-from-your-phone/"><span>Next &rarr;</span>Run it from your phone</a></nav>
+</article>
+<p class="md-source"><a href="../your-agent.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-07 from edgible-org/cards 7e6bc1b -->
+</footer>
+</body>
+</html>

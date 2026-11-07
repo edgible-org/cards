@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Under the hood | Edgible cards</title>
+<meta name="description" content="What the AI agent playbook does for you that&#x27;s easy to miss, for experts and the curious: how your data, keys and costs stay under your control.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/under-the-hood/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="Under the hood">
+<meta property="og:description" content="What the AI agent playbook does for you that&#x27;s easy to miss, for experts and the curious: how your data, keys and costs stay under your control.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/under-the-hood/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=0285f7f6">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../under-the-hood.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.png" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / under-the-hood</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#eye"/></svg></span><span>Under the hood</span></h1>
+<p><em>For the experts and the curious, alongside <a href="../your-own-ai-agent/">Your own AI agent, from anywhere</a>.</em></p>
+<p>The playbook reads as a handful of plain sentences to an AI. Behind them, a lot happens that's easy to miss. This page sets it out, so that you, or someone you ask, can judge whether it's done properly. Everything here was built and tested on our own machines; where something isn't done yet, the last section says so.</p>
+<p>The theme is one idea: <strong>keep your data close, with confidence.</strong> Close, because it runs on a machine you control. Confidence, because what's close is also locked down, costed and recoverable.</p>
+<h2 id="where-edgible-comes-in"><span class="ico" aria-hidden="true"><svg><use href="../icons.svg#machine"/></svg></span>Where Edgible comes in</h2>
+<p>Three kinds of thing work together in this playbook. <strong>Open-source apps</strong> do the jobs: OpenClaw the agent, LiteLLM the gateway, linkding the bookmarks. <strong>Our open recipes and skill</strong> (the cards, card-kit and the Edgible skill for AI assistants) set them up the same tested way every time. And <strong>Edgible</strong>, the platform, gives each app a safe way to be reached and run. This is Edgible's part, and what you'd otherwise put together yourself:</p>
+<table>
+<thead>
+<tr>
+<th>What you get</th>
+<th>What Edgible does</th>
+<th>Without Edgible, you'd need</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Apps reachable from anywhere, with no ports opened</td>
+<td>A small agent on your machine connects out to Edgible, which carries each app's traffic in</td>
+<td>A static address or dynamic DNS, open ports on your router, or a VPN or tunnel service you run</td>
+</tr>
+<tr>
+<td>A web address and HTTPS for every app</td>
+<td>Generates each app's address and issues and renews its certificate; your own domain with one CNAME</td>
+<td>A domain, DNS records and a certificate tool for each app</td>
+</tr>
+<tr>
+<td>Sign-in in front of every app</td>
+<td>Edgible's own sign-in, per app: only your organisation, open, or a key; it passes the signed-in person's email to the app and strips any forgery</td>
+<td>An identity server such as Authelia or Authentik, set up for each app</td>
+</tr>
+<tr>
+<td>Keys kept out of files and chats</td>
+<td>Organisation secrets, stored once and handed to apps by reference when they start</td>
+<td>A secrets manager, or keys in settings files on the machine</td>
+</tr>
+<tr>
+<td>Apps described, not hand-built</td>
+<td>Each app is a declaration: what runs, where, how it's reached and with which secrets, applied in one step and changed in place</td>
+<td>Scripts and notes per machine, and remembering what you did</td>
+</tr>
+<tr>
+<td>A fleet you can see and steer</td>
+<td>Your machines and apps in one console and one command line, each machine's agent updating itself and rolling back if an update fails</td>
+<td>Logging in to each machine to check on it</td>
+</tr>
+<tr>
+<td>Moving to another machine</td>
+<td>Starts the app on the new machine, switches its traffic over, then stops the old copy</td>
+<td>Backing up, copying, reconfiguring and re-pointing DNS by hand</td>
+</tr>
+<tr>
+<td>AI that can help, safely</td>
+<td>An official command line and MCP tools that AI assistants use, signed in with a code you approve</td>
+<td>Giving an AI broad access to your machine, or doing it all yourself</td>
+</tr>
+</tbody>
+</table>
+<p>Everything Edgible doesn't do is open and yours: the apps, the recipes and the data. The recipes run without Edgible too, with a reverse proxy of your choosing. Edgible is what makes them reachable, signed-in and steerable without the plumbing.</p>
+<h2 id="1-nothing-exposed-by-default"><span class="ico" aria-hidden="true"><svg><use href="../icons.svg#home"/></svg></span>1. Nothing exposed by default</h2>
+<ul>
+<li><strong>No inbound ports.</strong> Edgible's agent on your machine connects out to Edgible. Nothing on your router or firewall is opened, and your machine's own address is never published.</li>
+<li><strong>Every page sits behind your Edgible sign-in</strong> unless it has to be open: the gateway's admin, the connector's sign-in page and your agent all use it.</li>
+<li><strong>The few open addresses answer only credentials you authorised.</strong> The connector answers only Claude, with a token issued after you signed in and allowed it. The gateway's API answers only keys it issued itself. Linkding is open so its browser extension and phone apps can reach it, behind its own sign-in.</li>
+<li><strong>Your agent trusts only Edgible's sign-in.</strong> OpenClaw runs in trusted-proxy mode: it takes your identity from a header that Edgible's front door sets, and strips from anything a client sends, and admits only the email addresses you named. It trusts that header from one address only, the proxy in front of it.</li>
+</ul>
+<h2 id="2-keys-never-travel-through-chat"><span class="ico" aria-hidden="true"><svg><use href="../icons.svg#lock"/></svg></span>2. Keys never travel through chat</h2>
+<ul>
+<li><strong>Key links.</strong> When a key is needed, Claude gives you a one-time link that works for ten minutes, and you paste the key there. Claude never sees it, and it never sits in a chat history.</li>
+<li><strong>Provider keys are stored once,</strong> as Edgible organisation secrets, and passed to apps by reference when they start. They're never written into a settings file or an app's configuration.</li>
+<li><strong>Passwords are made on your machine,</strong> at the app's first start, by a small helper that never shows them again. The one exception is a first-use password a person needs, shown to you once and meant to be changed at once.</li>
+<li><strong>The gateway's master key is kept by your connector</strong> and shown to nobody, Claude included. Claude asks the connector to make keys and report spending; it never handles the master key itself.</li>
+<li><strong>Logs are treated as secret.</strong> The gateway's own logs record callers' keys, so our tools read only app names, models and numbers from them, and never pass a key on.</li>
+</ul>
+<h2 id="3-least-privilege-by-default"><span class="ico" aria-hidden="true"><svg><use href="../icons.svg#govern"/></svg></span>3. Least privilege, by default</h2>
+<ul>
+<li><strong>Each agent has its own key,</strong> with its own budget, limited to the routes it needs: asking models, listing them, and reading its own record. It can't read other agents' spending or reach the gateway's admin.</li>
+<li><strong>What you see depends on who's asking.</strong> Through Claude, the owner sees every agent's spending by model. An agent sees only its own, and says so.</li>
+<li><strong>The connector may change only the machines you allowed,</strong> and Claude asks before every change: setting up, moving, restarting or removing an app, changing a budget, giving an app your domain.</li>
+<li><strong>Every change is recorded</strong> on your machine: what, when, on which machine, and that you agreed. Ask Claude to show it at any time.</li>
+</ul>
+<h2 id="4-costs-that-cant-run-away"><span class="ico" aria-hidden="true"><svg><use href="../icons.svg#record"/></svg></span>4. Costs that can't run away</h2>
+<ul>
+<li><strong>Every agent has a budget,</strong> and stops at it. The dearest model, <code>best</code>, has its own cap on top.</li>
+<li><strong>Backups only go sideways or down.</strong> When a provider fails, the request falls to a cheaper or equal model, never a dearer one.</li>
+<li><strong>Private stays private.</strong> A model on your own machine never falls back to one on the internet.</li>
+<li><strong>You can check the real dollars any time,</strong> by agent and by model, and a test question costs a tiny fraction of a cent.</li>
+</ul>
+<h2 id="5-software-you-can-trust"><span class="ico" aria-hidden="true"><svg><use href="../icons.svg#tested"/></svg></span>5. Software you can trust</h2>
+<ul>
+<li><strong>Exact, tested versions.</strong> Each app runs a pinned version that our regression has set up from scratch, published, checked and torn down.</li>
+<li><strong>Tested where it runs.</strong> We test on the hardware people actually use, ARM included. That's how we found that one LiteLLM release's ARM image held Intel programs: it ran on a Mac only because the Mac quietly emulated them, and failed on real ARM Linux. We moved to a version that works, and <a class="ext" href="https://github.com/BerriAI/litellm/issues/47887" target="_blank" rel="noopener noreferrer">reported it<span class="sr-only"> (opens in a new tab)</span></a>.</li>
+<li><strong>No automatic upgrades.</strong> A new version reaches you only after it has been tested, never because it was released. LiteLLM's own supply-chain incident in March 2026 is the reason it matters.</li>
+<li><strong>Agents are told the house rules.</strong> The Edgible skill tells assistants to ask before risky steps, give honest advice, including when not to self-host, never print a secret, and stop at the first failure rather than work around it.</li>
+</ul>
+<h2 id="6-no-black-box-no-lock-in"><span class="ico" aria-hidden="true"><svg><use href="../icons.svg#recipe"/></svg></span>6. No black box, no lock-in</h2>
+<ul>
+<li><strong>Every step can be done by hand.</strong> Each chapter ends with the same steps without AI, taken from the card READMEs our regression runs exactly as written.</li>
+<li><strong>Open-source apps, on your machine:</strong> OpenClaw, LiteLLM, linkding. Your data is in your machine's volumes, classified so backups and moves know what matters.</li>
+<li><strong>Moving is built in.</strong> An app can move to another machine, data and all, with a check that the data arrived intact.</li>
+<li><strong>Your own domain</strong> for any app, with HTTPS, without interrupting it.</li>
+</ul>
+<h2 id="7-two-machines-one-private-model"><span class="ico" aria-hidden="true"><svg><use href="../icons.svg#machine"/></svg></span>7. Two machines, one private model</h2>
+<p>For <a href="../a-private-model-for-your-agent/">A private model for your agent</a>, which adds a GPU machine to the picture:</p>
+<ul>
+<li><strong>Ollama never faces your network.</strong> It listens on that computer only. What Edgible publishes is a small guard in front of it, which tells Ollama the request came from the computer itself, because Ollama refuses anything else. That's why we don't just open Ollama to the network: it has no sign-in of its own, so everyone on your wifi would be able to use your GPU and change your models.</li>
+<li><strong>A key can use the model, not change it.</strong> The guard passes on asking, chatting and listing models, and refuses downloading, copying, creating and deleting them. Edgible checks the key itself, on that computer, before a request reaches the guard.</li>
+<li><strong>The key is made for one caller and stored once.</strong> The gateway holds it by reference from your Edgible account, never in a file or in chat, and you can end it alone.</li>
+<li><strong><code>private</code> never leaves.</strong> It doesn't fall back to a cloud model, so an asleep computer gives you silence, not a leak. <code>private-smart</code> falls back only to <code>private</code>.</li>
+<li><strong>Each downloaded program is checked</strong> against its publisher's checksum before it is unpacked.</li>
+</ul>
+<h2 id="known-limits"><span class="ico" aria-hidden="true"><svg><use href="../icons.svg#map"/></svg></span>Known limits</h2>
+<p>We'd rather you heard these from us:</p>
+<ul>
+<li>
+<p><strong>The ready-made recipe is for computers with Apple silicon today.</strong> A recipe for Linux with an NVIDIA GPU is planned.</p>
+</li>
+<li>
+<p><strong>We tested two machines on one computer</strong> (a computer with a GPU and a virtual machine on it), not two physical machines on different networks. The path between them is the same Edgible address either way, but we haven't proved it across networks yet.</p>
+</li>
+<li>
+<p><strong>The guard is a workaround.</strong> Edgible can't yet forward a host name of your choosing to an app, which publishing Ollama directly would need, so a small guard does that part. It works, and it adds one more program to keep up to date.</p>
+</li>
+<li>
+<p><strong>A small local model is a less steady agent than a cloud one on long jobs.</strong> A single tool call works, but a long, many-step session drifts. It is a good private reader and writer; give your agent a cloud model for long jobs with many tools.</p>
+</li>
+<li>
+<p><strong>Your agent can't give you key links yet,</strong> so storing a key happens in Claude, not in the agent's chat.</p>
+</li>
+<li>
+<p><strong>A lost first-use password needs a terminal</strong> to recover today. A no-terminal way is planned.</p>
+</li>
+<li>
+<p><strong>Two copies of the same app on one machine</strong> can clash over a port, so for now, one of each per machine.</p>
+</li>
+<li>
+<p><strong>A virtual machine is on only while your computer is.</strong> It's right for trying things out, not for apps other people rely on.</p>
+</li>
+<li>
+<p><strong>Edgible is in public beta.</strong> An account holds twenty apps for now, and when a machine loses its internet connection, its link to Edgible can take a restart to recover.</p>
+</li>
+</ul>
+
+</article>
+<p class="md-source"><a href="../under-the-hood.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-07 from edgible-org/cards 7e6bc1b -->
+</footer>
+</body>
+</html>

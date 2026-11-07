@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Restore it, and prove it | Edgible cards</title>
+<meta name="description" content="Restore a backup as a copy beside your running app, check that it holds the same data, and learn how to put a backup back in place if you ever need to.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/restore-and-prove-it/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="Restore it, and prove it">
+<meta property="og:description" content="Restore a backup as a copy beside your running app, check that it holds the same data, and learn how to put a backup back in place if you ever need to.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/restore-and-prove-it/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=0285f7f6">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../restore-and-prove-it.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.png" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / restore-and-prove-it</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#tested"/></svg></span><span>Restore it, and prove it</span></h1>
+<p><em>Chapter 2 of <a href="../looking-after-it/">Looking after it</a>. <em>New: the tools are tested on our own machines, and the prompts are still being run end to end, so <a href="mailto:stefano@edgible.com?subject=Playbook%20feedback">tell us how it goes</a>.</em></em></p>
+<p>A backup you've never restored is a hope. This chapter turns it into a fact: you restore it beside your running app, without touching the app, and check that it holds the same data.</p>
+<blockquote>
+<p><strong>What you need</strong></p>
+<ul>
+<li><a href="../back-up-an-app/">Chapter 1</a> done: a backup of your app.</li>
+<li>Your AI assistant on the machine, as before.</li>
+</ul>
+</blockquote>
+<h2 id="1-restore-a-copy-beside-the-real-thing">1. Restore a copy, beside the real thing</h2>
+<p>If your backup lives somewhere else, bring the whole folder back to this machine first.</p>
+<blockquote>
+<p>Restore my team wiki's latest backup as a copy beside it, and tell me if it matches.</p>
+</blockquote>
+<p>Your assistant:</p>
+<ul>
+<li><strong>Checks every file</strong> of the backup against its check code first. A damaged file stops everything.</li>
+<li><strong>Starts a copy</strong> of the app under its own name and a free port, so your real app is never touched.</li>
+<li><strong>Checks the copy:</strong> it's running, it answers, and its data has the same fingerprint as the backup.</li>
+</ul>
+<p>It reports something like &quot;4 pages, same as the backup: pass&quot;. Open the copy's address if you like and have a look. This is a restore you can trust.</p>
+<h2 id="2-see-it-catch-a-difference">2. See it catch a difference</h2>
+<p>Change something in your real app, such as adding a page, and ask your assistant:</p>
+<blockquote>
+<p>Check my team wiki against that backup.</p>
+</blockquote>
+<p>It says the data differs: the backup has 4 pages, the app now has 5. That's the fingerprint doing its job: it tells you whether the data in front of you is the data you saved.</p>
+<h2 id="3-put-a-backup-back-if-you-ever-need-to">3. Put a backup back, if you ever need to</h2>
+<p>If you lose something, this is the one that matters:</p>
+<blockquote>
+<p>I deleted pages from my team wiki by mistake. Put it back the way it was in last night's backup.</p>
+</blockquote>
+<p>Because this <strong>replaces what's there now,</strong> your assistant asks first. Before it does anything it also makes a fresh backup of the app as it is, so you can undo the undo. Then it restores, starts the app, and checks the fingerprint, the same way as before.</p>
+<h2 id="4-clean-up-the-copy">4. Clean up the copy</h2>
+<p>When you've looked at the copy, ask your assistant to remove it:</p>
+<blockquote>
+<p>Remove the restored copy of my team wiki.</p>
+</blockquote>
+<h2 id="what-youve-just-done">What you've just done</h2>
+<ul>
+<li><strong>You know your backup works,</strong> because you restored it and checked it, not because it seemed to finish.</li>
+<li><strong>You can get back from a mistake,</strong> with a safety backup taken first.</li>
+<li><strong>You've seen how to compare</strong> an app with a backup at any time.</li>
+</ul>
+<p>Restoring onto a different machine is what a move does. That's <a href="../move-an-app/">the next chapter</a>.</p>
+<details>
+<summary>Prefer to do it by hand?</summary>
+<p>card-kit's <code>restore-card</code> and <code>verify-card</code>, from the Edgible skill. With the backup folder from chapter 1:</p>
+<pre><code class="language-bash"># a copy beside the app, under its own name and a free port
+python3 ~/.card-kit/restore-card.py ~/otter-wiki-backups/&lt;stamp&gt; ~/otter-copy --as otter-copy --dry-run
+python3 ~/.card-kit/restore-card.py ~/otter-wiki-backups/&lt;stamp&gt; ~/otter-copy --as otter-copy
+
+# does the running app hold the same data as the backup?
+python3 ~/.card-kit/verify-card.py ~/otter-wiki --against ~/otter-wiki-backups/&lt;stamp&gt;
+
+# put the backup back over the app (asks first, backs the app up first)
+python3 ~/.card-kit/restore-card.py ~/otter-wiki-backups/&lt;stamp&gt; ~/otter-wiki
+</code></pre>
+<p>Add <code>--dry-run</code> to any of them to see what it would do and change nothing. Remove a copy with <code>docker compose --env-file ~/otter-copy/card.env -f ~/otter-copy/docker-compose.yml down -v</code>.</p>
+</details>
+<nav class="chapters"><a class="prev" href="../back-up-an-app/"><span>&larr; Previous</span>Back up an app</a></nav>
+</article>
+<p class="md-source"><a href="../restore-and-prove-it.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-07 from edgible-org/cards 7e6bc1b -->
+</footer>
+</body>
+</html>

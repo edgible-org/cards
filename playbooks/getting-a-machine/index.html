@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Getting a machine | Edgible cards</title>
+<meta name="description" content="Where to run Edgible if you have no spare computer: a virtual machine on your own computer, or a small cloud server, with your AI assistant doing the setup.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/getting-a-machine/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="Getting a machine">
+<meta property="og:description" content="Where to run Edgible if you have no spare computer: a virtual machine on your own computer, or a small cloud server, with your AI assistant doing the setup.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/getting-a-machine/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=0285f7f6">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../getting-a-machine.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.png" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / getting-a-machine</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#cloud"/></svg></span><span>Getting a machine</span></h1>
+<p>Edgible runs on a computer you control. If you have a spare one, use that. If not, here are the other ways, and your AI assistant can do most of the work for each.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Good for</th>
+<th>Stays on</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A spare computer</strong></td>
+<td>Anything</td>
+<td>If you leave it on</td>
+<td>Free</td>
+</tr>
+<tr>
+<td><strong>A virtual machine on your own computer</strong></td>
+<td>Trying Edgible, learning, testing</td>
+<td>Only while your computer is on and awake</td>
+<td>Free</td>
+</tr>
+<tr>
+<td><strong>A small cloud server</strong></td>
+<td>A website or apps other people rely on</td>
+<td>Always</td>
+<td>A few dollars a month and up</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-edgible-needs">What Edgible needs</h2>
+<p>Whichever you choose, tell your AI these, so it gets them right:</p>
+<ul>
+<li><strong>Ubuntu 24.04 or 26.04,</strong> or a Mac. On Windows, Ubuntu 26.04 in WSL2 is what we suggest first, a virtual machine if you want it kept apart from your own system. WSL2 works, but WSL stops when nothing is using it, so it needs a small scheduled task to stay up, and it stops when Windows sleeps. Your AI sets this up and asks first.</li>
+<li><strong>Memory:</strong> 2 GB for a website, 4 GB for an AI gateway, 8 GB for your own AI agent with its gateway.</li>
+<li><strong>Disk:</strong> 20 to 30 GB free.</li>
+<li><strong>Internet out, and no ports in.</strong> Edgible connects out, so there's nothing to open in a firewall or router. If your AI offers to open a port for Edgible, say no.</li>
+<li><strong>On when you need it.</strong> For apps other people use, a machine that stays on.</li>
+</ul>
+<h2 id="a-virtual-machine-on-your-own-computer">A virtual machine on your own computer</h2>
+<p>A virtual machine is a whole computer running inside yours. We use Multipass, Canonical's free tool for Ubuntu virtual machines, on a Mac, Windows or Linux. In Claude Code on your computer, say:</p>
+<blockquote>
+<p>Create an Ubuntu 26.04 virtual machine with Multipass, named edgible-vm, with 2 CPUs, 8 GB memory and 30 GB disk. Install Multipass first if it isn't here. Don't open any ports.</p>
+</blockquote>
+<p>It takes a few minutes. Then, in <a href="../get-edgible-running/">Get Edgible running</a>, Claude Code stays on your computer and sets up the virtual machine from there. Say this in place of step 3:</p>
+<blockquote>
+<p>Set up Edgible on the Multipass virtual machine named edgible-vm, so I can run my own apps there.</p>
+</blockquote>
+<p>And in step 4:</p>
+<blockquote>
+<p>Is Edgible running on the edgible-vm?</p>
+</blockquote>
+<p>The virtual machine runs while your computer is on and awake. For anything other people rely on, choose a spare computer or a cloud server instead.</p>
+<p><strong>One thing to know about its clock.</strong> When your computer sleeps, the virtual machine stops with it, and can wake hours behind. Edgible then refuses the machine's requests without saying why: an app waits for ever for its certificate, or a sign-in code is rejected. Your AI sets the machine's clock to correct itself when it makes it, so this should be rare. If it ever happens, say:</p>
+<blockquote>
+<p>Check the clock on edgible-vm.</p>
+</blockquote>
+<p>It's a quick fix, and nothing is lost.</p>
+<h2 id="a-small-cloud-server">A small cloud server</h2>
+<p>A server you rent by the month, from Hetzner, DigitalOcean or AWS Lightsail for example. You make the account and pay; your AI walks you through the rest:</p>
+<blockquote>
+<p>Help me create a small Ubuntu 26.04 server at Hetzner with 8 GB memory. Sign-in with an SSH key only, and no inbound ports except SSH. I'll install Edgible on it.</p>
+</blockquote>
+<p>Then, in <a href="../get-edgible-running/">Get Edgible running</a>, say this in place of step 3, with your server's address:</p>
+<blockquote>
+<p>Set up Edgible on my server, which I reach with ssh root@203.0.113.10, so I can run my own apps there.</p>
+</blockquote>
+<p>And in step 4, <em>&quot;Is Edgible running on my server?&quot;</em></p>
+<h2 id="a-spare-computer">A spare computer</h2>
+<p>An old laptop or desktop works well. A Mac can run Edgible as it is: just set it not to sleep. A PC is best wiped and given Ubuntu:</p>
+<blockquote>
+<p>Help me put Ubuntu 26.04 on my old PC, so it can run Edgible all the time. I have a USB stick.</p>
+</blockquote>
+<p>Then follow <a href="../get-edgible-running/">Get Edgible running</a> on that computer, or from your own, as above.</p>
+<h2 id="what-youve-just-done">What you've just done</h2>
+<p>You have a machine for Edgible, without buying anything you didn't need, and your AI did the fiddly parts.</p>
+<ul>
+<li><strong>A virtual machine</strong> is a whole Ubuntu server, free, inside your own computer, and nothing on your computer itself changed. Not sure about it? Say <em>&quot;Delete the edgible-vm&quot;</em>, and it's gone.</li>
+<li><strong>A cloud server or a spare computer</strong> stays on, so it's ready for apps other people rely on.</li>
+<li><strong>Either way, you can change your mind.</strong> Start in a virtual machine, and when other people come to rely on your apps, your AI can move them to a machine that stays on, data and all.</li>
+</ul>
+<nav class="chapters"><a class="next" href="../get-edgible-running/"><span>Next &rarr;</span>Get Edgible running</a></nav>
+</article>
+<p class="md-source"><a href="../getting-a-machine.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-07 from edgible-org/cards 7e6bc1b -->
+</footer>
+</body>
+</html>
