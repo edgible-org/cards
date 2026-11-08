@@ -1,14 +1,15 @@
 # Use cards with your AI
 
-With an AI agent, such as Claude Code, you don't need to know which app you want or how a card works. Describe what you need in your own words. Your agent finds a card that fits, sets it up on your machine, checks that it works, and looks after it afterwards. When no card fits, it builds one with you, and you can share it back so the next person's agent finds it.
+Describe what you need in your own words. The picture is the path.
 
 ![With an AI agent: you describe a need and the agent suggests options from the cards. If a card fits, it deploys it on your machine. If not, it builds a new card with you, and you share it back so the next person finds it](about/ai-loop.svg)
 
 ## What you need
 
-- **An AI agent that runs commands on your machine.** For the first setup, run it on the computer that will run your apps (in Cursor, a local agent, not a cloud one); after that, you can look after your apps from anywhere, including from a chat in the Claude App ([below](#the-claude-app)). We recommend Claude Code, and we've also tested Cursor end to end: on a Windows laptop, it set up Edgible and published an app from two plain requests. OpenCode with an open model (DeepSeek) did the same in a Linux virtual machine, for about two cents; in OpenCode, install the skill by hand first. Codex, in the ChatGPT desktop app on the free plan, set up a clean Mac and published a family wiki that came back by itself after a restart. The skill is in the open Agent Skills format, so it also works with other agents that read skills, and we're measuring how well each one does.
-- **A computer that stays on.** Your agent sets up Edgible on it, and Docker for the cards that need it.
-- **The usual tools first,** if the computer is new. On a Mac: Apple's Command Line Tools, [Homebrew](https://brew.sh) and Docker Desktop. On Windows: WSL2 with Ubuntu. On Linux: Docker and Node.js 20 or later. Most developers' machines have them already; on a clean one they take about 20 minutes, and they are quicker to install before you start than halfway through. Your agent checks for each and asks before installing it.
+- **An AI agent that runs commands on your machine.** For the first setup, choose a local rather than cloud-based agent. Thereafter, you can manage your apps anywhere, including as a chat in the [Claude App](#the-claude-app).
+- **Claude Code (recommend).** Cursor, OpenCode, and Codex are tested too. Other agents that read skills also work, and we're measuring them.
+- **A computer that stays on,** with Docker for the cards that need it.
+- **The usual tools,** if the computer is new. A Mac needs Command Line Tools, [Homebrew](https://brew.sh), and Docker Desktop. Windows needs WSL2 with Ubuntu. Linux needs Docker and Node.js 20 or later. Your agent checks, and asks before installing.
 
 ## Get started
 
@@ -41,13 +42,9 @@ ln -s ~/.card-kit/skills/edgible-cards ~/.claude/skills/edgible-cards
 
 No special phrasing. Talk to it the way you'd talk to a friend who knows self-hosting. [Needs](../needs/) lists every need, and on each page the lines under What people say are ones you can hand to your AI:
 
-- "Pocket is shutting down. I want to keep my saved articles and still read them on my phone." It offers two or three bookmark apps, recommends one, and says how the phone app signs in.
-- "We pay $14 a month for website analytics. Could we run our own?" It points to the umami card, and is honest about whether the saving is worth the upkeep.
-- "Get Uptime Kuma running so I hear when my site goes down." It uses the tested card and puts its choices to you before starting anything.
-- "I want my Ollama models on my Mac's GPU, usable from anywhere." It sets up ollama-osx, behind an API key.
-- "What's running, and is it all healthy?" A short table: each card, its hostnames, and whether each is up.
-- "Gitea won't load on my phone today. What's wrong?" It works from the app outwards, and tells you what it found.
-- "Back up Vaultwarden before I upgrade it." It backs up, upgrades, and checks it still works.
+- "Pocket is shutting down. I want to keep my saved articles and still read them on my phone."
+- "Get Uptime Kuma running so I hear when my site goes down."
+- "What's running, and is it all healthy?"
 
 More, with what a good answer does, in [What to ask](https://github.com/edgible-org/card-kit/blob/main/skills/edgible-cards/EXAMPLES.md).
 
@@ -80,18 +77,27 @@ The skill teaches an agent how to work with cards. The edgible-mcp server gives 
 - **find** searches the cards for a need in your own words, with how well it suits Edgible and how to publish it.
 - **describe** shows one card: its apps, auth modes, minimum machine, and test status.
 - **whats_running** lists your devices and apps, and checks that each hostname answers the way its auth mode says.
-- **With writes allowed:** deploy a card, move, restart or remove an app, add your own domain, and keep keys out of the chat. Every change asks you first, and only on the devices you allow.
+- **With writes allowed:** deploy a card, move, restart or remove an app, add your own domain, and keep keys out of the chat.
 
 There are two ways to connect it:
 
 - **On your own computer**, over stdio, using that computer's `edgible` sign-in. See [card-kit's edgible-mcp](https://github.com/edgible-org/card-kit/tree/main/edgible-mcp#run-it).
-- **From anywhere**, with the [edgible-connector](edgible-connector) card: the server on a machine of yours, with its own sign-in, added as a connector in the Claude App. Claude Code and other clients that send a header can also use the [edgible-mcp](edgible-mcp) card, behind an Edgible API key.
+- **From anywhere**, with the [edgible-connector](edgible-connector) card: the server on a machine of yours, added as a connector in the Claude App. Claude Code and other clients that send a header can use the [edgible-mcp](edgible-mcp) card, behind an API key.
 
 ### The Claude App
 
-Once a computer is set up with Edgible, by an agent that runs commands such as Claude Code, you can choose, deploy, check and remove your apps from a chat in the Claude App, on desktop, web or phone, through the [edgible-connector](edgible-connector) card. Every change asks you first, and only on the devices you allow it. In the chat, find and describe show the cards as a panel, and whats_running shows your apps and devices. Tested in November 2026: Memos chosen and deployed from Claude Desktop's chat. The Claude App cannot set up a computer itself, since it has no way to run commands there: do the first setup with Claude Code or another agent. For the skill in the Claude App, upload [edgible-cards.zip](https://github.com/edgible-org/card-kit/releases/download/skill/edgible-cards.zip) under Customize, Skills; it is rebuilt on every change, and updating means uploading it again.
+Once a computer is set up, you can choose, deploy, check, and remove apps from the Claude App, on desktop, web, or phone, through the [edgible-connector](edgible-connector) card. Every change asks you first. Find and describe show the cards, and whats_running shows your apps.
 
-The skill and the server work well together: the skill knows what to ask and how to set things up, and the tools give it fresh answers without a terminal.
+The first setup still needs an agent that runs commands, such as Claude Code. The Claude App cannot set up a computer itself.
+
+<details>
+<summary>The skill in the Claude App</summary>
+
+<p>Upload <a href="https://github.com/edgible-org/card-kit/releases/download/skill/edgible-cards.zip">edgible-cards.zip</a> under Customize, Skills. It is rebuilt on every change, and updating means uploading it again. Tested in November 2026: Memos chosen and deployed from Claude Desktop's chat.</p>
+
+</details>
+
+The skill knows what to ask, and the tools give it fresh answers without a terminal.
 
 ### What's coming
 
