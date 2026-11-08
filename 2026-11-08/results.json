@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "date": "2026-11-08",
+    "rotation_day": 6,
+    "card_kit": "e23ef0a",
+    "claude": "2.1.296 (Claude Code)",
+    "mcp": "edgible find and describe",
+    "judge_model": "sonnet",
+    "not_run": [
+      "s3-members-area",
+      "record-stale-and-fixable",
+      "update-skill"
+    ],
+    "stopped": "s3-members-area: You've hit your weekly limit \u00b7 resets 10am (UTC)"
+  },
+  "results": []
+}
