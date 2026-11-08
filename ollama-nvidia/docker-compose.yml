@@ -1,0 +1,77 @@
+# Compose file for the ollama-nvidia card.
+# Ollama runs on the machine's NVIDIA GPU, through Docker's nvidia runtime.
+# Both ports listen on 127.0.0.1 only. Edgible publishes the proxy, ollama-nvidia-proxy, on api-key:
+# a key can use models (chat, generate, embeddings, the model list, the OpenAI-style /v1 routes)
+# but cannot pull, create, copy, push or delete one. Do those on this machine, against
+# 127.0.0.1:$OLLAMA_LOCAL_PORT. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: ollama-nvidia
+
+services:
+  ollama-nvidia:
+    image: ${OLLAMA_IMAGE:-ollama/ollama:0.40.15}
+    restart: unless-stopped
+    # The NVIDIA container runtime: the docker snap sets it up itself when the NVIDIA driver is
+    # installed; Docker from apt gets it from NVIDIA's container toolkit (nvidia-ctk runtime configure).
+    runtime: nvidia
+    ports:
+      - "127.0.0.1:${OLLAMA_LOCAL_PORT:?set OLLAMA_LOCAL_PORT in card.env}:11434"
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+      OLLAMA_KEEP_ALIVE: ${OLLAMA_KEEP_ALIVE:-10m}
+    volumes:
+      - ollama-nvidia-models:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 20s
+
+  ollama-nvidia-proxy:
+    image: caddy:2.11.9-alpine
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${OLLAMA_PORT:?set OLLAMA_PORT in card.env}:8080"
+    configs:
+      - source: ollama-nvidia-caddyfile
+        target: /etc/caddy/Caddyfile
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/api/version"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    depends_on:
+      ollama-nvidia:
+        condition: service_healthy
+
+configs:
+  ollama-nvidia-caddyfile:
+    content: |
+      {
+      	admin off
+      	auto_https off
+      }
+      :8080 {
+      	@use path / /api/chat /api/generate /api/embed /api/embeddings /api/tags /api/show /api/ps /api/version /v1/*
+      	handle @use {
+      		reverse_proxy ollama-nvidia:11434 {
+      			header_up Host localhost:11434
+      			flush_interval -1
+      		}
+      	}
+      	handle {
+      		respond "Not available through this address: manage models on the machine itself." 403
+      	}
+      }
+
+volumes:
+  ollama-nvidia-models: {}
