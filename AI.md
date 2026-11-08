@@ -39,7 +39,7 @@ ln -s ~/.card-kit/skills/edgible-cards ~/.claude/skills/edgible-cards
 
 ## Ask in your own words
 
-No special phrasing. Talk to it the way you'd talk to a friend who knows self-hosting:
+No special phrasing. Talk to it the way you'd talk to a friend who knows self-hosting. [Needs](../needs/) lists every need, and on each page the lines under What people say are ones you can hand to your AI:
 
 - "Pocket is shutting down. I want to keep my saved articles and still read them on my phone." It offers two or three bookmark apps, recommends one, and says how the phone app signs in.
 - "We pay $14 a month for website analytics. Could we run our own?" It points to the umami card, and is honest about whether the saving is worth the upkeep.
