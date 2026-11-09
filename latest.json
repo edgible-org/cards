@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-07T18:46:32+00:00",
+ "generated": "2026-11-09T23:02:28+00:00",
  "repo": "edgible-org/cards",
  "site": "https://cards.edgible.org",
  "jobs": [
@@ -9,8 +9,8 @@
    "state": "ok",
    "count": 1,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42363231612",
-   "at": "2026-11-07T10:16:12Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42610580637",
+   "at": "2026-11-09T11:37:58Z"
   },
   {
    "workflow": "skill-evals",
@@ -18,89 +18,82 @@
    "state": "ok",
    "count": 2,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42398981015",
-   "at": "2026-11-07T17:59:20Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42716796023",
+   "at": "2026-11-09T23:00:19Z"
   },
   {
    "workflow": "grow",
    "name": "Grow",
    "state": "ok",
-   "count": 8,
+   "count": 2,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42399634542",
-   "at": "2026-11-07T18:06:53Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42717011283",
+   "at": "2026-11-09T23:01:46Z"
   },
   {
    "workflow": "regression",
    "name": "Cards regression",
-   "state": "ok",
+   "state": "fail",
    "count": 3,
-   "failed": 1,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42399640570",
-   "at": "2026-11-07T18:06:57Z"
+   "failed": 0,
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42717023433",
+   "at": "2026-11-09T23:01:51Z"
   },
   {
    "workflow": "site",
    "name": "Site build",
-   "state": "ok",
+   "state": "running",
    "count": 10,
-   "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42402894400",
-   "at": "2026-11-07T18:45:54Z"
+   "failed": 1,
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42717035235",
+   "at": "2026-11-09T23:01:56Z"
   }
  ],
  "cards": {
-  "total": 66,
-  "with_status": 63,
-  "passing": 63,
+  "total": 68,
+  "with_status": 64,
+  "passing": 64,
   "failing": [],
-  "tested_24h": 37,
+  "tested_24h": 4,
   "oldest": [
    "canary",
-   11
+   13
   ],
   "no_test_yet": [
    "accounts",
    "assistant",
+   "ollama-nvidia",
    "website"
   ]
  },
  "regression_issues": [],
  "images": {
-  "cards_with_fixable": 62,
+  "cards_with_fixable": 64,
   "worst": [
    {
     "card": "frigate",
-    "count": 288
+    "count": 290
    },
    {
     "card": "linkding",
-    "count": 258
+    "count": 261
    },
    {
     "card": "immich",
-    "count": 172
+    "count": 174
    },
    {
     "card": "passbolt",
-    "count": 166
+    "count": 168
    },
    {
     "card": "langflow",
     "count": 157
    }
   ],
-  "scanned": 83
+  "scanned": 85
  },
  "queue": [
-  {
-   "number": 406,
-   "title": "New app card: ntfy",
-   "url": "https://github.com/edgible-org/cards/pull/406",
-   "kind": "new card",
-   "state": "review",
-   "why": "checks: 1 to look at. its test passed on a device; read the card, then merge or close"
-  },
   {
    "number": 402,
    "title": "Update ghcr.io/ridafkih/keeper-standalone Docker tag to v2.29",
@@ -111,7 +104,7 @@
   },
   {
    "number": 400,
-   "title": "Update ghcr.io/open-webui/open-webui Docker tag to v0.13.0",
+   "title": "Update ghcr.io/open-webui/open-webui Docker tag to v0.13.3",
    "url": "https://github.com/edgible-org/cards/pull/400",
    "kind": "image bump",
    "state": "hold",
@@ -135,50 +128,18 @@
   },
   {
    "number": 395,
-   "title": "Update ghcr.io/berriai/litellm Docker tag to v1.108.2",
+   "title": "Update ghcr.io/berriai/litellm Docker tag to v1.108.3",
    "url": "https://github.com/edgible-org/cards/pull/395",
    "kind": "image bump",
    "state": "hold",
    "why": "its test has not finished, or did not pass"
   }
  ],
- "card_kit_prs": [
-  {
-   "number": 238,
-   "title": "Needs map: add merged agent-made cards",
-   "url": "https://github.com/edgible-org/card-kit/pull/238"
-  }
- ],
+ "card_kit_prs": [],
  "grow": {
-  "made": [
-   {
-    "title": "New app card: ntfy",
-    "url": "https://github.com/edgible-org/cards/pull/406"
-   },
-   {
-    "title": "New app card: langflow",
-    "url": "https://github.com/edgible-org/cards/pull/387"
-   },
-   {
-    "title": "New app card: grafana-mcp",
-    "url": "https://github.com/edgible-org/cards/pull/386"
-   },
-   {
-    "title": "New app card: open-webui",
-    "url": "https://github.com/edgible-org/cards/pull/385"
-   },
-   {
-    "title": "New app card: chatwoot",
-    "url": "https://github.com/edgible-org/cards/pull/384"
-   }
-  ],
-  "could_not_make": [
-   {
-    "title": "App request: syncthing",
-    "url": "https://github.com/edgible-org/cards/issues/403"
-   }
-  ],
-  "agent_prs_open": 1
+  "made": [],
+  "could_not_make": [],
+  "agent_prs_open": 0
  },
  "upstream": {
   "draft": 11
@@ -295,6 +256,16 @@
    "image": "neosmemo/memos:0.31.0"
   },
   {
+   "card": "ntfy",
+   "topic": "healthcheck",
+   "image": "binwiederhier/ntfy:v2.37.2"
+  },
+  {
+   "card": "ollama-nvidia",
+   "topic": "healthcheck",
+   "image": "ollama/ollama:0.40.15"
+  },
+  {
    "card": "onedev",
    "topic": "healthcheck",
    "image": "1dev/server:17.1.2"
@@ -401,5 +372,5 @@
   }
  ],
  "skill_evals_report": "https://github.com/edgible-org/cards/issues/17",
- "summary": "Last night all 37 tested cards passed the regression, four new cards were added (chatwoot, grafana-mcp, langflow, open-webui), and the grow job succeeded on every run except that it could not make a card for the syncthing request. The one thing that needs you is that syncthing request: pick it up or close it."
+ "summary": "The card regression tests passed on all four cards tested, no card changed, and 64 of 64 cards are passing at their latest test. The skill evals ran successfully, but only 5 of 16 held-out prompts pass this week, so that low score is worth a look in the full report on issue 17. Nothing needs you today."
 }
