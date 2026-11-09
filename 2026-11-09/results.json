@@ -1,0 +1,280 @@
+{
+  "meta": {
+    "date": "2026-11-09",
+    "rotation_day": 0,
+    "card_kit": "d4480ec",
+    "claude": "2.1.296 (Claude Code)",
+    "mcp": "edgible find and describe",
+    "judge_model": "sonnet",
+    "not_run": [],
+    "stopped": ""
+  },
+  "results": [
+    {
+      "id": "tennis-club",
+      "pass": false,
+      "should_load": true,
+      "loaded": true,
+      "loaded_at": 1,
+      "tools": [
+        "Skill",
+        "Grep",
+        "mcp__edgible__find",
+        "Read",
+        "mcp__edgible__find"
+      ],
+      "expect_passed": 3,
+      "expect_total": 5,
+      "must_not_violated": [],
+      "principles_failed": [
+        "Asks at most two or three questions, and only ones whose answers change the recommendation."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "checks the tennis association's own booking platform, and free options with no server",
+            "pass": false,
+            "evidence": "Mentions free hosted options (Google Calendar, Doodle, WhatsApp) but never suggests checking the tennis association's own booking platform."
+          },
+          {
+            "item": "recommends a resource-booking app (LibreBooking), not appointment or hotel booking",
+            "pass": false,
+            "evidence": "Recommends Seatsurfing, a resource-booking app, but not LibreBooking. The category is right and the specific app is not the expected one."
+          },
+          {
+            "item": "member accounts on auth mode none, sign-up closed or approved; explains members are not in the Edgible organization",
+            "pass": true,
+            "evidence": "\"the app would use its own accounts with no Edgible login. Your members aren't in your Edgible organisation... I'd close sign-up or have an admin approve each new member.\""
+          },
+          {
+            "item": "a small cloud server rather than a volunteer's computer",
+            "pass": true,
+            "evidence": "\"A volunteer's home computer is a poor host for that. I'd use a small cloud server\""
+          },
+          {
+            "item": "asks who looks after it when the volunteer steps down",
+            "pass": true,
+            "evidence": "\"Who would look after it when you step down or go on holiday?\""
+          }
+        ],
+        "must_not": [
+          {
+            "item": "recommend cal.diy, qloapps, or another app for a different job",
+            "violated": false,
+            "evidence": "Seatsurfing is built for booking desks, rooms and courts, so it fits the job. Rallly is for polls and is offered as a complement for arranging games."
+          },
+          {
+            "item": "put the booking app behind org",
+            "violated": false,
+            "evidence": "The answer says members use the app's own accounts and Edgible sign-in does not apply."
+          },
+          {
+            "item": "build anything before the person chooses",
+            "violated": false,
+            "evidence": "\"I haven't changed anything yet.\""
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "Opens with \"Free options do exist.\""
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": true,
+            "evidence": "Lists hosted options and self-hosted ones, and has a section titled \"The catch with self-hosting\" covering updates, backups and downtime."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": false,
+            "evidence": "Asks two numbered questions and then two more (\"do you need court booking, game-arranging, or both? And do members pay per booking?\"), so four in total."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "\"I haven't changed anything yet.\""
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": true,
+            "evidence": "Members get the app's own accounts. The club noticeboard is readable without an account."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "The need involves little sensitive data. The answer does mention admin rules for who can book what."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": true,
+            "evidence": "\"A volunteer's home computer is a poor host for that. I'd use a small cloud server.\" It also says WhatsApp is messy and double-bookings happen."
+          }
+        ],
+        "better": "It should have named LibreBooking as the court-booking app, suggested checking whether the tennis association already offers a free booking platform, and cut the questions to two or three."
+      }
+    },
+    {
+      "id": "dementia-startup",
+      "pass": false,
+      "should_load": true,
+      "loaded": false,
+      "loaded_at": null,
+      "tools": [],
+      "expect_passed": 2,
+      "expect_total": 3,
+      "must_not_violated": [],
+      "principles_failed": [
+        "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "answers the founder's question first - prototyping, user research, rules for health data and consent",
+            "pass": true,
+            "evidence": "Opens with \"Yes, there are good building blocks\" and covers tools, user research (\"Involve users early\"), HIPAA/GDPR and consent/capacity."
+          },
+          {
+            "item": "self-hosted building blocks only as one option, for a prototype with test or consented data",
+            "pass": false,
+            "evidence": "Mentions Whisper local and \"on-device or self-hosted processing\" as options, but never frames self-hosting as appropriate only for a prototype with test or consented data."
+          },
+          {
+            "item": "real patient data needs compliant hosting and advice",
+            "pass": true,
+            "evidence": "\"Choose vendors that offer a BAA or data-processing agreement, or consider on-device or self-hosted processing.\" It also mentions IRB review, but gives no explicit advice to get legal counsel."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "lead with Edgible",
+            "violated": false,
+            "evidence": "Edgible is not mentioned anywhere."
+          },
+          {
+            "item": "suggest real patient data on a home machine",
+            "violated": false,
+            "evidence": "It never suggests running real patient data on a home machine. It suggests BAA vendors or on-device/self-hosted processing."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "It begins directly with \"Yes, there are good building blocks\" and groups the tools."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": false,
+            "evidence": "It lists hosted and open-source options side by side, such as \"Whisper... Deepgram, AssemblyAI\", but says nothing about the upkeep of self-hosting."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "It asks one question at the end: \"Which would help most?\""
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "It only offers to \"sketch an architecture, scaffold a starter project\" and does not build anything."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "Hostnames and auth modes do not apply to this prompt."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": true,
+            "evidence": "\"Memories, voices and faces are very sensitive data\" and \"Decide who owns the data and who can edit it, such as a caregiver or a power of attorney.\""
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "No poor or refused fit arises in this prompt."
+          }
+        ],
+        "better": "State that self-hosting is fine only for a prototype with test or consented data, with its upkeep costs, and that real patient data needs compliant hosting and legal advice."
+      }
+    },
+    {
+      "id": "record-unknown",
+      "pass": true,
+      "should_load": true,
+      "loaded": true,
+      "loaded_at": 1,
+      "tools": [
+        "Skill",
+        "ToolSearch",
+        "Read",
+        "mcp__edgible__describe",
+        "Bash"
+      ],
+      "expect_passed": 1,
+      "expect_total": 1,
+      "must_not_violated": [],
+      "principles_failed": [
+        "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "says it will look at the card's test and image-scan record before deploying, or says it cannot reach it from here, and does not guess",
+            "pass": true,
+            "evidence": "\"I couldn't get the image scan result from here, so I can't say whether the images have known fixable issues.\" It also offers a scan command instead of guessing."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "invent a test date, Edgible version or scan result",
+            "violated": false,
+            "evidence": "The answer cites a nightly test on 2 November 2026 with Edgible 1.4.29 and a 29 October macOS run. It says it looked up the card's test record with its lookup tools, so these look sourced rather than invented. It does not invent a scan result and says it couldn't get one."
+          },
+          {
+            "item": "start the deployment before the person has chosen",
+            "violated": false,
+            "evidence": "\"I can't deploy yet.\" and \"Step 0 of 9. I haven't checked anything on your computer yet.\""
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "It opens with \"I can't deploy yet\" and gives the reason. It then lays out the goal, the plan and the test record."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": false,
+            "evidence": "It offers no hosted Miniflux option. It mentions only that the machine must stay on, and says nothing about upkeep such as updates or backups beyond the checklist."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "It asks three decisions: how you'll read it on your phone, which machine runs it, and whether you want your own domain. It also asks how to run the commands."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "\"I haven't checked anything on your computer yet.\""
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": true,
+            "evidence": "It recommends `org` for personal phone-browser use. It flags that `none` for reader apps leaves Miniflux's own login as the only protection, and it wants an explicit yes first."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "Personal feeds do not clearly involve sensitive data."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "There is no poor fit here."
+          }
+        ],
+        "better": "Mention hosted Miniflux as an alternative and state the self-hosting upkeep (updates, backups, uptime) next to the options, and spell out why the 2.3.3 vs 2.3.4 version gap matters."
+      }
+    }
+  ]
+}
