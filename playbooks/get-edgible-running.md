@@ -68,7 +68,7 @@ Not long ago this took an afternoon with a networking guide: domain names, certi
 
 Edgible is running, and your AI knows how to use it. You're done with this chapter: go back to your playbook, or simply say what you need, in your own words. For example:
 
-> It costs us $40 a month to host our small website. Is there a better way?
+> Our small law firm needs one private place for precedents, and for onboarding new lawyers.
 
 If something goes wrong, tell your AI what you see. The skill knows Edgible's error messages and their fixes.
 

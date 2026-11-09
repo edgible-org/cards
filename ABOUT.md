@@ -34,7 +34,7 @@ Every card's page says this in the open.
 
 ## A person behind every card
 
-Cards don't say whether a person or an AI wrote the app. They show who answers for the card: a steward, or that nobody does. A person reads each card before it is listed.
+Cards don't say whether a person or an AI wrote the app. They show who answers for the card: a steward, or that nobody does.
 
 ## Who runs this
 
@@ -48,4 +48,4 @@ A catalog promises that every app works, stays current, and is supported. A card
 
 ## Get involved
 
-Have a look at the [cards](README.md) and try one. Share a change back as a variant, with a name that says what's different, like `n8n-sqlite`. [CONTRIBUTING.md](CONTRIBUTING.md) explains how. Built something yourself? [Add your app](https://www.edgible.ai/add-your-app/) checks it and helps you build what a card needs.
+Have a look at the [cards](README.md) and try one. Share a change back as a variant, with a name that says what's different, like `n8n-sqlite`. [CONTRIBUTING.md](CONTRIBUTING.md) explains how. Built something yourself? [Add your app](ADD-YOUR-APP.md) checks it and helps you build what a card needs.
