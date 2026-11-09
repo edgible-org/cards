@@ -8,7 +8,7 @@
   },
   "arize-phoenix": {
     "result": "pass",
-    "tested": "2026-11-01",
+    "tested": "2026-11-09",
     "edgible-cli": "1.4.29",
     "files": "sha256:74dd88b86c075080",
     "device": "osxdevice"
@@ -106,7 +106,7 @@
   },
   "gitea": {
     "result": "pass",
-    "tested": "2026-10-29",
+    "tested": "2026-11-09",
     "edgible-cli": "1.4.29",
     "files": "sha256:6f98e9bc3a2549a3",
     "device": "osxdevice"
