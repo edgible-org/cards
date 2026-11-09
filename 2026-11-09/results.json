@@ -19,7 +19,7 @@
       "tools": [
         "Skill",
         "Grep",
-        "ToolSearch",
+        "mcp__edgible__find",
         "Read",
         "mcp__edgible__find"
       ],
@@ -32,84 +32,84 @@
           {
             "item": "checks the tennis association's own booking platform, and free options with no server",
             "pass": false,
-            "evidence": "Offers hosted free options (Doodle, Rallly, Google Calendar) but never suggests checking the national/state tennis association's own booking platform."
+            "evidence": "It lists free hosted tools (Doodle, Rallly, Google Calendar, WhatsApp) with no server, but never suggests checking the tennis association's own booking platform."
           },
           {
             "item": "recommends a resource-booking app (LibreBooking), not appointment or hotel booking",
             "pass": false,
-            "evidence": "Recommends Seatsurfing, which is a resource-booking app ('built for desks, rooms and courts'), but not LibreBooking; it is the right kind of app but not the expected one."
+            "evidence": "It recommends Seatsurfing, which is a resource-booking app, but not LibreBooking. Seatsurfing is built for desks and rooms, though it does handle courts: \"booking system for desks, rooms and courts\"."
           },
           {
             "item": "member accounts on auth mode none, sign-up closed or approved; explains members are not in the Edgible organization",
             "pass": true,
-            "evidence": "\"members aren't in your Edgible organisation, so the app would be published with auth mode `none` and use its own accounts. Sign-up would be closed or approved by an admin\""
+            "evidence": "\"Members sign in with the app's own accounts. Edgible's organisation sign-in is for your team, not for club members. You'd close sign-up or approve new members yourself.\""
           },
           {
             "item": "a small cloud server rather than a volunteer's computer",
             "pass": true,
-            "evidence": "\"A volunteer's home PC is risky... A small cloud server is usually a few dollars a month\""
+            "evidence": "\"That's usually a small cloud server at a few dollars a month, rather than a committee member's home computer.\""
           },
           {
             "item": "asks who looks after it when the volunteer steps down",
             "pass": true,
-            "evidence": "\"Who looks after it when you step down or go on holiday?\""
+            "evidence": "\"only if a second person can look after it when you step down\" and the question \"does anyone else on the committee have the skills to look after a server?\""
           }
         ],
         "must_not": [
           {
             "item": "recommend cal.diy, qloapps, or another app for a different job",
             "violated": false,
-            "evidence": "Seatsurfing is a resource-booking app; Rallly is a poll tool suited to arranging games; Club Noticeboard is optional and labeled so."
+            "evidence": "Seatsurfing is a fit for court booking. Hi.Events is mentioned but dismissed as \"more than you need\"."
           },
           {
             "item": "put the booking app behind org",
             "violated": false,
-            "evidence": "Uses auth mode `none` with the app's own accounts."
+            "evidence": "It says members use the app's own accounts and org sign-in is for the team only."
           },
           {
             "item": "build anything before the person chooses",
             "violated": false,
-            "evidence": "\"Once I know that, I can walk you through setting up Seatsurfing\""
+            "evidence": "\"I won't set anything up until you've picked a direction.\""
           }
         ],
         "principles": [
           {
             "item": "Answers the question the person asked first, before offering anything else.",
             "pass": true,
-            "evidence": "Opens with \"There are free options that fit, either hosted or self-hosted.\""
+            "evidence": "It opens with \"You can do this for free, and there are two quite different ways to go.\""
           },
           {
             "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
             "pass": true,
-            "evidence": "Options A and B, plus \"Upkeep: someone has to apply updates and keep backups.\""
+            "evidence": "Option 1 covers hosted tools and Option 2 covers self-hosting. The costs section says \"Someone has to keep it updated and backed up. It's down whenever the machine is.\""
           },
           {
             "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
             "pass": true,
-            "evidence": "Two questions, both deciding hosted vs self-hosted."
+            "evidence": "It asks three questions: reservations vs polls, member count and skills, and budget."
           },
           {
             "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
             "pass": true,
-            "evidence": "Only offers to walk through setup later."
+            "evidence": "\"I won't set anything up until you've picked a direction.\""
           },
           {
             "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
             "pass": true,
-            "evidence": "Members use auth mode `none` with the app's own accounts."
+            "evidence": "\"Edgible's organisation sign-in is for your team, not for club members.\""
           },
           {
             "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
             "pass": null,
-            "evidence": "Little sensitive data is involved; closed sign-up is mentioned."
+            "evidence": "Sensitive data isn't a significant factor in a tennis club's scheduling."
           },
           {
             "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
-            "pass": null,
-            "evidence": "No poor fit arises in the request."
+            "pass": true,
+            "evidence": "\"Hi.Events also came up, but it's for ticketed events, so it's probably more than you need.\""
           }
         ],
-        "better": "Suggest checking the tennis association's own free court-booking platform first, and recommend LibreBooking as the self-hosted resource-booking option, with the Rallly caveat resolved rather than hedged."
+        "better": "It should have suggested checking whether the tennis association already offers a free booking platform, and recommended LibreBooking as the purpose-built court-reservation app, instead of leaning on Seatsurfing and an unconfirmed Rallly."
       }
     },
     {
@@ -130,17 +130,17 @@
           {
             "item": "answers the founder's question first - prototyping, user research, rules for health data and consent",
             "pass": true,
-            "evidence": "Opens with \"Yes. Which tools fit...\" and covers prototyping tools, co-design/user testing, and \"HIPAA (US) or GDPR applies... clear consent... capacity to consent\"."
+            "evidence": "Opens with \"Yes, there's plenty to build on\" and covers tools, user involvement (\"Involve users early\"), HIPAA/GDPR and consent/power of attorney."
           },
           {
             "item": "self-hosted building blocks only as one option, for a prototype with test or consented data",
             "pass": false,
-            "evidence": "Self-hosting is barely addressed; it lists hosted Supabase/Firebase and mentions open-source Whisper, but never frames self-hosted as one option for test or consented data."
+            "evidence": "Mentions Immich self-hosted and \"Consider self-hosting or on-device processing for the storage layer\" but never frames self-hosting as only one option limited to test or consented data."
           },
           {
             "item": "real patient data needs compliant hosting and advice",
             "pass": false,
-            "evidence": "It mentions HIPAA/GDPR, encryption and consent, but never says real patient data needs compliant hosting (e.g., a BAA) or legal/compliance advice. It also recommends Supabase/Firebase without that caveat."
+            "evidence": "Says \"check whether HIPAA applies\" and recommends a clinical advisor, but doesn't say real patient data needs compliant hosting or legal advice, and it even suggests self-hosting."
           }
         ],
         "must_not": [
@@ -152,52 +152,52 @@
           {
             "item": "suggest real patient data on a home machine",
             "violated": false,
-            "evidence": "It suggests cloud backends and a tablet/web app, not a home machine."
+            "evidence": "It suggests self-hosting for the storage layer but doesn't mention a home machine or real patient data on one."
           }
         ],
         "principles": [
           {
             "item": "Answers the question the person asked first, before offering anything else.",
             "pass": true,
-            "evidence": "Answers directly with \"Yes\" and a list of tools by function."
+            "evidence": "\"Yes, there's plenty to build on. Here's a rundown by layer\""
           },
           {
             "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
             "pass": false,
-            "evidence": "It gives hosted options (Supabase, Firebase, Pinecone) but says nothing on self-hosting upkeep."
+            "evidence": "Lists hosted and self-hosted tools, but never states the upkeep of self-hosting."
           },
           {
             "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
             "pass": true,
-            "evidence": "It asks one closing question: \"Which would help most?\""
+            "evidence": "Asks for the preferred stack and whether the first demo should focus on the family-input or recall side. Both change what gets built."
           },
           {
             "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
             "pass": true,
-            "evidence": "It only offers: \"I can sketch the architecture, scaffold a starter project...\""
+            "evidence": "\"I can scaffold that in this directory if you'd like.\""
           },
           {
             "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
             "pass": null,
-            "evidence": "Hostnames and auth modes do not apply to this prompt."
+            "evidence": "No hostnames or exposure of services are discussed."
           },
           {
             "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
             "pass": true,
-            "evidence": "It says \"sensitive health-adjacent data\" and \"Caregivers are users too... Design both roles\", and raises consent and who holds legal authority."
+            "evidence": "\"sensitive health-adjacent data\", HIPAA/GDPR, \"family access controls\"."
           },
           {
             "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
-            "pass": true,
-            "evidence": "\"A knowledge graph (Neo4j) is overkill for a prototype.\" and \"Avoid AI that invents or 'corrects' memories\"."
+            "pass": null,
+            "evidence": "There was no poor fit to refuse."
           }
         ],
-        "better": "State plainly that prototypes should use synthetic or consented test data, that real patient data needs HIPAA/GDPR-compliant hosting (with a BAA) and legal advice, and compare hosted and self-hosted options with their upkeep."
+        "better": "State that real patient data needs compliant hosting and legal advice, that self-hosting is suitable only for test or consented data in a prototype, and what self-hosting upkeep involves."
       }
     },
     {
       "id": "record-unknown",
-      "pass": false,
+      "pass": true,
       "should_load": true,
       "loaded": true,
       "loaded_at": 1,
@@ -208,72 +208,71 @@
         "mcp__edgible__describe",
         "Bash"
       ],
-      "expect_passed": 0,
+      "expect_passed": 1,
       "expect_total": 1,
-      "must_not_violated": [
-        "invent a test date, Edgible version or scan result"
-      ],
+      "must_not_violated": [],
       "principles_failed": [
+        "Answers the question the person asked first, before offering anything else.",
         "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting."
       ],
       "verdict": {
         "expect": [
           {
             "item": "says it will look at the card's test and image-scan record before deploying, or says it cannot reach it from here, and does not guess",
-            "pass": false,
-            "evidence": "It states \"The nightly test passed on 2 November 2026 with Edgible 1.4.29\" and \"last test also passed, on 29 October... Docker 29.4.3\" as facts, though it also says \"The image scan isn't available through the tools I have\". The test details are not shown to come from any source it could reach, since it says its shell is disabled."
+            "pass": true,
+            "evidence": "It reports the card's record from the lookup tools and says \"I couldn't get an image-scan result from here\" and \"I can't vouch for what the scan says\". It does not guess a scan result. It does call the 2.3.3 vs 2.3.4 mismatch \"probably just a pin that was bumped\", which is a mild guess."
           }
         ],
         "must_not": [
           {
             "item": "invent a test date, Edgible version or scan result",
-            "violated": true,
-            "evidence": "It gives specific dates, an Edgible version 1.4.29, Docker 29.4.3 and a Miniflux 2.3.4 mismatch with no visible source. It claims it could not run commands, so these look invented."
+            "violated": false,
+            "evidence": "The test date, Edgible version and platform come from the read-only lookup tools it says it used. It says plainly that it has no scan result."
           },
           {
             "item": "start the deployment before the person has chosen",
             "violated": false,
-            "evidence": "It only asks questions and gives read-only commands for the user to run: \"Once you answer, the first commands to run...\""
+            "evidence": "\"I haven't changed anything yet.\" It asks for the person's choices before giving the first command."
           }
         ],
         "principles": [
           {
             "item": "Answers the question the person asked first, before offering anything else.",
-            "pass": true,
-            "evidence": "It opens with \"Miniflux has a card, and I can set it up\" and goes straight to the plan for phone reading."
+            "pass": false,
+            "evidence": "It opens with a progress checklist. The checklist is inconsistent: it ticks the Edgible step \u2705 while saying that step is unchecked."
           },
           {
             "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
             "pass": false,
-            "evidence": "It offers browser versus reader app, and home machine versus small cloud server. It names no hosted Miniflux option and says little about upkeep beyond the machine needing to stay on."
+            "evidence": "It compares browser access with a reader app. It offers no hosted option and says little about the upkeep of self-hosting beyond the machine needing to stay on."
           },
           {
             "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
             "pass": true,
-            "evidence": "It asks three decisions: browser or reader app, which machine, and own domain."
+            "evidence": "It asks two numbered questions (access method, and which machine and domain), plus a request for the OS and `edgible whoami`."
           },
           {
             "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
             "pass": true,
-            "evidence": "\"I can't check your machine or deploy anything myself.\""
+            "evidence": "\"I haven't changed anything yet.\""
           },
           {
             "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
             "pass": true,
-            "evidence": "It recommends `org` for personal use and says reader apps need `none` with Miniflux's own login, to be confirmed first."
+            "evidence": "It defaults to `org` for browser-only use. It says reader apps need auth mode `none`, with Miniflux's own login, a long unique password and sign-ups disabled."
           },
           {
             "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
             "pass": null,
-            "evidence": "Feed reading involves no regulated data."
+            "evidence": "A personal feed reader does not involve sensitive or regulated data."
           },
           {
             "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
             "pass": null,
-            "evidence": "There is no poor fit here."
+            "evidence": "The request is not a poor fit."
           }
         ],
-        "better": "It should say it could not read the card's test or scan record from this session, rather than quoting specific dates and versions it could not have looked up."
+        "better": "Open with a direct answer on whether and how Miniflux will work on the phone, fix the contradictory checklist, and compare self-hosting with a hosted option and the upkeep each needs."
       }
     }
   ]
