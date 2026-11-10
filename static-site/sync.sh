@@ -12,6 +12,7 @@ set -eu
 
 W=/home/curl_user
 SOURCE=$STATIC_SITE_SOURCE
+TOKEN=${STATIC_SITE_TOKEN:-}
 STRIP=${STATIC_SITE_STRIP:-1}
 EVERY=${STATIC_SITE_EVERY:-300}
 MAX=200M
@@ -23,8 +24,11 @@ log() { echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) $*"; }
 
 update() {
   tmp=$(mktemp -d "$W/.incoming.XXXXXX")
-  # The ETag asks the source to send nothing when nothing changed.
-  code=$(curl -sSL --max-filesize "$MAX" --connect-timeout 20 --max-time 300 \
+  # The ETag asks the source to send nothing when nothing changed. A token, for a private
+  # source, goes in on stdin rather than the command line, so no process listing shows it,
+  # and curl drops it when a redirect leads to another host.
+  code=$(printf 'Authorization: Bearer %s\n' "$TOKEN" | grep -v ' $' |
+         curl -sSL --max-filesize "$MAX" --connect-timeout 20 --max-time 300 -H @- \
            --etag-compare .etag --etag-save "$tmp/etag" \
            -o "$tmp/site.tar.gz" -w '%{http_code}' "$SOURCE") || code=failed
   case "$code" in
@@ -68,7 +72,7 @@ update() {
   ls -1t releases | tail -n +3 | while read -r old; do rm -rf "releases/$old"; done
 }
 
-log "source: $SOURCE, every ${EVERY}s"
+log "source: $SOURCE${TOKEN:+, with a token}, every ${EVERY}s"
 while true; do
   rm -rf .incoming.*
   update || log "update failed: the live site stays as it is"

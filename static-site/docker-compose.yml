@@ -16,6 +16,7 @@ services:
       STATIC_SITE_SOURCE: ${STATIC_SITE_SOURCE:?set STATIC_SITE_SOURCE in card.env}
       STATIC_SITE_STRIP: ${STATIC_SITE_STRIP:-1}
       STATIC_SITE_EVERY: ${STATIC_SITE_EVERY:-300}
+      STATIC_SITE_TOKEN: ${STATIC_SITE_TOKEN:-}
     volumes:
       - ./sync.sh:/sync.sh:ro
       # Mounted on the image user's home, so the volume is theirs to write.
