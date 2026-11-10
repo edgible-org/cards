@@ -400,7 +400,7 @@
   },
   "umami": {
     "result": "pass",
-    "tested": "2026-10-28",
+    "tested": "2026-11-10",
     "edgible-cli": "1.4.29",
     "files": "sha256:58dbaad2ba41520d",
     "device": "osxdevice"
