@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-09T23:10:16+00:00",
+ "generated": "2026-11-10T20:32:53+00:00",
  "repo": "edgible-org/cards",
  "site": "https://cards.edgible.org",
  "jobs": [
@@ -9,44 +9,44 @@
    "state": "ok",
    "count": 1,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42610580637",
-   "at": "2026-11-09T11:37:58Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42806109104",
+   "at": "2026-11-10T11:16:24Z"
   },
   {
    "workflow": "skill-evals",
    "name": "Skill evals",
    "state": "ok",
-   "count": 2,
+   "count": 4,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42716796023",
-   "at": "2026-11-09T23:00:19Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42895167449",
+   "at": "2026-11-10T20:25:37Z"
   },
   {
    "workflow": "grow",
    "name": "Grow",
    "state": "ok",
-   "count": 2,
+   "count": 4,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42717011283",
-   "at": "2026-11-09T23:01:46Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42895424269",
+   "at": "2026-11-10T20:27:14Z"
   },
   {
    "workflow": "regression",
    "name": "Cards regression",
    "state": "ok",
-   "count": 3,
+   "count": 5,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42717023433",
-   "at": "2026-11-09T23:01:51Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42895478756",
+   "at": "2026-11-10T20:27:34Z"
   },
   {
    "workflow": "site",
    "name": "Site build",
-   "state": "fail",
-   "count": 10,
-   "failed": 1,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/42718174209",
-   "at": "2026-11-09T23:09:53Z"
+   "state": "running",
+   "count": 7,
+   "failed": 0,
+   "latest": "https://github.com/edgible-org/cards/actions/runs/42896319192",
+   "at": "2026-11-10T20:32:38Z"
   }
  ],
  "cards": {
@@ -54,10 +54,10 @@
   "with_status": 64,
   "passing": 64,
   "failing": [],
-  "tested_24h": 6,
+  "tested_24h": 3,
   "oldest": [
    "canary",
-   13
+   14
   ],
   "no_test_yet": [
    "accounts",
@@ -76,7 +76,7 @@
    },
    {
     "card": "linkding",
-    "count": 261
+    "count": 262
    },
    {
     "card": "immich",
@@ -372,5 +372,5 @@
   }
  ],
  "skill_evals_report": "https://github.com/edgible-org/cards/issues/17",
- "summary": "Last night's runs finished. Six cards passed their regression tests, all 64 of 64 are passing at their latest test, and no cards changed. Nothing needs you today, though the skill evals are worth a glance: only 5 of 16 held-out prompts passed this week."
+ "summary": "Last night's card tests passed for the three cards checked, all 64 cards are passing at their latest test, and the latest skill eval and Grow runs succeeded. Nothing needs you today. The number worth a look is that skill evals passed only 6 of 18 held-out prompts this week, and the full report is linked in the issue."
 }
