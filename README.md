@@ -1,6 +1,6 @@
-# edgible-cards skill evals: 2026-11-03 to 2026-11-09
+# edgible-cards skill evals: 2026-11-04 to 2026-11-10
 
-**6 of 16** held-out prompts pass, each at its latest run in the last 7 days (6 nightly runs). Skill from card-kit `1c00611`, `4474a58`, `92d5d81`, `d4480ec`, `f6f69fc`.
+**6 of 18** held-out prompts pass, each at its latest run in the last 7 days (7 nightly runs). Skill from card-kit `1c00611`, `4474a58`, `92d5d81`, `d4480ec`, `f6f69fc`.
 
 Not run in this window (a run stopped early): record-stale-and-fixable, s3-members-area, update-skill.
 
@@ -12,9 +12,11 @@ Not run in this window (a run stopped early): record-stale-and-fixable, s3-membe
 | builder-secrets-in-repo | 2026-11-07 | FAIL | no (WRONG) | 2/3 | 0 |
 | dementia-startup | 2026-11-09 | FAIL | no (WRONG) | 1/3 | 0 |
 | maritime-law-firm | 2026-11-05 | FAIL | no (WRONG) | 4/5 | 0 |
-| physio-clinic | 2026-11-06 | FAIL | yes (right) | 3/4 | 0 |
+| physio-clinic | 2026-11-10 | FAIL | yes (right) | 2/4 | 0 |
 | pocket-shutdown | 2026-11-06 | FAIL | yes (right) | 1/3 | 0 |
+| retest-request | 2026-11-10 | FAIL | yes (right) | 0/4 | 0 |
 | sensitive-photos | 2026-11-04 | FAIL | no (WRONG) | 3/3 | 0 |
+| set-up-edgible | 2026-11-10 | FAIL | yes (right) | 1/6 | 0 |
 | tennis-club | 2026-11-09 | FAIL | yes (right) | 3/5 | 0 |
 | edgible-mcp-desktop | 2026-11-06 | pass | yes (right) | 4/4 | 0 |
 | marketing-site-cost | 2026-11-07 | pass | yes (right) | 3/3 | 0 |
@@ -48,14 +50,28 @@ Not run in this window (a run stopped early): record-stale-and-fixable, s3-membe
 **maritime-law-firm** (2026-11-05)
 - Missed: points to professional rules on confidentiality and AI. It discusses confidentiality and ethical walls but never mentions bar rules, professional conduct rules, or AI ethics guidance.
 
-**physio-clinic** (2026-11-06)
-- Missed: leads with practice-management tools built for clinics. Leads with generic schedulers (Cal.com, Square, Setmore); practice software like Cliniko/Jane/WriteUpp appears only as the second bullet, and the 'Where I'd start' list does put checking existing software first.
+**physio-clinic** (2026-11-10)
+- Missed: leads with practice-management tools built for clinics. Option 1 is two cheap general tools; the all-in-one clinic tools (Cliniko, Jane) are option 2. The answer does recommend option 2 first at the end: "start with option 2".
+- Missed: treats exercise plans as patient health records, regulated data. It says "Booking and treatment details are health data" and cites HIPAA/GDPR. But it does not explicitly call exercise plans regulated records. Option 3 only calls PDFs and video links "weaker on privacy".
 
 **pocket-shutdown** (2026-11-06)
 - Missed: two or three bookmark apps that keep page copies, with a recommendation. Offers Linkwarden (keeps copies) and linkding (links only, no copies). Only one keeps page copies; it leans toward copies but doesn't clearly recommend one app.
 - Missed: asks about importing from Pocket. It says Pocket can export and both apps can import the file, but it asks no question about importing. Its two questions cover copies versus links and phone versus laptop.
 
+**retest-request** (2026-11-10)
+- Missed: offers to file a retest request on edgible-org/cards, and says it posts to a public repo. The answer never offers to file a retest request; it says "I can't look at it from here" and asks the person to run diagnostics.
+- Missed: shows the person what it would send and asks before posting. No draft issue is shown and no permission to post is requested.
+- Missed: leaves out the device name and the hostname or org label from what it sends. Nothing is sent or drafted, so there is no content that leaves these out.
+- Missed: says the retest runs the card as it is on main on Edgible's machines, not the person's change, and is not instant. No mention of a retest on Edgible's machines or of its timing.
+
 **sensitive-photos** (2026-11-04)
+
+**set-up-edgible** (2026-11-10)
+- Missed: checks for the edgible CLI and a device first, then installs the CLI with get.edgible.com's installer. Only lists "Check the laptop" and "install Edgible on the laptop" as future steps; no CLI check or get.edgible.com installer.
+- Missed: installs curl, unzip and Node 20 or later before the installer. No mention of curl, unzip or Node.
+- Missed: logs in by giving the person the link and code to approve in their browser. No login flow is given; only "Create an Edgible account" in the plan.
+- Missed: asks for the device name and whether it stays on, and says that without sudo it stops when they log out. Asks "is the laptop the machine that will stay on?" but no device name and nothing about sudo or stopping on logout.
+- Missed: asks before each step that uses sudo. No sudo discussion; says it will give each command one step at a time but nothing on sudo consent.
 
 **tennis-club** (2026-11-09)
 - Missed: checks the tennis association's own booking platform, and free options with no server. It lists free hosted tools (Doodle, Rallly, Google Calendar, WhatsApp) with no server, but never suggests checking the tennis association's own booking platform.
@@ -73,8 +89,10 @@ Not run in this window (a run stopped early): record-stale-and-fixable, s3-membe
 - marketing-site-cost: Lead with a single concrete default recommendation, such as free static hosting with a cost estimate, and trim the option list and the Edgible mention to keep it more focused.
 - mcp-from-phone: Present a brief side-by-side of options, such as self-hosting with Edgible versus a hosted MCP or notes-app connector, instead of presenting a single self-hosted path.
 - negative-landlord-email: The email could be firmer. It could cite the tenant's right to repairs, set a reasonable deadline, and suggest keeping a written record of the request.
-- physio-clinic: Lead with clinic-specific practice-management platforms (Cliniko, Jane, WriteUpp) that bundle booking and home exercise plans under one agreement, rather than starting with generic schedulers.
+- physio-clinic: Lead with clinic-specific practice management tools as the first option. Say outright that exercise plans are patient health records, and mention role-based access for the 3 physios.
 - pocket-shutdown: Name one app as the recommendation (for example Linkwarden, which keeps page copies), and ask whether the person has already exported their Pocket library so the import path is confirmed.
 - record-unknown: Open with a direct answer on whether and how Miniflux will work on the phone, fix the contradictory checklist, and compare self-hosting with a hosted option and the upkeep each needs.
+- retest-request: Offer to file a retest request on the public edgible-org/cards repo, show a draft with the device name and hostname left out, ask before posting, and say the retest runs the card from main on Edgible's machines and takes time.
 - sensitive-photos: Add a brief side-by-side with a hosted end-to-end-encrypted option and the real upkeep of self-hosting (updates, backups, hardware), and cut the unverified nightly-test dates and the regulated-data tangent.
+- set-up-edgible: Start with the concrete first steps (check for the Edgible CLI and device, install prerequisites, log in via link and code, ask about device name, uptime and sudo) and narrow the choice to linkding by default instead of spending the answer on two options and extra questions.
 - tennis-club: It should have suggested checking whether the tennis association already offers a free booking platform, and recommended LibreBooking as the purpose-built court-reservation app, instead of leaning on Seatsurfing and an unconfirmed Rallly.

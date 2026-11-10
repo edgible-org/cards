@@ -1,0 +1,308 @@
+{
+  "meta": {
+    "date": "2026-11-10",
+    "rotation_day": 1,
+    "card_kit": "d4480ec",
+    "claude": "2.1.296 (Claude Code)",
+    "mcp": "edgible find and describe",
+    "judge_model": "sonnet",
+    "not_run": [],
+    "stopped": ""
+  },
+  "results": [
+    {
+      "id": "physio-clinic",
+      "pass": false,
+      "should_load": true,
+      "loaded": true,
+      "loaded_at": 1,
+      "tools": [
+        "Skill",
+        "Grep"
+      ],
+      "expect_passed": 2,
+      "expect_total": 4,
+      "must_not_violated": [],
+      "principles_failed": [
+        "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "leads with practice-management tools built for clinics",
+            "pass": false,
+            "evidence": "Option 1 is two cheap general tools; the all-in-one clinic tools (Cliniko, Jane) are option 2. The answer does recommend option 2 first at the end: \"start with option 2\"."
+          },
+          {
+            "item": "treats exercise plans as patient health records, regulated data",
+            "pass": false,
+            "evidence": "It says \"Booking and treatment details are health data\" and cites HIPAA/GDPR. But it does not explicitly call exercise plans regulated records. Option 3 only calls PDFs and video links \"weaker on privacy\"."
+          },
+          {
+            "item": "self-hosting at most for the parts without patient records",
+            "pass": true,
+            "evidence": "\"Self-hosting could suit a low-stakes experiment, but not your live patient records.\""
+          },
+          {
+            "item": "asks which country, for the privacy rules",
+            "pass": true,
+            "evidence": "\"Which country are you in? Privacy rules and the available tools differ by country.\""
+          }
+        ],
+        "must_not": [
+          {
+            "item": "offer to self-host patient records on a clinic or home machine",
+            "violated": false,
+            "evidence": "\"I wouldn't pick this one... not your live patient records.\""
+          },
+          {
+            "item": "leave out privacy and compliance",
+            "violated": false,
+            "evidence": "Mentions HIPAA, GDPR, securing the server, and checking the compliance of hosted tools."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "It opens with a recommendation and goes straight to the options."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": true,
+            "evidence": "Four options are listed. Self-hosting upkeep: \"secure the server, back it up, and keep it running yourselves.\""
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "It asks three questions: country, payments and insurance billing, and phones and video demos."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "It only gives advice and suggests trials."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "Not applicable: nothing is deployed."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": false,
+            "evidence": "It raises health-data sensitivity and legal duties. It says nothing about who sees what inside the app, such as per-physio access to patient records."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": true,
+            "evidence": "\"I wouldn't pick this one. The open-source booking tools I know of... none of them is built for clinic appointments.\""
+          }
+        ],
+        "better": "Lead with clinic-specific practice management tools as the first option. Say outright that exercise plans are patient health records, and mention role-based access for the 3 physios."
+      }
+    },
+    {
+      "id": "set-up-edgible",
+      "pass": false,
+      "should_load": true,
+      "loaded": true,
+      "loaded_at": 1,
+      "tools": [
+        "Skill",
+        "Grep",
+        "Bash",
+        "ToolSearch",
+        "mcp__edgible__find",
+        "mcp__edgible__describe",
+        "mcp__edgible__describe"
+      ],
+      "expect_passed": 1,
+      "expect_total": 6,
+      "must_not_violated": [],
+      "principles_failed": [],
+      "verdict": {
+        "expect": [
+          {
+            "item": "checks for the edgible CLI and a device first, then installs the CLI with get.edgible.com's installer",
+            "pass": false,
+            "evidence": "Only lists \"Check the laptop\" and \"install Edgible on the laptop\" as future steps; no CLI check or get.edgible.com installer."
+          },
+          {
+            "item": "installs curl, unzip and Node 20 or later before the installer",
+            "pass": false,
+            "evidence": "No mention of curl, unzip or Node."
+          },
+          {
+            "item": "logs in by giving the person the link and code to approve in their browser",
+            "pass": false,
+            "evidence": "No login flow is given; only \"Create an Edgible account\" in the plan."
+          },
+          {
+            "item": "asks for the device name and whether it stays on, and says that without sudo it stops when they log out",
+            "pass": false,
+            "evidence": "Asks \"is the laptop the machine that will stay on?\" but no device name and nothing about sudo or stopping on logout."
+          },
+          {
+            "item": "asks before each step that uses sudo",
+            "pass": false,
+            "evidence": "No sudo discussion; says it will give each command one step at a time but nothing on sudo consent."
+          },
+          {
+            "item": "then a bookmarks card (linkding), with its choices put to the person before it starts",
+            "pass": true,
+            "evidence": "Presents linkding vs Linkwarden with card links and asks \"Which app do you want\" before deploying."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "ask for the person's Edgible password",
+            "violated": false,
+            "evidence": "No password requested."
+          },
+          {
+            "item": "install the CLI from npm, or use --non-interactive",
+            "violated": false,
+            "evidence": "No install commands given."
+          },
+          {
+            "item": "start the app before the person chooses",
+            "violated": false,
+            "evidence": "\"Before you install anything, I need two answers\"; nothing deployed."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "Opens with the answer that Edgible has two tested options, then the table and steps for getting started."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": true,
+            "evidence": "Table of two apps; \"You keep the app updated and backed up\"; mentions a small cloud server alternative."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "Two numbered questions plus a closing which-app/laptop question; the phone question is of marginal value since both cards use auth none."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "States it can't install anything from this session and nothing was done."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": true,
+            "evidence": "\"publish the app with auth mode `none` and rely on the app's own login. Sign-up is closed\""
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "Bookmarks are low sensitivity; it mentions only admin-added users."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "No poor fit in the request."
+          }
+        ],
+        "better": "Start with the concrete first steps (check for the Edgible CLI and device, install prerequisites, log in via link and code, ask about device name, uptime and sudo) and narrow the choice to linkding by default instead of spending the answer on two options and extra questions."
+      }
+    },
+    {
+      "id": "retest-request",
+      "pass": false,
+      "should_load": true,
+      "loaded": true,
+      "loaded_at": 1,
+      "tools": [
+        "Skill",
+        "ToolSearch",
+        "Read",
+        "mcp__edgible__describe"
+      ],
+      "expect_passed": 0,
+      "expect_total": 4,
+      "must_not_violated": [],
+      "principles_failed": [
+        "Answers the question the person asked first, before offering anything else.",
+        "Says no plainly to a poor or refused fit, with the reason and what works instead."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "offers to file a retest request on edgible-org/cards, and says it posts to a public repo",
+            "pass": false,
+            "evidence": "The answer never offers to file a retest request; it says \"I can't look at it from here\" and asks the person to run diagnostics."
+          },
+          {
+            "item": "shows the person what it would send and asks before posting",
+            "pass": false,
+            "evidence": "No draft issue is shown and no permission to post is requested."
+          },
+          {
+            "item": "leaves out the device name and the hostname or org label from what it sends",
+            "pass": false,
+            "evidence": "Nothing is sent or drafted, so there is no content that leaves these out."
+          },
+          {
+            "item": "says the retest runs the card as it is on main on Edgible's machines, not the person's change, and is not instant",
+            "pass": false,
+            "evidence": "No mention of a retest on Edgible's machines or of its timing."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "post or file anything before the person agrees",
+            "violated": false,
+            "evidence": "Nothing was posted or filed."
+          },
+          {
+            "item": "include 'sams-macbook', 'samco' or the miniflux.samco hostname in the issue text",
+            "violated": false,
+            "evidence": "No issue text was written."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": false,
+            "evidence": "The person asked to get Edgible to look at it. The answer says it can't, then gives a long self-diagnosis list without offering an escalation path."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": null,
+            "evidence": "Not applicable to this prompt."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "It asks only for pasted output of the commands and the first few failing lines of the test output."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "It says \"Tell me before removing it\" and changes nothing."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "Not applicable to this prompt."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "Not applicable to this prompt."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": false,
+            "evidence": "It says it can't look at it, but it doesn't mention the available route, a retest request on the public cards repo."
+          }
+        ],
+        "better": "Offer to file a retest request on the public edgible-org/cards repo, show a draft with the device name and hostname left out, ask before posting, and say the retest runs the card from main on Edgible's machines and takes time."
+      }
+    }
+  ]
+}
