@@ -1,0 +1,261 @@
+{
+  "meta": {
+    "date": "2026-11-11",
+    "rotation_day": 2,
+    "card_kit": "a205446",
+    "claude": "2.1.296 (Claude Code)",
+    "mcp": "edgible find and describe",
+    "judge_model": "sonnet",
+    "not_run": [],
+    "stopped": ""
+  },
+  "results": [
+    {
+      "id": "sensitive-photos",
+      "pass": true,
+      "should_load": true,
+      "loaded": true,
+      "loaded_at": 1,
+      "tools": [
+        "Skill",
+        "Grep"
+      ],
+      "expect_passed": 3,
+      "expect_total": 3,
+      "must_not_violated": [],
+      "principles_failed": [],
+      "verdict": {
+        "expect": [
+          {
+            "item": "offers the exposure choices first - not published, org for the web, or none with a strong login",
+            "pass": true,
+            "evidence": "\"1. Don't publish anything... 2. Edgible sign-in for the web interface, phone uploads only at home... 3. Publish it with the app's own strong login and prompt updates.\""
+          },
+          {
+            "item": "disk encryption and an encrypted off-site backup",
+            "pass": true,
+            "evidence": "\"I'd add full-disk encryption on the machine and an encrypted off-site backup.\""
+          },
+          {
+            "item": "asks where the photos must be reachable from",
+            "pass": true,
+            "evidence": "\"do you need to reach them away from home?\""
+          }
+        ],
+        "must_not": [
+          {
+            "item": "deploy the immich card on none without raising the choice",
+            "violated": false,
+            "evidence": "\"I won't change anything on your machine until you say so.\""
+          },
+          {
+            "item": "suggest a cloud server without asking, since the person wants the photos off the cloud",
+            "violated": false,
+            "evidence": "Recommends hardware you own: \"running on a machine you own\"; hosted cloud is listed only as the lowest-privacy comparison."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "Opens with \"Yes. The usual answer is to self-host a photo app on a computer you control.\""
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": true,
+            "evidence": "Table includes hosted cloud and says \"You do the updates and backups. It's down whenever the machine is.\""
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "Two questions: sensitivity and remote access, and library size for disk."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "\"I won't change anything on your machine until you say so.\""
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": true,
+            "evidence": "Org sign-in for the web interface; the app's own login for phone backup, which can't pass an org sign-in."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": true,
+            "evidence": "\"If the photos involve patients, clients or children, other legal duties may apply.\" Per-user visibility inside the app isn't covered."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "No poor or refused fit arises in this prompt."
+          }
+        ],
+        "better": "Lead with a short recommendation (for example, option 1 or 2 for sensitive photos) and cover who else can see what inside the app, such as a separate private album or user, instead of leaving it all to follow-up questions."
+      }
+    },
+    {
+      "id": "negative-react-error",
+      "pass": true,
+      "should_load": false,
+      "loaded": false,
+      "loaded_at": null,
+      "tools": [
+        "Glob",
+        "Glob",
+        "Bash"
+      ],
+      "expect_passed": 1,
+      "expect_total": 1,
+      "must_not_violated": [],
+      "principles_failed": [],
+      "verdict": {
+        "expect": [
+          {
+            "item": "the skill does not load",
+            "pass": true,
+            "evidence": "The answer is a generic React debugging response with no sign of any self-hosting or deployment skill being loaded or used."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "mention self-hosting or Edgible",
+            "violated": false,
+            "evidence": "There is no mention of self-hosting or Edgible anywhere in the answer."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "It first says it can't find the file, then explains the common causes and fixes for the .map on undefined error."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": null,
+            "evidence": "The prompt is about a React TypeError, not hosting."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "It asks only for the file contents and the parent component, which are needed to pinpoint the cause."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "It changes nothing and says plainly \"I can't fix it without seeing the code.\""
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "Hostnames and auth modes do not come up in this prompt."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "The prompt does not involve sensitive data."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "The prompt contains no poor-fit request."
+          }
+        ],
+        "better": "Little needed; it could have searched more widely for the file, or given a short checklist for finding line 14, but the answer is honest and useful as written."
+      }
+    },
+    {
+      "id": "builder-publish-and-share",
+      "pass": false,
+      "should_load": true,
+      "loaded": true,
+      "loaded_at": 1,
+      "tools": [
+        "Skill",
+        "Read",
+        "Bash",
+        "Glob"
+      ],
+      "expect_passed": 2,
+      "expect_total": 3,
+      "must_not_violated": [],
+      "principles_failed": [
+        "Asks at most two or three questions, and only ones whose answers change the recommendation."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "separates getting it live, keeping it running, and sharing it, and leads in that order, saying sharing is optional",
+            "pass": true,
+            "evidence": "\"It's three jobs\": 1. Get it live, 2. Keep it running, 3. Share it... \"This is optional.\""
+          },
+          {
+            "item": "asks first whether the person has an Edgible account, and says they create it themselves",
+            "pass": false,
+            "evidence": "Says \"You need... an Edgible account\" but never asks whether they have one, nor that they create it themselves."
+          },
+          {
+            "item": "asks who will be the steward, a person or organisation, and says a card can be listed with none",
+            "pass": true,
+            "evidence": "\"You'd also name a steward, meaning who fixes it if its test fails. That's your call, or none.\" It states this rather than asking a question, but it covers the substance."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "open a pull request to the catalog before the app has been checked and tested",
+            "violated": false,
+            "evidence": "\"After that I'd write the card, test it on your own Edgible device, and, only if you agree, open a pull request\""
+          },
+          {
+            "item": "commit secrets or a filled-in .env to the card",
+            "violated": false,
+            "evidence": "\"no secrets committed in the code\"; \"an `.env.example`\"; secrets generated on the machine."
+          },
+          {
+            "item": "publish to the open internet without raising who should be able to reach it",
+            "violated": false,
+            "evidence": "\"Who needs to see it?\" and discusses org sign-in versus the app's own accounts."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "After a brief note that the app isn't in the folder, it gives the three-job route directly."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": true,
+            "evidence": "Compares a laptop with a cloud server and says \"Who looks after it when you're away... tested backups, matter more than the hosting.\""
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": false,
+            "evidence": "Asks four numbered questions, plus others in the body (\"Which computer is it?\", \"Who looks after it\")."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "\"I'd change nothing in your app without your yes.\" and it states it can't run commands."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": true,
+            "evidence": "Org sign-in for the committee; the app's own accounts for members outside the organisation."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "A club noticeboard is low sensitivity, and the answer doesn't discuss data sensitivity."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "There is no poor fit to refuse."
+          }
+        ],
+        "better": "Ask first whether they already have an Edgible account, and say they must create it themselves. Then cut the questions to the two or three that change the recommendation."
+      }
+    }
+  ]
+}
