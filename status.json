@@ -218,7 +218,7 @@
   },
   "memos": {
     "result": "pass",
-    "tested": "2026-10-30",
+    "tested": "2026-11-11",
     "edgible-cli": "1.4.29",
     "files": "sha256:7108e43bff510bb7",
     "device": "osxdevice"
@@ -372,9 +372,9 @@
   },
   "static-site": {
     "result": "pass",
-    "tested": "2026-11-06",
+    "tested": "2026-11-11",
     "edgible-cli": "1.4.29",
-    "files": "sha256:730bbe47eddbc2ff",
+    "files": "sha256:8951fe9800768c41",
     "device": "osxdevice"
   },
   "stirling-pdf": {
@@ -407,7 +407,7 @@
   },
   "uptime-kuma": {
     "result": "pass",
-    "tested": "2026-11-01",
+    "tested": "2026-11-11",
     "edgible-cli": "1.4.29",
     "files": "sha256:00a68474c54d406d",
     "device": "osxdevice"
