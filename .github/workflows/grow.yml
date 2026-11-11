@@ -187,7 +187,7 @@ jobs:
         run: |
           set -euo pipefail
           # Files from an earlier night stay in this folder unless removed.
-          rm -rf card-kit work agent-home out pick.json agent.log check.log
+          rm -rf card-kit work agent-home out pick.json agent-prs.json agent.log check.log
           git clone -q --depth 1 https://github.com/edgible-org/card-kit.git card-kit
           # Apps proposed before, as a pull request or an issue, open or closed, are not picked again.
           # One per line, as a name can have spaces in it (Vvveb CMS).
@@ -195,20 +195,44 @@ jobs:
                                      gh issue list --repo "$GITHUB_REPOSITORY" --label agent-card --state all --limit 500 --json title --jq '.[].title'; } \
                                    | sed -nE 's/^(New app card|App request): //p' )
           echo "proposed before: ${proposed[*]:-none}"
-          # Categories a card was proposed for in the last two weeks are skipped, so a night's card is
-          # not another of the same kind: a category stays a gap until its card is merged and the
-          # needs-map pull request lands, which takes days.
-          mapfile -t cats < <( { gh pr list --repo "$GITHUB_REPOSITORY" --label agent-card --state all --limit 100 --json body,createdAt \
-                                   --jq '.[] | select(.createdAt > (now - 1209600 | todate)) | (.body | capture("Category: (?<c>[^\n]+)")? | .c) // empty'
-                                 gh issue list --repo "$GITHUB_REPOSITORY" --label agent-card --state all --limit 100 --json body,createdAt \
-                                   --jq '.[] | select(.createdAt > (now - 1209600 | todate)) | (.body | capture("category: (?<c>.+?)\\) and could")? | .c) // empty'; } | sort -u )
-          echo "categories skipped: ${cats[*]:-none}"
+          # A category with a card still waiting is skipped, so a night's cards are not all of the same
+          # kind: waiting means its pull request is open, or merged but not yet in the needs map's
+          # cards (a category counts as a gap until then). Newest first, so the fallback below can
+          # drop the one that has waited longest.
+          gh pr list --repo "$GITHUB_REPOSITORY" --label agent-card --state all --limit 200 \
+            --json title,body,state,createdAt > agent-prs.json
+          mapfile -t cats < <(python3 - card-kit/skills/edgible-cards/needs-map.yaml agent-prs.json <<'EOF'
+          import json, re, sys
+          text = open(sys.argv[1]).read()
+          mapped = {}
+          for block in re.findall(r"(?ms)^- category: (.+?)\n(.*?)(?=^- category:|\Z)", text):
+              m = re.search(r"(?m)^  cards: \[(.*)\]$", block[1])
+              mapped[block[0].strip()] = {c.strip() for c in m.group(1).split(",")} if m else set()
+          newest = {}
+          for pr in json.load(open(sys.argv[2])):
+              m = re.search(r"Category: ([^\n]+)", pr["body"] or "")
+              if not m or pr["state"] == "CLOSED" or m.group(1).strip() not in mapped:
+                  continue
+              category, card = m.group(1).strip(), re.sub(r"^New app card: ", "", pr["title"])
+              if pr["state"] == "OPEN" or card not in mapped.get(category, set()):
+                  newest[category] = max(newest.get(category, ""), pr["createdAt"])
+          for category in sorted(newest, key=newest.get, reverse=True):
+              print(category)
+          EOF
+          )
+          echo "categories waiting: ${cats[*]:-none}"
           if [ -n "$APP" ]; then
             if ! [[ "$APP" =~ ^[A-Za-z0-9\ ._-]+$ ]]; then echo "app: a name, letters, digits, spaces, . _ -" >&2; exit 2; fi
             # The named app, and its needs-map category, so the merged card lands in the map.
             (cd cards && ../card-kit/run pick-app --app "$APP") > pick.json
           else
-            (cd cards && ../card-kit/run pick-app --exclude ${proposed[@]+"${proposed[@]}"} --exclude-category ${cats[@]+"${cats[@]}"}) > pick.json || { echo "no gap left to fill"; echo "none=true" >> "$GITHUB_OUTPUT"; exit 0; }
+            # At least one card a night: when every gap is waiting, the category that has waited
+            # longest is let through, then the next, until a pick is found.
+            until (cd cards && ../card-kit/run pick-app --exclude ${proposed[@]+"${proposed[@]}"} --exclude-category ${cats[@]+"${cats[@]}"}) > pick.json; do
+              [ ${#cats[@]} -gt 0 ] || { echo "no gap left to fill"; echo "none=true" >> "$GITHUB_OUTPUT"; exit 0; }
+              echo "every gap is waiting: letting ${cats[-1]} through"
+              unset 'cats[-1]'
+            done
           fi
           jq -r '"category: \(.category)\ncandidates: \([.candidates[].name] | join(", "))"' pick.json
           echo "none=false" >> "$GITHUB_OUTPUT"
@@ -269,7 +293,7 @@ jobs:
 
       - name: Clean up
         if: always()
-        run: rm -rf work agent-home card-kit out agent.log check.log pick.json
+        run: rm -rf work agent-home card-kit out agent.log check.log pick.json agent-prs.json
 
   test-1:
     needs: write
