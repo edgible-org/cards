@@ -58,12 +58,14 @@ set -euo pipefail
 set -a
 . arize-phoenix/card.env
 set +a
-device_id=$(edgible device list --json | jq -er --arg name "$DEVICE" '
-  map(select(.name == $name))
-  | if length == 1 then .[0].id
-    else error("need exactly one device named " + $name + " (" + (map(.status + " " + .id) | join(", ")) + ")")
-    end
-')
+device_id=$(edgible device list --json | python3 -c '
+import json, sys
+name = sys.argv[1]
+found = [d for d in json.load(sys.stdin) if d["name"] == name]
+if len(found) != 1:
+    sys.exit("need exactly one device named " + name + " (" + ", ".join(d["status"] + " " + d["id"] for d in found) + ")")
+print(found[0]["id"])
+' "$DEVICE")
 edgible app create existing \
   --non-interactive \
   --name arize-phoenix \

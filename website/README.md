@@ -89,7 +89,7 @@ When both places are the same machine, run the `up` command in the same director
 
 ### 6. Publish
 
-`jq` reads each device's id out of `edgible device list`.
+`python3` reads each device's id out of `edgible device list`.
 
 ```bash
 set -euo pipefail
@@ -97,12 +97,14 @@ set -a
 . website/card.env
 set +a
 device_id() {
-  edgible device list --json | jq -er --arg name "$1" '
-    map(select(.name == $name))
-    | if length == 1 then .[0].id
-      else error("need exactly one device named " + $name + " (" + (map(.status + " " + .id) | join(", ")) + ")")
-      end
-  '
+  edgible device list --json | python3 -c '
+import json, sys
+name = sys.argv[1]
+found = [d for d in json.load(sys.stdin) if d["name"] == name]
+if len(found) != 1:
+    sys.exit("need exactly one device named " + name + " (" + ", ".join(d["status"] + " " + d["id"] for d in found) + ")")
+print(found[0]["id"])
+  ' "$1"
 }
 web_id=$(device_id "$WEB_DEVICE")
 monitor_id=$(device_id "$MONITOR_DEVICE")

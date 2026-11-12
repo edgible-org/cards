@@ -62,19 +62,21 @@ If `--wait` stops with `unhealthy`, `logs <service>` with the same `--env-file` 
 
 ### 5. Publish
 
-`jq` reads that device's id out of `edgible device list`.
+`python3` reads that device's id out of `edgible device list`.
 
 ```bash
 set -euo pipefail
 set -a
 . accounts/card.env
 set +a
-device_id=$(edgible device list --json | jq -er --arg name "$DEVICE" '
-  map(select(.name == $name))
-  | if length == 1 then .[0].id
-    else error("need exactly one device named " + $name + " (" + (map(.status + " " + .id) | join(", ")) + ")")
-    end
-')
+device_id=$(edgible device list --json | python3 -c '
+import json, sys
+name = sys.argv[1]
+found = [d for d in json.load(sys.stdin) if d["name"] == name]
+if len(found) != 1:
+    sys.exit("need exactly one device named " + name + " (" + ", ".join(d["status"] + " " + d["id"] for d in found) + ")")
+print(found[0]["id"])
+' "$DEVICE")
 edgible app create existing \
   --non-interactive \
   --name accounts \
@@ -101,7 +103,7 @@ edgible app list
 `accounts` uses `none`.
 
 ```bash
-curl -fsS "https://<accounts hostname>/oidc/.well-known/openid-configuration" | jq -r .issuer
+curl -fsS "https://<accounts hostname>/oidc/.well-known/openid-configuration" | python3 -c 'import json, sys; print(json.load(sys.stdin)["issuer"])'
 ```
 
 That prints `https://<accounts hostname>/oidc`. If it prints `localhost` or another hostname, `ORG_LABEL` in `card.env` does not match the hostname `edgible app list` prints.
