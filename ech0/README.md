@@ -85,12 +85,26 @@ curl -fsS -X POST "$B/init/owner" -H "$H" \
 
 token=$(curl -fsS -X POST "$B/login" -H "$H" \
   -d "{\"username\":\"$ECH0_ADMIN_USER\",\"password\":\"$ECH0_ADMIN_PASSWORD\"}" \
-  | jq -er '.data.access_token')
+  | python3 -c '
+import json, sys
+token = json.load(sys.stdin)["data"]["access_token"]
+if not token:
+    sys.exit(1)
+print(token)
+')
 
 # Close sign-up: the owner is the only account until the owner adds more.
-settings=$(curl -fsS "$B/settings" | jq -c '.data | .allow_register = false')
+settings=$(curl -fsS "$B/settings" | python3 -c '
+import json, sys
+data = json.load(sys.stdin)["data"]
+data["allow_register"] = False
+print(json.dumps(data, separators=(",", ":"), ensure_ascii=False))
+')
 curl -fsS -X PUT "$B/settings" -H "$H" -H "Authorization: Bearer $token" -d "$settings" >/dev/null
-curl -fsS "$B/settings" | jq -e '.data.allow_register == false' >/dev/null
+curl -fsS "$B/settings" | python3 -c '
+import json, sys
+sys.exit(0 if json.load(sys.stdin)["data"].get("allow_register") is False else 1)
+'
 echo "owner made from ECH0_ADMIN_USER and ECH0_ADMIN_PASSWORD, sign-up closed"
 ```
 
