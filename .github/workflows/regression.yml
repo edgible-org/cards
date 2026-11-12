@@ -9,18 +9,19 @@
 # test-status branch, which the README's badges read, and opens or closes failure issues.
 #
 # The fleet machines can publish apps, so this never runs on a pull request: only in the
-# nightly chain, after grow, or by hand from the Actions tab ("force" retests every card,
-# "only" names some).
+# nightly chain, which grow starts after the night's last card so the two never share the
+# fleet, or by hand from the Actions tab ("force" retests every card, "only" names some).
 
 name: regression
+run-name: ${{ inputs.nightly && 'regression (nightly)' || 'regression' }}
 
 on:
-  # Each night, when grow ends, so a night's jobs never overlap on the runners.
-  workflow_run:
-    workflows: [grow]
-    types: [completed]
   workflow_dispatch:
     inputs:
+      nightly:
+        description: Started by grow's nightly chain, so the daily report follows (grow sets this itself)
+        type: boolean
+        default: false
       force:
         description: Retest every card, changed or not
         type: boolean
@@ -47,12 +48,6 @@ defaults:
 
 jobs:
   plan:
-    # Only the nightly chain continues: a run started by hand does not set off the next job.
-    # The workflow before it ran on the schedule, or was itself part of the chain and did not skip.
-    if: >-
-      github.event_name != 'workflow_run' ||
-      github.event.workflow_run.event == 'schedule' ||
-      (github.event.workflow_run.event == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     outputs:
