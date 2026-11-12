@@ -1,0 +1,28 @@
+tested: 2026-11-13
+result: pass
+card-kit: "eac57b2"
+edgible-cli: 1.4.29
+files: sha256:b772b88d7b6e7724
+machine: darwin/arm64, docker 29.4.3
+images:
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+  - quay.io/hedgedoc/hedgedoc:1.10.8@sha256:abdb6b08815d5bc5832b52d983d983ac678895e9fa0d76aaad80d08c5d70812b
+image_facts:
+  quay.io/hedgedoc/hedgedoc:1.10.8: {user: "root", archs: ["amd64", "arm64"], healthcheck: true}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    hedgedoc: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"users": 1, "notes": 0}
+measured:
+  hedgedoc:
+    memory: 213 MB
+    images: 310 MB
+    data: 49 MB
+duration: 4m
+by: agent
