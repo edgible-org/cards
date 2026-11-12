@@ -1,0 +1,267 @@
+{
+  "meta": {
+    "date": "2026-11-12",
+    "rotation_day": 3,
+    "card_kit": "eac57b2",
+    "claude": "2.1.296 (Claude Code)",
+    "mcp": "edgible find and describe",
+    "judge_model": "sonnet",
+    "not_run": [],
+    "stopped": ""
+  },
+  "results": [
+    {
+      "id": "maritime-law-firm",
+      "pass": false,
+      "should_load": true,
+      "loaded": false,
+      "loaded_at": null,
+      "tools": [
+        "Glob"
+      ],
+      "expect_passed": 2,
+      "expect_total": 5,
+      "must_not_violated": [
+        "one shared AI knowledge base with no access rules"
+      ],
+      "principles_failed": [
+        "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+        "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+        "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "onboarding itself - playbook, precedent bank, mentoring",
+            "pass": true,
+            "evidence": "Offers \"A structured onboarding curriculum\", \"Case briefs and a precedent index\" and \"A best-practices handbook\". Mentoring is not mentioned, but the playbook and precedent bank are."
+          },
+          {
+            "item": "self-hosting as a leading option, for confidentiality, behind org",
+            "pass": false,
+            "evidence": "\"Does everything need to stay on firm-controlled infrastructure? That would point toward self-hosting, and I can look at options such as Edgible\". Self-hosting is raised only as a conditional question. It is not a leading option, and nothing is said about putting it behind org-only access."
+          },
+          {
+            "item": "who sees which matters is set inside the apps (ethical walls)",
+            "pass": false,
+            "evidence": "There is no mention of per-matter access, ethical walls, or conflicts between clients."
+          },
+          {
+            "item": "AI answers cite sources and a lawyer checks them",
+            "pass": true,
+            "evidence": "\"every answer should cite its source document so lawyers verify it rather than trust it.\""
+          },
+          {
+            "item": "points to professional rules on confidentiality and AI",
+            "pass": false,
+            "evidence": "It says \"Client-privileged material shouldn't go to a third-party service without careful handling\", but it cites no professional rules or bar guidance on AI."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "one shared AI knowledge base with no access rules",
+            "violated": true,
+            "evidence": "It proposes one Q&A knowledge base over all the cases and playbooks and says nothing about access rules or per-matter restrictions."
+          },
+          {
+            "item": "only hosted suggestions, with no mention of confidentiality",
+            "violated": false,
+            "evidence": "It raises confidentiality and self-hosting explicitly."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "It leads with the options for helping new lawyers use the knowledge, after a note that the working directory is empty."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": false,
+            "evidence": "The four options are content approaches, not hosting choices. Hosted options are not compared and self-hosting upkeep is not stated."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": false,
+            "evidence": "It asks five question bullets, several with sub-questions: format and volume, confidentiality, audience, priority, accuracy."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "\"I haven't seen your cases... I can prototype one of these\". It builds nothing."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "Nothing has been deployed, so there is no hostname or auth mode to choose."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": false,
+            "evidence": "It raises privilege and confidentiality but not who sees what inside the app."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "The request has no poor or refused fit."
+          }
+        ],
+        "better": "Make self-hosting behind org-only login the recommended default, with per-matter access rules or ethical walls and a pointer to bar rules on confidentiality and AI. Compare it with hosted options and state the upkeep, and cut the questions to two or three."
+      }
+    },
+    {
+      "id": "negative-landlord-email",
+      "pass": true,
+      "should_load": false,
+      "loaded": false,
+      "loaded_at": null,
+      "tools": [],
+      "expect_passed": 1,
+      "expect_total": 1,
+      "must_not_violated": [],
+      "principles_failed": [],
+      "verdict": {
+        "expect": [
+          {
+            "item": "the skill does not load",
+            "pass": true,
+            "evidence": "The answer is a plain landlord email with no sign of any skill being invoked or self-hosting content."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "mention self-hosting or Edgible",
+            "violated": false,
+            "evidence": "No mention of self-hosting or Edgible anywhere in the email or notes."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": true,
+            "evidence": "The email comes first, with the subject line and body, and the notes follow after the '---' divider."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": null,
+            "evidence": "Not applicable to an email-writing request."
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "It asks only one thing: 'Tell me your country or state and I'll tailor it.'"
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": null,
+            "evidence": "Not applicable; nothing was built or deployed."
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": null,
+            "evidence": "Not applicable."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": null,
+            "evidence": "Not applicable."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "Not applicable."
+          }
+        ],
+        "better": "The email could be a little more direct by stating the two-week delay as the first line and offering a ready-to-send version with fewer placeholders."
+      }
+    },
+    {
+      "id": "builder-just-live",
+      "pass": false,
+      "should_load": true,
+      "loaded": true,
+      "loaded_at": 1,
+      "tools": [
+        "Skill",
+        "Bash",
+        "Read"
+      ],
+      "expect_passed": 1,
+      "expect_total": 3,
+      "must_not_violated": [],
+      "principles_failed": [
+        "Answers the question the person asked first, before offering anything else.",
+        "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it."
+      ],
+      "verdict": {
+        "expect": [
+          {
+            "item": "publishes the running app on a device, with the port it listens on",
+            "pass": false,
+            "evidence": "It says \"You'd run the app on a computer or small cloud server and publish it with Edgible\" but never mentions the port the app listens on or concrete publish steps."
+          },
+          {
+            "item": "asks who needs to reach it and sets the sign-in to match (the team, not everyone)",
+            "pass": true,
+            "evidence": "\"Set it to the `org` auth mode, so only members of your Edgible organization can open it. That matches 'my team, nobody else'.\""
+          },
+          {
+            "item": "offers keeping it running later, as a card of their own, without requiring it now",
+            "pass": false,
+            "evidence": "It advises \"put it in a container with its data in a named volume\" for reliability, but doesn't offer a card of their own as a later step, and the container advice is framed as a recommendation, not a deferred option."
+          }
+        ],
+        "must_not": [
+          {
+            "item": "require a container, a card or a pull request just to get it live",
+            "violated": false,
+            "evidence": "The container is only advised \"For anything the team relies on\"; it isn't required to go live."
+          },
+          {
+            "item": "push the app to the shared catalog without being asked",
+            "violated": false,
+            "evidence": "Nothing is pushed or published; it only asks questions and offers options."
+          }
+        ],
+        "principles": [
+          {
+            "item": "Answers the question the person asked first, before offering anything else.",
+            "pass": false,
+            "evidence": "It opens with \"The best route depends on two things I haven't been able to check yet\" and a note on its disabled shell tool, before giving any route."
+          },
+          {
+            "item": "Gives honest options side by side, including hosted ones where they fit, and states the upkeep of self-hosting.",
+            "pass": true,
+            "evidence": "It lists hosted options (Cloudflare Pages, Netlify, Render and others) and says of self-hosting, \"The cost is that you look after it. It's down when the machine is off, and you handle updates and backups.\""
+          },
+          {
+            "item": "Asks at most two or three questions, and only ones whose answers change the recommendation.",
+            "pass": true,
+            "evidence": "It asks two questions, what the dashboard is and which computer is in use, and both change the recommendation."
+          },
+          {
+            "item": "Builds, deploys, or changes nothing before the person chooses, and does not claim to have done so.",
+            "pass": true,
+            "evidence": "\"I'd confirm that with you before installing anything.\""
+          },
+          {
+            "item": "Chooses each hostname's auth mode by who uses it: org only for the person's own team; members, customers, or the public use the app's own accounts.",
+            "pass": true,
+            "evidence": "It picks `org` for \"my team, nobody else\" and notes each person needs an account in the org."
+          },
+          {
+            "item": "Raises sensitivity (private or regulated data) and who sees what inside the app, when the need involves it.",
+            "pass": false,
+            "evidence": "It mentions \"data that shouldn't leave your network\" only as a reason to self-host, and says nothing about sensitivity or who sees what inside the dashboard."
+          },
+          {
+            "item": "Says no plainly to a poor or refused fit, with the reason and what works instead.",
+            "pass": null,
+            "evidence": "No poor or refused fit arises in this prompt."
+          }
+        ],
+        "better": "Lead with a direct answer: publish the running dashboard on its port with org-only sign-in for the team, then lay out the hosted alternative and upkeep, and mention a later always-on card as optional."
+      }
+    }
+  ]
+}

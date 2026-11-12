@@ -1,17 +1,17 @@
-# edgible-cards skill evals: 2026-11-05 to 2026-11-11
+# edgible-cards skill evals: 2026-11-06 to 2026-11-12
 
-**7 of 18** held-out prompts pass, each at its latest run in the last 7 days (7 nightly runs). Skill from card-kit `4474a58`, `92d5d81`, `a205446`, `d4480ec`, `f6f69fc`.
+**7 of 18** held-out prompts pass, each at its latest run in the last 7 days (7 nightly runs). Skill from card-kit `4474a58`, `92d5d81`, `a205446`, `d4480ec`, `eac57b2`.
 
 Not run in this window (a run stopped early): record-stale-and-fixable, s3-members-area, update-skill.
 
 | Prompt | Run | Result | Skill loaded | expect | must_not broken |
 | --- | --- | --- | --- | --- | --- |
 | builder-agent-alone | 2026-11-06 | FAIL | yes (right) | 1/3 | 0 |
-| builder-just-live | 2026-11-05 | FAIL | no (WRONG) | 1/3 | 1 |
+| builder-just-live | 2026-11-12 | FAIL | yes (right) | 1/3 | 0 |
 | builder-publish-and-share | 2026-11-11 | FAIL | yes (right) | 2/3 | 0 |
 | builder-secrets-in-repo | 2026-11-07 | FAIL | no (WRONG) | 2/3 | 0 |
 | dementia-startup | 2026-11-09 | FAIL | no (WRONG) | 1/3 | 0 |
-| maritime-law-firm | 2026-11-05 | FAIL | no (WRONG) | 4/5 | 0 |
+| maritime-law-firm | 2026-11-12 | FAIL | no (WRONG) | 2/5 | 1 |
 | physio-clinic | 2026-11-10 | FAIL | yes (right) | 2/4 | 0 |
 | pocket-shutdown | 2026-11-06 | FAIL | yes (right) | 1/3 | 0 |
 | retest-request | 2026-11-10 | FAIL | yes (right) | 0/4 | 0 |
@@ -20,7 +20,7 @@ Not run in this window (a run stopped early): record-stale-and-fixable, s3-membe
 | edgible-mcp-desktop | 2026-11-06 | pass | yes (right) | 4/4 | 0 |
 | marketing-site-cost | 2026-11-07 | pass | yes (right) | 3/3 | 0 |
 | mcp-from-phone | 2026-11-07 | pass | yes (right) | 4/4 | 0 |
-| negative-landlord-email | 2026-11-05 | pass | no (right) | 1/1 | 0 |
+| negative-landlord-email | 2026-11-12 | pass | no (right) | 1/1 | 0 |
 | negative-react-error | 2026-11-11 | pass | no (right) | 1/1 | 0 |
 | record-unknown | 2026-11-09 | pass | yes (right) | 1/1 | 0 |
 | sensitive-photos | 2026-11-11 | pass | yes (right) | 3/3 | 0 |
@@ -31,10 +31,9 @@ Not run in this window (a run stopped early): record-stale-and-fixable, s3-membe
 - Missed: says which parts it can do alone (check the app, build the card, test it) and which need the person (their Edgible sign-in, their GitHub account, naming a steward). It lists the readiness check, card build and test as its work and says the steward, licence and submission are the person's. It never mentions the person's Edgible sign-in or GitHub account as something they must do. It only says testing happens on a machine 'signed in to your own Edgible account'.
 - Missed: stops at the sign-in and gives the person the link, rather than creating accounts or asking for passwords or keys in the chat. It does not create accounts or ask for passwords. It also gives no sign-in link and never reaches the sign-in step.
 
-**builder-just-live** (2026-11-05)
-- Missed: publishes the running app on a device, with the port it listens on. The answer gives only general options and asks "What is the dashboard built with"; it never publishes the app on a device or names a port.
-- Missed: offers keeping it running later, as a card of their own, without requiring it now. It says "Edgible has no card for a custom app like yours" and covers keeping it running only through Docker or systemd. It doesn't offer a card of their own for later.
-- Broke: require a container, a card or a pull request just to get it live. Step 2 says "Run it with Docker, or as a systemd service" and the closing offer is to "write the Dockerfile". That treats a container as part of getting it live.
+**builder-just-live** (2026-11-12)
+- Missed: publishes the running app on a device, with the port it listens on. It says "You'd run the app on a computer or small cloud server and publish it with Edgible" but never mentions the port the app listens on or concrete publish steps.
+- Missed: offers keeping it running later, as a card of their own, without requiring it now. It advises "put it in a container with its data in a named volume" for reliability, but doesn't offer a card of their own as a later step, and the container advice is framed as a recommendation, not a deferred option.
 
 **builder-publish-and-share** (2026-11-11)
 - Missed: asks first whether the person has an Edgible account, and says they create it themselves. Says "You need... an Edgible account" but never asks whether they have one, nor that they create it themselves.
@@ -46,8 +45,11 @@ Not run in this window (a run stopped early): record-stale-and-fixable, s3-membe
 - Missed: self-hosted building blocks only as one option, for a prototype with test or consented data. Mentions Immich self-hosted and "Consider self-hosting or on-device processing for the storage layer" but never frames self-hosting as only one option limited to test or consented data.
 - Missed: real patient data needs compliant hosting and advice. Says "check whether HIPAA applies" and recommends a clinical advisor, but doesn't say real patient data needs compliant hosting or legal advice, and it even suggests self-hosting.
 
-**maritime-law-firm** (2026-11-05)
-- Missed: points to professional rules on confidentiality and AI. It discusses confidentiality and ethical walls but never mentions bar rules, professional conduct rules, or AI ethics guidance.
+**maritime-law-firm** (2026-11-12)
+- Missed: self-hosting as a leading option, for confidentiality, behind org. "Does everything need to stay on firm-controlled infrastructure? That would point toward self-hosting, and I can look at options such as Edgible". Self-hosting is raised only as a conditional question. It is not a leading option, and nothing is said about putting it behind org-only access.
+- Missed: who sees which matters is set inside the apps (ethical walls). There is no mention of per-matter access, ethical walls, or conflicts between clients.
+- Missed: points to professional rules on confidentiality and AI. It says "Client-privileged material shouldn't go to a third-party service without careful handling", but it cites no professional rules or bar guidance on AI.
+- Broke: one shared AI knowledge base with no access rules. It proposes one Q&A knowledge base over all the cases and playbooks and says nothing about access rules or per-matter restrictions.
 
 **physio-clinic** (2026-11-10)
 - Missed: leads with practice-management tools built for clinics. Option 1 is two cheap general tools; the all-in-one clinic tools (Cliniko, Jane) are option 2. The answer does recommend option 2 first at the end: "start with option 2".
@@ -77,15 +79,15 @@ Not run in this window (a run stopped early): record-stale-and-fixable, s3-membe
 ## What would make answers better
 
 - builder-agent-alone: Before stopping, it should have said plainly which steps need the person's own Edgible sign-in and GitHub account, and given the sign-in link, so the person can act on those while it waits for the app path.
-- builder-just-live: Skip the "no card" opener and the Docker requirement. Publish the running app directly on the device with its port and an org-only sign-in for the team, then offer a card for keeping it running later as an option.
+- builder-just-live: Lead with a direct answer: publish the running dashboard on its port with org-only sign-in for the team, then lay out the hosted alternative and upkeep, and mention a later always-on card as optional.
 - builder-publish-and-share: Ask first whether they already have an Edgible account, and say they must create it themselves. Then cut the questions to the two or three that change the recommendation.
 - builder-secrets-in-repo: State plainly that a .env in the repo means the Stripe key and admin password should be treated as already exposed, so rotate both now, instead of making rotation conditional on whether they were shared.
 - dementia-startup: State that real patient data needs compliant hosting and legal advice, that self-hosting is suitable only for test or consented data in a prototype, and what self-hosting upkeep involves.
 - edgible-mcp-desktop: Give the OS-specific config file location up front and briefly clarify which option fits a desktop-only user, trimming the card-kit option's extra detail.
-- maritime-law-firm: Cite the professional conduct rules and bar guidance on confidentiality and AI use, compare hosted options honestly with the upkeep of self-hosting, and cut the five questions down to two or three.
+- maritime-law-firm: Make self-hosting behind org-only login the recommended default, with per-matter access rules or ethical walls and a pointer to bar rules on confidentiality and AI. Compare it with hosted options and state the upkeep, and cut the questions to two or three.
 - marketing-site-cost: Lead with a single concrete default recommendation, such as free static hosting with a cost estimate, and trim the option list and the Edgible mention to keep it more focused.
 - mcp-from-phone: Present a brief side-by-side of options, such as self-hosting with Edgible versus a hosted MCP or notes-app connector, instead of presenting a single self-hosted path.
-- negative-landlord-email: The email could be firmer. It could cite the tenant's right to repairs, set a reasonable deadline, and suggest keeping a written record of the request.
+- negative-landlord-email: The email could be a little more direct by stating the two-week delay as the first line and offering a ready-to-send version with fewer placeholders.
 - negative-react-error: Little needed; it could have searched more widely for the file, or given a short checklist for finding line 14, but the answer is honest and useful as written.
 - physio-clinic: Lead with clinic-specific practice management tools as the first option. Say outright that exercise plans are patient health records, and mention role-based access for the 3 physios.
 - pocket-shutdown: Name one app as the recommendation (for example Linkwarden, which keeps page copies), and ask whether the person has already exported their Pocket library so the import path is confirmed.
