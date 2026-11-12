@@ -187,7 +187,7 @@ jobs:
         run: |
           set -euo pipefail
           # Files from an earlier night stay in this folder unless removed.
-          rm -rf card-kit work agent-home out pick.json agent-prs.json agent.log check.log
+          rm -rf card-kit work agent-home out pick.json agent-prs.json agent-issues.json agent.log check.log
           git clone -q --depth 1 https://github.com/edgible-org/card-kit.git card-kit
           # Apps proposed before, as a pull request or an issue, open or closed, are not picked again.
           # One per line, as a name can have spaces in it (Vvveb CMS).
@@ -197,12 +197,16 @@ jobs:
           echo "proposed before: ${proposed[*]:-none}"
           # A category with a card still waiting is skipped, so a night's cards are not all of the same
           # kind: waiting means its pull request is open, or merged but not yet in the needs map's
-          # cards (a category counts as a gap until then). Newest first, so the fallback below can
-          # drop the one that has waited longest.
+          # cards (a category counts as a gap until then). A failed attempt (an issue) keeps its
+          # category paused for two weeks, or the next attempts retry the same category (the CMS loop
+          # of 2026-11-05). Newest first, so the fallback below can drop the one that has waited longest.
           gh pr list --repo "$GITHUB_REPOSITORY" --label agent-card --state all --limit 200 \
             --json title,body,state,createdAt > agent-prs.json
-          mapfile -t cats < <(python3 - card-kit/skills/edgible-cards/needs-map.yaml agent-prs.json <<'EOF'
+          gh issue list --repo "$GITHUB_REPOSITORY" --label agent-card --state all --limit 100 \
+            --json body,createdAt > agent-issues.json
+          mapfile -t cats < <(python3 - card-kit/skills/edgible-cards/needs-map.yaml agent-prs.json agent-issues.json <<'EOF'
           import json, re, sys
+          from datetime import datetime, timedelta, timezone
           text = open(sys.argv[1]).read()
           mapped = {}
           for block in re.findall(r"(?ms)^- category: (.+?)\n(.*?)(?=^- category:|\Z)", text):
@@ -216,6 +220,11 @@ jobs:
               category, card = m.group(1).strip(), re.sub(r"^New app card: ", "", pr["title"])
               if pr["state"] == "OPEN" or card not in mapped.get(category, set()):
                   newest[category] = max(newest.get(category, ""), pr["createdAt"])
+          since = (datetime.now(timezone.utc) - timedelta(days=14)).strftime("%Y-%m-%dT%H:%M:%SZ")
+          for issue in json.load(open(sys.argv[3])):
+              m = re.search(r"\(category: (.+?)\) and could", issue["body"] or "")
+              if m and m.group(1).strip() in mapped and issue["createdAt"] > since:
+                  newest[m.group(1).strip()] = max(newest.get(m.group(1).strip(), ""), issue["createdAt"])
           for category in sorted(newest, key=newest.get, reverse=True):
               print(category)
           EOF
@@ -293,7 +302,7 @@ jobs:
 
       - name: Clean up
         if: always()
-        run: rm -rf work agent-home card-kit out agent.log check.log pick.json agent-prs.json
+        run: rm -rf work agent-home card-kit out agent.log check.log pick.json agent-prs.json agent-issues.json
 
   test-1:
     needs: write
