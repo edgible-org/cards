@@ -64,9 +64,9 @@
   },
   "ech0": {
     "result": "pass",
-    "tested": "2026-11-06",
+    "tested": "2026-11-12",
     "edgible-cli": "1.4.29",
-    "files": "sha256:8cb02ae8aeba9171",
+    "files": "sha256:79a71d46816cc427",
     "device": "osxdevice"
   },
   "edgible-agent": {
@@ -176,7 +176,7 @@
   },
   "linkwarden": {
     "result": "pass",
-    "tested": "2026-11-02",
+    "tested": "2026-11-12",
     "edgible-cli": "1.4.29",
     "files": "sha256:c4c4be89fcf732d8",
     "device": "osxdevice"
@@ -225,7 +225,7 @@
   },
   "minecraft": {
     "result": "pass",
-    "tested": "2026-10-31",
+    "tested": "2026-11-12",
     "edgible-cli": "1.4.29",
     "files": "sha256:e8c8472f43ffcb39",
     "device": "osxdevice"
@@ -414,7 +414,7 @@
   },
   "vaultwarden": {
     "result": "pass",
-    "tested": "2026-11-04",
+    "tested": "2026-11-12",
     "edgible-cli": "1.4.29",
     "files": "sha256:7de09c4494beafa5",
     "device": "osxdevice"
