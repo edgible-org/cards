@@ -47,6 +47,10 @@ on:
         description: How many more cards to make after this one (the nightly chain sets this itself)
         type: string
         default: "0"
+      nightly:
+        description: Part of the nightly chain, so the regression follows its last card (the chain sets this itself)
+        type: boolean
+        default: false
 
 permissions:
   contents: write        # push the card's branch
@@ -601,8 +605,11 @@ jobs:
     needs: [write, finish]
     if: always() && needs.write.outputs.go == 'true' && needs.finish.result == 'success'
     runs-on: ubuntu-latest
+    outputs:
+      next: ${{ steps.next.outputs.next }}
     steps:
       - name: Start the next card
+        id: next
         env:
           GH_TOKEN: ${{ github.token }}
           LEFT: ${{ inputs.left }}
@@ -612,4 +619,21 @@ jobs:
           if [ "$GITHUB_EVENT_NAME" = workflow_run ]; then left=$((PER_NIGHT - 1)); else left=${LEFT:-0}; fi
           if [ "$left" -le 0 ]; then echo "tonight's cards are done"; exit 0; fi
           echo "$left more tonight"
-          gh workflow run grow.yml --repo "$GITHUB_REPOSITORY" -f left=$((left - 1))
+          gh workflow run grow.yml --repo "$GITHUB_REPOSITORY" -f left=$((left - 1)) -f nightly=true
+          echo "next=true" >> "$GITHUB_OUTPUT"
+
+  regression:
+    # The night's regression, started here once the chain has no next card, whether the night made
+    # cards, stopped early or skipped. It tests on the same fleet machines as a card's test, so
+    # starting it when each card's run ends (as it once did) left the next card's test queued
+    # behind it. A run by hand does not start it.
+    needs: [write, finish, again]
+    if: >-
+      always() && needs.write.result != 'skipped' && needs.again.outputs.next != 'true' &&
+      (github.event_name == 'workflow_run' || inputs.nightly)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start the regression
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run regression.yml --repo "$GITHUB_REPOSITORY" -f nightly=true

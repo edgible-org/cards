@@ -32,10 +32,12 @@ jobs:
   report:
     # Only the nightly chain continues: a run started by hand does not set off the next job.
     # The workflow before it ran on the schedule, or was itself part of the chain and did not skip.
+    # The regression is part of it when grow's chain started it: its run is named "regression (nightly)".
     if: >-
       github.event_name != 'workflow_run' ||
       github.event.workflow_run.event == 'schedule' ||
-      (github.event.workflow_run.event == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped')
+      (github.event.workflow_run.event == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') ||
+      (github.event.workflow_run.display_title == 'regression (nightly)' && github.event.workflow_run.conclusion != 'skipped')
     # The hub, for the summary on its Claude subscription. If the hub is down, the watchdog
     # workflow reports that instead.
     runs-on: [self-hosted, hub]
