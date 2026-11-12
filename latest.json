@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-11T21:05:58+00:00",
+ "generated": "2026-11-12T21:33:16+00:00",
  "repo": "edgible-org/cards",
  "site": "https://cards.edgible.org",
  "jobs": [
@@ -9,8 +9,8 @@
    "state": "ok",
    "count": 1,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/43008571348",
-   "at": "2026-11-11T11:02:08Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/43208139607",
+   "at": "2026-11-12T11:19:22Z"
   },
   {
    "workflow": "skill-evals",
@@ -18,50 +18,51 @@
    "state": "ok",
    "count": 1,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/43093631047",
-   "at": "2026-11-11T20:08:07Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/43303389467",
+   "at": "2026-11-12T20:45:04Z"
   },
   {
    "workflow": "grow",
    "name": "Grow",
-   "state": "ok",
-   "count": 1,
+   "state": "running",
+   "count": 2,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/43093841998",
-   "at": "2026-11-11T20:09:29Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/43305147252",
+   "at": "2026-11-12T20:55:51Z"
   },
   {
    "workflow": "regression",
    "name": "Cards regression",
-   "state": "fail",
+   "state": "ok",
    "count": 1,
-   "failed": 1,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/43093895462",
-   "at": "2026-11-11T20:09:50Z"
+   "failed": 0,
+   "latest": "https://github.com/edgible-org/cards/actions/runs/43305165083",
+   "at": "2026-11-12T20:55:57Z"
   },
   {
    "workflow": "site",
    "name": "Site build",
    "state": "running",
-   "count": 5,
+   "count": 8,
    "failed": 0,
-   "latest": "https://github.com/edgible-org/cards/actions/runs/43100088116",
-   "at": "2026-11-11T21:05:31Z"
+   "latest": "https://github.com/edgible-org/cards/actions/runs/43311289636",
+   "at": "2026-11-12T21:32:44Z"
   }
  ],
  "cards": {
-  "total": 68,
+  "total": 69,
   "with_status": 64,
   "passing": 64,
   "failing": [],
-  "tested_24h": 4,
+  "tested_24h": 7,
   "oldest": [
    "canary",
-   15
+   16
   ],
   "no_test_yet": [
    "accounts",
    "assistant",
+   "hedgedoc",
    "ollama-nvidia",
    "website"
   ]
@@ -71,24 +72,24 @@
   "cards_with_fixable": 64,
   "worst": [
    {
+    "card": "minecraft",
+    "count": 300
+   },
+   {
     "card": "frigate",
     "count": 290
    },
    {
     "card": "linkding",
-    "count": 259
-   },
-   {
-    "card": "langflow",
-    "count": 175
+    "count": 251
    },
    {
     "card": "immich",
-    "count": 174
+    "count": 190
    },
    {
-    "card": "passbolt",
-    "count": 168
+    "card": "langflow",
+    "count": 176
    }
   ],
   "scanned": 85
@@ -128,7 +129,7 @@
   },
   {
    "number": 395,
-   "title": "Update ghcr.io/berriai/litellm Docker tag to v1.109.0",
+   "title": "Update ghcr.io/berriai/litellm Docker tag to v1.109.1",
    "url": "https://github.com/edgible-org/cards/pull/395",
    "kind": "image bump",
    "state": "hold",
@@ -137,7 +138,12 @@
  ],
  "card_kit_prs": [],
  "grow": {
-  "made": [],
+  "made": [
+   {
+    "title": "New app card: hedgedoc",
+    "url": "https://github.com/edgible-org/cards/pull/418"
+   }
+  ],
   "could_not_make": [],
   "agent_prs_open": 0
  },
@@ -204,6 +210,11 @@
    "card": "grafana-mcp",
    "topic": "healthcheck",
    "image": "grafana/mcp-grafana:2.2.0"
+  },
+  {
+   "card": "hedgedoc",
+   "topic": "secret-files",
+   "image": "quay.io/hedgedoc/hedgedoc:1.10.8"
   },
   {
    "card": "home-assistant",
@@ -372,5 +383,5 @@
   }
  ],
  "skill_evals_report": "https://github.com/edgible-org/cards/issues/17",
- "summary": "The cards regression run ended as a failure overnight, though all four cards it tested passed and all 64 cards are passing at their latest test. The skill evals succeeded (7 of 18 held-out prompts pass), and all jobs finished. Nothing needs you today, though the regression run's failure status with no failed tests may be worth a quick look."
+ "summary": "The nightly run added a hedgedoc card, and the regression retest passed on all 7 cards it ran, leaving all 64 cards passing at their latest test. Skill evals held at 7 of 18 prompts passing this week, and one Grow run is still queued. Nothing needs you today."
 }
