@@ -1,0 +1,80 @@
+# Compose file for the hedgedoc card.
+# The host port, ORG_LABEL and the first account's email come from card.env. The database
+# password, the session secret and the first account's password are made on this machine by
+# hedgedoc-secrets, at first start, and never leave it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: hedgedoc
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume hedgedoc-secrets, then exits. It never changes one that exists.
+  hedgedoc-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        HEDGEDOC_DB_PASSWORD=openssl rand -hex 16
+        HEDGEDOC_SESSION_SECRET=openssl rand -hex 32
+        HEDGEDOC_ADMIN_PASSWORD=openssl rand -hex 16
+    volumes:
+      - hedgedoc-secrets:/run/card-secrets
+
+  hedgedoc:
+    image: ${HEDGEDOC_IMAGE:-quay.io/hedgedoc/hedgedoc:1.10.8}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${HEDGEDOC_PORT:?set HEDGEDOC_PORT in card.env}:3000"
+    # HedgeDoc reads these two only from the environment, so it starts through the loader, which
+    # sets them from the secret files and then runs the image's own entrypoint and command.
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
+    command:
+      - >-
+        export CMD_DB_URL="postgres://hedgedoc:$$HEDGEDOC_DB_PASSWORD@hedgedoc-db:5432/hedgedoc"
+        CMD_SESSION_SECRET="$$HEDGEDOC_SESSION_SECRET"
+        && exec /usr/local/bin/docker-entrypoint.sh node app.js
+    volumes:
+      - hedgedoc-secrets:/run/card-secrets:ro
+      - hedgedoc-uploads:/hedgedoc/public/uploads
+    environment:
+      CMD_DOMAIN: ${HEDGEDOC_DOMAIN:-hedgedoc.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      CMD_PROTOCOL_USESSL: "true"
+      CMD_URL_ADDPORT: "false"
+      CMD_IMAGE_UPLOAD_TYPE: filesystem
+      # Only signed-in people write: no anonymous notes, and new notes are editable by signed-in
+      # users only. Sign-in is by email and password; the org login in front lets only members in.
+      CMD_ALLOW_ANONYMOUS: "false"
+      CMD_ALLOW_ANONYMOUS_EDITS: "false"
+      CMD_DEFAULT_PERMISSION: limited
+      CMD_EMAIL: "true"
+      CMD_ALLOW_EMAIL_REGISTER: ${HEDGEDOC_ALLOW_REGISTER:-true}
+    depends_on:
+      hedgedoc-secrets:
+        condition: service_completed_successfully
+      hedgedoc-db:
+        condition: service_healthy
+    # The image has its own healthcheck.
+
+  hedgedoc-db:
+    image: postgres:17.11-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: hedgedoc
+      POSTGRES_USER: hedgedoc
+      POSTGRES_PASSWORD_FILE: /run/card-secrets/HEDGEDOC_DB_PASSWORD
+    volumes:
+      - hedgedoc-db-data:/var/lib/postgresql/data
+      - hedgedoc-secrets:/run/card-secrets:ro
+    depends_on:
+      hedgedoc-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hedgedoc -d hedgedoc"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  hedgedoc-db-data: {}
+  hedgedoc-uploads: {}
+  hedgedoc-secrets: {}
