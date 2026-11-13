@@ -1,0 +1,29 @@
+tested: 2026-11-14
+result: pass
+card-kit: "3fa93c6"
+edgible-cli: 1.4.29
+files: sha256:bcae032712f26d84
+machine: darwin/arm64, docker 29.4.3
+images:
+  - semitechnologies/weaviate:1.40.5@sha256:fe848a3830c8a96fc598c903e39bbaa84a84553e30362663c313643a0febe32a
+image_facts:
+  semitechnologies/weaviate:1.40.5: {user: "root", archs: ["amd64", "arm64"], healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    weaviate: pass
+  checks:
+    api: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"collections": 0}
+measured:
+  weaviate:
+    memory: 48 MB
+    images: 86 MB
+    data: 152 KB
+duration: 3m
+by: agent
+notes: weaviate's port 8080 was taken on the test machine, so it was tested on 8081.
