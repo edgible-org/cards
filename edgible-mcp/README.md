@@ -96,7 +96,7 @@ edgible app list
 curl -sS -o /dev/null -w '%{http_code}\n' "https://<edgible-mcp hostname>"
 ```
 
-`401`, until a key is sent. Make a key for each person, which is shown once: `edgible app api-keys create --app edgible-mcp --name <who>`. Then add the server to Claude Code: `claude mcp add --transport http edgible https://<edgible-mcp hostname>/mcp --header "Authorization: Bearer <key>"`, and `/mcp` in Claude Code lists its tools. `edgible app api-keys list --app edgible-mcp` and `delete` manage the keys.
+`401`, until a key is sent. Make a key for each person, which is shown once: `edgible app api-keys create --app edgible-mcp --name <who>`. Then add the server to Claude Code: `claude mcp add --scope user --transport http edgible-remote https://<edgible-mcp hostname>/mcp --header "Authorization: Bearer <key>"`, and `/mcp` in Claude Code lists its tools. `edgible app api-keys list --app edgible-mcp` and `delete` manage the keys.
 
 The rest of the setup is in the [MCP in Claude Code docs](https://docs.claude.com/en/docs/claude-code/mcp).
 
