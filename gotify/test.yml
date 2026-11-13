@@ -1,0 +1,30 @@
+tested: 2026-11-14
+result: pass
+card-kit: "3fa93c6"
+edgible-cli: 1.4.29
+files: sha256:325ae926bc176cf8
+machine: darwin/arm64, docker 29.4.3
+images:
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - gotify/server:3.0.0@sha256:d75e89e0e28389c00c2556afe01282a37ee9756b0285799aa25214243aebd5e5
+image_facts:
+  gotify/server:3.0.0: {user: "root", archs: ["386", "amd64", "arm", "arm64", "riscv64"], healthcheck: true}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    gotify: pass
+  checks:
+    stranger-cannot-get-in: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"users": 1, "applications": 0}
+measured:
+  gotify:
+    memory: 14 MB
+    images: 53 MB
+    data: 98 KB
+duration: 4m
+by: agent
+notes: gotify's port 8080 was taken on the test machine, so it was tested on 8081.

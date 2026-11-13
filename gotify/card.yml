@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: gotify
+  description: Gotify, push notifications to your Android phone from your own scripts, on its own logins and tokens
+  type: app
+  added: 2026-11-13
+  homepage: https://gotify.net/
+  license: MIT
+  steward: edgible-org
+
+applications:
+  - name: gotify
+    what: Gotify, for the web app, Android and HTTP publishing
+    from: gotify/server:3.0.0
+    port: 8080
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [none]
+    place: gotify
+
+secrets:
+  GOTIFY_DEFAULTUSER_PASS:
+    kind: human
+    make: openssl rand -base64 24
+    for: the admin's first sign-in, made by Gotify on first start; add an application token for each sender and a user for each phone, then stop using it
+
+data:
+  volumes:
+    gotify-data:
+      class: irreplaceable
+    gotify-secrets:
+      class: irreplaceable        # the card's secrets, made on the device: back up with the data
+  fingerprint:
+    service: gotify
+    command: >-
+      P=$(cat /run/card-secrets/GOTIFY_DEFAULTUSER_PASS); n() { curl -s -u "${GOTIFY_DEFAULTUSER_NAME:-admin}:$P" "http://127.0.0.1:80/$1" | grep -o '"id":' | wc -l; }; echo "{\"users\": $(n user), \"applications\": $(n application)}"
+
+places:
+  gotify:
+    memory: 64 MB
+    disk: 1 GB
+    arch: [amd64, arm64, arm]
+    gpu: none
