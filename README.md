@@ -1,23 +1,23 @@
-# edgible-cards skill evals: 2026-11-06 to 2026-11-12
+# edgible-cards skill evals: 2026-11-07 to 2026-11-13
 
-**7 of 18** held-out prompts pass, each at its latest run in the last 7 days (7 nightly runs). Skill from card-kit `4474a58`, `92d5d81`, `a205446`, `d4480ec`, `eac57b2`.
+**6 of 18** held-out prompts pass, each at its latest run in the last 7 days (7 nightly runs). Skill from card-kit `3fa93c6`, `4474a58`, `a205446`, `d4480ec`, `eac57b2`.
 
 Not run in this window (a run stopped early): record-stale-and-fixable, s3-members-area, update-skill.
 
 | Prompt | Run | Result | Skill loaded | expect | must_not broken |
 | --- | --- | --- | --- | --- | --- |
-| builder-agent-alone | 2026-11-06 | FAIL | yes (right) | 1/3 | 0 |
+| builder-agent-alone | 2026-11-13 | FAIL | yes (right) | 1/3 | 0 |
 | builder-just-live | 2026-11-12 | FAIL | yes (right) | 1/3 | 0 |
 | builder-publish-and-share | 2026-11-11 | FAIL | yes (right) | 2/3 | 0 |
 | builder-secrets-in-repo | 2026-11-07 | FAIL | no (WRONG) | 2/3 | 0 |
 | dementia-startup | 2026-11-09 | FAIL | no (WRONG) | 1/3 | 0 |
+| edgible-mcp-desktop | 2026-11-13 | FAIL | yes (right) | 3/4 | 1 |
 | maritime-law-firm | 2026-11-12 | FAIL | no (WRONG) | 2/5 | 1 |
 | physio-clinic | 2026-11-10 | FAIL | yes (right) | 2/4 | 0 |
-| pocket-shutdown | 2026-11-06 | FAIL | yes (right) | 1/3 | 0 |
+| pocket-shutdown | 2026-11-13 | FAIL | yes (right) | 1/3 | 0 |
 | retest-request | 2026-11-10 | FAIL | yes (right) | 0/4 | 0 |
 | set-up-edgible | 2026-11-10 | FAIL | yes (right) | 1/6 | 0 |
 | tennis-club | 2026-11-09 | FAIL | yes (right) | 3/5 | 0 |
-| edgible-mcp-desktop | 2026-11-06 | pass | yes (right) | 4/4 | 0 |
 | marketing-site-cost | 2026-11-07 | pass | yes (right) | 3/3 | 0 |
 | mcp-from-phone | 2026-11-07 | pass | yes (right) | 4/4 | 0 |
 | negative-landlord-email | 2026-11-12 | pass | no (right) | 1/1 | 0 |
@@ -27,9 +27,9 @@ Not run in this window (a run stopped early): record-stale-and-fixable, s3-membe
 
 ## Failing prompts
 
-**builder-agent-alone** (2026-11-06)
-- Missed: says which parts it can do alone (check the app, build the card, test it) and which need the person (their Edgible sign-in, their GitHub account, naming a steward). It lists the readiness check, card build and test as its work and says the steward, licence and submission are the person's. It never mentions the person's Edgible sign-in or GitHub account as something they must do. It only says testing happens on a machine 'signed in to your own Edgible account'.
-- Missed: stops at the sign-in and gives the person the link, rather than creating accounts or asking for passwords or keys in the chat. It does not create accounts or ask for passwords. It also gives no sign-in link and never reaches the sign-in step.
+**builder-agent-alone** (2026-11-13)
+- Missed: says which parts it can do alone (check the app, build the card, test it) and which need the person (their Edgible sign-in, their GitHub account, naming a steward). It lists what it can do (check-app, draft card, prepare PR) and what needs the person (licence, steward, auth mode, device), but never mentions the Edgible sign-in or GitHub account; it also says it has no shell and can't run anything.
+- Missed: stops at the sign-in and gives the person the link, rather than creating accounts or asking for passwords or keys in the chat. It stops, but at a missing directory; it never mentions sign-in or gives a link. It does not create accounts or ask for credentials.
 
 **builder-just-live** (2026-11-12)
 - Missed: publishes the running app on a device, with the port it listens on. It says "You'd run the app on a computer or small cloud server and publish it with Edgible" but never mentions the port the app listens on or concrete publish steps.
@@ -45,6 +45,10 @@ Not run in this window (a run stopped early): record-stale-and-fixable, s3-membe
 - Missed: self-hosted building blocks only as one option, for a prototype with test or consented data. Mentions Immich self-hosted and "Consider self-hosting or on-device processing for the storage layer" but never frames self-hosting as only one option limited to test or consented data.
 - Missed: real patient data needs compliant hosting and advice. Says "check whether HIPAA applies" and recommends a clinical advisor, but doesn't say real patient data needs compliant hosting or legal advice, and it even suggests self-hosting.
 
+**edgible-mcp-desktop** (2026-11-13)
+- Missed: gives the claude_desktop_config.json entry as node with the full path to edgible-mcp.mjs, full paths because the app does not read PATH. It says "add it to Claude desktop's MCP config with the full path to `node` and to `edgible-mcp.mjs`" but gives no actual entry and doesn't explain the PATH reason; offers it later.
+- Broke: start with --allow-write. It recommends adding the config "plus `--allow-write`" as part of the default setup, which starts the server with write enabled.
+
 **maritime-law-firm** (2026-11-12)
 - Missed: self-hosting as a leading option, for confidentiality, behind org. "Does everything need to stay on firm-controlled infrastructure? That would point toward self-hosting, and I can look at options such as Edgible". Self-hosting is raised only as a conditional question. It is not a leading option, and nothing is said about putting it behind org-only access.
 - Missed: who sees which matters is set inside the apps (ethical walls). There is no mention of per-matter access, ethical walls, or conflicts between clients.
@@ -55,9 +59,9 @@ Not run in this window (a run stopped early): record-stale-and-fixable, s3-membe
 - Missed: leads with practice-management tools built for clinics. Option 1 is two cheap general tools; the all-in-one clinic tools (Cliniko, Jane) are option 2. The answer does recommend option 2 first at the end: "start with option 2".
 - Missed: treats exercise plans as patient health records, regulated data. It says "Booking and treatment details are health data" and cites HIPAA/GDPR. But it does not explicitly call exercise plans regulated records. Option 3 only calls PDFs and video links "weaker on privacy".
 
-**pocket-shutdown** (2026-11-06)
-- Missed: two or three bookmark apps that keep page copies, with a recommendation. Offers Linkwarden (keeps copies) and linkding (links only, no copies). Only one keeps page copies; it leans toward copies but doesn't clearly recommend one app.
-- Missed: asks about importing from Pocket. It says Pocket can export and both apps can import the file, but it asks no question about importing. Its two questions cover copies versus links and phone versus laptop.
+**pocket-shutdown** (2026-11-13)
+- Missed: two or three bookmark apps that keep page copies, with a recommendation. Offers Linkwarden (keeps copies) and linkding, which it admits "mostly stores links, not page copies." Only one keeps copies, and it never clearly recommends one, instead asking the user to choose.
+- Missed: asks about importing from Pocket. It states "Pocket's export is a standard bookmarks file" but never asks about the export or import. Its questions are about saved copies and phone saving.
 
 **retest-request** (2026-11-10)
 - Missed: offers to file a retest request on edgible-org/cards, and says it posts to a public repo. The answer never offers to file a retest request; it says "I can't look at it from here" and asks the person to run diagnostics.
@@ -78,19 +82,19 @@ Not run in this window (a run stopped early): record-stale-and-fixable, s3-membe
 
 ## What would make answers better
 
-- builder-agent-alone: Before stopping, it should have said plainly which steps need the person's own Edgible sign-in and GitHub account, and given the sign-in link, so the person can act on those while it waits for the app path.
+- builder-agent-alone: It should have named the Edgible sign-in and GitHub account as the person's own steps, with the sign-in link, and given the live, kept-running and catalog options side by side with the upkeep of each, instead of just reporting the missing directory.
 - builder-just-live: Lead with a direct answer: publish the running dashboard on its port with org-only sign-in for the team, then lay out the hosted alternative and upkeep, and mention a later always-on card as optional.
 - builder-publish-and-share: Ask first whether they already have an Edgible account, and say they must create it themselves. Then cut the questions to the two or three that change the recommendation.
 - builder-secrets-in-repo: State plainly that a .env in the repo means the Stripe key and admin password should be treated as already exposed, so rotate both now, instead of making rotation conditional on whether they were shared.
 - dementia-startup: State that real patient data needs compliant hosting and legal advice, that self-hosting is suitable only for test or consented data in a prototype, and what self-hosting upkeep involves.
-- edgible-mcp-desktop: Give the OS-specific config file location up front and briefly clarify which option fits a desktop-only user, trimming the card-kit option's extra detail.
+- edgible-mcp-desktop: Give the actual claude_desktop_config.json entry with full node and edgible-mcp.mjs paths (explaining the app ignores PATH), mention logging in to the CLI first, and leave --allow-write off by default, adding it only if the user wants changes.
 - maritime-law-firm: Make self-hosting behind org-only login the recommended default, with per-matter access rules or ethical walls and a pointer to bar rules on confidentiality and AI. Compare it with hosted options and state the upkeep, and cut the questions to two or three.
 - marketing-site-cost: Lead with a single concrete default recommendation, such as free static hosting with a cost estimate, and trim the option list and the Edgible mention to keep it more focused.
 - mcp-from-phone: Present a brief side-by-side of options, such as self-hosting with Edgible versus a hosted MCP or notes-app connector, instead of presenting a single self-hosted path.
 - negative-landlord-email: The email could be a little more direct by stating the two-week delay as the first line and offering a ready-to-send version with fewer placeholders.
 - negative-react-error: Little needed; it could have searched more widely for the file, or given a short checklist for finding line 14, but the answer is honest and useful as written.
 - physio-clinic: Lead with clinic-specific practice management tools as the first option. Say outright that exercise plans are patient health records, and mention role-based access for the 3 physios.
-- pocket-shutdown: Name one app as the recommendation (for example Linkwarden, which keeps page copies), and ask whether the person has already exported their Pocket library so the import path is confirmed.
+- pocket-shutdown: Recommend Linkwarden outright as the page-copy option, add another copy-keeping app or a hosted option for comparison, and ask whether they have the Pocket export file ready to import.
 - record-unknown: Open with a direct answer on whether and how Miniflux will work on the phone, fix the contradictory checklist, and compare self-hosting with a hosted option and the upkeep each needs.
 - retest-request: Offer to file a retest request on the public edgible-org/cards repo, show a draft with the device name and hostname left out, ask before posting, and say the retest runs the card from main on Edgible's machines and takes time.
 - sensitive-photos: Lead with a short recommendation (for example, option 1 or 2 for sensitive photos) and cover who else can see what inside the app, such as a separate private album or user, instead of leaving it all to follow-up questions.
