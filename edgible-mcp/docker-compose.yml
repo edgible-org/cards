@@ -7,7 +7,7 @@ name: edgible-mcp
 
 services:
   edgible-mcp:
-    image: ghcr.io/edgible-org/edgible-mcp:0.8.1
+    image: ghcr.io/edgible-org/edgible-mcp:0.8.2
     restart: unless-stopped
     ports:
       - "127.0.0.1:${EDGIBLE_MCP_PORT:?set EDGIBLE_MCP_PORT in card.env}:8000"
@@ -16,6 +16,7 @@ services:
       EDGIBLE_MCP_DEVICES: ${EDGIBLE_MCP_DEVICES:-}
       EDGIBLE_MCP_CACHE_DIR: /root/.cache/edgible-mcp
       EDGIBLE_MCP_CATALOG_TTL: ${EDGIBLE_MCP_CATALOG_TTL:-900}
+      EDGIBLE_MCP_VIEWS: ${EDGIBLE_MCP_VIEWS:-on}
       EDGIBLE_MCP_SIGN_IN: docker compose --env-file edgible-mcp/card.env -f edgible-mcp/docker-compose.yml exec edgible-mcp edgible auth login --no-browser
     volumes:
       # The catalog of cards, cached.

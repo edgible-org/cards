@@ -7,7 +7,7 @@ name: edgible-connector
 
 services:
   edgible-mcp:
-    image: ghcr.io/edgible-org/edgible-mcp:0.8.1
+    image: ghcr.io/edgible-org/edgible-mcp:0.8.2
     restart: unless-stopped
     environment:
       EDGIBLE_MCP_ALLOW_WRITE: ${EDGIBLE_MCP_ALLOW_WRITE:-0}
@@ -20,6 +20,9 @@ services:
       EDGIBLE_MCP_GATEWAY_URL: ${EDGIBLE_MCP_GATEWAY_URL:-}
       EDGIBLE_MCP_PAGES_URL: ${MCP_SIGNIN_LOGIN_URL:-https://mcp-signin-login.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}/pages
       EDGIBLE_MCP_CACHE_DIR: /root/.cache/edgible-mcp
+      # off leaves out the panels drawn beside find, describe and whats_running (MCP Apps), for a
+      # host that fails to draw them; the text answers are complete without them.
+      EDGIBLE_MCP_VIEWS: ${EDGIBLE_MCP_VIEWS:-on}
       EDGIBLE_MCP_SIGN_IN: docker compose --env-file edgible-connector/card.env -f edgible-connector/docker-compose.yml exec edgible-mcp edgible auth login --no-browser
     volumes:
       - edgible-mcp-cache:/root/.cache
