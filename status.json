@@ -36,7 +36,7 @@
   },
   "ci": {
     "result": "pass",
-    "tested": "2026-10-30",
+    "tested": "2026-11-13",
     "edgible-cli": "1.4.29",
     "files": "sha256:6746ffcd9d4da123",
     "device": "osxdevice"
@@ -78,16 +78,16 @@
   },
   "edgible-connector": {
     "result": "pass",
-    "tested": "2026-11-06",
+    "tested": "2026-11-13",
     "edgible-cli": "1.4.29",
-    "files": "sha256:ac6f7f23b3be8085",
+    "files": "sha256:af86322354ff968f",
     "device": "osxdevice"
   },
   "edgible-mcp": {
-    "result": "pass",
-    "tested": "2026-11-06",
+    "result": "fail",
+    "tested": "2026-11-13",
     "edgible-cli": "1.4.29",
-    "files": "sha256:557f0cbdd99a23b0",
+    "files": "sha256:21f6ea6fed69c730",
     "device": "osxdevice"
   },
   "freshrss": {
@@ -118,6 +118,13 @@
     "files": "sha256:056a921c9ac5b386",
     "device": "osxdevice"
   },
+  "hedgedoc": {
+    "result": "pass",
+    "tested": "2026-11-13",
+    "edgible-cli": "1.4.29",
+    "files": "sha256:b772b88d7b6e7724",
+    "device": "osxdevice"
+  },
   "hi-events": {
     "result": "pass",
     "tested": "2026-11-06",
@@ -127,7 +134,7 @@
   },
   "home-assistant": {
     "result": "pass",
-    "tested": "2026-11-06",
+    "tested": "2026-11-13",
     "edgible-cli": "1.4.29",
     "files": "sha256:5a68338e1f504281",
     "device": "osxdevice"
@@ -204,9 +211,9 @@
   },
   "mcp-signin": {
     "result": "pass",
-    "tested": "2026-11-06",
+    "tested": "2026-11-13",
     "edgible-cli": "1.4.29",
-    "files": "sha256:b6de7ff29ebaa4ae",
+    "files": "sha256:4ded8f0125caf58a",
     "device": "osxdevice"
   },
   "mediamtx": {
@@ -267,7 +274,7 @@
   },
   "onedev": {
     "result": "pass",
-    "tested": "2026-11-06",
+    "tested": "2026-11-13",
     "edgible-cli": "1.4.29",
     "files": "sha256:cef7ea50f1a5e4c8",
     "device": "osxdevice"
@@ -365,7 +372,7 @@
   },
   "speaches": {
     "result": "pass",
-    "tested": "2026-11-06",
+    "tested": "2026-11-13",
     "edgible-cli": "1.4.29",
     "files": "sha256:ed7b9e5e0cbd1eec",
     "device": "osxdevice"
