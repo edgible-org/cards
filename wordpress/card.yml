@@ -31,6 +31,22 @@ secrets:
     make: openssl rand -hex 16
     for: admin's sign-in, set by prepare.sh
 
+data:
+  volumes:
+    wordpress-db-data:
+      class: irreplaceable
+      dump:
+        service: wordpress-db
+        command: mariadb-dump -u wordpress -p"$(cat /run/card-secrets/WORDPRESS_DB_PASSWORD)" --single-transaction wordpress
+        restore: mariadb -u wordpress -p"$(cat /run/card-secrets/WORDPRESS_DB_PASSWORD)" wordpress
+    wordpress-files:
+      class: irreplaceable        # uploaded media, themes and plugins
+    wordpress-secrets:
+      class: irreplaceable        # the card's secrets, made on the device: back up with the data
+  fingerprint:
+    service: wordpress-db
+    command: mariadb -N -u wordpress -p"$(cat /run/card-secrets/WORDPRESS_DB_PASSWORD)" wordpress -e "select json_object('users', (select count(*) from wp_users), 'posts', (select count(*) from wp_posts where post_status = 'publish'))"
+
 places:
   wordpress:
     memory: 384 MB

@@ -10,6 +10,8 @@ One app, `wordpress`, on the place `wordpress`, on `none`: it is a public site. 
 
 WordPress keeps its address in its settings, so `WP_HOME` and `WP_SITEURL` are `https://wordpress.<ORG_LABEL>.<EDGIBLE_DOMAIN>`, or `WORDPRESS_URL` on your own domain. A fresh WordPress hands its admin to whoever opens the install page first, so this card installs it from the command line before it is published, with the `wordpress-cli` service, which runs only when asked.
 
+Your posts, pages, users and settings are in the database volume `wordpress-db-data`; uploads, themes and plugins are in `wordpress-files`; the passwords are in `wordpress-secrets`. Back up all three.
+
 The images are `wordpress:7.1.3-php8.3-apache`, `mariadb:11.8.9`, and `wordpress:cli-2.12.0-php8.3`. To use it in a card, copy the four services, the `x-wordpress-env` block, the three volumes, card.yml's `secrets:`, and the `WORDPRESS_` lines.
 
 Themes, plugins and uploads live in the volume `wordpress-files`, and posts, pages and users in `wordpress-db-data`. Minimum recommended for the place `wordpress`: 384 MB of memory and 2 GB of disk, on an arm64 or amd64 machine, with no GPU.
