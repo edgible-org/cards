@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Choosing between them | Edgible cards</title>
+<meta name="description" content="Which questions to send to your private model and which to the cloud, what the private model is good at, and what it isn&#x27;t.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/choosing-between-them/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="Choosing between them">
+<meta property="og:description" content="Which questions to send to your private model and which to the cloud, what the private model is good at, and what it isn&#x27;t.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/choosing-between-them/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=43e122d1">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../choosing-between-them.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.svg" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / choosing-between-them</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#map"/></svg></span><span>Choosing between them</span></h1>
+<p><em>Chapter 6 of <a href="../a-private-model-for-your-agent/">A private model for your agent</a>. Draft: <a href="mailto:stefano@edgible.com?subject=Playbook%20feedback">tell us how it goes</a>.</em></p>
+<p>You now have both. This last chapter is a rule of thumb, and an honest account of the trade.</p>
+<h2 id="the-rule-of-thumb">The rule of thumb</h2>
+<p>Ask yourself one question first: <strong>would I mind if this left my computer?</strong> If so, use <strong>private</strong>. If not, use whatever's best for the job.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Use</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Summarise or reword text you paste in</td>
+<td>private</td>
+<td>Small models do this well, and the text stays home</td>
+</tr>
+<tr>
+<td>Draft an email, a note, a plan</td>
+<td>private, or fast</td>
+<td>Both are fine; private if the content is personal</td>
+</tr>
+<tr>
+<td>Questions about a document you paste in</td>
+<td>private-smart</td>
+<td>More room to follow a long text</td>
+</tr>
+<tr>
+<td>Anything involving a client, a patient, a contract, your health or money</td>
+<td>private-smart</td>
+<td>This is what it's for</td>
+</tr>
+<tr>
+<td>Quick everyday questions</td>
+<td>fast</td>
+<td>Quickest and a fraction of a cent</td>
+</tr>
+<tr>
+<td>Hard reasoning, maths, careful analysis</td>
+<td>smart or best</td>
+<td>Cloud models are still ahead</td>
+</tr>
+<tr>
+<td>An agent doing a long job with many tools</td>
+<td>fast, smart or best</td>
+<td>Small local models drift on long, many-step jobs; see below</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-the-private-model-is-good-at">What the private model is good at</h2>
+<ul>
+<li><strong>Privacy,</strong> which nothing else gives you. The question and the answer stay on your hardware, and Edgible's part is the key that lets your gateway reach it.</li>
+<li><strong>Cost that doesn't surprise you.</strong> There's no bill, whatever the agent does. A runaway agent costs you warm air, not dollars.</li>
+<li><strong>Always the same.</strong> A cloud model is retired or changed on someone else's schedule. Yours changes when you say.</li>
+</ul>
+<h2 id="what-it-isnt-good-at-yet">What it isn't good at, yet</h2>
+<p>We measured these on a computer with 32 GB of memory its GPU can use. Yours will differ, but the shape won't.</p>
+<ul>
+<li><strong>The start of an agent conversation.</strong> The numbers below are for short questions. Your agent opens every conversation with about 12,000 tokens of instructions and tools, and a local model reads them at the pace of its hardware: 80 seconds with <code>qwen2.5:7b</code> on our test computer, then under a second per message for the rest of that conversation. The wait comes back after five idle minutes, when the computer unloads the model. It is a cost per conversation, not per message, so a few long conversations suit a private model better than many short ones.</li>
+<li><strong>Speed.</strong> A small model answers a short question almost at once. The 20 billion parameter one is fine. The biggest we tried, <code>qwen3.5:27b</code>, produced about six words a second, and took half a minute for a short answer once you count loading it. Good for a document you leave running. Slow for a chat.</li>
+<li><strong>Memory.</strong> A model needs about its own size in memory <em>on top of</em> everything else on the computer. A model that nearly fits makes everything slow.</li>
+<li><strong>Long jobs with many tools.</strong> A single tool call works: we asked both <code>qwen2.5:7b</code> and <code>gpt-oss:20b</code> for the weather in Paris with a weather tool on offer, three times each, and every time they called it correctly. What we saw go wrong was a long agent session on a small model with a full set of tools: slow, mostly at the start of each conversation (above), and clumsy. Cloud models are still the safer choice for that. Use private for what you say and ask, and a cloud model for a long job you want your agent to <em>do</em>, unless you've tried a local model on your own tasks and it holds up.</li>
+<li><strong>Strength.</strong> A 7 billion parameter model is not a cloud model. For hard problems it will be wrong more often, and say it with the same confidence. Check what matters.</li>
+</ul>
+<h2 id="keep-an-eye-on">Keep an eye on</h2>
+<ul>
+<li><strong>Is the GPU computer awake?</strong> <code>private</code> doesn't fall back, by design. &quot;It can't answer&quot; means check that computer.</li>
+<li><strong>Which model did you pick?</strong> The menu in your agent says.</li>
+<li><strong>Disk.</strong> Models are big. <code>ollama</code> on that computer lists them; delete the ones you don't use.</li>
+</ul>
+<h2 id="what-youve-just-done">What you've just done</h2>
+<p>You've built something most people don't have: a way to use AI that matches the sensitivity of the question.</p>
+<ul>
+<li><strong>Your own hardware, used well,</strong> for the work that must stay home.</li>
+<li><strong>Cloud models, used on purpose,</strong> for the work that's better there.</li>
+<li><strong>One agent, one gateway, one place to see what everything costs.</strong></li>
+<li><strong>No ports opened,</strong> on either machine, and no key shown to anyone.</li>
+</ul>
+<p>The next time someone says &quot;I'd use AI for that but I can't put it in a cloud service&quot;, you know what to tell them.</p>
+<p>Want to stop, or start again? <a href="../take-it-all-down/">Take it all down</a> removes the private model and everything else cleanly, in reverse order, keeping your data or not.</p>
+<nav class="chapters"><a class="prev" href="../give-your-agent-your-files/"><span>&larr; Previous</span>Give your agent your own files</a><a class="next" href="../take-it-all-down/"><span>Next &rarr;</span>Take it all down</a></nav>
+</article>
+<p class="md-source"><a href="../choosing-between-them.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-14 from edgible-org/cards cd07360 -->
+</footer>
+</body>
+</html>

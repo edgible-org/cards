@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Back up an app | Edgible cards</title>
+<meta name="description" content="Back up an app and its data with your AI assistant, with a plain account of what stops and for how long, and a check that the backup is whole.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/back-up-an-app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="Back up an app">
+<meta property="og:description" content="Back up an app and its data with your AI assistant, with a plain account of what stops and for how long, and a check that the backup is whole.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/back-up-an-app/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=43e122d1">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../back-up-an-app.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.svg" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / back-up-an-app</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#backup"/></svg></span><span>Back up an app</span></h1>
+<p><em>Chapter 1 of <a href="../looking-after-it/">Looking after it</a>. <em>New: the tools are tested on our own machines, and the prompts are still being run end to end, so <a href="mailto:stefano@edgible.com?subject=Playbook%20feedback">tell us how it goes</a>.</em></em></p>
+<p>A backup is a copy of an app's data, kept somewhere other than the app. This chapter makes one.</p>
+<blockquote>
+<p><strong>What you need</strong></p>
+<ul>
+<li>An app running from a card on your machine, such as a wiki or a bookmarks app. We use a team wiki as the example.</li>
+<li>Your AI assistant on that machine, with the Edgible skill.</li>
+</ul>
+</blockquote>
+<h2 id="1-ask-for-the-backup">1. Ask for the backup</h2>
+<p>In your AI assistant, on the machine that runs the app:</p>
+<blockquote>
+<p>Back up my team wiki.</p>
+</blockquote>
+<p>It starts with a <strong>dry run</strong>: it tells you what it would copy, which parts of the app would stop while it copies, for how long, and whether there's room on the disk. Nothing changes yet. It then asks if you want to go ahead.</p>
+<p>For a small app the stop is a few seconds. The app starts again by itself, and the assistant checks that it is healthy.</p>
+<p>By default the backup goes in a folder next to the app. To put it somewhere else, say so: &quot;Back up my team wiki to my external drive.&quot; That works for any folder your machine can see.</p>
+<h2 id="2-see-what-youve-got">2. See what you've got</h2>
+<p>When it's done, your assistant tells you where the backup is: a folder next to the app, named with the date and time. In it:</p>
+<ul>
+<li><strong>The data,</strong> one file per part of the app that matters, with a check code for each, so a damaged file is caught later.</li>
+<li><strong>The app's own settings and keys,</strong> kept private to you. The data is no use without them: some of it is locked with those keys.</li>
+<li><strong>A short list of what's inside,</strong> and a fingerprint of the data, such as &quot;4 pages&quot;. That fingerprint is how you prove a restore later.</li>
+</ul>
+<p>Apps that can be copied while they run, such as ones with a database, don't stop at all for that part: your assistant asks the database for a copy while the app stays up.</p>
+<h2 id="3-keep-a-copy-somewhere-else">3. Keep a copy somewhere else</h2>
+<p>The backup is on the same machine as the app unless you chose otherwise. If that machine is lost, so is the backup. Your assistant says so, and you should listen.</p>
+<p>A copy somewhere else, on an external drive or another storage service, is a good idea. That part is up to you: <strong>Edgible writes the backup into a folder you choose, and moving that folder elsewhere is something your AI can help with.</strong></p>
+<blockquote>
+<p>Copy that backup folder to somewhere else too.</p>
+</blockquote>
+<ul>
+<li><strong>Copy the whole folder.</strong> A restore checks every file in it, and a damaged or incomplete copy is caught before anything changes.</li>
+<li><strong>Keep it private.</strong> The backup holds your app's settings and keys.</li>
+</ul>
+<h2 id="what-youve-just-done">What you've just done</h2>
+<ul>
+<li><strong>Your data has a second home.</strong> If you break something, delete something by mistake, or lose the disk, there's something to go back to.</li>
+<li><strong>You know what a backup costs:</strong> a short pause, and some disk.</li>
+<li><strong>The backup carries its own proof,</strong> a fingerprint of the data, ready for the next chapter.</li>
+</ul>
+<p>A backup you've never restored is a hope, not a backup. <a href="../restore-and-prove-it/">Restore it, and prove it</a> is the next chapter.</p>
+<details>
+<summary>Prefer to do it by hand?</summary>
+<p>Your assistant uses card-kit's <code>backup-card</code>, which comes with the Edgible skill. On the machine that runs the app, with the app's folder, such as <code>~/otter-wiki</code>:</p>
+<pre><code class="language-bash">python3 ~/.card-kit/backup-card.py ~/otter-wiki --dry-run   # what it copies, what stops, how long
+python3 ~/.card-kit/backup-card.py ~/otter-wiki
+</code></pre>
+<p>It writes <code>~/otter-wiki-backups/&lt;date&gt;-&lt;time&gt;/</code>, with <code>backup.json</code> (what's inside and a check code for each file) and the app's <code>card.env</code> kept private. Copy that folder elsewhere.</p>
+<p>For a card with no <code>data:</code> section yet, stop the app, copy each of its Docker volumes with <code>tar</code>, keep <code>card.env</code> and the card's secrets volume with the copies, and start it again. The Edgible skill has the exact commands.</p>
+</details>
+<nav class="chapters"><a class="prev" href="../looking-after-it/"><span>&larr; Previous</span>Looking after it</a><a class="next" href="../restore-and-prove-it/"><span>Next &rarr;</span>Restore it, and prove it</a></nav>
+</article>
+<p class="md-source"><a href="../back-up-an-app.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-14 from edgible-org/cards cd07360 -->
+</footer>
+</body>
+</html>

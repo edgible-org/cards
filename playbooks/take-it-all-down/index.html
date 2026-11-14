@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Take it all down | Edgible cards</title>
+<meta name="description" content="Remove what the AI agent and private model playbooks set up, cleanly, keeping your data or deleting it, whenever you want to stop or start again.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/take-it-all-down/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="Take it all down">
+<meta property="og:description" content="Remove what the AI agent and private model playbooks set up, cleanly, keeping your data or deleting it, whenever you want to stop or start again.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/take-it-all-down/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=43e122d1">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../take-it-all-down.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.svg" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / take-it-all-down</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#clean"/></svg></span><span>Take it all down</span></h1>
+<p><em>An appendix to <a href="../your-own-ai-agent/">Your own AI agent, from anywhere</a> and <a href="../a-private-model-for-your-agent/">A private model for your agent</a>. Tested on one real setup in October 2026: removing the gateway's private model, the agent, the AI gateway, stored keys and the connector were all run from Claude. Not yet run: the Claude Code prompts for the GPU computer, for deleting an app's data, and for taking a machine off your account.</em></p>
+<p>You can walk away cleanly at any time, whether you were trying things out, want to start again, or need room for other apps. This page takes both playbooks down in reverse order, so nothing is left behind. Claude asks before each removal.</p>
+<p><strong>Only do the sections that apply.</strong> Each says who it's for. Never added a private model? Skip section 1. Never used your own domain? Skip section 2. And so on. You can stop after any section: what's left keeps working.</p>
+<blockquote>
+<p><strong>Keep your data, or delete it?</strong></p>
+<p>Removing an app keeps its data on your machine, so setting it up again under the same name picks up where you left off: your agent's memory, your bookmarks, your gateway's spending history. Deleting the data is a separate, deliberate step, in each section. If you're on a virtual machine and want everything gone, skip to <a href="#the-shortcut-delete-the-virtual-machine">The shortcut</a>.</p>
+</blockquote>
+<h2 id="1-your-private-model">1. Your private model</h2>
+<p><em>For you if you did <a href="../a-private-model-for-your-agent/">A private model for your agent</a>. It comes down first because it was added last. In reverse order:</em></p>
+<p><strong>In your agent:</strong> nothing to remove. The private choices in its model menu come from your gateway and disappear when the gateway stops offering them.</p>
+<p><strong>In your gateway.</strong> In Claude, on your phone or computer, say:</p>
+<blockquote>
+<p>Take Ollama out of my AI gateway.</p>
+</blockquote>
+<p><code>private</code> and <code>private-smart</code> go back to waiting for a model, as they were before. The gateway restarts and doesn't answer for about a minute. Its other providers, keys and budgets are untouched.</p>
+<p><strong>On your GPU computer, <code>edgible-gpu</code>.</strong> In Claude Code on that computer, say:</p>
+<blockquote>
+<p>Remove my ollama app, and the key my gateway used for it.</p>
+</blockquote>
+<p>The app is unpublished, and the key is deleted, so it stops working at once. Then, to stop Ollama and its guard on that computer:</p>
+<blockquote>
+<p>Stop and remove Ollama and its guard from this computer.</p>
+</blockquote>
+<p>Your downloaded models stay on the computer, which is useful if you set up again, but they take a lot of disk: <code>gpt-oss:20b</code> alone is 13 GB. To free the space:</p>
+<blockquote>
+<p>Delete the models I downloaded for Ollama.</p>
+</blockquote>
+<p><em>Not necessary if you'd like to keep using Ollama on that computer for something else, or its models for other programs.</em></p>
+<p><strong>Undo the keep-awake setting,</strong> if you'd like the computer to sleep again:</p>
+<blockquote>
+<p>Let this computer sleep again when it's idle.</p>
+</blockquote>
+<p><strong>Take it off your account</strong> (optional), in Claude Code on that computer:</p>
+<blockquote>
+<p>Remove Edgible from this computer, and take it off my account.</p>
+</blockquote>
+<p><em>Not necessary if you'll use <code>edgible-gpu</code> again, or want to keep the computer on Edgible for other apps.</em> If this computer is where you made the virtual machine (see <a href="../getting-a-machine/">Getting a machine</a>), leave Edgible on it for now: you may not be done with the VM.</p>
+<h2 id="2-your-own-domain">2. Your own domain</h2>
+<p><em>For you if you did <a href="../use-your-own-domain/">Use your own domain</a>.</em></p>
+<blockquote>
+<p>Stop using links.yourname.com for my bookmarks.</p>
+</blockquote>
+<p>The app keeps working at its Edgible address. Claude tells you which DNS record you added, and you delete that CNAME at your domain provider. It's the one step only you can do. Do the same for any other app you gave a domain.</p>
+<h2 id="3-your-bookmarks">3. Your bookmarks</h2>
+<p><em>For you if you did <a href="../a-home-for-your-apps/">A home for everything you've built</a>.</em></p>
+<blockquote>
+<p>Remove linkding.</p>
+</blockquote>
+<p>Its bookmarks stay on your machine. Claude's Edgible tools can't delete an app's data, so to delete them too, ask Claude Code on that machine: <em>&quot;Delete the data of my removed linkding app.&quot;</em> Its sign-in token, which you gave Claude to bookmark your apps, stays stored with Edgible until you delete it (section 5 covers stored keys too):</p>
+<blockquote>
+<p>Delete my stored linkding token from Edgible.</p>
+</blockquote>
+<h2 id="4-your-agent">4. Your agent</h2>
+<blockquote>
+<p>Remove my agent, and revoke its gateway key.</p>
+</blockquote>
+<p>Its memory and conversations stay on your machine. Claude's Edgible tools can't delete an app's data, so to delete them too, ask Claude Code on that machine: <em>&quot;Delete the data of my removed agent app.&quot;</em> Its gateway key stops working at once, so nothing can spend on its behalf. The keys stored for it go with it, and so does anything it was signed in to Edgible with.</p>
+<h2 id="5-your-ai-gateway">5. Your AI gateway</h2>
+<blockquote>
+<p>Remove my AI gateway.</p>
+</blockquote>
+<p>This takes down the gateway's second, public address as well, and the master key stored for it. Your provider keys stay stored with Edgible, ready if you set a gateway up again. So does its spending history, on your machine. To remove the keys too:</p>
+<blockquote>
+<p>Delete my stored AI keys from Edgible.</p>
+</blockquote>
+<p>If you won't use them again, also revoke them at each provider: DeepSeek, Gemini, and any others you added. That's done on their websites, and only you can do it.</p>
+<h2 id="6-the-connector">6. The connector</h2>
+<p>The connector is how Claude reaches your Edgible, so it comes down last of the things Claude uses, in two places:</p>
+<ol>
+<li>
+<p><strong>In Claude:</strong> Settings, Connectors, then remove <strong>Edgible</strong>.</p>
+</li>
+<li>
+<p><strong>On your machine:</strong> in Claude Code on your own computer, say:</p>
+<blockquote>
+<p>Remove the Edgible connector from my edgible-vm.</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="7-edgible-itself-optional">7. Edgible itself (optional)</h2>
+<p>To take the machine off your Edgible account and uninstall Edgible's agent from it, in Claude Code:</p>
+<blockquote>
+<p>Remove Edgible from my edgible-vm, and take it off my account.</p>
+</blockquote>
+<p>Your Edgible account stays, with nothing in it, ready if you come back.</p>
+<h2 id="the-shortcut-delete-the-virtual-machine">The shortcut: delete the virtual machine</h2>
+<p>If you followed <a href="../getting-a-machine/">Getting a machine</a> and made a virtual machine, you can remove everything on it in one go: the connector, gateway, agent and bookmarks. In Claude Code:</p>
+<blockquote>
+<p>Delete the edgible-vm virtual machine.</p>
+</blockquote>
+<p>Then tidy what lives outside it:</p>
+<ul>
+<li><strong>The connector in Claude's settings</strong> (section 6, step 1).</li>
+<li><strong>The machine's entry in your Edgible account:</strong> <em>&quot;Take my edgible-vm off my Edgible account.&quot;</em></li>
+<li><strong>Your stored keys,</strong> which stay with Edgible until you delete them (sections 3 and 5), and any provider keys you want revoked at their websites.</li>
+<li><strong>A domain record,</strong> if you used your own domain (section 2).</li>
+<li><strong>The private model,</strong> if you added one. It lives on <code>edgible-gpu</code>, not on the virtual machine, so do section 1 as well.</li>
+</ul>
+<h2 id="what-youve-just-done">What you've just done</h2>
+<p>You've taken it all down, and you chose what happened to your data. Nothing was locked in: no export to ask for, no account to plead with. That's what owning it means.</p>
+<details>
+<summary>Prefer to do it by hand?</summary>
+<p>Each app's card README ends with a Tear down section, the same steps in order: unpublish, stop, delete the data, remove the card. The cards are <a class="ext" href="https://github.com/edgible-org/cards/tree/main/linkding" target="_blank" rel="noopener noreferrer">linkding<span class="sr-only"> (opens in a new tab)</span></a>, <a class="ext" href="https://github.com/edgible-org/cards/tree/main/edgible-agent" target="_blank" rel="noopener noreferrer">edgible-agent<span class="sr-only"> (opens in a new tab)</span></a>, <a class="ext" href="https://github.com/edgible-org/cards/tree/main/litellm" target="_blank" rel="noopener noreferrer">litellm<span class="sr-only"> (opens in a new tab)</span></a> (the gateway), <a class="ext" href="https://github.com/edgible-org/cards/tree/main/edgible-connector" target="_blank" rel="noopener noreferrer">edgible-connector<span class="sr-only"> (opens in a new tab)</span></a> and <a class="ext" href="https://github.com/edgible-org/cards/tree/main/ollama-osx" target="_blank" rel="noopener noreferrer">ollama-osx<span class="sr-only"> (opens in a new tab)</span></a>. <code>edgible app api-keys</code> lists and deletes an app's keys; <code>edgible secret delete &lt;name&gt;</code> removes a stored key; <code>edgible device</code> and <code>edgible agent</code> commands take a machine off your account and uninstall the agent; <code>multipass delete --purge edgible-vm</code> removes the virtual machine.</p>
+</details>
+<nav class="chapters"><a class="prev" href="../a-home-for-your-apps/"><span>&larr; Previous</span>A home for everything you&#x27;ve built</a><a class="next" href="../your-own-ai-agent/"><span>Next &rarr;</span>Your own AI agent, from anywhere</a></nav>
+</article>
+<p class="md-source"><a href="../take-it-all-down.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-14 from edgible-org/cards cd07360 -->
+</footer>
+</body>
+</html>

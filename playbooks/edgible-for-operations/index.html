@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edgible for Operations | Edgible cards</title>
+<meta name="description" content="Back it up, move it, upgrade it, and know when something is wrong, so it keeps running.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/edgible-for-operations/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="Edgible for Operations">
+<meta property="og:description" content="Back it up, move it, upgrade it, and know when something is wrong, so it keeps running.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/edgible-for-operations/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=43e122d1">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../edgible-for-operations.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.svg" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / edgible-for-operations</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#backup"/></svg></span><span>Edgible for Operations</span></h1>
+<p>Back it up, move it, upgrade it, and know when something's wrong, so it keeps running. One playbook so far, in progress: the first three chapters are ready, and the rest are on the way. Every playbook begins with <a href="../get-edgible-running/">Get Edgible running</a>.</p>
+<p><strong>These playbooks are for apps that run from an Edgible card,</strong> and work best with a card that says where its data lives. If you built the app yourself, the ideas still apply, but the tools don't, and we haven't tried these steps on a hand-built app.</p>
+<figure class="flow">
+<svg viewBox="0 0 420 354" role="img" aria-labelledby="map-t map-d" xmlns="http://www.w3.org/2000/svg">
+<title id="map-t">Looking after it, in order</title>
+<desc id="map-d">One playbook, six chapters. The first three, backing up an app, restoring it and proving it, and moving it, are ready. Upgrading has short guidance for now. Knowing when something is wrong, and recovering when the machine dies are coming.</desc>
+<rect x="10" y="10" width="400" height="334" rx="16" class="frame"/>
+<text x="28" y="40" class="t">Looking after it</text>
+<a href="../back-up-an-app/"><rect x="24" y="54" width="372" height="40" rx="12" class="box"/><rect x="354" y="59" width="30" height="30" rx="8" fill="#111827"/><use href="../icons.svg#backup" x="357" y="62" width="24" height="24"/><circle cx="48" cy="74" r="13" class="num"/><text x="48" y="80" class="numt" text-anchor="middle">1</text><text x="72" y="80" class="t b">Back up an app</text></a>
+<a href="../restore-and-prove-it/"><rect x="24" y="102" width="372" height="40" rx="12" class="box"/><rect x="354" y="107" width="30" height="30" rx="8" fill="#111827"/><use href="../icons.svg#tested" x="357" y="110" width="24" height="24"/><circle cx="48" cy="122" r="13" class="num"/><text x="48" y="128" class="numt" text-anchor="middle">2</text><text x="72" y="128" class="t b">Restore it, and prove it</text></a>
+<a href="../move-an-app/"><rect x="24" y="150" width="372" height="40" rx="12" class="box"/><rect x="354" y="155" width="30" height="30" rx="8" fill="#111827"/><use href="../icons.svg#machine" x="357" y="158" width="24" height="24"/><circle cx="48" cy="170" r="13" class="num"/><text x="48" y="176" class="numt" text-anchor="middle">3</text><text x="72" y="176" class="t b">Move an app to another machine</text></a>
+<a href="#upgrading-for-now"><rect x="24" y="198" width="372" height="40" rx="12" class="box opt"/><rect x="354" y="203" width="30" height="30" rx="8" fill="#111827"/><use href="../icons.svg#bolt" x="357" y="206" width="24" height="24"/><circle cx="48" cy="218" r="13" class="num"/><text x="48" y="224" class="numt" text-anchor="middle">4</text><text x="72" y="224" class="t b">Upgrade an app safely: for now</text></a>
+<g opacity=".6"><rect x="24" y="246" width="372" height="40" rx="12" class="box opt"/><rect x="354" y="251" width="30" height="30" rx="8" fill="#111827"/><use href="../icons.svg#eye" x="357" y="254" width="24" height="24"/><circle cx="48" cy="266" r="13" class="num"/><text x="48" y="272" class="numt" text-anchor="middle">5</text><text x="72" y="272" class="t b">Know when something is wrong</text></g>
+<g opacity=".6"><rect x="24" y="294" width="372" height="40" rx="12" class="box opt"/><rect x="354" y="299" width="30" height="30" rx="8" fill="#111827"/><use href="../icons.svg#lock" x="357" y="302" width="24" height="24"/><circle cx="48" cy="314" r="13" class="num"/><text x="48" y="320" class="numt" text-anchor="middle">6</text><text x="72" y="320" class="t b">When the machine dies</text></g>
+</svg>
+</figure>
+<p>The chapters:</p>
+<ul>
+<li><strong><span class="ico sm" aria-hidden="true"><svg><use href="../icons.svg#backup"/></svg></span><a href="../looking-after-it/">Looking after it</a>:</strong> the unglamorous essentials of running your own apps, backed up, restored and proved.
+<ol>
+<li><span class="ico sm" aria-hidden="true"><svg><use href="../icons.svg#backup"/></svg></span><a href="../back-up-an-app/">Back up an app</a></li>
+<li><span class="ico sm" aria-hidden="true"><svg><use href="../icons.svg#tested"/></svg></span><a href="../restore-and-prove-it/">Restore it, and prove it</a></li>
+<li><span class="ico sm" aria-hidden="true"><svg><use href="../icons.svg#machine"/></svg></span><a href="../move-an-app/">Move an app to another machine</a></li>
+<li>Upgrade an app safely: coming; for now, see <a href="#upgrading-for-now">Upgrading, for now</a></li>
+<li>Know when something is wrong: coming</li>
+<li>When the machine dies: coming</li>
+</ol>
+</li>
+</ul>
+<h2 id="upgrading-for-now">Upgrading, for now</h2>
+<p>Every app is different, and we can't predict what an upgrade will ask of yours, so there's no fixed chapter yet. Until there is, the approach is simple, and your AI assistant can do most of it:</p>
+<ol>
+<li><strong>Back it up first.</strong> <a href="../back-up-an-app/">Chapter 1</a>. Its fingerprint then tells you whether your data came through.</li>
+<li><strong>Ask your AI what the upgrade changes.</strong> For example: &quot;What changes if I upgrade my team wiki to the newest version? Anything that could hurt my data?&quot; It can compare the old and new card and tell you in plain words, such as new settings, new image versions, or a database moving to a new major version.</li>
+<li><strong>Let it recommend a path,</strong> and ask before it acts. That may be the app's usual upgrade, or something specific to the app, such as a database's own upgrade tool. A safe way to try an upgrade is to restore your backup as a copy beside the app and upgrade the copy first (<a href="../restore-and-prove-it/">chapters 2 and 3</a>). If the copy breaks, your real app is untouched, and if it works, you can switch. An upgrade can change how your data is stored, and on a copy that costs you nothing.</li>
+</ol>
+<p>If the AI isn't sure, it should say so and stop, not guess. We haven't run upgrades end to end in these playbooks, and we may never write one fixed recipe, because apps differ too much.</p>
+<p>New here? Start at <a href="../">all the playbooks</a>, or go straight to <a href="../get-edgible-running/">Get Edgible running</a>.</p>
+
+</article>
+<p class="md-source"><a href="../edgible-for-operations.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-14 from edgible-org/cards cd07360 -->
+</footer>
+</body>
+</html>

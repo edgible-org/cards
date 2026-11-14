@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Use your own domain | Edgible cards</title>
+<meta name="description" content="Give any app an address on a domain you own, such as links.yourname.com, without interrupting it.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/use-your-own-domain/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="Use your own domain">
+<meta property="og:description" content="Give any app an address on a domain you own, such as links.yourname.com, without interrupting it.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/use-your-own-domain/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=43e122d1">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../use-your-own-domain.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.svg" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / use-your-own-domain</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#globe"/></svg></span><span>Use your own domain</span></h1>
+<p><em>An appendix for every playbook.</em></p>
+<p>Every app gets an Edgible address, such as <code>https://my-agent.&lt;you&gt;.edgible.app</code>. If you own a domain, you can give any app an address on it as well, such as <code>links.yourname.com</code> or <code>agent.yourname.com</code>. The app keeps working at its Edgible address throughout.</p>
+<blockquote>
+<p><strong>What you need</strong></p>
+<ul>
+<li>A domain you manage, at a provider such as Cloudflare, Namecheap or GoDaddy, where you can add DNS records.</li>
+</ul>
+</blockquote>
+<h2 id="1-ask-claude">1. Ask Claude</h2>
+<blockquote>
+<p>Put my bookmarks on links.yourname.com.</p>
+</blockquote>
+<p>It asks first, then gives you one record to add: a <strong>CNAME</strong> from <code>links.yourname.com</code> to your app's Edgible address.</p>
+<h2 id="2-add-the-record">2. Add the record</h2>
+<p>At your domain provider, add that CNAME record exactly as Claude gave it. This is the one step only you can do.</p>
+<h2 id="3-check-it">3. Check it</h2>
+<p>After a few minutes:</p>
+<blockquote>
+<p>Does links.yourname.com work yet?</p>
+</blockquote>
+<p>Once your provider has published the record, Edgible issues the certificate for HTTPS, and the address answers. It usually takes minutes, and occasionally longer.</p>
+<p>If you've bookmarked your apps, refresh them: <em>&quot;Refresh my app bookmarks.&quot;</em></p>
+<h2 id="what-youve-just-done">What you've just done</h2>
+<p>Your app answers at your own address, with HTTPS, on your machine, and nothing about it changed. Any app can do the same.</p>
+<nav class="chapters"><a class="prev" href="../a-home-for-your-apps/"><span>&larr; Previous</span>A home for everything you&#x27;ve built</a></nav>
+</article>
+<p class="md-source"><a href="../use-your-own-domain.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-14 from edgible-org/cards cd07360 -->
+</footer>
+</body>
+</html>

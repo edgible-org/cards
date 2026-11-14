@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your AI gateway | Edgible cards</title>
+<meta name="description" content="Cost guardrails before you run an agent: one place for your AI keys, a budget for every agent, and the spending in real dollars, on your own machine. Use the providers you like, added one at a time.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/your-ai-gateway/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="Your AI gateway">
+<meta property="og:description" content="Cost guardrails before you run an agent: one place for your AI keys, a budget for every agent, and the spending in real dollars, on your own machine. Use the providers you like, added one at a time.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/your-ai-gateway/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=43e122d1">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../your-ai-gateway.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.svg" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / your-ai-gateway</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#govern"/></svg></span><span>Your AI gateway</span></h1>
+<p><em>Chapter 3 of <a href="../your-own-ai-agent/">Your own AI agent, from anywhere</a>. New: tested on our own machines, so <a href="mailto:stefano@edgible.com?subject=Playbook%20feedback">tell us how it goes</a>.</em></p>
+<p>Before you run an agent, put the guardrails in. An AI gateway sits between your agents and the AI providers, and gives you:</p>
+<ul>
+<li><strong>One place for your keys.</strong> You store each provider's key once. Your agents never see them: each gets its own gateway key instead.</li>
+<li><strong>A budget per agent.</strong> Each agent can spend only its own budget, say five dollars a month. A runaway agent stops at its limit, not at your credit card's.</li>
+<li><strong>The real dollars.</strong> What each agent spent, on which model, from your phone.</li>
+<li><strong>Models by purpose, not by name.</strong> Agents ask for <em>fast</em>, <em>smart</em> or <em>best</em>, and you decide which model each one means, and change it any time.</li>
+<li><strong>A backup.</strong> When a provider has an outage or a free tier runs out, the next one answers.</li>
+</ul>
+<p>The gateway is LiteLLM, the most widely used open-source AI gateway, in a version we've tested.</p>
+<p>You'll set the gateway up first, then add the AI providers you want to use, one at a time, just by asking.</p>
+<blockquote>
+<p><strong>What you need</strong></p>
+<ul>
+<li>Chapters 1 and 2 done, on a machine with <strong>4 GB of memory</strong> or more.</li>
+<li><strong>An account with at least one AI provider, and a little credit.</strong> Any of OpenAI, Anthropic, Google Gemini, DeepSeek, Mistral, Groq or OpenRouter will do. The examples use DeepSeek, which is inexpensive; swap in yours.</li>
+</ul>
+</blockquote>
+<h2 id="1-set-up-the-gateway">1. Set up the gateway</h2>
+<p>In Claude, say:</p>
+<blockquote>
+<p>Set up an AI gateway on my edgible-vm, called ai-gateway.</p>
+</blockquote>
+<p>It checks the machine, then asks you one thing: whether to give the gateway an address your apps can call. Say yes. That address answers only apps holding a key the gateway gave them, and each app gets its own key and budget. Your connector keeps the gateway's own master key, so you never handle it.</p>
+<p>The gateway is running, but it can't answer yet: it has no AI provider. Next.</p>
+<h2 id="2-add-your-first-provider">2. Add your first provider</h2>
+<blockquote>
+<p>Add my DeepSeek key to the gateway.</p>
+</blockquote>
+<p>If you stored that key with Edgible before, Claude simply uses it. Otherwise it gives you a <strong>key link</strong>. Open it, paste the key from the provider's page, and save. The key goes straight to your Edgible account, never into the chat. Links work once, for ten minutes, and from your phone too.</p>
+<p>Claude then tells you what it's about to do and asks, something like:</p>
+<blockquote>
+<p>I'll add DeepSeek for <strong>fast</strong> and <strong>smart</strong>. The gateway restarts and doesn't answer for about a minute. OK?</p>
+</blockquote>
+<p>Say yes. When it's back, Claude checks each purpose answers, and reports what it did, in words like these:</p>
+<blockquote>
+<p>Added DeepSeek. <strong>fast</strong> uses deepseek-chat, <strong>smart</strong> uses deepseek-reasoner. Both answered a test question. Not set up: <strong>best</strong>, <strong>open</strong>, <strong>private</strong>. To change one, say &quot;make smart use …&quot;.</p>
+</blockquote>
+<p>You never had to choose a model name or a purpose. A first provider fills <strong>fast</strong> and <strong>smart</strong>, so you have a gateway that works.</p>
+<h2 id="3-check-it-answers">3. Check it answers</h2>
+<blockquote>
+<p>Check my AI gateway answers.</p>
+</blockquote>
+<p>It sends one tiny question through the gateway, and tells you which provider answered, how long it took, and what it cost: a tiny fraction of a cent.</p>
+<h2 id="4-add-another-provider-any-time">4. Add another provider, any time</h2>
+<p>Say which provider, in the same way:</p>
+<blockquote>
+<p>Add my Gemini key to the gateway.</p>
+</blockquote>
+<p>Claude is careful not to change what already works. With DeepSeek already answering, it tells you something like:</p>
+<blockquote>
+<p>Added Gemini as <strong>fast</strong>'s backup. <strong>fast</strong> and <strong>smart</strong> already use DeepSeek, so I left them. Say &quot;make smart use Gemini&quot; to switch.</p>
+</blockquote>
+<p>So adding a provider is safe: it never quietly sends your questions somewhere new. When you want it to, say so:</p>
+<blockquote>
+<p>Make smart use Gemini.</p>
+</blockquote>
+<blockquote>
+<p>Use OpenAI for fast and smart.</p>
+</blockquote>
+<p>The most expensive purpose, <strong>best</strong>, is never filled unless you ask:</p>
+<blockquote>
+<p>Add my Anthropic key to the gateway, for best.</p>
+</blockquote>
+<p>Each change restarts the gateway for about a minute.</p>
+<h2 id="the-purposes">The purposes</h2>
+<table>
+<thead>
+<tr>
+<th>Ask for</th>
+<th>What it's for</th>
+<th>Filled by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>fast</strong></td>
+<td>Everyday answers</td>
+<td>The first provider you add</td>
+</tr>
+<tr>
+<td><strong>smart</strong></td>
+<td>Harder questions</td>
+<td>The first provider you add</td>
+</tr>
+<tr>
+<td><strong>open</strong></td>
+<td>Trying strong open models, through OpenRouter</td>
+<td>OpenRouter</td>
+</tr>
+<tr>
+<td><strong>best</strong></td>
+<td>When it really matters, and the dearest</td>
+<td>Only when you ask</td>
+</tr>
+<tr>
+<td><strong>private</strong></td>
+<td>Anything that must not leave your machine</td>
+<td>A model you run yourself, on your own GPU computer (a later playbook)</td>
+</tr>
+</tbody>
+</table>
+<p>Change what any of them means by asking: <em>&quot;Make smart use Gemini Pro.&quot;</em> A purpose that no provider serves yet can't answer, and Claude's report tells you which those are. <strong>fast</strong> gets a backup when you add a second provider.</p>
+<h2 id="what-youve-just-done">What you've just done</h2>
+<p>You've put the guardrails in before letting an agent loose, which is exactly the right order:</p>
+<ul>
+<li><strong>Your keys are in one safe place,</strong> stored once, never written into a chat, a file or an app.</li>
+<li><strong>You chose the providers,</strong> and can add or switch them in a sentence, without touching a model name unless you want to.</li>
+<li><strong>Every agent you add gets its own key and budget.</strong> If one misbehaves, it stops at its limit, and you can switch it off without touching the others.</li>
+<li><strong>You'll see the real dollars,</strong> by agent and by model, whenever you ask.</li>
+<li><strong>It's yours.</strong> No middleman between your agents and the providers, no markup, and nobody else's dashboard.</li>
+</ul>
+<p>Most people running agents have none of this, and find out at the end of the month.</p>
+<details>
+<summary>Prefer to do it by hand?</summary>
+<p>What Claude does, in order. The gateway is the <a class="ext" href="https://github.com/edgible-org/cards/tree/main/litellm" target="_blank" rel="noopener noreferrer">litellm card<span class="sr-only"> (opens in a new tab)</span></a>; its README has every step, and our regression runs it as written.</p>
+<ol>
+<li><strong>Store a provider's key</strong> with Edgible, from a file holding just the key, with no newline at the end: <code>printf '%s' &quot;$KEY&quot; &gt; key.txt</code>, then <code>edgible secret set deepseek --from-file key=key.txt</code>, and delete the file.</li>
+<li><strong>On the machine, the litellm card.</strong> Pass the key to it by name in <code>card.env</code>, set <code>LITELLM_FAST_MODEL</code> and <code>LITELLM_SMART_MODEL</code> to that provider's models, such as <code>deepseek/deepseek-chat</code> and <code>deepseek/deepseek-reasoner</code>, then Check, Start, and publish <code>litellm</code> on <code>org</code> (the admin page).</li>
+<li><strong>Publish its API</strong> as <code>litellm-api</code> on <code>none</code>, as the README's Share it step shows: it answers only keys the gateway issued.</li>
+<li><strong>Check it:</strong> sign in to the admin page as <code>admin</code>, with the master key the README's <code>show</code> command prints on the machine, and send a test message to <code>fast</code>. The admin page is also where you make agents' keys and see spending.</li>
+<li><strong>To add a provider later,</strong> give the card its key variable (<code>OPENAI_API_KEY</code>, <code>GEMINI_API_KEY</code> and so on), set the purposes' model settings to its models, and restart the gateway.</li>
+</ol>
+<p>Claude does one more thing you don't need by hand: it gives your connector the gateway's address and master key, so you can ask Claude about spending.</p>
+</details>
+<nav class="chapters"><a class="prev" href="../connect-claude/"><span>&larr; Previous</span>Connect Claude to your Edgible</a><a class="next" href="../your-agent/"><span>Next &rarr;</span>Your agent</a></nav>
+</article>
+<p class="md-source"><a href="../your-ai-gateway.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-14 from edgible-org/cards cd07360 -->
+</footer>
+</body>
+</html>

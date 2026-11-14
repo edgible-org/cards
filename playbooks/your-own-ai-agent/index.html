@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your own AI agent, from anywhere | Edgible cards</title>
+<meta name="description" content="A playbook for running your own AI agent on a machine you control, used from anywhere, your phone included, safely and with its costs under control.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/your-own-ai-agent/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="Your own AI agent, from anywhere">
+<meta property="og:description" content="A playbook for running your own AI agent on a machine you control, used from anywhere, your phone included, safely and with its costs under control.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/your-own-ai-agent/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=43e122d1">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../your-own-ai-agent.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.svg" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / your-own-ai-agent</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#ai"/></svg></span><span>Your own AI agent, from anywhere</span></h1>
+<p><em>New: tested end to end on our own machines. You're among the first to follow it, so please <a href="mailto:stefano@edgible.com?subject=Playbook%20feedback">tell us how it goes</a>.</em></p>
+<p>AI agents do things for you: they research, write, organise, and use your apps. This playbook gets you one of your own:</p>
+<ul>
+<li><strong>Running on a machine you control,</strong> so its memory, your files and your conversations stay with you.</li>
+<li><strong>Usable from anywhere,</strong> your phone included, behind your own sign-in.</li>
+<li><strong>Safe and secure:</strong> no ports opened, no keys pasted into chats, and it asks before anything risky.</li>
+<li><strong>With its costs under control:</strong> every agent has its own budget, and you can see what each one spends, in real dollars, from your phone.</li>
+</ul>
+<h2 id="the-road-map">The road map</h2>
+<p>Each chapter builds on the one before, and each leaves you with something that works on its own.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Chapter</th>
+<th>You end up with</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><a href="../get-edgible-running/">Get Edgible running</a></td>
+<td>A machine of yours, reachable from anywhere</td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="../connect-claude/">Connect Claude to your Edgible</a></td>
+<td>Claude on your phone and desktop can see and change your apps, and store keys safely</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="../your-ai-gateway/">Your AI gateway</a></td>
+<td>Cost guardrails: one place for your AI keys, a budget per agent, the spending in dollars</td>
+</tr>
+<tr>
+<td>4</td>
+<td><a href="../your-agent/">Your agent</a></td>
+<td>Your own AI agent, on your machine, using the gateway</td>
+</tr>
+<tr>
+<td>5</td>
+<td><a href="../run-it-from-your-phone/">Run it from your phone</a></td>
+<td>Talk to your agent, check on it, and see what it costs, wherever you are</td>
+</tr>
+<tr>
+<td>6</td>
+<td><a href="../a-home-for-your-apps/">A home for everything you've built</a></td>
+<td>Your own bookmarks app, set up by your agent, with every app you've built in it</td>
+</tr>
+</tbody>
+</table>
+<h2 id="why-the-gateway-comes-before-the-agent">Why the gateway comes before the agent</h2>
+<p>An agent works in loops: it thinks, calls a tool, reads the result, and thinks again. Each loop costs money, and a confused agent can loop all night. People running agents without guardrails are the ones with the surprise bills.</p>
+<p>So before we let an agent loose, we put the guardrails in. An AI gateway sits between your agents and the AI providers: one address, your keys in one safe place, a budget per agent, and a running total of what each one spends. Welcome to the world of AI gateways. We make it easy.</p>
+<p>Want to stop, or start again? <a href="../take-it-all-down/">Take it all down</a> removes it cleanly, keeping your data or not. Curious how it all works, or asked to vouch for it? <a href="../under-the-hood/">Under the hood</a> sets out what this playbook does for you that's easy to miss, and its known limits.</p>
+<h2 id="what-it-adds-to-your-edgible">What it adds to your Edgible</h2>
+<p>Five apps in all, each a web address with its own rule for who gets in. You'll see them in your Edgible console:</p>
+<table>
+<thead>
+<tr>
+<th>Chapter</th>
+<th>App</th>
+<th>Its address</th>
+<th>What it's for</th>
+<th>Who can reach it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>The connector</td>
+<td><code>https://mcp-signin.&lt;you&gt;.edgible.app/mcp</code></td>
+<td>Where Claude's apps call your Edgible tools</td>
+<td>Anyone can knock, but only Claude with your permission gets an answer</td>
+</tr>
+<tr>
+<td>2</td>
+<td>The connector's sign-in page</td>
+<td><code>https://mcp-signin-login.&lt;you&gt;.edgible.app</code></td>
+<td>Where you sign in and allow Claude, and where key links open</td>
+<td>Only you and your organisation</td>
+</tr>
+<tr>
+<td>3</td>
+<td>The gateway's admin (advanced)</td>
+<td><code>https://ai-gateway.&lt;you&gt;.edgible.app</code></td>
+<td>The gateway's own settings page. You won't need it: it asks for the gateway's master key, which your connector keeps and never shows, so you do everything by asking Claude</td>
+<td>Only you and your organisation</td>
+</tr>
+<tr>
+<td>3</td>
+<td>The gateway's API</td>
+<td><code>https://ai-gateway-api.&lt;you&gt;.edgible.app</code></td>
+<td>Where your agents send their AI requests</td>
+<td>Anyone can knock, but only agents holding a key the gateway gave them get an answer</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Your agent</td>
+<td><code>https://my-agent.&lt;you&gt;.edgible.app</code></td>
+<td>Your agent's chat and settings</td>
+<td>Only you</td>
+</tr>
+</tbody>
+</table>
+<p><code>&lt;you&gt;</code> is your organisation's name in Edgible, and the first part is the app's name: the chapters suggest these names, and Claude picks another if one is taken. Note the pairs: the gateway's API ends in <code>-api</code>, and the connector's sign-in page in <code>-login</code>, which is never the address you give Claude. For your exact addresses, ask Claude <em>&quot;What are my apps' addresses?&quot;</em>, look in your Edgible console, or, after chapter 6, open your bookmarks.</p>
+<p>Nothing is hidden: each chapter ends with the same steps done by hand, and every change Claude makes is recorded on your machine, for you to read back at any time. Some parts have no address at all, such as the Edgible tools behind the connector and inside your agent: nothing outside can reach them except through the apps above. An Edgible account has room for twenty apps during the public beta.</p>
+<h2 id="what-youll-need">What you'll need</h2>
+<ul>
+<li><strong>Chapter 1 done,</strong> on a machine with <strong>8 GB of memory</strong> or more: the gateway and the agent need about 6 GB between them while they work.</li>
+<li><strong>Claude,</strong> on a paid plan, on your computer and your phone. <strong>Which model:</strong> the setup chapters change things on your machines, asking your permission first, so choose a Sonnet-class model or better for them. For everyday questions afterwards, such as what's running or what you've spent, a smaller, cheaper model is likely fine. We haven't tested smaller models on these steps yet: if you try one, <a href="mailto:stefano@edgible.com?subject=Playbook%20feedback">tell us how it goes</a>.</li>
+<li><strong>An account with an AI provider, and a little credit.</strong> OpenAI, Anthropic, Google Gemini, DeepSeek, Mistral, Groq or OpenRouter will do; you add them in chapter 3, one at a time. We use DeepSeek in the examples: reliable, and cents a day for most people. Five dollars goes a long way.</li>
+</ul>
+<nav class="chapters"><a class="next" href="../get-edgible-running/"><span>Next &rarr;</span>Get Edgible running</a></nav>
+</article>
+<p class="md-source"><a href="../your-own-ai-agent.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-14 from edgible-org/cards cd07360 -->
+</footer>
+</body>
+</html>

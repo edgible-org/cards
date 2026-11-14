@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get Edgible running | Edgible cards</title>
+<meta name="description" content="Put Edgible on a computer that stays on, with your AI assistant doing the technical work. The first chapter of every playbook.">
+<link rel="canonical" href="https://cards.edgible.org/playbooks/get-edgible-running/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="Get Edgible running">
+<meta property="og:description" content="Put Edgible on a computer that stays on, with your AI assistant doing the technical work. The first chapter of every playbook.">
+<meta property="og:url" content="https://cards.edgible.org/playbooks/get-edgible-running/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../../style.css?v=43e122d1">
+<link rel="alternate" type="text/markdown" title="This page as Markdown" href="../get-edgible-running.md">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../../assets/images/edgible-logo-white.svg" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../../about/">About</a><a href="../../ai/">Using AI</a><a href="../../playbooks/">AI Playbooks</a><a href="../../needs/">Needs</a><a href="../../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../../">Cards</a> / <a href="../">playbooks</a> / get-edgible-running</p>
+<article class="playbook">
+<h1 class="with-ico"><span class="page-ico" aria-hidden="true"><svg><use href="../icons.svg#machine"/></svg></span><span>Get Edgible running</span></h1>
+<p>This is the first chapter of every playbook. By the end, a computer of yours runs Edgible, ready for apps that you and the people you choose can reach from anywhere.</p>
+<p>Your AI assistant does the technical work. You tell it what you want, approve a couple of things in your browser, and answer a few questions. It takes about fifteen minutes.</p>
+<p>Done this already? Skip to your playbook.</p>
+<blockquote>
+<p><strong>What you need</strong></p>
+<ul>
+<li><strong>A computer that stays on:</strong> a Mac, or a PC or small server running Linux, such as Ubuntu. A spare one is ideal. On Windows, Edgible runs in a Linux virtual machine. No suitable computer? See <a href="../getting-a-machine/">Getting a machine</a>: a virtual machine on your own computer, or a small cloud server.</li>
+<li><strong>Claude Code,</strong> in the Claude desktop app on your own Mac or Windows computer. It comes with Claude's paid plans. If Edgible is going on another machine, such as a virtual machine or a cloud server, Claude Code sets it up from yours. Other assistants that read skills, such as Codex, work too.</li>
+<li><strong>An Edgible account.</strong> It's free during the public beta, and your AI will help you make one.</li>
+</ul>
+</blockquote>
+<h2 id="1-open-claude-code">1. Open Claude Code</h2>
+<p>On your own computer, in the Claude desktop app, switch to <strong>Code</strong>, and choose a folder for it to work in: a new, empty one is fine.</p>
+<p>Edgible going on a virtual machine or a server? Claude Code still runs here, on your own computer, and reaches the other machine from here. If you just made a virtual machine with it, carry on in the same session.</p>
+<p>Claude Code is the part of Claude that can work on your computer. It always asks before it changes anything.</p>
+<h2 id="2-give-it-the-edgible-skill">2. Give it the Edgible skill</h2>
+<p>The skill is Edgible's recipe book for AI assistants: how to set Edgible up, our tested app recipes, and how to look after them. Say:</p>
+<blockquote>
+<p>Install the Edgible skill from github.com/edgible-org/card-kit</p>
+</blockquote>
+<h2 id="3-ask-it-to-set-up-edgible">3. Ask it to set up Edgible</h2>
+<blockquote>
+<p>Set up Edgible on this computer so I can run my own apps.</p>
+</blockquote>
+<p>For a virtual machine or a server, name it instead, as <a href="../getting-a-machine/">Getting a machine</a> shows. It checks the computer first, then takes you through the rest. Along the way:</p>
+<ul>
+<li><strong>Your account.</strong> If you don't have one yet, it sends you to <a class="ext" href="https://www.edgible.com" target="_blank" rel="noopener noreferrer">edgible.com<span class="sr-only"> (opens in a new tab)</span></a> to sign up and create an organisation, the name your apps live under. It never asks for your password.</li>
+<li><strong>A clean slate.</strong> Before anything else, it signs this computer out of Edgible, so nothing is picked up by accident from an earlier sign-in. If the computer was signed in, it first tells you which account, so you know what it's leaving.</li>
+<li><strong>Signing in, on purpose.</strong> It shows you a link and a short code. Open the link, and check two things: the code matches, and the page names the account you mean to use. Browsers remember sign-ins, so if the page shows another account, such as a work one, sign out of it there or open the link in a private window. Then approve. That's how this computer gets permission to act for your account. Claude then reads the account back to you, for example <em>&quot;Signed in as jane@example.com, organisation Jane's&quot;</em>, and carries on only when you say it's right.</li>
+<li><strong>A name for this computer,</strong> such as <code>minipc</code> or <code>office-mac</code>. It's how you'll recognise it later.</li>
+<li><strong>Whether it should stay on.</strong> Say yes for anything other people rely on: Edgible then starts by itself whenever the computer starts.</li>
+</ul>
+<h2 id="4-check-it-worked">4. Check it worked</h2>
+<blockquote>
+<p>Is Edgible running on this computer?</p>
+</blockquote>
+<p>For a virtual machine or a server, name it here too, such as <em>&quot;Is Edgible running on the edgible-vm?&quot;</em>: your own computer may run Edgible as well, and then &quot;this computer&quot; means yours.</p>
+<p>It should say the computer is <strong>online</strong>. You can also see it, by the name you gave it, in your <a class="ext" href="https://app.prod.edgible.com/" target="_blank" rel="noopener noreferrer">Edgible console<span class="sr-only"> (opens in a new tab)</span></a>.</p>
+<h2 id="what-youve-just-done">What you've just done</h2>
+<p>Your computer is now an Edgible device. That sounds small, and it isn't:</p>
+<ul>
+<li><strong>It's reachable from anywhere, safely.</strong> Apps on it can get their own web address, with HTTPS and sign-in, and you didn't open a single port on your router or touch your internet settings. Edgible's agent connects out, so nothing on your network is exposed.</li>
+<li><strong>Your AI can look after it.</strong> It knows how to put apps there and keep them going: checks, backups, upgrades, moving to another machine.</li>
+<li><strong>It's yours.</strong> Your machine, your data. Nothing is held in someone else's cloud, and nothing is held hostage if you leave.</li>
+</ul>
+<p>Not long ago this took an afternoon with a networking guide: domain names, certificates, firewall rules. You did it in about fifteen minutes, in plain sentences.</p>
+<h2 id="whats-next">What's next</h2>
+<p>Edgible is running, and your AI knows how to use it. You're done with this chapter: go back to your playbook, or simply say what you need, in your own words. For example:</p>
+<blockquote>
+<p>Our small law firm needs one private place for precedents, and for onboarding new lawyers.</p>
+</blockquote>
+<p>If something goes wrong, tell your AI what you see. The skill knows Edgible's error messages and their fixes.</p>
+<details>
+<summary>Prefer to do it by hand?</summary>
+<p>These are the commands your AI runs, on macOS or Linux. You need <code>curl</code>, <code>unzip</code> and Node.js 20 or later.</p>
+<pre><code class="language-bash"># Install the Edgible command-line tool
+curl -fsSL https://get.edgible.com/install.sh | bash
+export PATH=&quot;$HOME/.local/bin:$PATH&quot;
+
+# Start clean, then sign in: open the link it prints, check the account, and approve
+edgible auth logout
+edgible auth login --no-browser
+
+# Make this computer a device that starts by itself (choose your own name)
+sudo ln -sfn &quot;$HOME/.local/bin/edgible&quot; /usr/local/bin/edgible
+sudo edgible install --device-name minipc --yes
+
+# Check
+edgible agent status
+</code></pre>
+<p>For accounts, downloads and help, see <a class="ext" href="https://edgible.com/" target="_blank" rel="noopener noreferrer">edgible.com<span class="sr-only"> (opens in a new tab)</span></a>.</p>
+</details>
+<nav class="chapters"><a class="prev" href="../your-own-ai-agent/"><span>&larr; Previous</span>Your own AI agent, from anywhere</a><a class="next" href="../connect-claude/"><span>Next &rarr;</span>Connect Claude to your Edgible</a></nav>
+</article>
+<p class="md-source"><a href="../get-edgible-running.md">This page as Markdown</a>, for your AI assistant</p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>.<br></span>&copy; 2026 Edgible and contributors.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../../about/">About</a> &middot; <a href="../../ai/">Using AI</a> &middot; <a href="../../playbooks/">AI Playbooks</a> &middot; <a href="../../sources/">Sources</a></span><span><a href="../../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-14 from edgible-org/cards cd07360 -->
+</footer>
+</body>
+</html>
