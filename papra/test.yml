@@ -1,0 +1,27 @@
+tested: 2026-11-18
+result: pass
+card-kit: "3fff564"
+edgible-cli: 1.4.34
+files: sha256:b547c6ffa3f833be
+machine: darwin/arm64, docker 29.4.3
+images:
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - ghcr.io/papra-hq/papra:26.7.1-rootless@sha256:d1f596a35332ad04d8a69d88a5e19bc82acd47f2bc2fe687dd2145b1ef5a8b19
+image_facts:
+  ghcr.io/papra-hq/papra:26.7.1-rootless: {user: "nonroot", archs: ["amd64", "arm64"], healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    papra: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"users": 0, "documents": 0}
+measured:
+  papra:
+    memory: 359 MB
+    images: 601 MB
+    data: 606 KB
+duration: 4m
+by: agent

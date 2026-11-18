@@ -1,0 +1,61 @@
+# Compose file for the papra card.
+# The host port and ORG_LABEL come from card.env. The signing secret is made on this machine by
+# papra-secrets, at first start, and never leaves it. You make your account on Papra's own sign-up
+# page. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: papra
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume papra-secrets, then exits. It never changes one that exists.
+  papra-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        PAPRA_AUTH_SECRET=openssl rand -hex 48
+    volumes:
+      - papra-secrets:/run/card-secrets
+
+  # A new named volume is owned by root, and Papra runs as a non-root user: hand it the volume.
+  papra-init:
+    image: ghcr.io/papra-hq/papra:26.7.1-rootless
+    restart: "no"
+    user: "0:0"
+    entrypoint: ["sh", "-c", "chown -R nonroot:nonroot /app/app-data"]
+    volumes:
+      - papra-data:/app/app-data
+
+  papra:
+    image: ghcr.io/papra-hq/papra:26.7.1-rootless
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${PAPRA_PORT:?set PAPRA_PORT in card.env}:1221"
+    # Papra reads its signing secret only from the environment, so it starts through the loader,
+    # which sets it from the secret file and then runs the image's own start command.
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
+    command:
+      - >-
+        export AUTH_SECRET="$$PAPRA_AUTH_SECRET" && exec docker-entrypoint.sh pnpm start:with-migrations
+    volumes:
+      - papra-secrets:/run/card-secrets:ro
+      - papra-data:/app/app-data
+    environment:
+      APP_BASE_URL: ${PAPRA_URL:-https://papra.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      AUTH_IS_REGISTRATION_ENABLED: ${PAPRA_REGISTRATION:-true}
+    depends_on:
+      papra-secrets:
+        condition: service_completed_successfully
+      papra-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:1221/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+volumes:
+  papra-data: {}
+  papra-secrets: {}
