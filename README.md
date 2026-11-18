@@ -16,8 +16,6 @@ Each top-level directory with a `card.yml` in it is one card, and its README is 
 - **App cards** run one self-hosted app, such as Gitea or Umami, ready on its own or as a building block. Every app card is tested end to end on a real Edgible serving device, and tested again when it changes and when Edgible releases a new version.
 - **Pattern cards** wire several apps together for a purpose, sometimes across several machines, such as a Git server with a CI runner. A pattern is built from app cards.
 
-App cards used to live in Edgible/starters, as starters. That repo is archived, and everything is here now.
-
 ## App cards
 
 | Card | What | Status |
