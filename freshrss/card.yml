@@ -28,6 +28,7 @@ applications:
     subtype: existing
     published: true
     authModes: [none]
+    publicFor: ["phone and desktop reader apps"]
     place: freshrss
 
 secrets:

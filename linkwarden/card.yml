@@ -19,6 +19,7 @@ applications:
     subtype: existing
     published: true
     authModes: [none]
+    publicFor: ["its browser extension", "its phone app"]
     place: linkwarden
 
 data:

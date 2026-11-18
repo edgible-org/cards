@@ -31,6 +31,7 @@ applications:
     subtype: existing
     published: true
     authModes: [none]
+    publicFor: ["the Home Assistant companion phone apps"]
     setup:
       behind: org
       done: curl -fsS "http://127.0.0.1:$HOME_ASSISTANT_PORT/api/onboarding" | tr -d ' ' | grep -q '"step":"user","done":true'

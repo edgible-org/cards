@@ -17,6 +17,7 @@ applications:
     subtype: existing
     published: true
     authModes: [none]
+    publicFor: ["its desktop and phone apps", "WebDAV clients"]
     place: owncloud
 
 secrets:

@@ -17,6 +17,7 @@ applications:
     subtype: existing
     published: true
     authModes: [none]
+    publicFor: ["its browser extension", "the community phone apps"]
     place: linkding
 
 secrets:

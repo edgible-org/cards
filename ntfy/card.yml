@@ -18,6 +18,7 @@ applications:
     subtype: existing
     published: true
     authModes: [none]
+    publicFor: ["its phone apps", "scripts that send notifications"]
     place: ntfy
 
 secrets:

@@ -17,6 +17,7 @@ applications:
     subtype: existing
     published: true
     authModes: [none]
+    publicFor: ["the Bitwarden phone and desktop apps", "the Bitwarden browser extensions"]
     place: vaultwarden
 
 secrets:

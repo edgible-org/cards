@@ -18,6 +18,7 @@ applications:
     subtype: existing
     published: true
     authModes: [org]
+    publicFor: ["its phone apps", "API clients"]
     place: paperless-ngx
 
 data:

@@ -17,6 +17,7 @@ applications:
     subtype: existing
     published: true
     authModes: [none]
+    publicFor: ["its TV, phone and desktop apps"]
     setup:
       behind: org
       done: curl -fsS "http://127.0.0.1:$JELLYFIN_PORT/System/Info/Public" | grep -q '"StartupWizardCompleted":true'
