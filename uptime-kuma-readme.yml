@@ -1,0 +1,32 @@
+why: >-
+  You want to know your sites and services are up before your users tell you.
+  [Uptime Kuma](https://github.com/louislam/uptime-kuma) checks them on a schedule, alerts you
+  through dozens of channels, and draws status pages, from a machine you own. This card puts its
+  interface behind your org login.
+what: >-
+  One app, `uptime-kuma`, on the place `uptime-kuma`, behind `org`. The image is
+  `louislam/uptime-kuma:2.5.9-slim`, about 180 MB. It keeps monitors in SQLite and leaves out the
+  bundled MariaDB and the browser-based monitors; `2.5.9` is the full image, about 600 MB, if you
+  want those. The image brings its own healthcheck. A new Uptime Kuma asks its first visitor to
+  pick a database and make the admin; behind `org`, only your organization reaches that, so you do
+  it yourself after Publish.
+
+
+  A monitor on the same machine as what it watches cannot report that machine going down. Put
+  this card on a different serving device from the services it checks. To use it in a card, copy
+  the `uptime-kuma` service and its volume, `UPTIME_KUMA_PORT`, and card.yml's `setup:`, and give
+  it its own place.
+data: >-
+  Monitors, settings and history live in the volume `uptime-kuma-data`.
+edit: >-
+  Set `DEVICE` to a name `edgible device list` prints.
+start: ""
+setup:
+  uptime-kuma: >-
+    Its first page asks for the database: choose SQLite, which this image is made for. Then it
+    makes the admin: a username and a password from a password manager.
+verify:
+  uptime-kuma: >-
+    Open the hostname in a browser, sign in to Edgible, then to Uptime Kuma as the admin you made
+    in Set up.
+docs: [Uptime Kuma, https://github.com/louislam/uptime-kuma/wiki]

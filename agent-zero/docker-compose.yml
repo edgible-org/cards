@@ -1,0 +1,21 @@
+# Compose file for the agent-zero card.
+# The host port comes from card.env. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: agent-zero
+
+services:
+  agent-zero:
+    image: agent0ai/agent-zero:v2.15
+    restart: unless-stopped
+    ports:
+      # Loopback only: the agent runs code for whoever reaches this page.
+      - "127.0.0.1:${AGENT_ZERO_PORT:?set AGENT_ZERO_PORT in card.env}:80"
+    environment:
+      TZ: ${AGENT_ZERO_TZ:-UTC}
+    volumes:
+      # Settings, chats, memory, projects and plugins. Never mount all of /a0: it is the code.
+      - agent-zero-data:/a0/usr
+
+volumes:
+  agent-zero-data: {}

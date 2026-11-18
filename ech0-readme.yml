@@ -1,0 +1,30 @@
+why: >-
+  A short-post blog or notes feed on a hosted service lives under that service's terms.
+  [Ech0](https://github.com/lin-snow/Ech0) is a lightweight publishing platform for personal
+  posts, with a public timeline, that runs on a machine you own. It has no newsletter or paid
+  members: it suits a personal blog or micro-blog, not a replacement for Substack's email list.
+what: >-
+  One app, `ech0`, on the place `ech0`, on `none`. A blog is public, so readers need no Edgible
+  sign-in, and the owner's own login in Ech0 protects publishing. The first account to register on
+  a fresh Ech0 becomes its owner, and anyone can register after, so the card publishes it on `org`
+  first: only your Edgible organization reaches it while you make the owner and close sign-up.
+  Then you open it to everyone. The image is `sn0wl1n/ech0:v5.9.5`, from Docker Hub, and the
+  Compose file adds a healthcheck on `/api/hello`.
+data: >-
+  Posts, uploads, users and settings live in the volume `ech0-data`, at `/app/data`. Back it up.
+edit: >-
+  Set `DEVICE` to a name `edgible device list` prints, and `ORG_LABEL` to the part after the app
+  name in a hostname `edgible app list` prints. There are no secrets to fill: Start makes the
+  card's token secret on the machine, and you choose the owner's password on Ech0's first page.
+start: ""
+setup:
+  ech0: >-
+    Its first page makes the owner: a username, an email (only an address on the account, so any
+    will do) and a password from a password manager. Then, in its settings, turn off registration,
+    so nobody else can make an account once it is public. The check below says `done` only when
+    both are true.
+verify:
+  ech0: >-
+    The public timeline, with no Edgible sign-in. Sign in as the owner you made in Set up to
+    publish.
+docs: [Ech0, https://github.com/lin-snow/Ech0]

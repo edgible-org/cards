@@ -1,0 +1,91 @@
+# Compose file for the librephotos card, from the single-container Compose file LibrePhotos
+# publishes (deploy/compose/docker-compose.unified.yml), for 1.6.0.
+# The host port comes from card.env. The database password and the admin's password are made on
+# this machine by librephotos-secrets, at first start, and never leave it. The admin is made by
+# LibrePhotos itself at start, so no first page is ever open to a stranger. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: librephotos
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume librephotos-secrets, then exits. It never changes one that exists.
+  librephotos-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        LIBREPHOTOS_DB_PASSWORD=openssl rand -hex 16
+        LIBREPHOTOS_ADMIN_PASSWORD=openssl rand -hex 16
+    volumes:
+      - librephotos-secrets:/run/card-secrets
+
+  librephotos:
+    image: reallibrephotos/librephotos-unified:1.6.0
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${LIBREPHOTOS_PORT:?set LIBREPHOTOS_PORT in card.env}:8001"
+    # LibrePhotos reads its settings only from the environment, so it starts through the loader,
+    # which sets them from the secret files and then runs the image's own start script.
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
+    command:
+      - >-
+        export DB_PASS="$$LIBREPHOTOS_DB_PASSWORD" ADMIN_PASSWORD="$$LIBREPHOTOS_ADMIN_PASSWORD"
+        && exec /entrypoint.sh
+    environment:
+      SERVE_FRONTEND: "true"
+      DEBUG: "0"
+      DB_BACKEND: postgresql
+      DB_NAME: librephotos
+      DB_USER: librephotos
+      DB_HOST: librephotos-db
+      DB_PORT: "5432"
+      ADMIN_USERNAME: admin
+      ADMIN_EMAIL: ${LIBREPHOTOS_ADMIN_EMAIL:-}
+      ALLOW_UPLOAD: "true"
+      NUM_PROXIES: "1"
+      WEB_CONCURRENCY: "1"
+      UPDATE_CHECK: "false"
+    volumes:
+      - librephotos-photos:/data
+      - librephotos-media:/protected_media
+      - librephotos-logs:/logs
+      - librephotos-cache:/root/.cache
+      - librephotos-secrets:/run/card-secrets:ro
+    depends_on:
+      librephotos-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/api/healthz/ready')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15m
+
+  librephotos-db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    shm_size: 256mb
+    environment:
+      POSTGRES_DB: librephotos
+      POSTGRES_USER: librephotos
+      POSTGRES_PASSWORD_FILE: /run/card-secrets/LIBREPHOTOS_DB_PASSWORD
+    volumes:
+      - librephotos-db-data:/var/lib/postgresql
+      - librephotos-secrets:/run/card-secrets:ro
+    depends_on:
+      librephotos-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U librephotos -d librephotos"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  librephotos-photos: {}
+  librephotos-media: {}
+  librephotos-logs: {}
+  librephotos-cache: {}
+  librephotos-db-data: {}
+  librephotos-secrets: {}

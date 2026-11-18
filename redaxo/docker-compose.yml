@@ -1,0 +1,80 @@
+# Compose file for the redaxo card.
+# The host port, ORG_LABEL and the admin's name come from card.env. The passwords are made on
+# this machine by redaxo-secrets, at first start, and never leave it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+# The image has no healthcheck of its own, so this file adds one on the back end's sign-in page.
+
+name: redaxo
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume redaxo-secrets, then exits. It never changes one that exists.
+  redaxo-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        REDAXO_DB_PASSWORD=openssl rand -hex 16
+        REDAXO_ADMIN_PASSWORD=openssl rand -hex 16
+    volumes:
+      - redaxo-secrets:/run/card-secrets
+
+  redaxo:
+    # The floating 5 tag (the image publishes no per-release tags), held to one build by digest.
+    image: friendsofredaxo/redaxo:5@sha256:34144244f37dcd410e59437219a4425fab8a506bb4e12cf3892985c127e1cbd3
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${REDAXO_PORT:?set REDAXO_PORT in card.env}:80"
+    # The image installs REDAXO and makes the admin at its first start, from REDAXO_* variables
+    # it reads from the environment only. So it starts through the loader, which puts the secret
+    # files in the environment first, then runs the image's own entrypoint and start command.
+    entrypoint: ["sh", "/run/card-secrets/.load", "docker-entrypoint.sh"]
+    command: ["apache2-foreground"]
+    environment:
+      REDAXO_SERVER: ${REDAXO_URL:-https://redaxo.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      REDAXO_SERVERNAME: ${REDAXO_SITE_NAME:-My site}
+      REDAXO_ERROR_EMAIL: ${REDAXO_ADMIN_EMAIL:?set REDAXO_ADMIN_EMAIL in card.env}
+      REDAXO_LANG: ${REDAXO_LANG:-en_gb}
+      REDAXO_TIMEZONE: ${REDAXO_TIMEZONE:-UTC}
+      REDAXO_DB_HOST: redaxo-db
+      REDAXO_DB_NAME: redaxo
+      REDAXO_DB_LOGIN: redaxo
+      REDAXO_DB_CHARSET: utf8mb4
+      REDAXO_ADMIN_USER: ${REDAXO_ADMIN_USER:?set REDAXO_ADMIN_USER in card.env}
+    volumes:
+      - redaxo-files:/var/www/html
+      - redaxo-secrets:/run/card-secrets:ro
+    depends_on:
+      redaxo-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1/redaxo/index.php') === false ? 1 : 0);"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 40s
+
+  redaxo-db:
+    image: mariadb:11.8.9
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: redaxo
+      MARIADB_USER: redaxo
+      MARIADB_PASSWORD_FILE: /run/card-secrets/REDAXO_DB_PASSWORD
+      MARIADB_RANDOM_ROOT_PASSWORD: "1"
+    volumes:
+      - redaxo-db-data:/var/lib/mysql
+      - redaxo-secrets:/run/card-secrets:ro
+    depends_on:
+      redaxo-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  redaxo-files: {}
+  redaxo-db-data: {}
+  redaxo-secrets: {}

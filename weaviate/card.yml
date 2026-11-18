@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: weaviate
+  description: Weaviate, a vector database with hybrid search for RAG, semantic search and agent memory, its REST and GraphQL API on a key
+  type: app
+  added: 2026-11-13
+  homepage: https://weaviate.io
+  license: BSD-3-Clause
+  steward: edgible-org
+
+applications:
+  - name: weaviate
+    what: Weaviate REST and GraphQL API, for vector apps
+    from: semitechnologies/weaviate:1.40.5
+    port: 8080
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [api-key]
+    place: weaviate
+
+data:
+  volumes:
+    # Every collection, its objects, vectors and indexes.
+    weaviate-data:
+      class: irreplaceable
+  fingerprint:
+    service: weaviate
+    command: >-
+      echo "{\"collections\": $(wget -qO- http://127.0.0.1:8080/v1/schema | grep -o '\"class\":' | wc -l)}"
+
+places:
+  weaviate:
+    memory: 1 GB
+    disk: 2 GB
+    arch: [amd64, arm64]
+    gpu: none

@@ -1,0 +1,31 @@
+tested: 2026-11-06
+result: pass
+card-kit: "92d5d81"
+edgible-cli: 1.4.29
+files: sha256:8968b95c4cce1946
+machine: darwin/arm64, docker 29.4.3
+images:
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - mariadb:11.8.9@sha256:6422478cb8e159f080fb1d8ccf65101e26fe51385787fde7d16c3b165a331f15
+  - syncin/server:2.6.2@sha256:25ea13df731f9a960da10f7901f79002adb0229dd9b64384ffd232e4b847c88a
+image_facts:
+  syncin/server:2.6.2: {user: "root", archs: ["amd64", "arm64"], healthcheck: true}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    sync-in: pass
+  checks:
+    admin-signs-in: pass
+    stranger-cannot-get-in: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"users": 1}
+measured:
+  sync-in:
+    memory: 797 MB
+    images: 250 MB
+    data: 173 MB
+duration: 3m
+by: agent

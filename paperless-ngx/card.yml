@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: paperless-ngx
+  description: Paperless-ngx, scan, index and search your paper documents, behind your Edgible sign-in
+  type: app
+  added: 2026-11-02
+  homepage: https://docs.paperless-ngx.com
+  license: GPL-3.0-only
+
+applications:
+  - name: paperless-ngx
+    what: Paperless-ngx web interface and API, for the people in your organisation
+    from: ghcr.io/paperless-ngx/paperless-ngx:3.4.1
+    database: postgres:17.11-alpine
+    port: 8000
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [org]
+    place: paperless-ngx
+
+data:
+  volumes:
+    paperless-ngx-db-data:
+      class: irreplaceable
+      dump:
+        service: paperless-ngx-db
+        command: pg_dump -U paperless -Fc paperless
+        restore: pg_restore -U paperless -d paperless --clean
+    paperless-ngx-media:
+      class: irreplaceable
+    paperless-ngx-data:
+      class: rebuildable
+    paperless-ngx-consume:
+      class: cache
+    paperless-ngx-secrets:
+      class: irreplaceable
+  fingerprint:
+    service: paperless-ngx-db
+    command: psql -U paperless -d paperless -tAc "select json_build_object('users', (select count(*) from auth_user), 'documents', (select count(*) from documents_document))"
+
+secrets:
+  PAPERLESS_NGX_DB_PASSWORD:
+    kind: internal
+    use: password
+    make: openssl rand -hex 16
+    update:
+      service: paperless-ngx-db
+      command: psql -U paperless -d paperless -c "ALTER USER paperless PASSWORD '$PAPERLESS_NGX_DB_PASSWORD'"
+  PAPERLESS_NGX_SECRET_KEY:
+    kind: internal
+    use: signing
+    make: openssl rand -hex 32
+  PAPERLESS_NGX_ADMIN_PASSWORD:
+    kind: human
+    make: openssl rand -hex 16
+    for: the admin's first sign-in, made by Paperless at its first start; change it in the app after
+
+places:
+  paperless-ngx:
+    memory: 3 GB
+    disk: 6 GB
+    arch: [amd64, arm64]
+    gpu: none

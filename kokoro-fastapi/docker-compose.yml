@@ -1,0 +1,20 @@
+# Compose file for the kokoro-fastapi card: text to speech. The host port comes from card.env.
+# Kokoro listens on 127.0.0.1 only; Edgible's api-key and org checks are what keep strangers out. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+# An app on the same machine can skip Edgible and call http://127.0.0.1:<KOKORO_FASTAPI_PORT>/v1, or
+# http://kokoro-fastapi:8880/v1 on a shared Compose network.
+
+name: kokoro-fastapi
+
+services:
+  kokoro-fastapi:
+    image: ${KOKORO_FASTAPI_IMAGE:-ghcr.io/remsky/kokoro-fastapi-cpu:v0.3.0}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${KOKORO_FASTAPI_PORT:?set KOKORO_FASTAPI_PORT in card.env}:8880"
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c \"import urllib.request as u; u.urlopen('http://127.0.0.1:8880/health', timeout=4)\" || python -c \"import urllib.request as u; u.urlopen('http://127.0.0.1:8880/health', timeout=4)\""]
+      interval: 10s
+      timeout: 6s
+      retries: 18
+      start_period: 40s

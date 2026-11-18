@@ -1,0 +1,29 @@
+tested: 2026-11-01
+result: pass
+card-kit: "972ec6b"
+edgible-cli: 1.4.29
+files: sha256:ac6a2ef2d842b52f
+machine: darwin/arm64, docker 29.4.3
+images:
+  - qdrant/qdrant:v1.20.0@sha256:9bfc89f9914fc14876a88c05270685921a55b8877b254a98bcc1cc2f0a424cd2
+image_facts:
+  qdrant/qdrant:v1.20.0: {user: "0:0", archs: ["amd64", "arm64"], healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    qdrant: pass
+    qdrant-dashboard: pass
+  checks:
+    api-and-dashboard: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"collections": 0}
+measured:
+  qdrant:
+    memory: 222 MB
+    images: 72 MB
+    data: 37 KB
+duration: 4m
+by: agent

@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: ech0
+  description: Ech0, a lightweight publishing platform for short posts, public with the owner's own login
+  type: app
+  added: 2026-10-17
+  homepage: https://github.com/lin-snow/Ech0
+  steward: edgible-org
+
+applications:
+  - name: ech0
+    what: Ech0, the public timeline and the owner's editor
+    from: sn0wl1n/ech0:v5.8.0
+    port: 6277
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [none]
+    setup:
+      behind: org
+      done: curl -fsS "http://127.0.0.1:$ECH0_PORT/api/init/status" | grep -q '"owner_exists":true' && curl -fsS "http://127.0.0.1:$ECH0_PORT/api/settings" | grep -q '"allow_register":false'
+    place: ech0
+
+data:
+  volumes:
+    ech0-data:
+      class: irreplaceable
+    ech0-secrets:
+      class: irreplaceable        # the card's secrets, made on the device: back up with the data
+  fingerprint:
+    service: ech0
+    command: >-
+      if wget -qO- http://127.0.0.1:6277/api/init/status | grep -q '"owner_exists":true';
+      then echo '{"owners": 1}'; else echo '{"owners": 0}'; fi
+
+secrets:
+  ECH0_JWT_SECRET:
+    kind: internal
+    use: signing
+    make: openssl rand -hex 32
+
+places:
+  ech0:
+    memory: 256 MB
+    disk: 1.5 GB
+    arch: [amd64, arm64]
+    gpu: none

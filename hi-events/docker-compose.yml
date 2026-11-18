@@ -1,0 +1,122 @@
+# Compose file for the hi-events card.
+# The host port, ORG_LABEL and the mail settings come from card.env. The database password, the
+# app key, the JWT secret and the organizer's password are made on this machine by
+# hi-events-secrets, at first start. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: hi-events
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume hi-events-secrets, then exits. It never changes one that exists.
+  hi-events-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        HI_EVENTS_DB_PASSWORD=openssl rand -hex 16
+        HI_EVENTS_APP_KEY=echo "base64:$(openssl rand -base64 32)"
+        HI_EVENTS_JWT_SECRET=openssl rand -base64 32
+        HI_EVENTS_ADMIN_PASSWORD=openssl rand -hex 16
+    volumes:
+      - hi-events-secrets:/run/card-secrets
+
+  hi-events:
+    image: daveearley/hi.events-all-in-one:v2.0.0
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${HI_EVENTS_PORT:?set HI_EVENTS_PORT in card.env}:80"
+    # Hi.Events reads these only from the environment, so the image's own start command runs
+    # through the loader, which sets them from the secret files first.
+    command:
+      - sh
+      - /run/card-secrets/.load
+      - sh
+      - -c
+      - >-
+        export APP_KEY="$$HI_EVENTS_APP_KEY" JWT_SECRET="$$HI_EVENTS_JWT_SECRET"
+        DATABASE_URL="postgresql://hievents:$$HI_EVENTS_DB_PASSWORD@hi-events-db:5432/hievents"
+        && exec /startup.sh
+    volumes:
+      - hi-events-secrets:/run/card-secrets:ro
+      - hi-events-storage:/app/backend/storage
+    environment:
+      APP_FRONTEND_URL: ${HI_EVENTS_URL:-https://hi-events.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      VITE_FRONTEND_URL: ${HI_EVENTS_URL:-https://hi-events.${ORG_LABEL}.${EDGIBLE_DOMAIN:-edgible.app}}
+      APP_CDN_URL: ${HI_EVENTS_URL:-https://hi-events.${ORG_LABEL}.${EDGIBLE_DOMAIN:-edgible.app}}/storage
+      VITE_API_URL_CLIENT: ${HI_EVENTS_URL:-https://hi-events.${ORG_LABEL}.${EDGIBLE_DOMAIN:-edgible.app}}/api
+      VITE_API_URL_SERVER: http://localhost:80/api
+      # The image's supervisord config reads this by name and stops with its usage text when it
+      # is not set at all. Payment is off, so it is empty.
+      VITE_STRIPE_PUBLISHABLE_KEY: ""
+      VITE_APP_NAME: ${HI_EVENTS_APP_NAME:-Hi.Events}
+      # Closed unless prepare.sh opens it for a moment, to make the organizer.
+      APP_DISABLE_REGISTRATION: ${HI_EVENTS_DISABLE_REGISTRATION:-true}
+      APP_SAAS_MODE_ENABLED: "false"
+      DB_CONNECTION: pgsql
+      REDIS_HOST: hi-events-redis
+      REDIS_PORT: "6379"
+      QUEUE_CONNECTION: redis
+      FILESYSTEM_PUBLIC_DISK: public
+      FILESYSTEM_PRIVATE_DISK: local
+      LOG_CHANNEL: stderr
+      MAIL_MAILER: ${HI_EVENTS_MAIL_MAILER:-log}
+      MAIL_DRIVER: ${HI_EVENTS_MAIL_MAILER:-log}
+      MAIL_HOST: ${HI_EVENTS_SMTP_HOST:-}
+      MAIL_PORT: ${HI_EVENTS_SMTP_PORT:-587}
+      MAIL_PASSWORD: ${HI_EVENTS_SMTP_PASSWORD:-}
+      MAIL_USERNAME: ${HI_EVENTS_SMTP_USER:-}
+      MAIL_ENCRYPTION: ${HI_EVENTS_SMTP_ENCRYPTION:-tls}
+      MAIL_FROM_ADDRESS: ${HI_EVENTS_SMTP_FROM:-noreply@example.com}
+      MAIL_FROM_NAME: ${HI_EVENTS_APP_NAME:-Hi.Events}
+    depends_on:
+      hi-events-secrets:
+        condition: service_completed_successfully
+      hi-events-db:
+        condition: service_healthy
+      hi-events-redis:
+        condition: service_healthy
+    healthcheck:
+      # Healthy once nginx answers on port 80. A fetch of / goes through the server-side
+      # rendered frontend and fails on any non-2xx reply, which is not a sign the app is down.
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 80 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 120s
+
+  hi-events-db:
+    image: postgres:17.11-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: hievents
+      POSTGRES_USER: hievents
+      POSTGRES_PASSWORD_FILE: /run/card-secrets/HI_EVENTS_DB_PASSWORD
+    volumes:
+      - hi-events-db-data:/var/lib/postgresql/data
+      - hi-events-secrets:/run/card-secrets:ro
+    depends_on:
+      hi-events-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hievents -d hievents"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  hi-events-redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    volumes:
+      - hi-events-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  hi-events-db-data: {}
+  hi-events-storage: {}
+  hi-events-redis-data: {}
+  hi-events-secrets: {}

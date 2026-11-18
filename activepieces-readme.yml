@@ -1,0 +1,39 @@
+why: >-
+  Connecting your apps, such as a Slack message for each new Trello card, usually means a Zapier
+  subscription that holds your data and charges by the task.
+  [Activepieces](https://www.activepieces.com) does the same with no-code flows, and has AI steps,
+  on a machine you own.
+what: >-
+  One process on two hostnames. `activepieces` is the flow editor, behind `org`, because it is an
+  admin interface for people in your Edgible organization. `activepieces-hooks` takes webhook
+  calls, on `none`, because the services that call a webhook (Stripe, GitHub, a form) cannot sign
+  in to Edgible. Both are port `80` on the place `activepieces`; list `activepieces` first so
+  `ACTIVEPIECES_PORT` is named after it. Postgres runs beside it as `activepieces-db`, and Redis,
+  for the job queue, as `activepieces-redis`. Flows run without Activepieces' own sandbox
+  (`AP_EXECUTION_MODE=UNSANDBOXED`), because the sandbox needs a privileged container; the editor
+  being behind `org` is what keeps strangers from writing code steps. The `activepieces-hooks`
+  hostname serves the whole process, so its sign-in page is public too. The first account to sign
+  up becomes the admin, and sign-up closes after it, so both hostnames start on `org` while you
+  sign up; then only `activepieces-hooks` opens, and the app's own password protects it. Point a
+  service at `https://<activepieces-hooks hostname>/api/v1/webhooks/<flow id>`.
+data: >-
+  Flows, connections, runs and accounts live in the volume `activepieces-db-data`. The key that
+  encrypts stored connections is in `activepieces-secrets`: back them up together.
+edit: >-
+  Set `DEVICE` to a name `edgible device list` prints, and `ORG_LABEL`. There are no secrets to
+  fill: Start makes the card's keys on the machine, and you choose the admin's password when you
+  sign up. Port 80 is the default; the check in How moves it if the machine uses it.
+start: ""
+setup:
+  activepieces: >-
+    Sign up there as the first account, with your email and a password from a password manager:
+    that makes you the admin, and sign-up closes after it. Once `activepieces-hooks` is open,
+    Activepieces' login is what protects it.
+verify:
+  activepieces: >-
+    Sign in as the admin you made in Set up. The editor is behind the Edgible sign-in, so you
+    reach it as a member of your organization.
+  activepieces-hooks: >-
+    The hostname answers with the app, and a stranger's sign-up on it is refused. A webhook
+    flow's URL, shown in the editor, starts with this hostname.
+docs: [Activepieces, https://www.activepieces.com/docs]

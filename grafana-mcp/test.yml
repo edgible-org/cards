@@ -1,0 +1,26 @@
+tested: 2026-11-07
+result: pass
+card-kit: "92d5d81"
+edgible-cli: 1.4.29
+files: sha256:056a921c9ac5b386
+machine: darwin/arm64, docker 29.4.3
+images:
+  - grafana/mcp-grafana:2.2.0@sha256:697336440e34878f8e0b26a69675db8d7e97b4d0daec25ec5441c85ac6c60e81
+image_facts:
+  grafana/mcp-grafana:2.2.0: {user: "mcp-grafana", archs: ["amd64", "arm64"], healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    grafana-mcp: pass
+  checks:
+    grafana-mcp: pass
+  teardown: pass
+measured:
+  grafana-mcp:
+    memory: 26 MB
+    images: 61 MB
+    data: 1 KB
+duration: 2m
+by: agent

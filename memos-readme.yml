@@ -1,0 +1,28 @@
+why: >-
+  You want private notes you can reach from any device, or shared notes for a family or a small
+  team, written in markdown on a server you own. [Memos](https://usememos.com/) is a note app that
+  keeps everything in one SQLite file, has a fast web interface, and works with phone apps.
+what: >-
+  One Memos container, with its notes and uploads in one volume. It is published on one hostname
+  with auth mode `none`: Memos' phone apps and the web call the same address and cannot get past
+  an Edgible sign-in, so Memos' own login is the protection. A new Memos lets its first visitor
+  register as the admin, and anyone register after, so the card publishes it on `org` first: only
+  your Edgible organization reaches it while you make the admin and close sign-up. Then you open
+  it to everyone, and the admin adds family or team members under Settings, Members. If you only
+  use the web and need no phone app, leave it on `org` instead of opening it.
+data: >-
+  The notes and uploads are in the `memos-data` volume.
+edit: >-
+  Set `DEVICE` and `ORG_LABEL`. There are no passwords to fill: you make the admin on Memos's first
+  page.
+start: ""
+setup:
+  memos: >-
+    Its first page makes the admin: a username and a password from a password manager. Then, in
+    Settings, turn on the setting that disallows user registration, so nobody else can make an
+    account once it is public. The check below says `done` only when both are true.
+verify:
+  memos: >-
+    Answers with Memos itself, open to the internet, so the sign-in is the protection. In the phone
+    app, give it the same address and the admin you made in Set up.
+docs: [Memos, https://usememos.com/docs]

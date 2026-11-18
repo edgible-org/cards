@@ -1,0 +1,66 @@
+# Compose file for the edgible-connector card: the mcp-signin and edgible-mcp app cards in one
+# Compose project. mcp-signin is published; edgible-mcp has no host port, and only mcp-signin
+# reaches it, on this project's network. Ports and settings come from card.env. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: edgible-connector
+
+services:
+  edgible-mcp:
+    image: ghcr.io/edgible-org/edgible-mcp:0.8.9
+    restart: unless-stopped
+    environment:
+      EDGIBLE_MCP_ALLOW_WRITE: ${EDGIBLE_MCP_ALLOW_WRITE:-0}
+      EDGIBLE_MCP_DEVICES: ${EDGIBLE_MCP_DEVICES:-}
+      # Named in whats_running, so a person with two connectors can tell which one answered.
+      EDGIBLE_MCP_DEVICE: ${DEVICE:-}
+      # The page where a person stores a key they bring, from any device: mcp-signin shows it on its
+      # sign-in address, behind Edgible's org sign-in (request_key gives the link).
+      # A shared AI gateway's API address (the litellm card's litellm-api), for gateway_key.
+      EDGIBLE_MCP_GATEWAY_URL: ${EDGIBLE_MCP_GATEWAY_URL:-}
+      EDGIBLE_MCP_PAGES_URL: ${MCP_SIGNIN_LOGIN_URL:-https://mcp-signin-login.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}/pages
+      EDGIBLE_MCP_CACHE_DIR: /root/.cache/edgible-mcp
+      # off leaves out the panels drawn beside find, describe and whats_running (MCP Apps), for a
+      # host that fails to draw them; the text answers are complete without them.
+      EDGIBLE_MCP_VIEWS: ${EDGIBLE_MCP_VIEWS:-on}
+      EDGIBLE_MCP_SIGN_IN: docker compose --env-file edgible-connector/card.env -f edgible-connector/docker-compose.yml exec edgible-mcp edgible auth login --no-browser
+    volumes:
+      - edgible-mcp-cache:/root/.cache
+      # The Edgible CLI's sign-in, which the tools act as: never this directory.
+      - edgible-mcp-login:/login
+      # With writes: the record of what the tools did, and each deployed card's Compose file.
+      - edgible-mcp-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8000/healthz | grep -q ok"]
+      interval: 30s
+      timeout: 15s
+      retries: 3
+      start_period: 1m
+
+  mcp-signin:
+    image: ghcr.io/edgible-org/mcp-signin:0.2.3
+    restart: unless-stopped
+    depends_on:
+      edgible-mcp:
+        condition: service_healthy
+    ports:
+      # Both on 127.0.0.1: Edgible's web server on this machine is the one proxy in front.
+      - "127.0.0.1:${MCP_SIGNIN_PORT:?set MCP_SIGNIN_PORT in card.env}:8000"
+      - "127.0.0.1:${MCP_SIGNIN_LOGIN_PORT:?set MCP_SIGNIN_LOGIN_PORT in card.env}:8001"
+    environment:
+      MCP_UPSTREAM_URL: http://edgible-mcp:8000/mcp
+      EDGIBLE_ORGANIZATION_ID: ${EDGIBLE_ORGANIZATION_ID:?set EDGIBLE_ORGANIZATION_ID in card.env}
+      MCP_SIGNIN_PUBLIC_URL: ${MCP_SIGNIN_URL:-https://mcp-signin.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      MCP_SIGNIN_LOGIN_URL: ${MCP_SIGNIN_LOGIN_URL:-https://mcp-signin-login.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      MCP_SIGNIN_USERS: ${MCP_SIGNIN_USERS:-}
+      MCP_SIGNIN_NAME: Edgible
+      MCP_SIGNIN_PURPOSE: see your Edgible apps and devices, and, if this server allows it, deploy, move and remove apps, asking you before each change
+    volumes:
+      # Registered assistants and tokens, kept hashed: a restart signs no one out.
+      - mcp-signin-data:/data
+
+volumes:
+  edgible-mcp-cache: {}
+  edgible-mcp-login: {}
+  edgible-mcp-data: {}
+  mcp-signin-data: {}

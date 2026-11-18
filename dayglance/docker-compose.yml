@@ -1,0 +1,22 @@
+# Compose file for the dayglance card.
+# The host port comes from card.env. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: dayglance
+
+services:
+  dayglance:
+    image: ghcr.io/krelltunez/dayglance:5.15.0
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${DAYGLANCE_PORT:?set DAYGLANCE_PORT in card.env}:80"
+    environment:
+      # The bundled proxy that fetches calendars and WebDAV for the browser. Off by default so it can
+      # reach a CalDAV server on your network; set to 1 to refuse private addresses.
+      WEBDAV_PROXY_BLOCK_PRIVATE: "${DAYGLANCE_PROXY_BLOCK_PRIVATE:-0}"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:80/"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s

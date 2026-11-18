@@ -1,0 +1,70 @@
+# Compose file for the umami card.
+# The host port comes from card.env. The passwords and keys are made on this machine by
+# umami-secrets, at first start, and never leave it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: umami
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume umami-secrets, then exits. It never changes one that exists.
+  umami-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        UMAMI_DB_PASSWORD=openssl rand -hex 16
+        UMAMI_APP_SECRET=openssl rand -base64 32
+        UMAMI_TWO_FACTOR_KEY=openssl rand -hex 32
+        UMAMI_ADMIN_PASSWORD=openssl rand -hex 16
+    volumes:
+      - umami-secrets:/run/card-secrets
+
+  umami:
+    image: ghcr.io/umami-software/umami:3.4.1
+    restart: unless-stopped
+    init: true
+    ports:
+      - "127.0.0.1:${UMAMI_PORT:?set UMAMI_PORT in card.env}:3000"
+    # Umami reads its settings only from the environment, so it starts through the loader,
+    # which sets them from the secret files and then runs the image's own start command.
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
+    command:
+      - >-
+        export DATABASE_URL="postgresql://umami:$$UMAMI_DB_PASSWORD@umami-db:5432/umami"
+        APP_SECRET="$$UMAMI_APP_SECRET" TWO_FACTOR_ENCRYPTION_KEY="$$UMAMI_TWO_FACTOR_KEY"
+        && exec docker-entrypoint.sh sh scripts/start-docker.sh
+    volumes:
+      - umami-secrets:/run/card-secrets:ro
+    depends_on:
+      umami-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:3000/api/heartbeat"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  umami-db:
+    image: postgres:17.11-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD_FILE: /run/card-secrets/UMAMI_DB_PASSWORD
+    volumes:
+      - umami-db-data:/var/lib/postgresql/data
+      - umami-secrets:/run/card-secrets:ro
+    depends_on:
+      umami-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U umami -d umami"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  umami-db-data: {}
+  umami-secrets: {}

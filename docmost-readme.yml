@@ -1,0 +1,36 @@
+why: >-
+  A team wiki is where a team writes down how it does things, and hosted ones (Notion, Confluence)
+  charge per seat and keep your pages on their servers. [Docmost](https://docmost.com) is an
+  open-source wiki with spaces, page trees, real-time editing, comments, diagrams, and permissions
+  per space and group. This card runs it on a machine you own, through Edgible.
+what: >-
+  One app, `docmost`, on `org`, so only members of your Edgible organization reach it. Everyone who
+  reads or edits the wiki is a person in a browser, so the Edgible sign-in is the first door and
+  Docmost's own login the second. Three containers run it: Docmost, PostgreSQL for its pages and
+  accounts, and Redis for live editing. People outside your organization cannot reach it. For a
+  public knowledge base for customers, publish with `none` instead and keep sign-up closed, which
+  is a different choice from this card's. Use Docmost's spaces and roles to keep confidential pages
+  to the people who should see them.
+
+
+  The first visit to a new Docmost is its setup page, which makes the workspace and its admin.
+  Behind `org`, only your organization reaches it, so you answer it yourself after Publish: the
+  workspace's name, and your name, email and password.
+data: >-
+  Pages and accounts are in the volume `docmost-db-data`, uploaded files in `docmost-data`, and the
+  keys the card made in `docmost-secrets`. Copy all three; the keys unlock the database.
+edit: >-
+  Set `DEVICE` to a name `edgible device list` prints, and `ORG_LABEL` to the label in your
+  hostnames. Change `DOCMOST_PORT` only if 3000 is taken. There are no passwords to fill: Start
+  makes the card's keys on the machine, and you choose the admin's on Docmost's setup page.
+start: ""
+setup:
+  docmost: >-
+    It asks for the workspace's name, and your name, email and password, which make you its admin.
+    Use a password manager for the password.
+verify:
+  docmost: >-
+    Sign in as the admin you made in Set up, and invite your team from Settings, Members. Docmost
+    sends invitations by email only when you configure mail in its settings; without it, copy each
+    invitation link from the members page.
+docs: [Docmost, https://docmost.com/docs]

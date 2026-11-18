@@ -1,0 +1,32 @@
+tested: 2026-11-15
+result: pass
+card-kit: "07c71dd"
+edgible-cli: 1.4.34
+files: sha256:07c7514af1b21899
+machine: darwin/arm64, docker 29.4.3
+images:
+  - docker.n8n.io/n8nio/n8n:2.47.2@sha256:83ec9349e09a8efdb51f7e2729f1f83503c038475747a351772ff6b78838f02a
+  - n8nio/runners:2.46.4@sha256:7ae8720b0c2e1c3504cb4386394183ced00fa227697e4fa47f095b0e368827b6
+  - postgres:18@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6
+image_facts:
+  docker.n8n.io/n8nio/n8n:2.41.4: {user: "node", healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    n8n: pass
+    n8n-hooks: pass
+  setup:
+    n8n: pass
+    n8n-hooks: pass
+  checks:
+    stranger-cannot-take-over: pass
+  teardown: pass
+measured:
+  workhorse:
+    memory: 938 MB
+    images: 666 MB
+    data: 77 MB
+duration: 5m
+by: agent

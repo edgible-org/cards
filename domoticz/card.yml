@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: domoticz
+  description: Domoticz, a home automation hub for lights, switches and sensors, kept on your own machine, with a web interface and phone apps
+  type: app
+  added: 2026-10-29
+  homepage: https://www.domoticz.com/
+  license: GPL-3.0-only
+  steward: edgible-org
+
+applications:
+  - name: domoticz
+    what: Domoticz's web interface, behind the Edgible sign-in
+    from: domoticz/domoticz:2026.3
+    port: 8080
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [org]
+    place: domoticz
+
+  - name: domoticz-app
+    what: The same Domoticz, for its phone apps, which have only Domoticz's own login
+    from: domoticz/domoticz:2026.3
+    port: 8083
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [none]
+    place: domoticz
+
+secrets:
+  DOMOTICZ_ADMIN_PASSWORD:
+    kind: human
+    make: openssl rand -hex 16
+    for: the admin's first sign-in, set by prepare.sh; change it under Setup, Users after
+
+data:
+  volumes:
+    domoticz-data:
+      class: irreplaceable
+    domoticz-secrets:
+      class: irreplaceable
+  fingerprint:
+    service: domoticz
+    command: |-
+      python3 -c "import sqlite3,json; c=sqlite3.connect('file:/opt/domoticz/userdata/domoticz.db?mode=ro', uri=True); print(json.dumps({'users': c.execute('select count(*) from Users').fetchone()[0], 'devices': c.execute('select count(*) from DeviceStatus').fetchone()[0]}))"
+
+places:
+  domoticz:
+    memory: 256 MB
+    disk: 1 GB
+    arch: [amd64, arm64]
+    gpu: none

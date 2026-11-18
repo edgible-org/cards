@@ -1,0 +1,33 @@
+tested: 2026-11-15
+result: pass
+card-kit: "07c71dd"
+edgible-cli: 1.4.34
+files: sha256:271905b756115fea
+machine: darwin/arm64, docker 29.4.3
+images:
+  - docker.io/valkey/valkey:9@sha256:3add1a336a920ea54770a001ab6feb3da5fceea96a40373a3a2cd469b815f0b7
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - ghcr.io/immich-app/immich-machine-learning:v3.3.6@sha256:14367bfb374b8576ddf49abd67c5ca0190a4c7fcf6303cdad65d7f7bf1a50bc2
+  - ghcr.io/immich-app/immich-server:v3.3.6@sha256:e1981983b1c13f6024b57d72e7ecae3342eed1581201ab09fb248932d86c593a
+  - ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23
+image_facts:
+  ghcr.io/immich-app/immich-server:v3.3.1: {user: "root", archs: ["amd64", "arm64"], healthcheck: true}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    immich: pass
+  setup:
+    immich: pass
+  checks:
+    admin-signs-in: pass
+    stranger-cannot-get-in: pass
+  teardown: pass
+measured:
+  immich:
+    memory: 2.6 GB
+    images: 850 MB
+    data: 346 MB
+duration: 5m
+by: agent

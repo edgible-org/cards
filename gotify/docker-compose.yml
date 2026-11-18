@@ -1,0 +1,44 @@
+# Compose file for the gotify card.
+# The host port and the admin's name come from card.env. The admin's password is made on this
+# machine by gotify-secrets, at first start, and never leaves it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: gotify
+
+services:
+  # Makes the admin's password (card.yml secrets:) if it does not exist yet, as a file in the
+  # volume gotify-secrets, then exits. It never changes it after.
+  gotify-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        GOTIFY_DEFAULTUSER_PASS=openssl rand -base64 24
+    volumes:
+      - gotify-secrets:/run/card-secrets
+
+  gotify:
+    image: gotify/server:3.0.0
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${GOTIFY_PORT:?set GOTIFY_PORT in card.env}:80"
+    # Gotify reads the admin's password only from the environment, so it starts through the
+    # loader, which puts the secret file in the environment, then runs the image's own start.
+    entrypoint: ["sh", "/run/card-secrets/.load", "./gotify-app"]
+    command: ["serve"]
+    environment:
+      # The admin is made at the first start, with the made password, so there is never a
+      # login with Gotify's default one.
+      GOTIFY_DEFAULTUSER_NAME: ${GOTIFY_DEFAULTUSER_NAME:-admin}
+      # Nobody makes their own account on a public hostname.
+      GOTIFY_REGISTRATION: "false"
+    volumes:
+      - gotify-data:/app/data
+      - gotify-secrets:/run/card-secrets:ro
+    depends_on:
+      gotify-secrets:
+        condition: service_completed_successfully
+
+volumes:
+  gotify-data: {}
+  gotify-secrets: {}

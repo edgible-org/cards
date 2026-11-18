@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: keeper-sh
+  description: Keeper.sh, which syncs calendars between iCal feeds, CalDAV and other sources without Google in the middle, on its own login
+  type: app
+  added: 2026-10-29
+  homepage: https://keeper.sh/
+  license: AGPL-3.0-only
+  steward: edgible-org
+
+applications:
+  - name: keeper-sh
+    what: Keeper.sh, for the people who sign in to set up and watch their calendar syncs
+    from: ghcr.io/ridafkih/keeper-standalone:2.28
+    port: 8095
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [none]
+    place: keeper-sh
+
+secrets:
+  KEEPER_AUTH_SECRET:
+    kind: internal
+    use: signing
+    make: openssl rand -base64 32
+  KEEPER_ENCRYPTION_KEY:
+    kind: internal
+    use: encryption
+    make: openssl rand -base64 32
+
+data:
+  volumes:
+    keeper-sh-data:
+      class: irreplaceable
+      dump:
+        service: keeper-sh
+        command: PGPASSWORD=keeper pg_dump -h 127.0.0.1 -U keeper -Fc keeper
+        restore: PGPASSWORD=keeper pg_restore -h 127.0.0.1 -U keeper -d keeper --clean
+    keeper-sh-secrets:
+      class: irreplaceable
+  fingerprint:
+    service: keeper-sh
+    command: PGPASSWORD=keeper psql -h 127.0.0.1 -U keeper -d keeper -tAc "select json_build_object('users', (select count(*) from \"user\"))"
+
+places:
+  keeper-sh:
+    memory: 256 MB
+    disk: 1.5 GB
+    arch: [amd64, arm64]
+    gpu: none

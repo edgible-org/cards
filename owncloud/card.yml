@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: owncloud
+  description: ownCloud Infinite Scale, your files and shares, for its desktop and phone apps and the web
+  type: app
+  added: 2026-10-13
+  homepage: https://owncloud.dev/ocis/
+  steward: edgible-org
+
+applications:
+  - name: owncloud
+    what: ownCloud web, WebDAV, and its desktop and phone apps
+    from: owncloud/ocis:8.2.1
+    port: 9200
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [none]
+    place: owncloud
+
+secrets:
+  OWNCLOUD_ADMIN_PASSWORD:
+    kind: human
+    make: openssl rand -base64 18 | tr -d '/+='
+    for: admin's sign-in, read by ownCloud on its first start
+
+places:
+  owncloud:
+    memory: 1 GB
+    disk: 3 GB
+    arch: [amd64, arm64]
+    gpu: none

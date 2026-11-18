@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: wordpress
+  description: WordPress with MariaDB, set up by you behind your organization's sign-in before it goes public
+  type: app
+  added: 2026-10-09
+  homepage: https://wordpress.org
+  steward: edgible-org
+
+applications:
+  - name: wordpress
+    what: WordPress, the site and its /wp-admin
+    from: wordpress:7.1.4-php8.3-apache
+    database: mariadb:11.8.9
+    port: 8085
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [none]
+    setup:
+      behind: org
+      done: $COMPOSE --profile cli run --rm -T wordpress-cli wp core is-installed
+    # WordPress builds its links from WORDPRESS_URL (wp-config), and also keeps old ones in its
+    # posts, widgets and settings: change rewrites those, so a new address (your own domain)
+    # leaves no links to the old one. card-kit's set-address runs it.
+    address:
+      url: https://wordpress.${ORG_LABEL}.${EDGIBLE_DOMAIN:-edgible.app}
+      setting: WORDPRESS_URL
+      change: $COMPOSE --profile cli run --rm -T wordpress-cli wp search-replace "$OLD_URL" "$NEW_URL" --all-tables --skip-columns=guid --precise --report-changed-only
+    place: wordpress
+
+secrets:
+  WORDPRESS_DB_PASSWORD:
+    kind: internal
+    use: password
+    make: openssl rand -hex 16
+    on-move: carry            # MariaDB keeps it in its data, and its root password is random
+
+data:
+  volumes:
+    wordpress-db-data:
+      class: irreplaceable
+      dump:
+        service: wordpress-db
+        command: mariadb-dump -u wordpress -p"$(cat /run/card-secrets/WORDPRESS_DB_PASSWORD)" --single-transaction wordpress
+        restore: mariadb -u wordpress -p"$(cat /run/card-secrets/WORDPRESS_DB_PASSWORD)" wordpress
+    wordpress-files:
+      class: irreplaceable        # uploaded media, themes and plugins
+    wordpress-secrets:
+      class: irreplaceable        # the card's secrets, made on the device: back up with the data
+  fingerprint:
+    service: wordpress-db
+    command: mariadb -N -u wordpress -p"$(cat /run/card-secrets/WORDPRESS_DB_PASSWORD)" wordpress -e "select json_object('users', (select count(*) from wp_users), 'posts', (select count(*) from wp_posts where post_status = 'publish'))"
+
+places:
+  wordpress:
+    memory: 384 MB
+    disk: 2 GB
+    arch: [amd64, arm64]
+    gpu: none

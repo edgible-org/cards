@@ -1,0 +1,85 @@
+# Compose file for the karakeep card.
+# The host port, ORG_LABEL and the admin's email come from card.env. The keys and the admin's
+# password are made on this machine by karakeep-secrets, at first start, and never leave it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+# Sign-up is closed. prepare.sh opens it for one local request to make the admin, then closes it.
+
+name: karakeep
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume karakeep-secrets, then exits. It never changes one that exists.
+  karakeep-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        KARAKEEP_AUTH_SECRET=openssl rand -base64 36
+        KARAKEEP_MEILI_KEY=openssl rand -hex 24
+        KARAKEEP_ADMIN_PASSWORD=openssl rand -hex 16
+    volumes:
+      - karakeep-secrets:/run/card-secrets
+
+  karakeep:
+    image: ghcr.io/karakeep-app/karakeep:0.35.0
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${KARAKEEP_PORT:?set KARAKEEP_PORT in card.env}:3000"
+    # Karakeep reads its settings only from the environment, so it starts through the loader,
+    # which sets them from the secret files and then runs the image's own entrypoint, /init.
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
+    command:
+      - >-
+        export NEXTAUTH_SECRET="$$KARAKEEP_AUTH_SECRET" MEILI_MASTER_KEY="$$KARAKEEP_MEILI_KEY"
+        && exec /init
+    environment:
+      DATA_DIR: /data
+      NEXTAUTH_URL: ${KARAKEEP_URL:-https://karakeep.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      MEILI_ADDR: http://karakeep-meili:7700
+      BROWSER_WEB_URL: http://karakeep-chrome:9222
+      # Closed to strangers. Only prepare.sh opens it, for the first admin. The admin makes
+      # everyone else's account under Admin Settings.
+      DISABLE_SIGNUPS: ${KARAKEEP_DISABLE_SIGNUPS:-true}
+    volumes:
+      - karakeep-data:/data
+      - karakeep-secrets:/run/card-secrets:ro
+    depends_on:
+      karakeep-secrets:
+        condition: service_completed_successfully
+      karakeep-meili:
+        condition: service_started
+      karakeep-chrome:
+        condition: service_started
+
+  karakeep-chrome:
+    image: zenika/alpine-chrome:124
+    restart: unless-stopped
+    command:
+      - --no-sandbox
+      - --disable-gpu
+      - --disable-dev-shm-usage
+      - --remote-debugging-address=0.0.0.0
+      - --remote-debugging-port=9222
+      - --hide-scrollbars
+
+  karakeep-meili:
+    image: getmeili/meilisearch:v1.55.0
+    restart: unless-stopped
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
+    command:
+      - >-
+        export MEILI_MASTER_KEY="$$KARAKEEP_MEILI_KEY"
+        && exec tini -- /bin/meilisearch
+    environment:
+      MEILI_NO_ANALYTICS: "true"
+    volumes:
+      - karakeep-meili-data:/meili_data
+      - karakeep-secrets:/run/card-secrets:ro
+    depends_on:
+      karakeep-secrets:
+        condition: service_completed_successfully
+
+volumes:
+  karakeep-data: {}
+  karakeep-meili-data: {}
+  karakeep-secrets: {}

@@ -1,0 +1,120 @@
+# cards
+
+Edgible cards let a self-hosted setup be shared and reproduced. A card records the programs, the images, the ports, the auth mode on each hostname, and which apps share a serving device. Someone else fetches that card, edits `card.env`, starts the containers, and publishes the apps. The card leaves out device names, hostnames, and the organization id, so the next person maps each place to a serving device they have.
+
+Browse the cards, and the needs they answer, on the catalog site: [cards.edgible.org](https://cards.edgible.org). It is rebuilt from this repo after every change and every regression.
+
+[![The catalog site: search the cards by app, need, or the service you are leaving, and filter by category](.github/catalog.png)](https://cards.edgible.org)
+
+If a card helps you, **star this repo**: it is how other people find the cards, and how we see which ones matter.
+
+
+Cards run on Edgible by default, and they are plain Docker Compose, so you can run one on your own server too: see [Run a card without Edgible](https://cards.edgible.org/run-without-edgible/).
+
+Each top-level directory with a `card.yml` in it is one card, and its README is how to run it. There are two types:
+
+- **App cards** run one self-hosted app, such as Gitea or Umami, ready on its own or as a building block. Every app card is tested end to end on a real Edgible serving device, and tested again when it changes and when Edgible releases a new version.
+- **Pattern cards** wire several apps together for a purpose, sometimes across several machines, such as a Git server with a CI runner. A pattern is built from app cards.
+
+App cards used to live in Edgible/starters, as starters. That repo is archived, and everything is here now.
+
+## App cards
+
+| Card | What | Status |
+| --- | --- | --- |
+| [gitea](gitea) | Gitea, your own Git forge, with Git over HTTPS and SSH | [![gitea status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fgitea.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![gitea images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fgitea.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [immich](immich) | Immich, your photo and video library, for its phone apps and the web | [![immich status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fimmich.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![immich images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fimmich.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [jellyfin](jellyfin) | Jellyfin, your films, shows and music, streamed to its apps and the web | [![jellyfin status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fjellyfin.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![jellyfin images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fjellyfin.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [linkding](linkding) | linkding, a minimal bookmark manager, for your browsers and its extension | [![linkding status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Flinkding.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![linkding images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Flinkding.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [mcp-bridge](mcp-bridge) | Any stdio MCP server, published over Streamable HTTP for your AI assistants | [![mcp-bridge status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fmcp-bridge.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![mcp-bridge images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fmcp-bridge.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [mcp-signin](mcp-signin) | Sign in with Edgible in front of any MCP server, so Claude on the web and phone can use it | [![mcp-signin status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fmcp-signin.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![mcp-signin images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fmcp-signin.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [minecraft](minecraft) | A Minecraft server for friends on PC over TCP and on phones over UDP, one world | [![minecraft status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fminecraft.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![minecraft images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fminecraft.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [miniflux](miniflux) | Miniflux, the minimalist feed reader, behind your org login | [![miniflux status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fminiflux.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![miniflux images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fminiflux.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [ollama-nvidia](ollama-nvidia) | Ollama on a Linux machine's NVIDIA GPU, in Docker, as an API behind a key | [![ollama-nvidia status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Follama-nvidia.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![ollama-nvidia images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Follama-nvidia.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [ollama-osx](ollama-osx) | Ollama on an Apple Silicon Mac, natively on its GPU, as an API behind a key | [![ollama-osx status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Follama-osx.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![ollama-osx images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Follama-osx.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [openclaw](openclaw) | OpenClaw, the open-source AI agent, with its Control UI behind your organisation's sign-in | [![openclaw status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fopenclaw.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![openclaw images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fopenclaw.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [owncloud](owncloud) | ownCloud Infinite Scale, your files and shares, for its desktop and phone apps and the web | [![owncloud status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fowncloud.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![owncloud images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fowncloud.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [static-site](static-site) | A static website from a tarball URL, served by Caddy and kept up to date | [![static-site status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fstatic-site.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![static-site images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fstatic-site.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [stirling-pdf](stirling-pdf) | Stirling-PDF, the PDF toolbox, behind your org login | [![stirling-pdf status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fstirling-pdf.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![stirling-pdf images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fstirling-pdf.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [umami](umami) | Umami analytics, the dashboard behind org and the tracking script open | [![umami status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fumami.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![umami images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fumami.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [uptime-kuma](uptime-kuma) | Uptime Kuma, the uptime monitor, behind your org login | [![uptime-kuma status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fuptime-kuma.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![uptime-kuma images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fuptime-kuma.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [vaultwarden](vaultwarden) | Vaultwarden, a Bitwarden-compatible password server, for your own apps and browsers | [![vaultwarden status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fvaultwarden.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![vaultwarden images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fvaultwarden.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [wordpress](wordpress) | WordPress with MariaDB, installed before it goes public | [![wordpress status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fwordpress.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![wordpress images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fwordpress.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+
+## Pattern cards
+
+| Card | What | Status |
+| --- | --- | --- |
+| [accounts](accounts) | Sign-up and sign-in for your visitors, and the console that manages them | not tested yet [![accounts images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Faccounts.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [assistant](assistant) | Chat that answers from your own documents, and the model that runs it | not tested yet [![assistant images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fassistant.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [ci](ci) | Your own Git forge with CI, and the runner on a machine of its own | [![ci status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fci.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![ci images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fci.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [edgible-agent](edgible-agent) | Your own AI agent that looks after your Edgible apps, from your phone | [![edgible-agent status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fedgible-agent.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![edgible-agent images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fedgible-agent.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [edgible-connector](edgible-connector) | Edgible in Claude's web, desktop and phone apps, signed in with Edgible | [![edgible-connector status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Ftest-status%2Fedgible-connector.json)](https://github.com/edgible-org/cards/blob/test-status/status.json) [![edgible-connector images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fedgible-connector.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [litellm](litellm) | Metered model API and its admin, one LiteLLM process | not tested yet [![litellm images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Flitellm.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [n8n](n8n) | Locked editor and open webhook hostname, one n8n process | not tested yet [![n8n images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fn8n.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+| [website](website) | Public React site, its editor, open tracker, locked dashboard, locked monitor | not tested yet [![website images](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fedgible-org%2Fcards%2Fscan-status%2Fwebsite.json)](https://github.com/edgible-org/cards/blob/scan-status/scan.json) |
+
+The first badge is the latest lifecycle test of each card, on a real Edgible serving device, and the Edgible version it ran on. The "images" badge is last night's scan of the images the card pins, for fixable HIGH or CRITICAL vulnerabilities. A green badge with the current version means it works today. A pattern with no test yet has been run by its author, but not by the regression.
+
+## What a card is
+
+The format, its conventions, and the tools that check and test a card are in [edgible-org/card-kit](https://github.com/edgible-org/card-kit#what-a-card-is). `metadata.type` in `card.yml` says which type a card is. An app card also follows these rules, and `check-cards` checks them:
+
+- **One app.** The app may sit on more than one hostname, such as Umami's dashboard and its tracking script, and it brings its own database or cache. It does not bring a second app.
+- **Names that say whose they are.** Every variable, service, and volume is prefixed with the app: `GITEA_DB_PASSWORD`, a service `gitea-db`, a volume `gitea-db-data`. No `container_name`. Two app cards then drop into one Compose file without a clash.
+- **Pinned images.** Each image is the exact version that passed `test.yml`. A newer version replaces it only once it passes too.
+- **Secrets made on the device.** Every password and key is declared in `card.yml` under `secrets:` ([the format](https://github.com/edgible-org/card-kit#secrets)). The ones the app or a person needs are made at first start by a `<card>-secrets` service, never written in `card.env` or the Compose file. Only keys a person brings, such as an AI model's, are `card.env` lines.
+- **Data described.** `data:` in `card.yml` says what each volume holds, so backups, restores and moves keep what matters ([the format](https://github.com/edgible-org/card-kit#data)). Cards still without it are being filled in.
+- **`test.yml`, always, with `result: pass`.** It is committed only when the result, a step, or the images change ([the rule](https://github.com/edgible-org/card-kit#test-results)).
+- **A short README.** Why is what the app is, with a link to its docs. What is its services, its hostnames, and what it needs to be combined into a pattern. How, Verify, and Tear down are as in any card.
+
+A pattern card says in its README which app cards it was built from.
+
+## Choosing the auth mode
+
+The auth mode belongs to each hostname, and the right one depends on who calls it.
+
+| Caller | Auth mode |
+| --- | --- |
+| A person in a browser, for an admin or personal interface | `org` |
+| An app's own phone app, desktop client, or browser extension, which cannot get past an Edgible sign-in | `none`, with the app's own login as the protection, and the card says so |
+| Another machine calling an API | `api-key` |
+| The public, such as a site, a tracking script, or a webhook | `none` |
+| A game, SSH, or another `tcp` or `udp` service | `none`, the only mode those take; the app's own checks decide who gets in |
+
+`org` is not automatically the safe choice. A card on `org` that its own phone app cannot reach does not work, and the README is where the trade-off is written down.
+
+## What is not an app card
+
+Some apps should not be put on a public hostname at all, however popular they are. The agent skips them and says why:
+
+- Services that would serve anyone and can be abused: an open DNS resolver such as Pi-hole, an open mail relay, an open proxy.
+- Apps with no maintained container image.
+- Apps whose project is archived.
+
+## Reviewing a card
+
+A person reviews every card before it is published. The agent cannot judge these, so the pull request lists them:
+
+- [ ] Default passwords are changed or generated, and the README says how to sign in the first time.
+- [ ] Every secret is empty in git, with a `# Generate with:` comment.
+- [ ] The auth mode of each hostname suits its callers, by the table above.
+- [ ] The README says where the data lives, and Tear down backs it up before deleting it.
+- [ ] `test.yml` passes, and its images are the ones in the Compose files. An app card must have one.
+- [ ] Nothing names a device, a hostname, or an organization.
+
+## Using app cards in a pattern
+
+Copy the services of each app card into your pattern's Compose file, and their lines into its `card.env`. The prefixes keep them apart. Then add what only you know: how the apps reach each other, which place each runs in, and the story in Why. Say in the README which app cards it was built from.
+
+## Tools and tests
+
+The format and the tools are in [edgible-org/card-kit](https://github.com/edgible-org/card-kit). Every submission runs `check-cards --fresh`, which fails a card whose files changed since its `test.yml`: run `test-card` and commit the new one. The lifecycle tests run with `test-cards` on an Edgible serving device, only on cards a maintainer has read, never straight from a submission. They test every card that carries `test.yml`, write the status to the [`test-status` branch](https://github.com/edgible-org/cards/tree/test-status), and never commit to `main`.
+
+## Contributing
+
+Cards are submitted to [edgible-org/cards-submissions](https://github.com/edgible-org/cards-submissions), not here: how to add a card, fix one, ask for one, or ask for a retest is in its [CONTRIBUTING.md](https://github.com/edgible-org/cards-submissions/blob/main/CONTRIBUTING.md). After a maintainer has read a card and it passes on Edgible's devices, it is published here.
+
+## License
+
+Everything in this repo is under the [MIT License](LICENSE). A card you contribute is shared under the same license. The apps a card runs keep their own licenses. Cards come as is, with no warranty: [what that means for you](NO-WARRANTY.md).

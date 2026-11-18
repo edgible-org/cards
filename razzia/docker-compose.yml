@@ -1,0 +1,47 @@
+# Compose file for the razzia card.
+# The host port comes from card.env. The host's password and the session signing key are
+# made on this machine by razzia-secrets, at first start, and never leave it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: razzia
+
+services:
+  # Makes the secrets (card.yml secrets:) if they do not exist yet, as files in the volume
+  # razzia-secrets, then exits. It never changes one after.
+  razzia-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        RAZZIA_MANAGER_PASSWORD=openssl rand -hex 16
+        RAZZIA_JWT_SECRET=openssl rand -hex 32
+    volumes:
+      - razzia-secrets:/run/card-secrets
+
+  razzia:
+    image: ${RAZZIA_IMAGE:-ghcr.io/ralex91/razzia:4.0.2}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${RAZZIA_PORT:?set RAZZIA_PORT in card.env}:3000"
+    # Razzia reads both secrets only from the environment, so it starts through the loader,
+    # which reads the secret files and then runs the image's own start command.
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
+    command: ['export MANAGER_PASSWORD="$$RAZZIA_MANAGER_PASSWORD" JWT_SECRET="$$RAZZIA_JWT_SECRET" && exec s6-svscan /etc/s6']
+    volumes:
+      # The quizzes, their media and the saved results.
+      - razzia-config:/app/config
+      - razzia-secrets:/run/card-secrets:ro
+    depends_on:
+      razzia-secrets:
+        condition: service_completed_successfully
+    # The image has no healthcheck of its own.
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+volumes:
+  razzia-config: {}
+  razzia-secrets: {}

@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: langflow
+  description: Langflow's builder behind org, each flow's API behind a key, and a webhook hostname open
+  type: app
+  added: 2026-11-06
+  homepage: https://www.langflow.org
+  license: MIT
+  steward: edgible-org
+
+applications:
+  - name: langflow
+    what: Langflow builder
+    from: langflowai/langflow:1.11.0
+    database: postgres:17.11-alpine
+    port: 7860
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [org]
+    place: langflow
+
+  - name: langflow-api
+    what: Langflow flow API, same process as langflow
+    from: langflowai/langflow:1.11.0
+    port: 7860
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [api-key]
+    place: langflow
+
+  - name: langflow-hooks
+    what: Langflow webhooks, same process as langflow
+    from: langflowai/langflow:1.11.0
+    port: 7860
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [none]
+    place: langflow
+
+data:
+  volumes:
+    langflow-db-data:
+      class: irreplaceable
+      dump:
+        service: langflow-db
+        command: pg_dump -U langflow -Fc langflow
+        restore: pg_restore -U langflow -d langflow --clean
+    langflow-secrets:
+      class: irreplaceable
+    langflow-data:
+      class: rebuildable
+  fingerprint:
+    service: langflow-db
+    command: psql -U langflow -d langflow -tAc "select json_build_object('users', (select count(*) from \"user\"), 'flows', (select count(*) from flow))"
+
+secrets:
+  LANGFLOW_DB_PASSWORD:
+    kind: internal
+    use: password
+    make: openssl rand -hex 16
+    update:
+      service: langflow-db
+      command: psql -U langflow -d langflow -c "ALTER USER langflow PASSWORD '$LANGFLOW_DB_PASSWORD'"
+  LANGFLOW_SECRET_KEY:
+    kind: internal
+    use: encryption
+    make: openssl rand -hex 32
+  LANGFLOW_ADMIN_PASSWORD:
+    kind: human
+    make: printf 'Lf1!%s' "$(openssl rand -hex 12)"
+    for: the admin's sign-in, admin, made when Langflow first starts
+
+places:
+  langflow:
+    memory: 2 GB
+    disk: 4 GB
+    arch: [amd64, arm64]
+    gpu: none

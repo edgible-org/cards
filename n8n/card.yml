@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: n8n
+  description: n8n with its editor behind org and a webhook hostname open to the services that call it
+  type: pattern
+  added: 2026-10-05
+  steward: edgible-org
+
+applications:
+  - name: n8n
+    what: n8n editor
+    from: docker.n8n.io/n8nio/n8n:2.41.4
+    database: postgres:18
+    port: 5678
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [org]
+    setup:
+      behind: org
+      done: curl -fsS "http://127.0.0.1:$N8N_PORT/rest/settings" | grep -q '"showSetupOnFirstLoad":false'
+    place: workhorse
+
+  - name: n8n-hooks
+    what: n8n webhooks, same process as n8n
+    from: docker.n8n.io/n8nio/n8n:2.41.4
+    port: 5678
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [none]
+    setup:
+      behind: org
+      done: curl -fsS "http://127.0.0.1:$N8N_PORT/rest/settings" | grep -q '"showSetupOnFirstLoad":false'
+    place: workhorse

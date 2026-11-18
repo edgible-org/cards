@@ -1,0 +1,25 @@
+tested: 2026-11-17
+result: pass
+card-kit: "bac8017"
+edgible-cli: 1.4.34
+files: sha256:d5656d40c835333e
+machine: darwin/arm64, docker 29.4.3
+images:
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - owncloud/ocis:8.2.3@sha256:4567aa656eeef86091e826eea8297d886ecf72c54beb00944dfa97c1455c2e9b
+image_facts:
+  owncloud/ocis:8.2.1: {user: "1000", archs: ["amd64", "arm64"], healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    owncloud: pass
+  teardown: pass
+measured:
+  owncloud:
+    memory: 270 MB
+    images: 86 MB
+    data: 418 KB
+duration: 3m
+by: ci

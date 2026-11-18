@@ -1,0 +1,29 @@
+tested: 2026-11-06
+result: pass
+card-kit: "ad80064"
+edgible-cli: 1.4.29
+files: sha256:e94f535b597d7599
+machine: darwin/arm64, docker 29.4.3
+images:
+  - localai/localai:v4.4.0@sha256:78a86bf170f400c36a7739644197c24416fc3832ed8f7bab0abf1a817d57b1c3
+image_facts:
+  localai/localai:v4.4.0: {user: "root", archs: ["amd64", "arm64"], healthcheck: true}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    localai: pass
+    localai-ui: pass
+  checks:
+    api-and-ui: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"models": 0}
+measured:
+  localai:
+    memory: 64 MB
+    images: 270 MB
+    data: 8 KB
+duration: 3m
+by: agent

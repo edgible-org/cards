@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: litellm
+  description: An AI gateway for your apps, one address for every model, with a key and a budget per app
+  type: app
+  added: 2026-10-09
+  homepage: https://docs.litellm.ai/
+  steward: edgible-org
+
+applications:
+  - name: litellm
+    what: LiteLLM's admin and its OpenAI-compatible API, one process
+    from: ghcr.io/berriai/litellm:v1.106.2
+    database: postgres:17.11-alpine
+    port: 4000
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [org]
+    place: litellm
+
+data:
+  volumes:
+    # Each app's key, its budget and its spend, and the keys and models added in the admin.
+    litellm-db-data:
+      class: irreplaceable
+    # The card's secrets, made on the device: the salt key encrypts what the admin stores.
+    litellm-secrets:
+      class: irreplaceable
+  fingerprint:
+    service: litellm-db
+    command: >-
+      echo "{\"keys\": $(psql -U litellm -d litellm -tAc 'select count(*) from "LiteLLM_VerificationToken"' 2>/dev/null || echo 0)}"
+
+secrets:
+  LITELLM_DB_PASSWORD:
+    kind: internal
+    use: password
+    make: openssl rand -hex 16
+    update:
+      service: litellm-db
+      command: psql -U litellm -d litellm -c "ALTER USER litellm PASSWORD '$LITELLM_DB_PASSWORD'"
+  LITELLM_SALT_KEY:
+    kind: internal
+    use: encryption
+    make: printf 'sk-%s' "$(openssl rand -hex 32)"
+  LITELLM_MASTER_KEY:
+    kind: human
+    make: printf 'sk-%s' "$(openssl rand -hex 32)"
+    for: the admin (user admin) and creating keys; apps get their own keys, never this one
+  GEMINI_API_KEY:
+    kind: external
+    from: https://aistudio.google.com/apikey (free tier), for fast's fallback
+    required: false
+  DEEPSEEK_API_KEY:
+    kind: external
+    from: https://platform.deepseek.com/api_keys, for fast and smart
+    required: false
+  OPENROUTER_API_KEY:
+    kind: external
+    from: https://openrouter.ai/settings/keys, for open (one key, many open models)
+    required: false
+  ANTHROPIC_API_KEY:
+    kind: external
+    from: https://console.anthropic.com/settings/keys, for the gateway's best (Claude)
+    required: false
+  OLLAMA_API_KEY:
+    kind: external
+    from: "`edgible app api-keys create --app ollama --name gateway`, for private and private-smart when Ollama runs on another machine (the ollama-osx card's app)"
+    required: false
+
+places:
+  litellm:
+    memory: 2.5 GB
+    disk: 2 GB
+    arch: [amd64, arm64]
+    gpu: none

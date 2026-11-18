@@ -1,0 +1,34 @@
+why: >-
+  You want shared notes that several people edit at once, written in markdown on a server you own,
+  for a family, a club committee or a small team, or just your own notes reachable from any
+  browser. [HedgeDoc](https://hedgedoc.org/) is a realtime collaborative markdown editor, formerly
+  CodiMD and HackMD CE, with live preview, sharing by link, slides, diagrams and note history.
+what: >-
+  One HedgeDoc container with a PostgreSQL database, and the uploaded images in a volume. It is
+  published on one hostname with auth mode `org`, because HedgeDoc is used in a browser and has no
+  phone app that would need to get past an Edgible sign-in, so only members of your Edgible
+  organisation reach it. HedgeDoc has its own accounts too (email and password), which is what
+  gives each note an owner. Anonymous editing is off, and new notes are editable by signed-in
+  users only. HedgeDoc has no admin role, so after Publish you register your own account behind
+  the Edgible sign-in, like anyone else in your organisation. Family or club members who are not in
+  your organisation cannot reach it this way; add them to the organisation, or use a different
+  app.
+data: >-
+  The notes are in the `hedgedoc-db-data` volume, the uploaded images in `hedgedoc-uploads`, and
+  the keys the card made in `hedgedoc-secrets`.
+edit: >-
+  Set `DEVICE` and `ORG_LABEL`. Set `HEDGEDOC_ALLOW_REGISTER=false` if you would rather add each
+  account yourself.
+start: ""
+setup:
+  hedgedoc: >-
+    Choose Sign in, then Register, with your email and a password from a password manager. With
+    `HEDGEDOC_ALLOW_REGISTER=false` there is no Register: make your account on the machine instead,
+    with `docker compose --env-file hedgedoc/card.env -f hedgedoc/docker-compose.yml exec hedgedoc
+    sh /run/card-secrets/.load sh -c 'export CMD_DB_URL="postgres://hedgedoc:$HEDGEDOC_DB_PASSWORD@hedgedoc-db:5432/hedgedoc";
+    exec node bin/manage_users --add <your email>'`, which asks for the password.
+verify:
+  hedgedoc: >-
+    Opening the address redirects to the Edgible sign-in, because the hostname is on `org`. Sign in
+    to Edgible, then to HedgeDoc with the account you registered in Set up, and make a note.
+docs: [HedgeDoc, https://docs.hedgedoc.org]

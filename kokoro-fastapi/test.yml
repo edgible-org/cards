@@ -1,0 +1,27 @@
+tested: 2026-11-16
+result: pass
+card-kit: "2f23d14"
+edgible-cli: 1.4.34
+files: sha256:ee961ac6cdc5d212
+machine: darwin/arm64, docker 29.4.3
+images:
+  - ghcr.io/remsky/kokoro-fastapi-cpu:v0.3.0@sha256:d7df384acb57929f88a696d892c1a2e0c6b60fa934802ebec9a88626003b8e9a
+image_facts:
+  ghcr.io/remsky/kokoro-fastapi-cpu:v0.3.0: {user: "appuser", archs: ["amd64", "arm64"], healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    kokoro-fastapi: pass
+    kokoro-fastapi-ui: pass
+  checks:
+    api: pass
+  teardown: pass
+measured:
+  kokoro-fastapi:
+    memory: 1.2 GB
+    images: 1.5 GB
+    data: 1 KB
+duration: 11m
+by: agent

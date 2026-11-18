@@ -1,0 +1,30 @@
+tested: 2026-11-08
+result: pass
+card-kit: "0d5658c"
+edgible-cli: 1.4.32
+files: sha256:d2fbb54fa3fcb02f
+machine: linux/amd64, docker 29.1.3
+images:
+  - caddy:2.11.9-alpine@sha256:0bbb055bda6793c999bde78b1b5ce3e89f829fb031af2cf50056ea1246559fee
+  - ollama/ollama:0.40.15@sha256:0e59999e0e8f9fd4e704bd788a89b7e4cad399367fb1365f8c102ac662288761
+image_facts:
+  ollama/ollama:0.40.15: {user: "root", healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    ollama: pass
+  checks:
+    gpu: pass
+    keyed: pass
+    loopback: pass
+  teardown: pass
+measured:
+  ollama:
+    memory: 401 MB
+    images: 3.4 GB
+    data: 271 MB
+duration: 7m
+by: agent
+notes: ollama is taken in the test org, so it was published as test-ollama.

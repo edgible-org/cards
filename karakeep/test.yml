@@ -1,0 +1,31 @@
+tested: 2026-11-17
+result: pass
+card-kit: "cf3ac91"
+edgible-cli: 1.4.34
+files: sha256:58b7d82908686e86
+machine: darwin/arm64, docker 29.4.3
+images:
+  - getmeili/meilisearch:v1.55.0@sha256:ff546679970126f8822e15d1b6a06bfbff1f2ce2e43f810cfb5258012f92de5c
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - ghcr.io/karakeep-app/karakeep:0.35.0@sha256:6f7d32ef296ddf1fc7c67ff56b8a201b7006a6a47b92b202afee1338841b353d
+  - zenika/alpine-chrome:124@sha256:eb3378c1ed0079f94db054a5fe1aaa790a254ec0d6bbc67eda052420d86a179d
+image_facts:
+  ghcr.io/karakeep-app/karakeep:0.35.0: {user: "root", archs: ["amd64", "arm64"], healthcheck: true}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    karakeep: pass
+  checks:
+    stranger-and-admin: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"asset_files": 0}
+measured:
+  karakeep:
+    memory: 807 MB
+    images: 892 MB
+    data: 852 KB
+duration: 8m
+by: agent

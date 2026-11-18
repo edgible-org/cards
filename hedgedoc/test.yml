@@ -1,0 +1,31 @@
+tested: 2026-11-15
+result: pass
+card-kit: "07c71dd"
+edgible-cli: 1.4.34
+files: sha256:10edbb58e4714ef9
+machine: darwin/arm64, docker 29.4.3
+images:
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - postgres:17.11-alpine@sha256:e5d2edd28b1f8d40a0a6c0c9cdc545b19b56a0d5d88f94bc11a97d970d4700d0
+  - quay.io/hedgedoc/hedgedoc:1.10.8@sha256:abdb6b08815d5bc5832b52d983d983ac678895e9fa0d76aaad80d08c5d70812b
+image_facts:
+  quay.io/hedgedoc/hedgedoc:1.10.8: {user: "root", archs: ["amd64", "arm64"], healthcheck: true}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    hedgedoc: pass
+  setup:
+    hedgedoc: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"users": 1, "notes": 0}
+measured:
+  hedgedoc:
+    memory: 286 MB
+    images: 310 MB
+    data: 49 MB
+duration: 3m
+by: agent
+notes: hedgedoc's port 3000 was taken on the test machine, so it was tested on 3001. hedgedoc is taken in the test org, so it was published as test-hedgedoc.

@@ -1,0 +1,123 @@
+# Compose file for the chatwoot card.
+# The host port, ORG_LABEL and the admin's email come from card.env. The database password, the
+# app secret and the admin's password are made on this machine by chatwoot-secrets, at first start,
+# and never leave it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: chatwoot
+
+x-chatwoot-env: &chatwoot-env
+  RAILS_ENV: production
+  NODE_ENV: production
+  INSTALLATION_ENV: docker
+  RAILS_LOG_TO_STDOUT: "true"
+  FRONTEND_URL: ${CHATWOOT_URL:-https://chatwoot.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+  # Nobody can make an account of their own: the admin adds agents.
+  ENABLE_ACCOUNT_SIGNUP: "false"
+  POSTGRES_HOST: chatwoot-db
+  POSTGRES_USERNAME: chatwoot
+  POSTGRES_DATABASE: chatwoot
+  REDIS_URL: redis://chatwoot-redis:6379
+  SMTP_ADDRESS: ${CHATWOOT_SMTP_ADDRESS:-}
+  SMTP_PORT: ${CHATWOOT_SMTP_PORT:-587}
+  SMTP_USERNAME: ${CHATWOOT_SMTP_USERNAME:-}
+  SMTP_PASSWORD: ${CHATWOOT_SMTP_PASSWORD:-}
+  SMTP_AUTHENTICATION: ${CHATWOOT_SMTP_AUTHENTICATION:-login}
+  MAILER_SENDER_EMAIL: ${CHATWOOT_MAILER_SENDER_EMAIL:-Support <noreply@example.com>}
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume chatwoot-secrets, then exits. It never changes one that exists.
+  chatwoot-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        CHATWOOT_DB_PASSWORD=openssl rand -hex 16
+        CHATWOOT_SECRET_KEY_BASE=openssl rand -hex 64
+        CHATWOOT_ADMIN_PASSWORD=printf 'Cw-%s1' "$(openssl rand -hex 12)"
+    volumes:
+      - chatwoot-secrets:/run/card-secrets
+
+  chatwoot:
+    image: chatwoot/chatwoot:v4.19.1
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${CHATWOOT_PORT:?set CHATWOOT_PORT in card.env}:3000"
+    # Chatwoot reads these only from the environment, so it starts through the loader, which sets
+    # them from the secret files. It then makes the database ready and runs the image's own start.
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
+    command:
+      - >-
+        export POSTGRES_PASSWORD="$$CHATWOOT_DB_PASSWORD" SECRET_KEY_BASE="$$CHATWOOT_SECRET_KEY_BASE"
+        && bundle exec rails db:chatwoot_prepare
+        && exec docker/entrypoints/rails.sh bundle exec rails s -p 3000 -b 0.0.0.0
+    volumes:
+      - chatwoot-secrets:/run/card-secrets:ro
+      - chatwoot-storage:/app/storage
+    environment: *chatwoot-env
+    depends_on:
+      chatwoot-secrets:
+        condition: service_completed_successfully
+      chatwoot-db:
+        condition: service_healthy
+      chatwoot-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:3000/api"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 90s
+
+  chatwoot-sidekiq:
+    image: chatwoot/chatwoot:v4.19.1
+    restart: unless-stopped
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
+    command:
+      - >-
+        export POSTGRES_PASSWORD="$$CHATWOOT_DB_PASSWORD" SECRET_KEY_BASE="$$CHATWOOT_SECRET_KEY_BASE"
+        && exec docker/entrypoints/rails.sh bundle exec sidekiq -C config/sidekiq.yml
+    volumes:
+      - chatwoot-secrets:/run/card-secrets:ro
+      - chatwoot-storage:/app/storage
+    environment: *chatwoot-env
+    depends_on:
+      chatwoot:
+        condition: service_healthy
+
+  chatwoot-db:
+    image: pgvector/pgvector:0.8.1-pg17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: chatwoot
+      POSTGRES_USER: chatwoot
+      POSTGRES_PASSWORD_FILE: /run/card-secrets/CHATWOOT_DB_PASSWORD
+    volumes:
+      - chatwoot-db-data:/var/lib/postgresql/data
+      - chatwoot-secrets:/run/card-secrets:ro
+    depends_on:
+      chatwoot-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chatwoot -d chatwoot"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  chatwoot-redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    volumes:
+      - chatwoot-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  chatwoot-db-data: {}
+  chatwoot-storage: {}
+  chatwoot-redis-data: {}
+  chatwoot-secrets: {}

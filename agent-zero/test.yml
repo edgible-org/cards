@@ -1,0 +1,26 @@
+tested: 2026-11-16
+result: pass
+card-kit: "2f23d14"
+edgible-cli: 1.4.34
+files: sha256:655892712539fef4
+machine: darwin/arm64, docker 29.4.3
+images:
+  - agent0ai/agent-zero:v2.15@sha256:05d6ab347bd7db4b6bd5a7d902c9965281ff852ff23f29fffcc1c8919e628bd8
+image_facts:
+  agent0ai/agent-zero:v2.15: {user: "root", archs: ["amd64", "arm64"], healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    agent-zero: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"chats": 0, "files": 12}
+measured:
+  agent-zero:
+    memory: 991 MB
+    images: 2.7 GB
+    data: 78 KB
+duration: 17m
+by: agent

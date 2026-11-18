@@ -1,0 +1,32 @@
+tested: 2026-11-07
+result: pass
+card-kit: "92d5d81"
+edgible-cli: 1.4.29
+files: sha256:5b8407423d4d2c57
+machine: darwin/arm64, docker 29.4.3
+images:
+  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - langflowai/langflow:1.11.0@sha256:f7de8256fdbba725d7765bcff9d984ad272e0f726daabf2d7e3c3b0fa8dc31bf
+  - postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+image_facts:
+  langflowai/langflow:1.11.0: {user: "user", archs: ["amd64", "arm64"], healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    langflow: pass
+    langflow-api: pass
+    langflow-hooks: pass
+  checks:
+    no-stranger: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"users": 2, "flows": 29}
+measured:
+  langflow:
+    memory: 1.6 GB
+    images: 1.1 GB
+    data: 54 MB
+duration: 10m
+by: agent

@@ -1,0 +1,268 @@
+# Compose file for the edgible-agent pattern: the openclaw, edgible-mcp and litellm app cards in
+# one Compose project, so OpenClaw reaches Edgible's MCP tools and the AI gateway on this project's
+# network, and nothing else does. OpenClaw asks the gateway for model fast with its own key; the
+# provider keys are the gateway's alone. OpenClaw's Gateway is on this machine's loopback only. Ports and the model come from card.env; the Gateway token is made
+# on this machine by openclaw-secrets. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+# openclaw-setup runs OpenClaw's onboarding once, then the Gateway starts. openclaw-cli runs
+# OpenClaw's own commands, such as approving a device:
+#   docker compose --env-file card.env -f docker-compose.yml run --rm --no-deps openclaw-cli devices list
+
+name: edgible-agent
+
+x-openclaw-env: &openclaw-env
+  HOME: /home/node
+  OPENCLAW_HOME: /home/node
+  OPENCLAW_STATE_DIR: /home/node/.openclaw
+  OPENCLAW_CONFIG_PATH: /home/node/.openclaw/openclaw.json
+  OPENCLAW_CONFIG_DIR: /home/node/.openclaw
+  OPENCLAW_WORKSPACE_DIR: /home/node/.openclaw/workspace
+  OPENCLAW_GATEWAY_PORT: "18789"
+  OPENCLAW_DISABLE_BONJOUR: "1"
+  OPENCLAW_USERS: ${OPENCLAW_USERS:-}
+  # A shared AI gateway's key for this agent, by reference (edgible-mcp's gateway_key); empty, the
+  # agent uses its own key on the gateway in this pattern.
+  OPENCLAW_MODEL_KEY: ${OPENCLAW_MODEL_KEY:-}
+  # npx's cache, kept in the agent's data so the notes server is fetched once, not at every start.
+  npm_config_cache: /home/node/.openclaw/npm-cache
+  TERM: xterm-256color
+  TZ: ${OPENCLAW_TZ:-UTC}
+
+x-openclaw-hardening: &openclaw-hardening
+  cap_drop: [NET_RAW, NET_ADMIN]
+  security_opt: [no-new-privileges:true]
+  init: true
+
+services:
+  # Makes OpenClaw's secrets (card.yml secrets:) if they do not exist yet, as files in the volume
+  # openclaw-card-secrets, then exits: the Gateway token, and the agent's key for the AI gateway,
+  # which the gateway reads from this volume to register it with a budget. Every OpenClaw service
+  # starts through the loader, which puts them in its environment.
+  openclaw-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        OPENCLAW_GATEWAY_TOKEN=openssl rand -hex 32
+        LITELLM_KEY_AGENT=printf 'sk-%s' "$(openssl rand -hex 24)"
+    volumes:
+      - openclaw-card-secrets:/run/card-secrets
+
+  openclaw-setup:
+    image: ghcr.io/openclaw/openclaw:2026.11.4
+    <<: *openclaw-hardening
+    restart: "no"
+    environment:
+      <<: *openclaw-env
+      OPENCLAW_URL: ${OPENCLAW_URL:-https://openclaw.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      # The model is the AI gateway's fast, with the agent's own key; fallbacks are the gateway's.
+      OPENCLAW_MODEL_PROVIDER: openai-compatible
+      OPENCLAW_MODEL: ${OPENCLAW_MODEL:-fast}
+      OPENCLAW_MODEL_CHOICES: ${OPENCLAW_MODEL_CHOICES:-fast,smart,open,best,private,private-smart}
+      # This pattern's own gateway, or a shared one: https://litellm-api.<org>.edgible.app/v1
+      OPENCLAW_MODEL_URL: ${OPENCLAW_MODEL_URL:-http://litellm:4000/v1}
+      EDGIBLE_MCP_URL: http://edgible-mcp:8000/mcp
+      EDGIBLE_SKILL: "1"
+      # Set OPENCLAW_NOTES_DIR (a folder on this machine) to give the agent read-only access to it.
+      OPENCLAW_NOTES: ${OPENCLAW_NOTES_DIR:+1}
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c", 'export CUSTOM_API_KEY="$${OPENCLAW_MODEL_KEY:-$$LITELLM_KEY_AGENT}"; exec sh /setup.sh']
+    depends_on:
+      openclaw-secrets:
+        condition: service_completed_successfully
+    configs:
+      - source: openclaw-setup
+        target: /setup.sh
+    volumes:
+      - openclaw-data:/home/node/.openclaw
+      - openclaw-secrets:/home/node/.config/openclaw
+      - openclaw-card-secrets:/run/card-secrets:ro
+
+  edgible-mcp:
+    image: ghcr.io/edgible-org/edgible-mcp:0.7.27
+    restart: unless-stopped
+    environment:
+      EDGIBLE_MCP_ALLOW_WRITE: ${EDGIBLE_MCP_ALLOW_WRITE:-0}
+      EDGIBLE_MCP_DEVICES: ${EDGIBLE_MCP_DEVICES:-}
+      # agent_spend: the agent's own spending on its AI gateway, through its own key (scoped to the agent).
+      EDGIBLE_MCP_AGENT_GATEWAY_URL: ${OPENCLAW_MODEL_URL:-http://litellm:4000/v1}
+      EDGIBLE_MCP_AGENT_KEY: ${OPENCLAW_MODEL_KEY:-}
+      EDGIBLE_MCP_AGENT_KEY_FILE: /run/agent-keys/LITELLM_KEY_AGENT
+      EDGIBLE_MCP_CACHE_DIR: /root/.cache/edgible-mcp
+      EDGIBLE_MCP_SIGN_IN: docker compose --env-file edgible-agent/card.env -f edgible-agent/docker-compose.yml exec edgible-mcp edgible auth login --no-browser
+    volumes:
+      - edgible-mcp-cache:/root/.cache
+      # The Edgible CLI's sign-in, which the agent's Edgible tools act as.
+      - edgible-mcp-login:/login
+      # The agent's own gateway key (with OpenClaw's Gateway token), read-only, for agent_spend.
+      - openclaw-card-secrets:/run/agent-keys:ro
+      # With writes: the record of what the tools did, and each deployed card's Compose file.
+      - edgible-mcp-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8000/healthz | grep -q ok"]
+      interval: 30s
+      timeout: 15s
+      retries: 3
+      start_period: 1m
+
+  openclaw:
+    image: ghcr.io/openclaw/openclaw:2026.11.4
+    <<: *openclaw-hardening
+    restart: unless-stopped
+    depends_on:
+      openclaw-setup:
+        condition: service_completed_successfully
+      edgible-mcp:
+        condition: service_healthy
+      # Not there when the agent uses a shared gateway (COMPOSE_PROFILES without gateway).
+      litellm:
+        condition: service_healthy
+        required: false
+    environment: *openclaw-env
+    # With OPENCLAW_USERS, Edgible's sign-in is the Gateway's auth (trusted-proxy): the token
+    # then serves only OpenClaw's own command line, as its password, and must not be the token.
+    entrypoint: ["tini", "-s", "--", "sh", "/run/card-secrets/.load", "sh", "-c", 'export CUSTOM_API_KEY="$${OPENCLAW_MODEL_KEY:-$$LITELLM_KEY_AGENT}"; if [ -n "$${OPENCLAW_USERS:-}" ]; then export OPENCLAW_GATEWAY_PASSWORD="$$OPENCLAW_GATEWAY_TOKEN"; unset OPENCLAW_GATEWAY_TOKEN; fi; exec "$$@"', "sh", "node", "/app/docker-entrypoint.mjs"]
+    command: ["node", "dist/index.js", "gateway", "--bind", "lan", "--port", "18789"]
+    ports:
+      # Loopback only: the Control UI is an admin console over an agent with a shell.
+      - "127.0.0.1:${OPENCLAW_PORT:?set OPENCLAW_PORT in card.env}:18789"
+    extra_hosts:
+      # A model on this machine, such as ollama-osx: http://host.docker.internal:11434/v1
+      - "host.docker.internal:host-gateway"
+    volumes:
+      # The agent's config, memory, sessions and workspace.
+      - openclaw-data:/home/node/.openclaw
+      - openclaw-secrets:/home/node/.config/openclaw
+      - openclaw-card-secrets:/run/card-secrets:ro
+      # Your own files, read-only, for the notes server; an empty volume when OPENCLAW_NOTES_DIR is unset.
+      - ${OPENCLAW_NOTES_DIR:-openclaw-notes}:/notes:ro
+      # And in the agent's workspace, where its own file tools look first, so a path like notes/ works too.
+      - ${OPENCLAW_NOTES_DIR:-openclaw-notes}:/home/node/.openclaw/workspace/notes:ro
+    healthcheck:
+      test: ["CMD", "node", "dist/docker-healthcheck.js"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  openclaw-cli:
+    image: ghcr.io/openclaw/openclaw:2026.11.4
+    <<: *openclaw-hardening
+    profiles: [cli]
+    # Shares the Gateway's network and processes: OpenClaw only lets the Gateway's own
+    # process namespace change its config while it runs.
+    network_mode: "service:openclaw"
+    pid: "service:openclaw"
+    environment:
+      <<: *openclaw-env
+      BROWSER: echo
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c", 'export CUSTOM_API_KEY="$${OPENCLAW_MODEL_KEY:-$$LITELLM_KEY_AGENT}"; if [ -n "$${OPENCLAW_USERS:-}" ]; then export OPENCLAW_GATEWAY_PASSWORD="$$OPENCLAW_GATEWAY_TOKEN"; unset OPENCLAW_GATEWAY_TOKEN; fi; exec "$$@"', "sh", "node", "dist/index.js"]
+    volumes:
+      - openclaw-data:/home/node/.openclaw
+      - openclaw-secrets:/home/node/.config/openclaw
+      - openclaw-card-secrets:/run/card-secrets:ro
+
+  # The AI gateway, as in the litellm card (gateway.yaml and register-keys.py are copies of its own:
+  # copy them across when those change). Not published: only OpenClaw reaches it. In the profile
+  # gateway, which card.env turns on; off, the agent uses a shared gateway instead.
+  litellm-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    profiles: [gateway]
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        LITELLM_DB_PASSWORD=openssl rand -hex 16
+        LITELLM_SALT_KEY=printf 'sk-%s' "$(openssl rand -hex 32)"
+        LITELLM_MASTER_KEY=printf 'sk-%s' "$(openssl rand -hex 32)"
+    volumes:
+      - litellm-secrets:/run/card-secrets
+
+  litellm:
+    image: ghcr.io/berriai/litellm:v1.109.1
+    profiles: [gateway]
+    restart: unless-stopped
+    entrypoint: ["sh", "/run/card-secrets/.load", "sh", "-c"]
+    command:
+      - >-
+        export DATABASE_URL="postgresql://litellm:$$LITELLM_DB_PASSWORD@litellm-db:5432/litellm"
+        LITELLM_MASTER_KEY="$$LITELLM_MASTER_KEY" LITELLM_SALT_KEY="$$LITELLM_SALT_KEY"
+        && (python3 /app/register-keys.py &)
+        && exec docker/prod_entrypoint.sh --config /app/gateway.yaml --port 4000
+    environment:
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      LITELLM_FAST_MODEL: ${LITELLM_FAST_MODEL:-deepseek/deepseek-chat}
+      LITELLM_FAST_FALLBACK_MODEL: ${LITELLM_FAST_FALLBACK_MODEL:-gemini/gemini-3.5-flash}
+      LITELLM_SMART_MODEL: ${LITELLM_SMART_MODEL:-deepseek/deepseek-reasoner}
+      LITELLM_OPEN_MODEL: ${LITELLM_OPEN_MODEL:-openrouter/z-ai/glm-5.3}
+      LITELLM_BEST_MODEL: ${LITELLM_BEST_MODEL:-anthropic/claude-opus-5-5}
+      LITELLM_BEST_BUDGET: ${LITELLM_BEST_BUDGET:-5}
+      LITELLM_BEST_BUDGET_PERIOD: ${LITELLM_BEST_BUDGET_PERIOD:-30d}
+      LITELLM_PRIVATE_MODEL: ${LITELLM_PRIVATE_MODEL:-ollama/qwen2.5:7b}
+      LITELLM_PRIVATE_SMART_MODEL: ${LITELLM_PRIVATE_SMART_MODEL:-ollama/qwen3.5:27b}
+      LITELLM_PRIVATE_URL: ${LITELLM_PRIVATE_URL:-http://host.docker.internal:11434}
+      LITELLM_APP_BUDGET: ${LITELLM_APP_BUDGET:-5}
+      LITELLM_APP_BUDGET_PERIOD: ${LITELLM_APP_BUDGET_PERIOD:-30d}
+      STORE_MODEL_IN_DB: "True"
+    configs:
+      - source: litellm-gateway
+        target: /app/gateway.yaml
+      - source: litellm-register-keys
+        target: /app/register-keys.py
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - litellm-secrets:/run/card-secrets:ro
+      # The agent's key, to register; OpenClaw never sees the gateway's own secrets.
+      - openclaw-card-secrets:/run/app-keys:ro
+    depends_on:
+      litellm-db:
+        condition: service_healthy
+      openclaw-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:4000/health/liveliness', timeout=4)\""]
+      interval: 10s
+      timeout: 6s
+      retries: 18
+      start_period: 40s
+
+  litellm-db:
+    image: postgres:17.11-alpine
+    profiles: [gateway]
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: litellm
+      POSTGRES_USER: litellm
+      POSTGRES_PASSWORD_FILE: /run/card-secrets/LITELLM_DB_PASSWORD
+    volumes:
+      - litellm-db-data:/var/lib/postgresql/data
+      - litellm-secrets:/run/card-secrets:ro
+    depends_on:
+      litellm-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U litellm -d litellm"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+configs:
+  openclaw-setup:
+    file: ./setup.sh
+  litellm-gateway:
+    file: ./gateway.yaml
+  litellm-register-keys:
+    file: ./register-keys.py
+
+volumes:
+  openclaw-data: {}
+  openclaw-secrets: {}
+  edgible-mcp-cache: {}
+  edgible-mcp-login: {}
+  edgible-mcp-data: {}
+  openclaw-card-secrets: {}
+  openclaw-notes: {}
+  litellm-db-data: {}
+  litellm-secrets: {}

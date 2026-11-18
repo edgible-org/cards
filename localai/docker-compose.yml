@@ -1,0 +1,31 @@
+# Compose file for the localai card: an OpenAI-compatible model server. The host port comes from card.env.
+# LocalAI listens on 127.0.0.1 only; Edgible's api-key check is what keeps strangers out. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+# An app on the same machine can skip Edgible and call http://127.0.0.1:<LOCALAI_PORT>/v1, or
+# http://localai:8080/v1 on a shared Compose network.
+
+name: localai
+
+services:
+  localai:
+    image: ${LOCALAI_IMAGE:-localai/localai:v4.4.0}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${LOCALAI_PORT:?set LOCALAI_PORT in card.env}:8080"
+    environment:
+      MODELS_PATH: /models
+      LOCALAI_BACKENDS_PATH: /backends
+      DEBUG: "false"
+    volumes:
+      - localai-models:/models
+      - localai-backends:/backends
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/readyz"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+
+volumes:
+  localai-models: {}
+  localai-backends: {}

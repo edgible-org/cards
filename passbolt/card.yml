@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: passbolt
+  description: Passbolt, a password manager for teams, on its own sign-in and two-factor
+  type: app
+  added: 2026-11-01
+  homepage: https://www.passbolt.com
+  license: AGPL-3.0-only
+
+applications:
+  - name: passbolt
+    what: Passbolt web, browser extension, and phone app API
+    from: passbolt/passbolt:5.8.0-1-ce-non-root
+    database: mariadb:11.8.5
+    port: 8086
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [none]
+    place: passbolt
+
+secrets:
+  PASSBOLT_DB_PASSWORD:
+    kind: internal
+    use: password
+    make: openssl rand -hex 16
+    on-move: carry            # MariaDB keeps it in its data, and its root password is random
+  PASSBOLT_SMTP_PASSWORD:
+    kind: external
+    from: your mail provider's SMTP settings; leave empty to send no mail
+
+data:
+  volumes:
+    passbolt-db-data:
+      class: irreplaceable
+      dump:
+        service: passbolt-db
+        command: mariadb-dump --single-transaction -u passbolt -p"$(cat /run/card-secrets/PASSBOLT_DB_PASSWORD)" passbolt
+        restore: mariadb -u passbolt -p"$(cat /run/card-secrets/PASSBOLT_DB_PASSWORD)" passbolt
+    passbolt-gpg:
+      class: irreplaceable     # the server's key: without it nobody can sign in
+    passbolt-jwt:
+      class: irreplaceable
+    passbolt-secrets:
+      class: irreplaceable        # the card secrets, made on the device: back up with the data
+  fingerprint:
+    service: passbolt-db
+    command: mariadb -N -u passbolt -p"$(cat /run/card-secrets/PASSBOLT_DB_PASSWORD)" passbolt -e "select json_object('users', (select count(*) from users), 'resources', (select count(*) from resources))"
+
+places:
+  passbolt:
+    memory: 1 GB
+    disk: 3 GB
+    arch: [amd64, arm64]
+    gpu: none

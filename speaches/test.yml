@@ -1,0 +1,29 @@
+tested: 2026-11-06
+result: pass
+card-kit: "ad80064"
+edgible-cli: 1.4.29
+files: sha256:ed7b9e5e0cbd1eec
+machine: darwin/arm64, docker 29.4.3
+images:
+  - ghcr.io/speaches-ai/speaches:0.9.0-rc.3-cpu@sha256:2163775b6df5e451a71200e8f675fed68dbd8ab184fc604453d549e486f22fd2
+image_facts:
+  ghcr.io/speaches-ai/speaches:0.9.0-rc.3-cpu: {user: "ubuntu", archs: ["amd64", "arm64"], healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    speaches: pass
+    speaches-ui: pass
+  checks:
+    api: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"models": 0}
+measured:
+  speaches:
+    memory: 466 MB
+    images: 616 MB
+    data: 4 KB
+duration: 3m
+by: agent

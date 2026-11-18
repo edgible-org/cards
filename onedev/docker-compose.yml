@@ -1,0 +1,75 @@
+# Compose file for the onedev card.
+# Ports and ORG_LABEL come from card.env. The passwords are made on this machine by
+# onedev-secrets, at first start, and never leave it. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: onedev
+
+services:
+  # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
+  # volume onedev-secrets, then exits. It never changes one that exists.
+  onedev-secrets:
+    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    restart: "no"
+    environment:
+      CARD_SECRETS: |
+        ONEDEV_DB_PASSWORD=openssl rand -hex 16
+        ONEDEV_ADMIN_PASSWORD=openssl rand -hex 16
+    volumes:
+      - onedev-secrets:/run/card-secrets
+
+  onedev:
+    image: ${ONEDEV_IMAGE:-1dev/server:17.1.2}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${ONEDEV_PORT:?set ONEDEV_PORT in card.env}:6610"
+      - "127.0.0.1:${ONEDEV_SSH_PORT:?set ONEDEV_SSH_PORT in card.env}:6611"
+    environment:
+      hibernate_dialect: io.onedev.server.persistence.PostgreSQLDialect
+      hibernate_connection_driver_class: org.postgresql.Driver
+      hibernate_connection_url: jdbc:postgresql://onedev-db:5432/onedev
+      hibernate_connection_username: onedev
+      hibernate_connection_password_file: /run/card-secrets/ONEDEV_DB_PASSWORD
+      # Unattended setup: the admin exists from the first start, so no setup page is ever served.
+      # Self-registration is off by default; the admin adds people.
+      initial_user: admin
+      initial_password_file: /run/card-secrets/ONEDEV_ADMIN_PASSWORD
+      initial_email: ${ONEDEV_ADMIN_EMAIL:-admin@example.com}
+      initial_server_url: ${ONEDEV_URL:-https://onedev.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+      initial_ssh_root_url: ssh://${ONEDEV_SSH_DOMAIN:-onedev-ssh.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}:${ONEDEV_SSH_PORT:?set ONEDEV_SSH_PORT in card.env}
+    volumes:
+      - onedev-data:/opt/onedev
+      - onedev-secrets:/run/card-secrets:ro
+    depends_on:
+      onedev-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/6610'"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+
+  onedev-db:
+    image: postgres:17.11-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: onedev
+      POSTGRES_USER: onedev
+      POSTGRES_PASSWORD_FILE: /run/card-secrets/ONEDEV_DB_PASSWORD
+    volumes:
+      - onedev-db-data:/var/lib/postgresql/data
+      - onedev-secrets:/run/card-secrets:ro
+    depends_on:
+      onedev-secrets:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U onedev -d onedev"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  onedev-data: {}
+  onedev-db-data: {}
+  onedev-secrets: {}

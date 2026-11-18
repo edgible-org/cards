@@ -1,0 +1,23 @@
+# Frigate's starting config, copied into the frigate-config volume once, at first start.
+# After that, change the copy in the volume (Settings, Config editor, in the interface).
+mqtt:
+  enabled: false
+
+detectors:
+  cpu1:
+    type: cpu
+
+# A placeholder so Frigate starts. Replace it with your own cameras' streams.
+cameras:
+  placeholder:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/placeholder
+          roles:
+            - detect
+    detect:
+      enabled: false
+      width: 1280
+      height: 720
+
+version: 0.17-0

@@ -1,0 +1,37 @@
+why: >-
+  Chatting with an AI usually means typing your questions, and your documents, into a hosted
+  service. [Open WebUI](https://openwebui.com) is a chat interface you run yourself: it talks to
+  models on your own machine (through Ollama, which keeps prompts and documents off outside
+  services), or to any OpenAI-compatible service or gateway you choose, several at once. You can
+  upload documents and ask questions about them, and each person has their own chats.
+what: >-
+  One app, `open-webui`, on `org`: it is a web interface for people, so Edgible's sign-in stands
+  in front of it and only members of your organization reach it. It has accounts of its own as
+  well, for who sees which chats and documents. Sign-up is closed, but Open WebUI lets its first
+  account through as the admin: after Publish you make it yourself on its first page, behind the
+  Edgible sign-in, and then nobody else can register; the admin adds people under Admin Panel,
+  Users. The card runs no model itself. Point it at one: Ollama on this machine (the default,
+  `host.docker.internal:11434`, as the `ollama-osx` card runs on a Mac), or an OpenAI-compatible
+  address and key in `card.env` or under Admin Settings, Connections, such as the `litellm` card's
+  gateway. Its own OpenAI-compatible API needs a key made in the app; if other programs should
+  call models, give them the `litellm` or `localai` card's API instead, on `api-key`.
+data: >-
+  Accounts, chats, settings, uploaded documents and their search index are in the volume
+  `open-webui-data`; the signing key is in `open-webui-secrets`. A document answer is only as good
+  as the model behind it: check the sources it cites, and have a person check an answer before
+  relying on it.
+edit: >-
+  Set `DEVICE` to a name `edgible device list` prints, and `ORG_LABEL`. Set `OPEN_WEBUI_OLLAMA_URL`
+  if Ollama is elsewhere, or enable the OpenAI-compatible connection and its key. These are read
+  at the first start only; afterwards change them in the app. Change `OPEN_WEBUI_PORT` only if
+  8080 is taken.
+start: ""
+setup:
+  open-webui: >-
+    Its first page makes the admin: your name, email and a password from a password manager. After
+    that, sign-up stays closed.
+verify:
+  open-webui: >-
+    Sign in as the admin you made in Set up, add a model connection if you have not, and send a
+    message. A person who is not in your organization is stopped at Edgible's sign-in.
+docs: [Open WebUI, https://docs.openwebui.com]

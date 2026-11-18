@@ -1,0 +1,48 @@
+why: >-
+  Your photos and videos are the data people least want on someone else's servers, and the most
+  expensive to keep there. [Immich](https://immich.app) is a photo and video library with phone
+  apps that back up your camera roll, on a machine you own.
+what: >-
+  One app, `immich`, on the place `immich`, on `none`. That is deliberate: Immich's phone apps
+  cannot get past an Edgible sign-in, so `org` would stop them backing up. Immich's own login
+  protects it, and nobody can sign up: the first account is the admin, and the admin adds everyone
+  else. Until that first account exists, anyone who reaches Immich can make it, so the card
+  publishes it on `org` first: only your Edgible organization reaches its first page, where you
+  make the admin with your own email and password. Then you open it to everyone, for the phone
+  apps.
+
+
+  It runs four services, from the Compose file Immich publishes for v3.3.1: `immich-server`,
+  `immich-machine-learning` for face recognition and smart search, `immich-redis`, and
+  `immich-db`, a Postgres with vector search. The images are pinned to `v3.3.1`, with the digests
+  Immich publishes for Redis and Postgres. To run without machine learning, remove that service;
+  Immich then skips those features.
+
+
+  To use it in a card, copy the five services, the `x-immich-env` block, the four volumes,
+  card.yml's `secrets:` and `setup:`, and the `IMMICH_` lines.
+data: >-
+  Photos and videos live in the volume `immich-library`, the database in `immich-db-data`, and
+  machine learning's models in `immich-model-cache`. Back up the first two together. The memory
+  and disk below follow Immich's own documented minimum, which is higher than an empty test library
+  measures; disk is for Immich itself, so add room for your photos and about 20% more for
+  thumbnails.
+edit: >-
+  Set `DEVICE` to a name `edgible device list` prints. There are no passwords to fill: Start makes
+  the database's on the machine, and you choose the admin's on Immich's first page.
+start: ""
+setup:
+  immich: >-
+    Its first page makes the admin: your name, email and password. Use a password manager for the
+    password. Immich then walks you through a few settings, such as its theme and storage
+    template, which you can change later.
+verify:
+  immich: >-
+    That prints `200`: the web app, with no Edgible sign-in, as the phone apps need. In the phone
+    app, set the server to `https://<immich hostname>` and sign in with the admin you made in Set
+    up.
+
+
+    For a forgotten admin password, Immich resets it on the machine:
+    `docker compose --env-file immich/card.env -f immich/docker-compose.yml exec immich-server immich-admin reset-admin-password`.
+docs: [Immich, https://docs.immich.app]

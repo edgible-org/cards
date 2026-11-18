@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: karakeep
+  description: Karakeep, a bookmark-everything app that saves a copy of each page, behind its own login
+  type: app
+  added: 2026-11-17
+  homepage: https://karakeep.app/
+  license: AGPL-3.0-only
+  steward: edgible-org
+
+applications:
+  - name: karakeep
+    what: Karakeep, for the web, the browser extension and the phone app
+    from: ghcr.io/karakeep-app/karakeep:0.35.0
+    port: 3000
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [none]
+    place: karakeep
+
+data:
+  volumes:
+    karakeep-data:
+      class: irreplaceable
+    karakeep-meili-data:
+      class: rebuildable
+    karakeep-secrets:
+      class: irreplaceable
+  fingerprint:
+    service: karakeep
+    command: 'printf ''{"asset_files": %s}\n'' "$(find /data/assets -type f 2>/dev/null | wc -l)"'
+
+secrets:
+  KARAKEEP_AUTH_SECRET:
+    kind: internal
+    use: signing
+    make: openssl rand -base64 36
+  KARAKEEP_MEILI_KEY:
+    kind: internal
+    use: token
+    make: openssl rand -hex 24
+  KARAKEEP_ADMIN_PASSWORD:
+    kind: human
+    make: openssl rand -hex 16
+    for: the admin's first sign-in, made by prepare.sh; change it under Settings after
+
+places:
+  karakeep:
+    memory: 2 GB
+    disk: 4 GB
+    arch: [amd64, arm64]
+    gpu: none

@@ -1,0 +1,24 @@
+tested: 2026-11-17
+result: pass
+card-kit: "cf3ac91"
+edgible-cli: 1.4.34
+files: sha256:96916f3aebe2b1f3
+machine: darwin/arm64, docker 29.4.3
+images:
+  - ghcr.io/krelltunez/dayglance:5.15.0@sha256:5bd379d2ec9932fec55aeed6cbc83add0b58aea12bb122fb0cdf2c30a5713a8d
+image_facts:
+  ghcr.io/krelltunez/dayglance:5.15.0: {user: "root", archs: ["amd64", "arm64"], healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    dayglance: pass
+  teardown: pass
+measured:
+  dayglance:
+    memory: 27 MB
+    images: 52 MB
+    data: 1 KB
+duration: 3m
+by: agent

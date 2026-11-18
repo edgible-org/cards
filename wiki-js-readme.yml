@@ -1,0 +1,36 @@
+why: >-
+  A team wiki is where a team writes down how it does things, and hosted ones (Notion, Confluence)
+  charge per seat and keep your pages on their servers. [Wiki.js](https://js.wiki) is an
+  open-source wiki with a visual and a Markdown editor, a page tree, search, page history, groups
+  with per-page access rules, and optional sync of its pages to a Git repository. This card runs it
+  on a machine you own, through Edgible.
+what: >-
+  One app, `wiki-js`, on `org`, so only members of your Edgible organization reach it. Everyone who
+  reads or edits the wiki is a person in a browser, so the Edgible sign-in is the first door and
+  Wiki.js's own login the second. Two containers run it: Wiki.js and PostgreSQL for its pages,
+  uploads and accounts. People outside your organization cannot reach it. For a public knowledge
+  base for customers, publish with `none` instead and let guests read only the pages you choose,
+  which is a different choice from this card's. Use Wiki.js groups and page rules to keep
+  confidential pages to the people who should see them.
+
+
+  The first visit to a new Wiki.js is its setup page, which makes the admin. Behind `org`, only
+  your organization reaches it, so you answer it yourself after Publish: your email and password,
+  and the wiki's address.
+data: >-
+  Pages, uploads and accounts are in the volume `wiki-js-db-data`, and the database password the
+  card made is in `wiki-js-secrets`. Copy both; the password unlocks the database.
+edit: >-
+  Set `DEVICE` to a name `edgible device list` prints. Change `WIKI_JS_PORT` only if 3000 is taken.
+  There are no passwords to fill: Start makes the database's on the machine, and you choose the
+  admin's on Wiki.js's setup page.
+start: ""
+setup:
+  wiki-js: >-
+    It asks for the admin's email and password, and the site's address: set it to
+    `https://<wiki-js hostname>`. Use a password manager for the password.
+verify:
+  wiki-js: >-
+    Sign in as the admin you made in Set up, add your team from Administration, Users, and set who
+    may see what under Groups.
+docs: [Wiki.js, https://docs.requarks.io]

@@ -1,0 +1,103 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: edgible-agent
+  description: Your own AI agent that looks after your Edgible apps, from your phone
+  type: pattern
+  added: 2026-10-20
+  steward: edgible-org
+
+applications:
+  - name: openclaw
+    what: OpenClaw Gateway and Control UI, with Edgible's tools and skill, its models through an AI gateway
+    from: ghcr.io/openclaw/openclaw:2026.10.5
+    port: 18789
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [org]
+    place: agent
+
+data:
+  volumes:
+    # From the openclaw card: the agent's config, memory, sessions and workspace.
+    openclaw-data:
+      class: irreplaceable
+    openclaw-secrets:
+      class: irreplaceable
+    # OpenClaw's secrets, made on the device: the Gateway token and its key for the AI gateway.
+    openclaw-card-secrets:
+      class: irreplaceable
+    # Empty unless OPENCLAW_NOTES_DIR names a folder, which is mounted in its place, read-only.
+    openclaw-notes:
+      class: cache
+    # From the litellm card: the AI gateway's keys, budgets and spend, and its own secrets.
+    litellm-db-data:
+      class: irreplaceable
+    litellm-secrets:
+      class: irreplaceable
+    # From the edgible-mcp card: the catalog cache, the CLI's sign-in, the tools' record.
+    edgible-mcp-cache:
+      class: cache
+    edgible-mcp-login:
+      class: cache
+    edgible-mcp-data:
+      class: cache
+  fingerprint:
+    service: openclaw
+    command: >-
+      d=/home/node/.openclaw &&
+      echo "{\"sessions\": $(find $d/agents -name '*.jsonl' 2>/dev/null | wc -l | tr -d ' '),
+      \"workspace_files\": $(find $d/workspace -type f 2>/dev/null | wc -l | tr -d ' ')}"
+
+secrets:
+  OPENCLAW_GATEWAY_TOKEN:
+    kind: human
+    make: openssl rand -hex 32
+    for: the Control UI without OPENCLAW_USERS, pasted once per browser; with it, OpenClaw's own command line only
+  LITELLM_KEY_AGENT:
+    kind: internal
+    use: token
+    make: printf 'sk-%s' "$(openssl rand -hex 24)"
+  LITELLM_DB_PASSWORD:
+    kind: internal
+    use: password
+    make: openssl rand -hex 16
+    update:
+      service: litellm-db
+      command: psql -U litellm -d litellm -c "ALTER USER litellm PASSWORD '$LITELLM_DB_PASSWORD'"
+  LITELLM_SALT_KEY:
+    kind: internal
+    use: encryption
+    make: printf 'sk-%s' "$(openssl rand -hex 32)"
+  LITELLM_MASTER_KEY:
+    kind: human
+    make: printf 'sk-%s' "$(openssl rand -hex 32)"
+    for: the AI gateway's admin and its keys; the agent has its own key, never this one
+  OPENCLAW_MODEL_KEY:
+    kind: external
+    from: a shared AI gateway, by edgible-mcp's gateway_key (organisation secret <app>-gateway)
+    required: false
+  GEMINI_API_KEY:
+    kind: external
+    from: https://aistudio.google.com/apikey (free tier), for the gateway's fast fallback
+    required: false
+  DEEPSEEK_API_KEY:
+    kind: external
+    from: https://platform.deepseek.com/api_keys, for the gateway's fast and smart
+    required: false
+  OPENROUTER_API_KEY:
+    kind: external
+    from: https://openrouter.ai/settings/keys, for open (one key, many open models)
+    required: false
+  ANTHROPIC_API_KEY:
+    kind: external
+    from: https://console.anthropic.com/settings/keys, for the gateway's best (Claude)
+    required: false
+
+places:
+  agent:
+    memory: 4 GB
+    disk: 3.5 GB
+    arch: [amd64, arm64]
+    gpu: none
