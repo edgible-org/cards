@@ -6,7 +6,7 @@ Your family's photos are the data you least want on someone else's servers, and 
 
 ## What
 
-One app, `librephotos`, on the place `librephotos`, on `none`. LibrePhotos' own login protects it, so its phone and desktop clients, which cannot get past an Edgible sign-in, can reach it. Nobody can sign up: LibrePhotos makes the admin itself when it starts, with a password made on the machine, so no first page is ever open to a stranger, and Start turns off sign-up before anything is published. The admin adds everyone else.
+One app, `librephotos`, on the place `librephotos`, on `none`. LibrePhotos' own login protects it, so its phone and desktop clients, which cannot get past an Edgible sign-in, can reach it. Nobody can sign up: LibrePhotos makes the admin itself when it starts, with a password made on the machine, so no first page is ever open to a stranger, and LibrePhotos starts with sign-up off. The admin adds everyone else.
 
 It runs the single-container image LibrePhotos publishes, `librephotos`, which serves the web app and the API, with Postgres beside it as `librephotos-db`. Face recognition, place names and scene search run inside that container, so give it memory and let the first scan finish: it can take hours on a large library. The images are pinned to `1.6.0` and Postgres 18.
 
@@ -53,39 +53,7 @@ docker compose --env-file librephotos/card.env -f librephotos/docker-compose.yml
 docker compose --env-file librephotos/card.env -f librephotos/docker-compose.yml ps
 ```
 
-The first start downloads the app's images from the registries named in the Compose file, which takes longer for a larger app. `pull` does that download on its own, so you can see it. The time is the download, not Edgible, and it happens once: later starts and upgrades reuse the images on the machine and fetch only what changed. `--wait` returns when each service is running, and healthy when it has a healthcheck.
-
-```bash
-sh librephotos/prepare.sh
-```
-
-[prepare.sh](prepare.sh) is:
-
-```sh
-#!/bin/sh
-# Prepare for the librephotos card: close sign-up, so only the admin can make accounts.
-# Run it after Start and before Publish, from the directory that holds librephotos/:
-#   sh librephotos/prepare.sh
-set -eu
-cd "$(dirname "$0")"
-set -a; . ./card.env; set +a
-COMPOSE=${COMPOSE:-docker compose --env-file card.env -f docker-compose.yml}
-
-# LibrePhotos made the admin at start, with the human secret librephotos-secrets made.
-LIBREPHOTOS_ADMIN_PASSWORD=$($COMPOSE run --rm --no-deps librephotos-secrets show LIBREPHOTOS_ADMIN_PASSWORD)
-
-B="http://127.0.0.1:$LIBREPHOTOS_PORT"
-H='Content-Type: application/json'
-token=$(curl -fsS -X POST "$B/api/auth/token/obtain" -H "$H" \
-  -d "{\"username\":\"admin\",\"password\":\"$LIBREPHOTOS_ADMIN_PASSWORD\"}" \
-  | sed -n 's/.*"access":"\([^"]*\)".*/\1/p')
-[ -n "$token" ] || { echo "the admin could not sign in"; exit 1; }
-curl -fsS -X POST "$B/api/sitesettings" -H "$H" -H "Authorization: Bearer $token" \
-  -d '{"allow_registration":false,"allow_upload":true}' >/dev/null
-curl -fsS "$B/api/sitesettings" -H "Authorization: Bearer $token" | tr -d ' ' | grep -q '"allow_registration":false' \
-  || { echo "sign-up is still open"; exit 1; }
-echo "sign-up is closed; the admin is admin, with LIBREPHOTOS_ADMIN_PASSWORD"
-```
+The first start downloads the app's images from the registries named in the Compose file, which takes longer for a larger app. `pull` does that download on its own, so you can see it. The time is the download, not Edgible, and it happens once: later starts and upgrades reuse the images on the machine and fetch only what changed. `--wait` returns when each service is running, and healthy when it has a healthcheck. LibrePhotos makes the admin as it starts, and starts with sign-up off, so nobody else can make an account.
 
 ### 5. Publish
 

@@ -1,15 +1,15 @@
-tested: 2026-11-17
+tested: 2026-11-19
 result: pass
-card-kit: "4e8d37f"
-edgible-cli: 1.4.34
-files: sha256:944024432081954e
+card-kit: "a49c5d1"
+edgible-cli: 1.4.35
+files: sha256:f31b80bc7584bc8d
 machine: darwin/arm64, docker 29.4.3
 images:
   - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
   - postgres:18-alpine@sha256:123b17998ccaf47e53b502e8c6a1e79afd8f579c6f3eec83c563da026f957395
   - reallibrephotos/librephotos-unified:1.6.0@sha256:bed9b3ebfa949d1f7d462fd4a02ee3890550de90ca1927120299896405f673e3
 image_facts:
-  reallibrephotos/librephotos-unified:1.6.0: {user: "root", healthcheck: false}
+  reallibrephotos/librephotos-unified:1.6.0: {user: "root", archs: ["amd64", "arm64"], healthcheck: false}
 steps:
   check-env: pass
   start: pass
@@ -22,8 +22,9 @@ steps:
   teardown: pass
 measured:
   librephotos:
-    memory: 862 MB
+    memory: 824 MB
     images: 618 MB
-    data: 357 MB
-duration: 4m
-by: agent
+    data: 76 MB
+duration: 3m
+by: person
+via: stack
