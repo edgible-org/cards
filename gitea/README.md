@@ -8,7 +8,7 @@ Code, issues and reviews usually live on someone else's forge. [Gitea](https://a
 
 One process on two hostnames, on the place `gitea`. `gitea` is the web, the API, and Git over HTTPS. `gitea-ssh` is Git over SSH, a TCP app on port `22222`, from the range `20000` to `29999` that TCP apps use.
 
-Both are on `none`, deliberately. `git` over HTTPS, a CI runner, API tokens and webhooks cannot get past an Edgible sign-in, so `org` would break them. Gitea's own protections take its place: registration is off, so only the admin adds people; the web installer is never served (`INSTALL_LOCK`); and the admin is made from the command line before anything is public, with a generated password.
+Both are on `none`, deliberately. `git` over HTTPS, a CI runner, API tokens and webhooks cannot get past an Edgible sign-in, so `org` would break them. Gitea's own protections take its place: registration is off, so only the admin adds people; and `gitea` stays behind the Edgible sign-in until you have made the admin in Gitea's install page ([Set up Gitea](#6-set-up-gitea)), which Gitea then locks.
 
 Gitea shows its addresses in clone URLs, so `ROOT_URL` is `https://gitea.<ORG_LABEL>.<EDGIBLE_DOMAIN>` (or `GITEA_URL`), and SSH clones use `gitea-ssh.<ORG_LABEL>.<EDGIBLE_DOMAIN>` on port `22222`. Postgres runs beside it as `gitea-db`. The images are `gitea/gitea:28.1.0` and `postgres:17.11-alpine`.
 
@@ -20,7 +20,7 @@ The Compose file is [docker-compose.yml](docker-compose.yml), the settings [card
 
 ## How
 
-Five steps. Edit [card.env](card.env) before you start.
+Six steps. Edit [card.env](card.env) before you start.
 
 ### 1. Fetch
 
@@ -32,7 +32,7 @@ curl -fsSL https://github.com/edgible-org/cards/archive/refs/heads/main.tar.gz \
 
 ### 2. Edit card.env
 
-Set `DEVICE` to a name `edgible device list` prints, `ORG_LABEL` to the part after the app name in a hostname `edgible app list` prints, and `GITEA_ADMIN_EMAIL` to your address. There are no secrets to fill: Start makes them on the machine.
+Set `DEVICE` to a name `edgible device list` prints, `ORG_LABEL` to the part after the app name in a hostname `edgible app list` prints. There are no secrets to fill: Start makes them on the machine.
 
 ```bash
 nano gitea/card.env
@@ -55,33 +55,7 @@ docker compose --env-file gitea/card.env -f gitea/docker-compose.yml up -d --wai
 docker compose --env-file gitea/card.env -f gitea/docker-compose.yml ps
 ```
 
-The first start downloads the app's images from the registries named in the Compose file: about 184 MB, a minute or two on a typical home connection. `pull` does that download on its own, so you can see it. The time is the download, not Edgible, and it happens once: later starts and upgrades reuse the images on the machine and fetch only what changed. `--wait` returns when each service is running, and healthy when it has a healthcheck. Then make the admin, before Publish:
-
-```bash
-sh gitea/prepare.sh
-```
-
-[prepare.sh](prepare.sh) is:
-
-```sh
-#!/bin/sh
-# Prepare for the gitea card: make the admin.
-# Run it after Start and before Publish, from the directory that holds gitea/:
-#   sh gitea/prepare.sh
-set -eu
-cd "$(dirname "$0")"
-set -a; . ./card.env; set +a
-COMPOSE=${COMPOSE:-docker compose --env-file card.env -f docker-compose.yml}
-
-# The card made this password on this machine at Start (gitea-secrets).
-GITEA_ADMIN_PASSWORD=$($COMPOSE run --rm --no-deps gitea-secrets show GITEA_ADMIN_PASSWORD)
-
-$COMPOSE exec -T -u git gitea \
-  gitea admin user create --admin --username gitadmin \
-  --password "$GITEA_ADMIN_PASSWORD" --email "$GITEA_ADMIN_EMAIL" --must-change-password=false
-```
-
-It prints `New user 'gitadmin' has been successfully created!` Gitea reserves the name `admin`, so the admin is `gitadmin`.
+The first start downloads the app's images from the registries named in the Compose file: about 184 MB, a minute or two on a typical home connection. `pull` does that download on its own, so you can see it. The time is the download, not Edgible, and it happens once: later starts and upgrades reuse the images on the machine and fetch only what changed. `--wait` returns when each service is running, and healthy when it has a healthcheck. Gitea waits for its install page, which you fill in after Publish, behind the Edgible sign-in.
 
 ### 5. Publish
 
@@ -103,7 +77,7 @@ edgible app create existing \
   --name gitea \
   --port "$GITEA_PORT" \
   --protocol https \
-  --auth-modes none \
+  --auth-modes org \
   --device-id "$device_id"
 edgible app create existing \
   --non-interactive \
@@ -115,6 +89,29 @@ edgible app create existing \
 edgible app list
 ```
 
+`edgible app list` shows `gitea` with `org` for now, and `gitea-ssh`.
+
+### 6. Set up Gitea
+
+A new Gitea shows its install page to its first visitor, so Publish put `gitea` on `org`: only your Edgible organization reaches it. `gitea-ssh` is open, but nobody can register, so there is no account to use it with yet. Open `https://<gitea hostname>`, sign in with Edgible, and Gitea shows its install page with the database already filled in. Leave those settings as they are, open **Administrator Account Settings** at the bottom, and make the admin: Gitea reserves the name `admin`, so choose another, such as `gitadmin`, and a strong password from a password manager. Then **Install Gitea**. Registration stays off whatever the page's box says: the Compose file sets it.
+
+When the admin exists and the install page is gone, this prints `done`:
+
+```bash
+set -a
+. gitea/card.env
+set +a
+test "$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:$GITEA_PORT/")" = 200 && ! curl -s "http://127.0.0.1:$GITEA_PORT/" | grep -q '<title>Installation' && curl -s "http://127.0.0.1:$GITEA_PORT/api/v1/users/search?limit=1" | grep -q '"login"' && echo done
+```
+
+If you installed without making an admin, nothing prints: nobody can register, so make one with `docker compose --env-file gitea/card.env -f gitea/docker-compose.yml exec -u git gitea gitea admin user create --admin --username gitadmin --email <you> --random-password`.
+
+Then switch `gitea` to `none`, so `git` over HTTPS, CI runners, API tokens and webhooks reach it. Until then it stays on `org`, and nothing changes for you: a signed-in session stays signed in.
+
+```bash
+edgible app update gitea --auth-modes none
+```
+
 ## Verify
 
 `gitea` uses `none`.
@@ -123,7 +120,7 @@ edgible app list
 curl -sS -o /dev/null -w '%{http_code}\n' "https://<gitea hostname>"
 ```
 
-That prints `200`. Open the hostname and sign in as `gitadmin` with the password the card made on the machine; see it with `docker compose --env-file gitea/card.env -f gitea/docker-compose.yml run --rm --no-deps gitea-secrets show GITEA_ADMIN_PASSWORD`. **Register** is not offered: registration is off.
+That prints `200`. Open the hostname and sign in as the admin you made in Set up. **Register** is not offered: registration is off.
 
 `gitea-ssh` is a TCP app on port `22222`, with no auth mode.
 

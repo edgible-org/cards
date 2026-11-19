@@ -15,7 +15,6 @@ services:
       CARD_SECRETS: |
         GITEA_DB_PASSWORD=openssl rand -hex 16
         GITEA_SECRET_KEY=openssl rand -hex 32
-        GITEA_ADMIN_PASSWORD=openssl rand -hex 16
     volumes:
       - gitea-secrets:/run/card-secrets
 
@@ -37,8 +36,8 @@ services:
       GITEA__server__SSH_DOMAIN: ${GITEA_SSH_DOMAIN:-gitea-ssh.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
       GITEA__server__SSH_PORT: ${GITEA_SSH_PORT:?set GITEA_SSH_PORT in card.env}
       GITEA__security__SECRET_KEY__FILE: /run/card-secrets/GITEA_SECRET_KEY
-      # The web installer is never served; the admin is made from the command line.
-      GITEA__security__INSTALL_LOCK: "true"
+      # No INSTALL_LOCK: the admin is made in Gitea's install page, behind the Edgible sign-in
+      # (README, Set up). Gitea locks the installer itself afterwards, in app.ini.
       # The hostname is open to anyone, so nobody may register; the admin adds people.
       GITEA__service__DISABLE_REGISTRATION: "true"
     volumes:

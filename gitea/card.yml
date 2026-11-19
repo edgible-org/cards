@@ -18,6 +18,9 @@ applications:
     subtype: existing
     published: true
     authModes: [none]
+    setup:
+      behind: org
+      done: test "$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:$GITEA_PORT/")" = 200 && ! curl -s "http://127.0.0.1:$GITEA_PORT/" | grep -q '<title>Installation' && curl -s "http://127.0.0.1:$GITEA_PORT/api/v1/users/search?limit=1" | grep -q '"login"'
     place: gitea
 
   - name: gitea-ssh
@@ -42,10 +45,6 @@ secrets:
     kind: internal
     use: signing
     make: openssl rand -hex 32
-  GITEA_ADMIN_PASSWORD:
-    kind: human
-    make: openssl rand -hex 16
-    for: gitadmin's sign-in, set by prepare.sh
 
 places:
   gitea:
