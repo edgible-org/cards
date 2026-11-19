@@ -1,12 +1,12 @@
-tested: 2026-11-17
+tested: 2026-11-18
 result: pass
-card-kit: "bac8017"
+card-kit: "3fff564"
 edgible-cli: 1.4.34
-files: sha256:15fe4b1eff691250
+files: sha256:db09ef819a3a8c9b
 machine: darwin/arm64, docker 29.4.3
 images:
   - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
-  - ghcr.io/open-webui/open-webui:v0.13.3@sha256:46b59158e6558eeb980bc828e0f1b30238ad24d82ed84d5e5eda1dab2a082f14
+  - ghcr.io/open-webui/open-webui:v0.13.4@sha256:d5168bfbc28609eff5bea1b438dd864cf64d185cf6582c02244865e18385b901
 image_facts:
   ghcr.io/open-webui/open-webui:v0.12.5: {user: "0:0", archs: ["amd64", "arm64"], healthcheck: true}
 steps:
