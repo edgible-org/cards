@@ -1,14 +1,14 @@
-tested: 2026-11-17
+tested: 2026-11-18
 result: pass
-card-kit: "7682072"
+card-kit: "3fff564"
 edgible-cli: 1.4.34
-files: sha256:4d69db47217317a2
+files: sha256:220427a4539018b5
 machine: darwin/arm64, docker 29.4.3
 images:
   - ghcr.io/berriai/litellm:v1.109.1@sha256:11175975a3093e05e92faee2fe2fe3412a3ae2fcaa849eb0fe25d5f0d8bcb2e9
   - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
   - ghcr.io/edgible-org/edgible-mcp:0.7.27@sha256:fbf1f8bfd449e1a248ecabaf2995607f0edfe7838be4095fd50a1deb29ae82bd
-  - ghcr.io/openclaw/openclaw:2026.11.4@sha256:f019ffc78c8866dc38c5e965e748a474989c0bdd132ed307a87ae606d829bd26
+  - ghcr.io/openclaw/openclaw:2026.11.5@sha256:9c74476e3e79b5a1595fd5cf904286eaba3471c10c640aaa9a361a89b41d0882
   - postgres:17.11-alpine@sha256:e5d2edd28b1f8d40a0a6c0c9cdc545b19b56a0d5d88f94bc11a97d970d4700d0
 image_facts:
   ghcr.io/openclaw/openclaw:2026.10.5: {user: "node", archs: ["amd64", "arm64"], healthcheck: true}
@@ -23,11 +23,11 @@ steps:
     gateway: pass
   fingerprint: pass
   teardown: pass
-fingerprint: {"sessions": 0, "workspace_files": 26}
+fingerprint: {"sessions": 0, "workspace_files": 27}
 measured:
   agent:
     memory: 3 GB
-    images: 2 GB
-    data: 61 MB
+    images: 1.9 GB
+    data: 60 MB
 duration: 8m
 by: ci
