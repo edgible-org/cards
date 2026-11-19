@@ -1,22 +1,11 @@
 # Compose file for the domoticz card.
-# The host ports, ORG_LABEL and the admin's name come from card.env. The admin's password is
-# made on this machine by domoticz-secrets, at first start, and never leaves it. Start with:
+# The host ports and ORG_LABEL come from card.env. A new Domoticz lets its first visitor make
+# the admin; you do that behind the Edgible sign-in (README, Set up). Start with:
 #   docker compose --env-file card.env -f docker-compose.yml up -d --wait
 
 name: domoticz
 
 services:
-  # Makes the admin's password (card.yml secrets:) if it does not exist yet, as a file in the
-  # volume domoticz-secrets, then exits. It never changes it after. prepare.sh uses it.
-  domoticz-secrets:
-    image: ghcr.io/edgible-org/card-secrets:0.1.2
-    restart: "no"
-    environment:
-      CARD_SECRETS: |
-        DOMOTICZ_ADMIN_PASSWORD=openssl rand -hex 16
-    volumes:
-      - domoticz-secrets:/run/card-secrets
-
   domoticz:
     image: ${DOMOTICZ_IMAGE:-domoticz/domoticz:2026.4}
     restart: unless-stopped
@@ -30,9 +19,6 @@ services:
     volumes:
       # The database, plugins, scripts and backups.
       - domoticz-data:/opt/domoticz/userdata
-    depends_on:
-      domoticz-secrets:
-        condition: service_completed_successfully
     # The image has no healthcheck of its own. The start page is public.
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS -o /dev/null http://127.0.0.1:8080/"]
@@ -43,4 +29,3 @@ services:
 
 volumes:
   domoticz-data: {}
-  domoticz-secrets: {}

@@ -1,12 +1,11 @@
-tested: 2026-11-06
+tested: 2026-11-19
 result: pass
-card-kit: "92d5d81"
-edgible-cli: 1.4.29
-files: sha256:9a5d408d635b16f2
+card-kit: "a49c5d1"
+edgible-cli: 1.4.35
+files: sha256:d0af803df3f76950
 machine: darwin/arm64, docker 29.4.3
 images:
   - domoticz/domoticz:2026.4@sha256:ece392300d055395cac0b4edea4451b31f765ff5339e5597ca77371be8d7e93a
-  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
 image_facts:
   domoticz/domoticz:2026.3: {user: "root", archs: ["amd64", "arm", "arm64"], healthcheck: false}
 steps:
@@ -14,6 +13,9 @@ steps:
   start: pass
   publish: pass
   verify:
+    domoticz: pass
+    domoticz-app: pass
+  setup:
     domoticz: pass
     domoticz-app: pass
   checks:
@@ -24,8 +26,8 @@ steps:
 fingerprint: {"users": 1, "devices": 0}
 measured:
   domoticz:
-    memory: 51 MB
-    images: 146 MB
+    memory: 12 MB
+    images: 141 MB
     data: 2 MB
 duration: 3m
-by: agent
+by: person

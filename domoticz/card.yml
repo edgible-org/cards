@@ -18,6 +18,9 @@ applications:
     subtype: existing
     published: true
     authModes: [org]
+    setup:
+      behind: org
+      done: curl -s "http://127.0.0.1:$DOMOTICZ_PORT/json.htm?type=command&param=getsetuprequired" | grep -q '"SetupRequired"[[:space:]]*:[[:space:]]*false' && ! curl -s "http://127.0.0.1:$DOMOTICZ_PORT/json.htm?type=command&param=getusers" | grep -q '"status"[[:space:]]*:[[:space:]]*"OK"'
     place: domoticz
 
   - name: domoticz-app
@@ -28,19 +31,14 @@ applications:
     subtype: existing
     published: true
     authModes: [none]
+    setup:
+      behind: org
+      done: curl -s "http://127.0.0.1:$DOMOTICZ_PORT/json.htm?type=command&param=getsetuprequired" | grep -q '"SetupRequired"[[:space:]]*:[[:space:]]*false' && ! curl -s "http://127.0.0.1:$DOMOTICZ_PORT/json.htm?type=command&param=getusers" | grep -q '"status"[[:space:]]*:[[:space:]]*"OK"'
     place: domoticz
-
-secrets:
-  DOMOTICZ_ADMIN_PASSWORD:
-    kind: human
-    make: openssl rand -hex 16
-    for: the admin's first sign-in, set by prepare.sh; change it under Setup, Users after
 
 data:
   volumes:
     domoticz-data:
-      class: irreplaceable
-    domoticz-secrets:
       class: irreplaceable
   fingerprint:
     service: domoticz

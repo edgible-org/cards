@@ -18,19 +18,14 @@ applications:
     subtype: existing
     published: true
     authModes: [org]
+    setup:
+      behind: org
+      done: test "$(curl -s -o /dev/null -w '%{http_code}' -X POST "http://127.0.0.1:$WIKI_GO_PORT/api/login" -H 'Content-Type:application/json' -d '{"username":"admin","password":"admin"}')" = 401
     place: wiki-go
-
-secrets:
-  WIKI_GO_ADMIN_PASSWORD:
-    kind: human
-    make: openssl rand -hex 16
-    for: the admin's first sign-in, set by prepare.sh in place of the default password
 
 data:
   volumes:
     wiki-go-data:
-      class: irreplaceable
-    wiki-go-secrets:
       class: irreplaceable
   fingerprint:
     service: wiki-go
