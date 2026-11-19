@@ -18,6 +18,9 @@ applications:
     subtype: existing
     published: true
     authModes: [org]
+    setup:
+      behind: org
+      done: test "$(curl -s -o /dev/null -w '%{http_code}' -X POST "http://127.0.0.1:$UMAMI_PORT/api/auth/login" -H 'Content-Type:application/json' -d '{"username":"admin","password":"umami"}')" = 401
     place: umami
 
   - name: analytics
@@ -28,6 +31,9 @@ applications:
     subtype: existing
     published: true
     authModes: [none]
+    setup:
+      behind: org
+      done: test "$(curl -s -o /dev/null -w '%{http_code}' -X POST "http://127.0.0.1:$UMAMI_PORT/api/auth/login" -H 'Content-Type:application/json' -d '{"username":"admin","password":"umami"}')" = 401
     place: umami
 
 secrets:
@@ -46,10 +52,6 @@ secrets:
     kind: internal
     use: encryption
     make: openssl rand -hex 32
-  UMAMI_ADMIN_PASSWORD:
-    kind: human
-    make: openssl rand -hex 16
-    for: the admin's sign-in, set by prepare.sh in place of the default umami
 
 places:
   umami:

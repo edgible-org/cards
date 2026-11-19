@@ -16,7 +16,6 @@ services:
         UMAMI_DB_PASSWORD=openssl rand -hex 16
         UMAMI_APP_SECRET=openssl rand -base64 32
         UMAMI_TWO_FACTOR_KEY=openssl rand -hex 32
-        UMAMI_ADMIN_PASSWORD=openssl rand -hex 16
     volumes:
       - umami-secrets:/run/card-secrets
 
