@@ -1,5 +1,7 @@
 # onedev
 
+> **Deprecated.** Its Git-over-SSH address is a plain TCP port, which Edgible cannot keep behind its sign-in while you set OneDev up, and closing OneDev's sign-up takes a command Edgible cannot yet run in an app it manages. Do not start a new setup on this card.
+
 ## Why
 
 Code, reviews and CI usually live on someone else's forge. [OneDev](https://onedev.io) is a Git forge with pull requests and code review, issues, and built-in CI/CD, that runs on a machine you own.

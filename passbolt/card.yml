@@ -7,6 +7,8 @@ metadata:
   added: 2026-11-01
   homepage: https://www.passbolt.com
   license: AGPL-3.0-only
+  status: deprecated
+  reason: "Its first admin can only be made by a command inside the app, which Edgible cannot yet run in an app it manages."
 
 applications:
   - name: passbolt

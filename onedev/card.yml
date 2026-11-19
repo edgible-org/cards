@@ -7,6 +7,8 @@ metadata:
   added: 2026-11-05
   homepage: https://onedev.io
   license: MIT
+  status: deprecated
+  reason: "Its Git-over-SSH address is a plain TCP port, which Edgible cannot keep behind its sign-in while you set OneDev up, and closing OneDev's sign-up takes a command Edgible cannot yet run in an app it manages."
 
 applications:
   - name: onedev

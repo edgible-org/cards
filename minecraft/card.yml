@@ -7,6 +7,8 @@ metadata:
   added: 2026-10-09
   homepage: https://papermc.io
   steward: edgible-org
+  status: deprecated
+  reason: "Bedrock players need a Geyser setting changed in a file after the first start, which Edgible cannot yet do in an app it manages."
 
 applications:
   - name: mc-java

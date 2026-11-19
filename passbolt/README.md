@@ -1,5 +1,7 @@
 # passbolt
 
+> **Deprecated.** Its first admin can only be made by a command inside the app, which Edgible cannot yet run in an app it manages. Do not start a new setup on this card.
+
 ## Why
 
 A team that keeps its passwords in a spreadsheet, or one shared login, has no way to share a password with only the people who need it. [Passbolt](https://www.passbolt.com) is a password manager built for teams and families: each password is encrypted to its readers, shared with people or groups, and read through a browser extension or phone app. This card runs it on a machine you control, through Edgible.

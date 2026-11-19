@@ -1,5 +1,7 @@
 # minecraft
 
+> **Deprecated.** Bedrock players need a Geyser setting changed in a file after the first start, which Edgible cannot yet do in an app it manages. Do not start a new setup on this card.
+
 ## Why
 
 A Minecraft server for friends usually means renting one, or opening a port on your router. This card runs [Paper](https://papermc.io), a Java server, on a machine you own, with [Geyser and Floodgate](https://geysermc.org) so friends on phones and consoles join the same world as friends on PC.

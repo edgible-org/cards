@@ -8,6 +8,8 @@ metadata:
   homepage: https://github.com/binwiederhier/ntfy
   license: Apache-2.0 OR GPL-2.0-only
   steward: edgible-org
+  status: deprecated
+  reason: "Its first user can only be made by a command inside the app (ntfy user add), which Edgible cannot yet run in an app it manages."
 
 applications:
   - name: ntfy

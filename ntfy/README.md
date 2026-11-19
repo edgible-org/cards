@@ -1,5 +1,7 @@
 # ntfy
 
+> **Deprecated.** Its first user can only be made by a command inside the app (ntfy user add), which Edgible cannot yet run in an app it manages. Do not start a new setup on this card.
+
 ## Why
 
 Your scripts, backups and self-hosted apps need a way to tell your phone that something happened, without sending it through a third-party service. [ntfy](https://github.com/binwiederhier/ntfy) takes a plain HTTP request on a topic and pushes it to the phone apps (Android and iPhone) and the web app.
