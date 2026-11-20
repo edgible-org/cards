@@ -1,9 +1,10 @@
 #!/bin/sh
-# The organizer made by prepare.sh can sign in, and sign-up is closed.
+# The organizer test/setup.sh made can sign in, and sign-up is closed again after setup.
 set -eu
+password=$(cat hi-events-test-admin-password)
 base="https://$HOSTNAME_HI_EVENTS"
 login=$(curl -fsS -X POST "$base/api/auth/login" -H 'Content-Type: application/json' \
-  -d "{\"email\":\"$HI_EVENTS_ADMIN_EMAIL\",\"password\":\"$HI_EVENTS_ADMIN_PASSWORD\"}")
+  -d "{\"email\":\"admin@example.com\",\"password\":\"$password\"}")
 echo "$login" | grep -q token
 code=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$base/api/auth/register" \
   -H 'Content-Type: application/json' \

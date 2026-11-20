@@ -1,8 +1,8 @@
 # Compose file for the hi-events card.
-# The host port, ORG_LABEL and the mail settings come from card.env. The database password, the
-# app key, the JWT secret and the organizer's password are made on this machine by
-# hi-events-secrets, at first start. Start with:
-#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+# The host port, ORG_LABEL, the mail settings and whether sign-up is open come from card.env. The
+# database password, the app key and the JWT secret are made on this machine by hi-events-secrets,
+# at first start. The README's Start opens sign-up while only your organization reaches it, so you
+# make the organizer's account; Set up starts it again with card.env's own value, sign-up closed.
 
 name: hi-events
 
@@ -17,7 +17,6 @@ services:
         HI_EVENTS_DB_PASSWORD=openssl rand -hex 16
         HI_EVENTS_APP_KEY=echo "base64:$(openssl rand -base64 32)"
         HI_EVENTS_JWT_SECRET=openssl rand -base64 32
-        HI_EVENTS_ADMIN_PASSWORD=openssl rand -hex 16
     volumes:
       - hi-events-secrets:/run/card-secrets
 
@@ -50,7 +49,7 @@ services:
       # is not set at all. Payment is off, so it is empty.
       VITE_STRIPE_PUBLISHABLE_KEY: ""
       VITE_APP_NAME: ${HI_EVENTS_APP_NAME:-Hi.Events}
-      # Closed unless prepare.sh opens it for a moment, to make the organizer.
+      # Closed, except while you make the organizer's account behind the Edgible sign-in (README Set up).
       APP_DISABLE_REGISTRATION: ${HI_EVENTS_DISABLE_REGISTRATION:-true}
       APP_SAAS_MODE_ENABLED: "false"
       DB_CONNECTION: pgsql

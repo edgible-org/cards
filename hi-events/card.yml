@@ -19,6 +19,10 @@ applications:
     subtype: existing
     published: true
     authModes: [none]
+    setup:
+      behind: org
+      during: {HI_EVENTS_DISABLE_REGISTRATION: "false"}
+      done: $COMPOSE exec -T hi-events-db psql -U hievents -d hievents -tAc 'select count(*) from users' | grep -qvx 0
     place: hi-events
 
 secrets:
@@ -37,10 +41,6 @@ secrets:
     kind: internal
     use: signing
     make: openssl rand -base64 32
-  HI_EVENTS_ADMIN_PASSWORD:
-    kind: human
-    make: openssl rand -hex 16
-    for: the organizer's first sign-in
   HI_EVENTS_SMTP_PASSWORD:
     kind: external
     from: your mail provider, with HI_EVENTS_SMTP_USER
