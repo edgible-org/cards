@@ -1,8 +1,8 @@
-tested: 2026-11-17
+tested: 2026-11-20
 result: pass
-card-kit: "cf3ac91"
-edgible-cli: 1.4.34
-files: sha256:58b7d82908686e86
+card-kit: "3697822"
+edgible-cli: 1.4.35
+files: sha256:b036dc780598b3e5
 machine: darwin/arm64, docker 29.4.3
 images:
   - getmeili/meilisearch:v1.55.0@sha256:ff546679970126f8822e15d1b6a06bfbff1f2ce2e43f810cfb5258012f92de5c
@@ -17,6 +17,8 @@ steps:
   publish: pass
   verify:
     karakeep: pass
+  setup:
+    karakeep: pass
   checks:
     stranger-and-admin: pass
   fingerprint: pass
@@ -24,8 +26,9 @@ steps:
 fingerprint: {"asset_files": 0}
 measured:
   karakeep:
-    memory: 807 MB
+    memory: 848 MB
     images: 892 MB
-    data: 852 KB
-duration: 8m
-by: agent
+    data: 848 KB
+duration: 4m
+by: person
+notes: karakeep's port 3000 was taken on the test machine, so it was tested on 3001.

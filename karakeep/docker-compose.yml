@@ -1,8 +1,8 @@
 # Compose file for the karakeep card.
-# The host port, ORG_LABEL and the admin's email come from card.env. The keys and the admin's
-# password are made on this machine by karakeep-secrets, at first start, and never leave it. Start with:
-#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
-# Sign-up is closed. prepare.sh opens it for one local request to make the admin, then closes it.
+# The host port, ORG_LABEL and whether sign-up is open come from card.env. The keys are made on
+# this machine by karakeep-secrets, at first start, and never leave it.
+# The README's Start opens sign-up while only your organization reaches it, so you make the first
+# account, the admin; Set up starts it again with card.env's own value, sign-up closed.
 
 name: karakeep
 
@@ -16,7 +16,6 @@ services:
       CARD_SECRETS: |
         KARAKEEP_AUTH_SECRET=openssl rand -base64 36
         KARAKEEP_MEILI_KEY=openssl rand -hex 24
-        KARAKEEP_ADMIN_PASSWORD=openssl rand -hex 16
     volumes:
       - karakeep-secrets:/run/card-secrets
 
@@ -37,8 +36,8 @@ services:
       NEXTAUTH_URL: ${KARAKEEP_URL:-https://karakeep.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
       MEILI_ADDR: http://karakeep-meili:7700
       BROWSER_WEB_URL: http://karakeep-chrome:9222
-      # Closed to strangers. Only prepare.sh opens it, for the first admin. The admin makes
-      # everyone else's account under Admin Settings.
+      # Closed, except while you make the first account behind the Edgible sign-in (README Set up).
+      # The admin makes everyone else's account under Admin Settings.
       DISABLE_SIGNUPS: ${KARAKEEP_DISABLE_SIGNUPS:-true}
     volumes:
       - karakeep-data:/data

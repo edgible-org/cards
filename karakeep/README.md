@@ -6,7 +6,7 @@ Articles to read later, links from every browser and phone, and pages that vanis
 
 ## What
 
-One app, `karakeep`, on `none`: its browser extension and phone apps cannot get past an Edgible sign-in, and the web pages sit on the same hostname, so Karakeep's own login is the protection. Sign-up is closed, so only the admin and the accounts the admin makes can get in. Three containers run it: Karakeep, which also runs its page-saving worker, a headless Chrome for screenshots and page copies, and Meilisearch for search. The optional AI tagging is left off; set its key in Karakeep's own settings if you want it. If you only save from a browser at home, you can move the hostname to `org` after Publish, with `edgible app update karakeep --auth-modes org`; the extension and phone apps then stop working.
+One app, `karakeep`, on `none`: its browser extension and phone apps cannot get past an Edgible sign-in, and the web pages sit on the same hostname, so Karakeep's own login is the protection. Sign-up is closed, so only the admin and the accounts the admin makes can get in. The admin is the first account: you make it yourself on Karakeep's own sign-up page, which is open only while the app is behind the Edgible sign-in, in [Set up Karakeep](#6-set-up-karakeep). Three containers run it: Karakeep, which also runs its page-saving worker, a headless Chrome for screenshots and page copies, and Meilisearch for search. The optional AI tagging is left off; set its key in Karakeep's own settings if you want it. If you only save from a browser at home, you can keep the hostname on `org` instead of the last step of Set up, or move it back later with `edgible app update karakeep --auth-modes org`; the extension and phone apps then stop working.
 
 The bookmarks, the account and the saved page copies are in the volume `karakeep-data`. The search index in `karakeep-meili-data` is rebuilt from it, and the keys the card made are in `karakeep-secrets`. Copy `karakeep-data` and `karakeep-secrets`. Minimum recommended for the place `karakeep`: 2 GB of memory and 4 GB of disk, on an arm64 or amd64 machine, with no GPU.
 
@@ -14,7 +14,7 @@ The Compose file is [docker-compose.yml](docker-compose.yml), the settings [card
 
 ## How
 
-Five steps. Edit [card.env](card.env) before you start.
+Six steps. Edit [card.env](card.env) before you start.
 
 ### 1. Fetch
 
@@ -26,7 +26,7 @@ curl -fsSL https://github.com/edgible-org/cards/archive/refs/heads/main.tar.gz \
 
 ### 2. Edit card.env
 
-Set `DEVICE` to a name `edgible device list` prints, and `ORG_LABEL` to the label in your hostnames. Set `KARAKEEP_ADMIN_EMAIL` to your own email: it is the admin's sign-in name. Change `KARAKEEP_PORT` only if 3000 is taken. There are no passwords to fill: Start makes the card's keys and the admin's password on the machine.
+Set `DEVICE` to a name `edgible device list` prints, and `ORG_LABEL` to the label in your hostnames. Leave `KARAKEEP_DISABLE_SIGNUPS` at `true`: Start opens sign-up only for its first run. Change `KARAKEEP_PORT` only if 3000 is taken. There are no passwords to fill: Start makes the card's keys on the machine.
 
 ```bash
 nano karakeep/card.env
@@ -45,48 +45,11 @@ It moves a taken port, as lines to paste. Run it again until it says `no conflic
 
 ```bash
 docker compose --env-file karakeep/card.env -f karakeep/docker-compose.yml pull
-docker compose --env-file karakeep/card.env -f karakeep/docker-compose.yml up -d --wait
+KARAKEEP_DISABLE_SIGNUPS=false docker compose --env-file karakeep/card.env -f karakeep/docker-compose.yml up -d --wait
 docker compose --env-file karakeep/card.env -f karakeep/docker-compose.yml ps
 ```
 
-The first start downloads the app's images from the registries named in the Compose file, which takes longer for a larger app. `pull` does that download on its own, so you can see it. The time is the download, not Edgible, and it happens once: later starts and upgrades reuse the images on the machine and fetch only what changed. `--wait` returns when each service is running, and healthy when it has a healthcheck.
-
-```bash
-sh karakeep/prepare.sh
-```
-
-[prepare.sh](prepare.sh) is:
-
-```sh
-#!/bin/sh
-# Prepare for the karakeep card: make the admin before the sign-up page is public.
-# Run it after Start and before Publish, from the directory that holds karakeep/:
-#   sh karakeep/prepare.sh
-set -eu
-cd "$(dirname "$0")"
-set -a; . ./card.env; set +a
-COMPOSE=${COMPOSE:-docker compose --env-file card.env -f docker-compose.yml}
-
-# The admin's password is the human secret karakeep-secrets made on this machine.
-KARAKEEP_ADMIN_PASSWORD=$($COMPOSE run --rm --no-deps karakeep-secrets show KARAKEEP_ADMIN_PASSWORD)
-
-# Open sign-up for this one local request. Nothing is published yet. Karakeep makes the first
-# account an admin.
-KARAKEEP_DISABLE_SIGNUPS=false $COMPOSE up -d --wait karakeep
-B="http://127.0.0.1:$KARAKEEP_PORT"
-O=${KARAKEEP_URL:-https://karakeep.$ORG_LABEL.${EDGIBLE_DOMAIN:-edgible.app}}
-code=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$B/api/auth/sign-up/email" \
-  -H 'Content-Type: application/json' -H "Origin: $O" \
-  -d "{\"name\":\"admin\",\"email\":\"$KARAKEEP_ADMIN_EMAIL\",\"password\":\"$KARAKEEP_ADMIN_PASSWORD\"}")
-
-# Close it again, whatever happened: recreate with the Compose file's default.
-$COMPOSE up -d --wait --force-recreate karakeep
-# 200 made the admin; 422 or 400 means that email already has an account (a second run).
-[ "$code" = 200 ] || [ "$code" = 400 ] || [ "$code" = 422 ] || { echo "creating the admin answered $code"; exit 1; }
-echo "admin $KARAKEEP_ADMIN_EMAIL made; sign-up is closed again"
-```
-
-prepare.sh makes the admin and closes sign-up again before anything is published, so nobody else can register first. Its password was made on this machine: show it with the command the Verify step gives, and change it in Karakeep's settings after you sign in.
+The first start downloads the app's images from the registries named in the Compose file, which takes longer for a larger app. `pull` does that download on its own, so you can see it. The time is the download, not Edgible, and it happens once: later starts and upgrades reuse the images on the machine and fetch only what changed. `--wait` returns when each service is running, and healthy when it has a healthcheck. `KARAKEEP_DISABLE_SIGNUPS=false` in front opens sign-up for this first run only, so you can make the first account in Set up; card.env keeps it closed.
 
 ### 5. Publish
 
@@ -108,9 +71,33 @@ edgible app create existing \
   --name karakeep \
   --port "$KARAKEEP_PORT" \
   --protocol https \
-  --auth-modes none \
+  --auth-modes org \
   --device-id "$device_id"
 edgible app list
+```
+
+`edgible app list` shows `karakeep` with `org`.
+
+### 6. Set up Karakeep
+
+Sign-up is open for now, so Publish put `karakeep` on `org`: only your Edgible organization reaches it. Open `https://<karakeep hostname>`, sign in with Edgible, and choose **Sign Up**. Make your account with your own email and a strong password from a password manager. Karakeep makes the first account the admin.
+
+When it exists, this prints `done`:
+
+```bash
+docker compose --env-file karakeep/card.env -f karakeep/docker-compose.yml exec -T karakeep node -e "process.exit(new (require('node:sqlite').DatabaseSync)('/data/db.db',{readOnly:true}).prepare('select count(*) n from user').get().n>0?0:1)" && echo done
+```
+
+Then start Karakeep again with card.env as written, which closes sign-up. Your account and bookmarks stay.
+
+```bash
+docker compose --env-file karakeep/card.env -f karakeep/docker-compose.yml up -d --wait
+```
+
+Then switch `karakeep` to `none`, so its browser extension and phone apps reach it. Until then it stays on `org`, and nothing changes for you: a signed-in session stays signed in.
+
+```bash
+edgible app update karakeep --auth-modes none
 ```
 
 **Without Edgible:** only Publish is Edgible's. The app listens on `127.0.0.1` at the port in `card.env`, so any reverse proxy or tunnel on the machine, such as Caddy, nginx, Cloudflare Tunnel or Tailscale, can publish it instead, and sign-in is then that tool's to provide. Every other step stays the same.
@@ -123,7 +110,7 @@ edgible app list
 curl -sS -o /dev/null -w '%{http_code}\n' "https://<karakeep hostname>"
 ```
 
-Answers with Karakeep itself, open to the internet, so the sign-in is the protection. Sign in with the admin's email and the password prepare.sh made. In the extension or phone app, give it the same address and the same account. Add people under Admin Settings, Users.
+Answers with Karakeep itself, open to the internet, so the sign-in is the protection. Sign in with the account you made in Set up. In the extension or phone app, give it the same address and the same account. Add people under Admin Settings, Users.
 
 The rest of the setup is in the [Karakeep docs](https://docs.karakeep.com).
 

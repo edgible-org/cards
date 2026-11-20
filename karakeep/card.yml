@@ -19,6 +19,10 @@ applications:
     published: true
     authModes: [none]
     publicFor: ["its browser extension", "its phone apps"]
+    setup:
+      behind: org
+      during: {KARAKEEP_DISABLE_SIGNUPS: "false"}
+      done: $COMPOSE exec -T karakeep node -e "process.exit(new (require('node:sqlite').DatabaseSync)('/data/db.db',{readOnly:true}).prepare('select count(*) n from user').get().n>0?0:1)"
     place: karakeep
 
 data:
@@ -42,10 +46,6 @@ secrets:
     kind: internal
     use: token
     make: openssl rand -hex 24
-  KARAKEEP_ADMIN_PASSWORD:
-    kind: human
-    make: openssl rand -hex 16
-    for: the admin's first sign-in, made by prepare.sh; change it under Settings after
 
 places:
   karakeep:
