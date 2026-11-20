@@ -21,7 +21,7 @@ services:
 
   redaxo:
     # The floating 5 tag (the image publishes no per-release tags), held to one build by digest.
-    image: friendsofredaxo/redaxo:5@sha256:34144244f37dcd410e59437219a4425fab8a506bb4e12cf3892985c127e1cbd3
+    image: friendsofredaxo/redaxo:5@sha256:a7effb0c76aa7b4165d4aa46aed8f67d1e96f428ec2ae820ad376ee2638a3440
     restart: unless-stopped
     ports:
       - "127.0.0.1:${REDAXO_PORT:?set REDAXO_PORT in card.env}:80"
