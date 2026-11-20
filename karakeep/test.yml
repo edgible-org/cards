@@ -1,12 +1,12 @@
-tested: 2026-11-20
+tested: 2026-11-21
 result: pass
-card-kit: "3697822"
+card-kit: "3a4a229"
 edgible-cli: 1.4.35
-files: sha256:b036dc780598b3e5
+files: sha256:c3b52b49a2521c73
 machine: darwin/arm64, docker 29.4.3
 images:
   - getmeili/meilisearch:v1.55.0@sha256:ff546679970126f8822e15d1b6a06bfbff1f2ce2e43f810cfb5258012f92de5c
-  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - ghcr.io/edgible-org/card-secrets:0.1.3@sha256:e10e5779a454566d09219cabf9d81c01e89010c26c92db119a96a36fee7077bc
   - ghcr.io/karakeep-app/karakeep:0.35.0@sha256:6f7d32ef296ddf1fc7c67ff56b8a201b7006a6a47b92b202afee1338841b353d
   - zenika/alpine-chrome:124@sha256:eb3378c1ed0079f94db054a5fe1aaa790a254ec0d6bbc67eda052420d86a179d
 image_facts:
@@ -26,9 +26,8 @@ steps:
 fingerprint: {"asset_files": 0}
 measured:
   karakeep:
-    memory: 848 MB
+    memory: 1.1 GB
     images: 892 MB
     data: 848 KB
 duration: 4m
 by: person
-notes: karakeep's port 3000 was taken on the test machine, so it was tested on 3001.

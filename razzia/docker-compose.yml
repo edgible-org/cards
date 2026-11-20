@@ -9,7 +9,7 @@ services:
   # Makes the secrets (card.yml secrets:) if they do not exist yet, as files in the volume
   # razzia-secrets, then exits. It never changes one after.
   razzia-secrets:
-    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    image: ghcr.io/edgible-org/card-secrets:0.1.3
     restart: "no"
     environment:
       CARD_SECRETS: |

@@ -1,12 +1,12 @@
 tested: 2026-11-20
 result: pass
-card-kit: "85d88c9"
+card-kit: "3697822"
 edgible-cli: 1.4.35
-files: sha256:ed61373f593c8b1a
+files: sha256:aa7baa93b3d691b1
 machine: darwin/arm64, docker 29.4.3
 images:
   - friendsofredaxo/redaxo:5@sha256:a7effb0c76aa7b4165d4aa46aed8f67d1e96f428ec2ae820ad376ee2638a3440
-  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - ghcr.io/edgible-org/card-secrets:0.1.3@sha256:e10e5779a454566d09219cabf9d81c01e89010c26c92db119a96a36fee7077bc
   - mariadb:11.8.9@sha256:d36f18d65a0459510b8b0f643b226a6d299e3206486e2b64ff20754a6d291707
 steps:
   check-env: pass
@@ -23,8 +23,8 @@ steps:
 fingerprint: {"users": 1, "articles": 0}
 measured:
   redaxo:
-    memory: 223 MB
+    memory: 193 MB
     images: 372 MB
     data: 197 MB
-duration: 5m
+duration: 4m
 by: ci

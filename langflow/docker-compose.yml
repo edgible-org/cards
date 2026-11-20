@@ -9,7 +9,7 @@ services:
   # Makes each secret in card.yml's secrets: that does not exist yet, one file each in the
   # volume langflow-secrets, then exits. It never changes one that exists.
   langflow-secrets:
-    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    image: ghcr.io/edgible-org/card-secrets:0.1.3
     restart: "no"
     environment:
       CARD_SECRETS: |

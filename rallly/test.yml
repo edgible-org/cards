@@ -1,12 +1,13 @@
-tested: 2026-10-15
+tested: 2026-11-20
 result: pass
-card-kit: "b3a4fb1"
-edgible-cli: 1.4.6
-files: sha256:276505374874f4a6
+card-kit: "3697822"
+edgible-cli: 1.4.35
+files: sha256:854037511112f1ff
 machine: darwin/arm64, docker 29.4.3
 images:
-  - lukevella/rallly:4.7.0@sha256:0a362dc5fd8977826fe78e69aaeee8e15879b81aab69813976e02e13584e5181
-  - postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+  - ghcr.io/edgible-org/card-secrets:0.1.3@sha256:e10e5779a454566d09219cabf9d81c01e89010c26c92db119a96a36fee7077bc
+  - lukevella/rallly:4.16.4@sha256:1dacb9297f29d89d543f6fe4de2f8703b2c59e854bac1953fc66a6dbc1d1d8b0
+  - postgres:17.11-alpine@sha256:e5d2edd28b1f8d40a0a6c0c9cdc545b19b56a0d5d88f94bc11a97d970d4700d0
 image_facts:
   lukevella/rallly:4.7.0: {user: "nextjs", archs: ["amd64", "arm64"], healthcheck: true}
 steps:
@@ -18,8 +19,8 @@ steps:
   teardown: pass
 measured:
   rallly:
-    memory: 554 MB
-    images: 420 MB
+    memory: 457 MB
+    images: 429 MB
     data: 51 MB
-duration: 5m
-by: agent
+duration: 3m
+by: ci

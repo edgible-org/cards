@@ -1,11 +1,11 @@
-tested: 2026-11-03
+tested: 2026-11-20
 result: pass
-card-kit: "9a38c75"
-edgible-cli: 1.4.29
-files: sha256:a3ea967220e5c021
+card-kit: "3697822"
+edgible-cli: 1.4.35
+files: sha256:3a2ca4b629136383
 machine: darwin/arm64, docker 29.4.3
 images:
-  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - ghcr.io/edgible-org/card-secrets:0.1.3@sha256:e10e5779a454566d09219cabf9d81c01e89010c26c92db119a96a36fee7077bc
   - ghcr.io/ralex91/razzia:4.0.2@sha256:e880097d232d42cba882391831ea4cad617f5a9c82947e2fc96595d0d9d5b11d
 image_facts:
   ghcr.io/ralex91/razzia:4.0.2: {user: "root", archs: ["amd64", "arm64"], healthcheck: false}
@@ -22,8 +22,8 @@ steps:
 fingerprint: {"quizzes": 1}
 measured:
   razzia:
-    memory: 36 MB
+    memory: 86 MB
     images: 41 MB
     data: 29 KB
-duration: 4m
-by: agent
+duration: 3m
+by: ci

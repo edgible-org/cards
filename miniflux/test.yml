@@ -1,15 +1,15 @@
-tested: 2026-10-29
+tested: 2026-11-20
 result: pass
-card-kit: "5832045"
-edgible-cli: 1.4.29
-files: sha256:9cc3fa2cfd3ffe2c
+card-kit: "3697822"
+edgible-cli: 1.4.35
+files: sha256:7f40f18606d25cc4
 machine: darwin/arm64, docker 29.4.3
 images:
-  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
-  - miniflux/miniflux:2.3.4@sha256:72e49f513a63104506aab98ba8cfc3a409d4fde23550a583dec07ec941f1e94e
-  - postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+  - ghcr.io/edgible-org/card-secrets:0.1.3@sha256:e10e5779a454566d09219cabf9d81c01e89010c26c92db119a96a36fee7077bc
+  - miniflux/miniflux:2.3.5@sha256:8fd6c3c434ecc3d4083306f83e03c0bb74c632e0f8378da5ead7e1773b0b89c9
+  - postgres:17.11-alpine@sha256:e5d2edd28b1f8d40a0a6c0c9cdc545b19b56a0d5d88f94bc11a97d970d4700d0
 image_facts:
-  miniflux/miniflux:2.3.3: {user: "65534", archs: ["amd64", "arm", "arm64", "riscv64"], healthcheck: false}
+  miniflux/miniflux:2.3.3: {user: "65534", healthcheck: false}
 steps:
   check-env: pass
   start: pass
@@ -21,8 +21,8 @@ steps:
   teardown: pass
 measured:
   miniflux:
-    memory: 56 MB
+    memory: 78 MB
     images: 133 MB
     data: 49 MB
-duration: 3m
+duration: 4m
 by: ci

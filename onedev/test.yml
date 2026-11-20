@@ -1,15 +1,15 @@
-tested: 2026-11-06
+tested: 2026-11-20
 result: pass
-card-kit: "ad80064"
-edgible-cli: 1.4.29
-files: sha256:cef7ea50f1a5e4c8
+card-kit: "85d88c9"
+edgible-cli: 1.4.35
+files: sha256:48a4c7e299216f78
 machine: darwin/arm64, docker 29.4.3
 images:
   - 1dev/server:17.1.2@sha256:e9776872769308306f116d4bab9ed5934d0058136d62a4e87ddbb4422d44a3c9
-  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
-  - postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+  - ghcr.io/edgible-org/card-secrets:0.1.3@sha256:e10e5779a454566d09219cabf9d81c01e89010c26c92db119a96a36fee7077bc
+  - postgres:17.11-alpine@sha256:e5d2edd28b1f8d40a0a6c0c9cdc545b19b56a0d5d88f94bc11a97d970d4700d0
 image_facts:
-  1dev/server:17.1.2: {user: "root", archs: ["amd64", "arm64"], healthcheck: false}
+  1dev/server:17.1.2: {user: "root", healthcheck: false}
 steps:
   check-env: pass
   start: pass
@@ -24,8 +24,8 @@ steps:
 fingerprint: {"users": 3, "projects": 1}
 measured:
   onedev:
-    memory: 965 MB
-    images: 534 MB
+    memory: 984 MB
+    images: 535 MB
     data: 271 MB
-duration: 3m
-by: agent
+duration: 5m
+by: ci

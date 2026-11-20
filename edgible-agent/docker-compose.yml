@@ -39,7 +39,7 @@ services:
   # which the gateway reads from this volume to register it with a budget. Every OpenClaw service
   # starts through the loader, which puts them in its environment.
   openclaw-secrets:
-    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    image: ghcr.io/edgible-org/card-secrets:0.1.3
     restart: "no"
     environment:
       CARD_SECRETS: |
@@ -165,7 +165,7 @@ services:
   # copy them across when those change). Not published: only OpenClaw reaches it. In the profile
   # gateway, which card.env turns on; off, the agent uses a shared gateway instead.
   litellm-secrets:
-    image: ghcr.io/edgible-org/card-secrets:0.1.2
+    image: ghcr.io/edgible-org/card-secrets:0.1.3
     profiles: [gateway]
     restart: "no"
     environment:

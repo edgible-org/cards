@@ -1,16 +1,16 @@
-tested: 2026-11-20
+tested: 2026-11-21
 result: pass
-card-kit: "be5b455"
+card-kit: "b36d557"
 edgible-cli: 1.4.35
-files: sha256:fc9c84baa3834689
+files: sha256:510cd52320401fae
 machine: darwin/arm64, docker 29.4.3
 images:
   - chatwoot/chatwoot:v4.19.1@sha256:a0d571a3a2f78f4fa4b1d7c21a53309c0184068d6021b3664ab37788faef04c1
-  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - ghcr.io/edgible-org/card-secrets:0.1.3@sha256:e10e5779a454566d09219cabf9d81c01e89010c26c92db119a96a36fee7077bc
   - pgvector/pgvector:0.8.1-pg17@sha256:3e8b3adfd27b5707128f60956f62a793c3c9326ea8cfaf0eab7adccb5d700b21
   - redis:7.4-alpine@sha256:4783bb5c3ecd5a93ce0a779ed2c44d5472043bb2cb7251f5390700748c62e62b
 image_facts:
-  chatwoot/chatwoot:v4.19.1: {user: "root", archs: ["amd64", "arm64"], healthcheck: false}
+  chatwoot/chatwoot:v4.19.1: {user: "root", healthcheck: false}
 steps:
   check-env: pass
   start: pass
@@ -32,4 +32,4 @@ measured:
     data: 78 MB
 duration: 5m
 by: person
-notes: chatwoot's port 3000 was taken on the test machine, so it was tested on 3001. the gateway serves chatwoot's hostname openly, so it was published as test-chatwoot.
+notes: the gateway serves chatwoot's hostname openly, so it was published as test-chatwoot.

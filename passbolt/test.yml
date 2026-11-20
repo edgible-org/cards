@@ -1,15 +1,15 @@
-tested: 2026-11-02
+tested: 2026-11-20
 result: pass
-card-kit: "36d8b7f"
-edgible-cli: 1.4.29
-files: sha256:5216e89f51b3c6c7
+card-kit: "3697822"
+edgible-cli: 1.4.35
+files: sha256:739c15fe1d6a326f
 machine: darwin/arm64, docker 29.4.3
 images:
-  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
-  - mariadb:11.8.5@sha256:345fa26d595e8c7fe298e0c4098ed400356f502458769c8902229b3437d6da2b
+  - ghcr.io/edgible-org/card-secrets:0.1.3@sha256:e10e5779a454566d09219cabf9d81c01e89010c26c92db119a96a36fee7077bc
+  - mariadb:11.8.9@sha256:d36f18d65a0459510b8b0f643b226a6d299e3206486e2b64ff20754a6d291707
   - passbolt/passbolt:5.8.0-1-ce-non-root@sha256:0977089131ced9c157a967148d94b5b7a0f03df0643be79814cdfe77874289c0
 image_facts:
-  passbolt/passbolt:5.8.0-1-ce-non-root: {user: "www-data", archs: ["amd64", "arm", "arm64"], healthcheck: false}
+  passbolt/passbolt:5.8.0-1-ce-non-root: {user: "www-data", healthcheck: false}
 steps:
   check-env: pass
   start: pass
@@ -23,8 +23,8 @@ steps:
 fingerprint: {"users": 1, "resources": 0}
 measured:
   passbolt:
-    memory: 189 MB
-    images: 264 MB
+    memory: 314 MB
+    images: 262 MB
     data: 173 MB
-duration: 3m
-by: agent
+duration: 4m
+by: ci

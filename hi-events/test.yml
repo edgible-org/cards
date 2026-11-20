@@ -1,12 +1,12 @@
-tested: 2026-11-20
+tested: 2026-11-21
 result: pass
-card-kit: "3697822"
+card-kit: "3a4a229"
 edgible-cli: 1.4.35
-files: sha256:71107d3a9891ce6e
+files: sha256:9ccd070fe4e4e7ab
 machine: darwin/arm64, docker 29.4.3
 images:
   - daveearley/hi.events-all-in-one:v2.0.0@sha256:8f192597f0a83267f608057fd3c9195678d19f7743415076f992596fbbe66859
-  - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
+  - ghcr.io/edgible-org/card-secrets:0.1.3@sha256:e10e5779a454566d09219cabf9d81c01e89010c26c92db119a96a36fee7077bc
   - postgres:17.11-alpine@sha256:e5d2edd28b1f8d40a0a6c0c9cdc545b19b56a0d5d88f94bc11a97d970d4700d0
   - redis:7.4-alpine@sha256:4783bb5c3ecd5a93ce0a779ed2c44d5472043bb2cb7251f5390700748c62e62b
 image_facts:
@@ -26,7 +26,7 @@ steps:
 fingerprint: {"users": 1, "events": 0}
 measured:
   hi-events:
-    memory: 488 MB
+    memory: 489 MB
     images: 486 MB
     data: 55 MB
 duration: 4m
