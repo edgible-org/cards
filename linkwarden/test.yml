@@ -1,13 +1,13 @@
-tested: 2026-11-02
+tested: 2026-11-20
 result: pass
-card-kit: "36d8b7f"
-edgible-cli: 1.4.29
-files: sha256:c4c4be89fcf732d8
+card-kit: "85d88c9"
+edgible-cli: 1.4.35
+files: sha256:0ec27217581462c4
 machine: darwin/arm64, docker 29.4.3
 images:
   - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
   - ghcr.io/linkwarden/linkwarden:v2.16.3@sha256:0664c28a039bda8ffa6663389e8536b2fc717219e329f85b83faca7efed3b144
-  - postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+  - postgres:17.11-alpine@sha256:e5d2edd28b1f8d40a0a6c0c9cdc545b19b56a0d5d88f94bc11a97d970d4700d0
 image_facts:
   ghcr.io/linkwarden/linkwarden:v2.16.3: {user: "root", archs: ["amd64", "arm64"], healthcheck: true}
 steps:
@@ -16,6 +16,8 @@ steps:
   publish: pass
   verify:
     linkwarden: pass
+  setup:
+    linkwarden: pass
   checks:
     admin-only: pass
   fingerprint: pass
@@ -23,8 +25,8 @@ steps:
 fingerprint: {"users": 1, "links": 0}
 measured:
   linkwarden:
-    memory: 561 MB
+    memory: 743 MB
     images: 687 MB
     data: 49 MB
 duration: 3m
-by: agent
+by: person

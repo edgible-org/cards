@@ -1,8 +1,8 @@
 # Compose file for the linkwarden card.
-# The host port, ORG_LABEL and the admin's name come from card.env. The passwords and keys are
-# made on this machine by linkwarden-secrets, at first start, and never leave it. Start with:
-#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
-# Sign-up is closed. prepare.sh opens it for one local request to make the admin, then closes it.
+# The host port, ORG_LABEL and whether sign-up is open come from card.env. The passwords and keys
+# are made on this machine by linkwarden-secrets, at first start, and never leave it. The README's
+# Start opens sign-up while only your organization reaches it, so you make the first account, the
+# admin; Set up starts it again with card.env's own value, sign-up closed.
 
 name: linkwarden
 
@@ -16,7 +16,6 @@ services:
       CARD_SECRETS: |
         LINKWARDEN_DB_PASSWORD=openssl rand -hex 16
         LINKWARDEN_AUTH_SECRET=openssl rand -base64 32
-        LINKWARDEN_ADMIN_PASSWORD=openssl rand -hex 16
     volumes:
       - linkwarden-secrets:/run/card-secrets
 
@@ -37,8 +36,8 @@ services:
         && exec concurrently -k -n web,worker "cd /data/apps/web && exec next start" "cd /data/apps/worker && exec tsx worker.ts"
     environment:
       NEXTAUTH_URL: ${LINKWARDEN_URL:-https://linkwarden.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}/api/v1/auth
-      # Closed to strangers. Only prepare.sh opens it, for the first admin. The admin adds
-      # everyone else under Admin Panel.
+      # Closed, except while you make the first account behind the Edgible sign-in (README Set up).
+      # The admin adds everyone else under Admin Panel.
       NEXT_PUBLIC_DISABLE_REGISTRATION: ${LINKWARDEN_DISABLE_REGISTRATION:-true}
     volumes:
       - linkwarden-data:/data/data

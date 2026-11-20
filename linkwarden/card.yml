@@ -20,6 +20,10 @@ applications:
     published: true
     authModes: [none]
     publicFor: ["its browser extension", "its phone app"]
+    setup:
+      behind: org
+      during: {LINKWARDEN_DISABLE_REGISTRATION: "false"}
+      done: $COMPOSE exec -T linkwarden-db psql -U linkwarden -d linkwarden -tAc 'select count(*) from "User"' | grep -qvx 0
     place: linkwarden
 
 data:
@@ -50,10 +54,6 @@ secrets:
     kind: internal
     use: signing
     make: openssl rand -base64 32
-  LINKWARDEN_ADMIN_PASSWORD:
-    kind: human
-    make: openssl rand -hex 16
-    for: the admin's first sign-in, made by prepare.sh; change it under Settings after
 
 places:
   linkwarden:

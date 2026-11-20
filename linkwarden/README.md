@@ -6,7 +6,7 @@ Bookmarks scattered across browsers and phones, and pages that vanish after you 
 
 ## What
 
-One app, `linkwarden`, on `none`: its browser extension and phone app cannot get past an Edgible sign-in, and the web pages sit on the same hostname, so the app's own login is the protection. Sign-up is closed, so only the admin and the people the admin adds can get in. Two containers run it: Linkwarden, which also runs its page-archiving worker and a headless browser, and Postgres. Search is Linkwarden's built-in one; its optional Meilisearch index is left out.
+One app, `linkwarden`, on `none`: its browser extension and phone app cannot get past an Edgible sign-in, and the web pages sit on the same hostname, so the app's own login is the protection. Sign-up is closed, so only the admin and the people the admin adds can get in. The admin is the first account: you make it yourself on Linkwarden's own sign-up page, which is open only while the app is behind the Edgible sign-in, in [Set up Linkwarden](#6-set-up-linkwarden). Two containers run it: Linkwarden, which also runs its page-archiving worker and a headless browser, and Postgres. Search is Linkwarden's built-in one; its optional Meilisearch index is left out.
 
 The links are in the volume `linkwarden-db-data`. The saved screenshots, PDFs and page copies are in `linkwarden-data`. Both are irreplaceable, and so is `linkwarden-secrets`, which holds the passwords and the key that signs sessions. Minimum recommended for the place `linkwarden`: 2 GB of memory and 4 GB of disk, on an arm64 or amd64 machine, with no GPU.
 
@@ -14,7 +14,7 @@ The Compose file is [docker-compose.yml](docker-compose.yml), the settings [card
 
 ## How
 
-Five steps. Edit [card.env](card.env) before you start.
+Six steps. Edit [card.env](card.env) before you start.
 
 ### 1. Fetch
 
@@ -26,7 +26,7 @@ curl -fsSL https://github.com/edgible-org/cards/archive/refs/heads/main.tar.gz \
 
 ### 2. Edit card.env
 
-Set `DEVICE` to a name `edgible device list` prints and `ORG_LABEL` as the file says. Change `LINKWARDEN_ADMIN_USER` if you like, using lowercase letters, digits, `-` and `_`.
+Set `DEVICE` to a name `edgible device list` prints and `ORG_LABEL` as the file says. Leave `LINKWARDEN_DISABLE_REGISTRATION` at `true`: Start opens sign-up only for its first run.
 
 ```bash
 nano linkwarden/card.env
@@ -45,44 +45,11 @@ It moves a taken port, as lines to paste. Run it again until it says `no conflic
 
 ```bash
 docker compose --env-file linkwarden/card.env -f linkwarden/docker-compose.yml pull
-docker compose --env-file linkwarden/card.env -f linkwarden/docker-compose.yml up -d --wait
+LINKWARDEN_DISABLE_REGISTRATION=false docker compose --env-file linkwarden/card.env -f linkwarden/docker-compose.yml up -d --wait
 docker compose --env-file linkwarden/card.env -f linkwarden/docker-compose.yml ps
 ```
 
-The first start downloads the app's images from the registries named in the Compose file, which takes longer for a larger app. `pull` does that download on its own, so you can see it. The time is the download, not Edgible, and it happens once: later starts and upgrades reuse the images on the machine and fetch only what changed. `--wait` returns when each service is running, and healthy when it has a healthcheck. Sign-up is closed in the Compose file. `prepare.sh` opens it for one request on the machine, before anything is published, to make the admin, and closes it again. Its password is the secret `LINKWARDEN_ADMIN_PASSWORD`; show it with `docker compose --env-file linkwarden/card.env -f linkwarden/docker-compose.yml run --rm --no-deps linkwarden-secrets show LINKWARDEN_ADMIN_PASSWORD`.
-
-```bash
-sh linkwarden/prepare.sh
-```
-
-[prepare.sh](prepare.sh) is:
-
-```sh
-#!/bin/sh
-# Prepare for the linkwarden card: make the admin before the sign-up page is public.
-# Run it after Start and before Publish, from the directory that holds linkwarden/:
-#   sh linkwarden/prepare.sh
-set -eu
-cd "$(dirname "$0")"
-set -a; . ./card.env; set +a
-COMPOSE=${COMPOSE:-docker compose --env-file card.env -f docker-compose.yml}
-
-# The admin's password is the human secret linkwarden-secrets made on this machine.
-LINKWARDEN_ADMIN_PASSWORD=$($COMPOSE run --rm --no-deps linkwarden-secrets show LINKWARDEN_ADMIN_PASSWORD)
-
-# Open sign-up for this one local request. Nothing is published yet.
-LINKWARDEN_DISABLE_REGISTRATION=false $COMPOSE up -d --wait linkwarden
-B="http://127.0.0.1:$LINKWARDEN_PORT"
-code=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$B/api/v1/users" -H 'Content-Type: application/json' \
-  -d "{\"name\":\"$LINKWARDEN_ADMIN_USER\",\"username\":\"$LINKWARDEN_ADMIN_USER\",\"password\":\"$LINKWARDEN_ADMIN_PASSWORD\"}")
-
-# Close it again, whatever happened: recreate with the Compose file's default.
-$COMPOSE up -d --wait --force-recreate linkwarden
-[ "$code" = 201 ] || [ "$code" = 400 ] || { echo "creating the admin answered $code"; exit 1; }
-echo "admin $LINKWARDEN_ADMIN_USER made; sign-up is closed again"
-```
-
-It prints that the admin was made and sign-up is closed again. Sign in as that admin and change the password under Settings. Add teammates under Admin Panel.
+The first start downloads the app's images from the registries named in the Compose file, which takes longer for a larger app. `pull` does that download on its own, so you can see it. The time is the download, not Edgible, and it happens once: later starts and upgrades reuse the images on the machine and fetch only what changed. `--wait` returns when each service is running, and healthy when it has a healthcheck. `LINKWARDEN_DISABLE_REGISTRATION=false` in front opens sign-up for this first run only, so you can make the first account in Set up; card.env keeps it closed.
 
 ### 5. Publish
 
@@ -104,9 +71,33 @@ edgible app create existing \
   --name linkwarden \
   --port "$LINKWARDEN_PORT" \
   --protocol https \
-  --auth-modes none \
+  --auth-modes org \
   --device-id "$device_id"
 edgible app list
+```
+
+`edgible app list` shows `linkwarden` with `org`.
+
+### 6. Set up Linkwarden
+
+Sign-up is open for now, so Publish put `linkwarden` on `org`: only your Edgible organization reaches it. Open `https://<linkwarden hostname>`, sign in with Edgible, and choose **Sign Up**. Make your account with a strong password from a password manager. The first account is the admin.
+
+When it exists, this prints `done`:
+
+```bash
+docker compose --env-file linkwarden/card.env -f linkwarden/docker-compose.yml exec -T linkwarden-db psql -U linkwarden -d linkwarden -tAc 'select count(*) from "User"' | grep -qvx 0 && echo done
+```
+
+Then start Linkwarden again with card.env as written, which closes sign-up. Your account and links stay.
+
+```bash
+docker compose --env-file linkwarden/card.env -f linkwarden/docker-compose.yml up -d --wait
+```
+
+Then switch `linkwarden` to `none`, so its browser extension and phone app reach it. Until then it stays on `org`, and nothing changes for you: a signed-in session stays signed in.
+
+```bash
+edgible app update linkwarden --auth-modes none
 ```
 
 **Without Edgible:** only Publish is Edgible's. The app listens on `127.0.0.1` at the port in `card.env`, so any reverse proxy or tunnel on the machine, such as Caddy, nginx, Cloudflare Tunnel or Tailscale, can publish it instead, and sign-in is then that tool's to provide. Every other step stays the same.
@@ -119,7 +110,7 @@ edgible app list
 curl -sS -o /dev/null -w '%{http_code}\n' "https://<linkwarden hostname>"
 ```
 
-The check proves a stranger cannot sign up, and that the admin signs in. Sign in at the hostname as the admin, save a link, and open its saved copy. The browser extension and phone app take the same address and the same login.
+That prints `200`. The check proves a stranger cannot sign up, and that the admin signs in. Sign in at the hostname with the account you made in Set up, save a link, and open its saved copy. Add teammates under Admin Panel. The browser extension and phone app take the same address and the same login.
 
 The rest of the setup is in the [Linkwarden docs](https://docs.linkwarden.app).
 
@@ -141,7 +132,7 @@ docker compose --env-file linkwarden/card.env -f linkwarden/docker-compose.yml d
 
 ### 3. Delete the data
 
-Skip this step to keep the data. The loop copies each volume to a `.tgz` file in this directory first.
+Skip this step to keep the data. The loop copies each volume to a `.tgz` file in this directory first. `linkwarden-secrets.tgz` holds the card's passwords and keys: keep it as safe as the data, which needs them.
 
 ```bash
 for volume in $(docker volume ls -q --filter label=com.docker.compose.project=linkwarden); do
