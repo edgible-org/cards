@@ -55,7 +55,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 30
-      start_period: 60s
+      # The first start downloads its embedding models from Hugging Face before /health answers,
+      # which can take several minutes; failures in this window don't count.
+      start_period: 600s
 
 volumes:
   open-webui-data: {}

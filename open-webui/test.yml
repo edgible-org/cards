@@ -1,8 +1,8 @@
-tested: 2026-11-18
+tested: 2026-11-20
 result: pass
-card-kit: "3fff564"
-edgible-cli: 1.4.34
-files: sha256:db09ef819a3a8c9b
+card-kit: "1102ff5"
+edgible-cli: 1.4.35
+files: sha256:243fc3baf1529133
 machine: darwin/arm64, docker 29.4.3
 images:
   - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
@@ -24,8 +24,8 @@ steps:
 fingerprint: {"users": 1, "chats": 0}
 measured:
   open-webui:
-    memory: 1.2 GB
+    memory: 1.3 GB
     images: 1.5 GB
     data: 1.1 GB
-duration: 7m
-by: ci
+duration: 9m
+by: person
