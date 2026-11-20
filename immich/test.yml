@@ -1,11 +1,11 @@
-tested: 2026-11-15
+tested: 2026-11-20
 result: pass
-card-kit: "07c71dd"
-edgible-cli: 1.4.34
-files: sha256:271905b756115fea
+card-kit: "85d88c9"
+edgible-cli: 1.4.35
+files: sha256:cdabe38013258b15
 machine: darwin/arm64, docker 29.4.3
 images:
-  - docker.io/valkey/valkey:9@sha256:3add1a336a920ea54770a001ab6feb3da5fceea96a40373a3a2cd469b815f0b7
+  - docker.io/valkey/valkey:9@sha256:1c2b25b09f354c66fe994733acdf12fcfd4bdf6f3bd92b88a93a70378d884056
   - ghcr.io/edgible-org/card-secrets:0.1.2@sha256:5b55047b0bd9f99cdb00f883e105eede65857b7925f7b6913d9a64c7c89f1987
   - ghcr.io/immich-app/immich-machine-learning:v3.3.6@sha256:14367bfb374b8576ddf49abd67c5ca0190a4c7fcf6303cdad65d7f7bf1a50bc2
   - ghcr.io/immich-app/immich-server:v3.3.6@sha256:e1981983b1c13f6024b57d72e7ecae3342eed1581201ab09fb248932d86c593a
@@ -26,8 +26,9 @@ steps:
   teardown: pass
 measured:
   immich:
-    memory: 2.6 GB
-    images: 850 MB
+    memory: 2.3 GB
+    images: 851 MB
     data: 346 MB
-duration: 5m
-by: agent
+duration: 4m
+by: ci
+notes: the gateway serves immich's hostname openly, so it was published as test-immich.
