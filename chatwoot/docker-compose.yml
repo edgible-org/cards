@@ -1,8 +1,8 @@
 # Compose file for the chatwoot card.
-# The host port, ORG_LABEL and the admin's email come from card.env. The database password, the
-# app secret and the admin's password are made on this machine by chatwoot-secrets, at first start,
-# and never leave it. Start with:
-#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+# The host port and ORG_LABEL come from card.env. The database password and the app secret are made
+# on this machine by chatwoot-secrets, at first start, and never leave it. A new Chatwoot shows its
+# own install page to its first visitor, who makes the super admin and the account: the README
+# publishes it behind the Edgible sign-in until you have.
 
 name: chatwoot
 
@@ -12,7 +12,7 @@ x-chatwoot-env: &chatwoot-env
   INSTALLATION_ENV: docker
   RAILS_LOG_TO_STDOUT: "true"
   FRONTEND_URL: ${CHATWOOT_URL:-https://chatwoot.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
-  # Nobody can make an account of their own: the admin adds agents.
+  # Nobody can make an account of their own: the admin adds agents. The install page is not sign-up.
   ENABLE_ACCOUNT_SIGNUP: "false"
   POSTGRES_HOST: chatwoot-db
   POSTGRES_USERNAME: chatwoot
@@ -35,7 +35,6 @@ services:
       CARD_SECRETS: |
         CHATWOOT_DB_PASSWORD=openssl rand -hex 16
         CHATWOOT_SECRET_KEY_BASE=openssl rand -hex 64
-        CHATWOOT_ADMIN_PASSWORD=printf 'Cw-%s1' "$(openssl rand -hex 12)"
     volumes:
       - chatwoot-secrets:/run/card-secrets
 

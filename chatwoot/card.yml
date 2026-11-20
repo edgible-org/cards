@@ -19,6 +19,9 @@ applications:
     subtype: existing
     published: true
     authModes: [none]
+    setup:
+      behind: org
+      done: $COMPOSE exec -T chatwoot-db psql -U chatwoot -d chatwoot -tAc 'select count(*) from users' | grep -qvx 0
     place: chatwoot
 
 secrets:
@@ -33,10 +36,6 @@ secrets:
     kind: internal
     use: signing
     make: openssl rand -hex 64
-  CHATWOOT_ADMIN_PASSWORD:
-    kind: human
-    make: printf 'Cw-%s1' "$(openssl rand -hex 12)"
-    for: the admin's first sign-in, set by prepare.sh when it makes the account
   CHATWOOT_SMTP_PASSWORD:
     kind: external
     from: your mail provider, with CHATWOOT_SMTP_USERNAME
