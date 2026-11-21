@@ -7,7 +7,7 @@ name: wiki-go
 
 services:
   wiki-go:
-    image: ${WIKI_GO_IMAGE:-leomoonstudios/wiki-go:1.9.2}
+    image: ${WIKI_GO_IMAGE:-leomoonstudios/wiki-go:1.9.6}
     restart: unless-stopped
     ports:
       - "127.0.0.1:${WIKI_GO_PORT:?set WIKI_GO_PORT in card.env}:8080"
