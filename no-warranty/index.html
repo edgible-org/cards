@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>No warranty: Edgible cards come as is</title>
+<meta name="description" content="Cards, card-kit, the edgible-cards skill and its MCP servers are free and open source, and come as is, with no warranty: what that means for you.">
+<link rel="canonical" href="https://cards.edgible.org/no-warranty/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Edgible cards">
+<meta property="og:title" content="No warranty: Edgible cards come as is">
+<meta property="og:description" content="Cards, card-kit, the edgible-cards skill and its MCP servers are free and open source, and come as is, with no warranty: what that means for you.">
+<meta property="og:url" content="https://cards.edgible.org/no-warranty/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../assets/images/favicon.png">
+<script>document.documentElement.className+=" js"</script>
+<link rel="stylesheet" href="../style.css?v=5ea4f50e">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="brand"><a class="brand-logo" href="https://www.edgible.ai" target="_self"><img src="../assets/images/edgible-logo-white.svg" alt="Edgible" width="107" height="24"></a><a class="brand-cards" href="../">Cards</a></div>
+<button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+<nav id="site-nav"><a href="../about/">About</a><a href="../ai/">Using AI</a><a href="../playbooks/">AI Playbooks</a><a href="../needs/">Needs</a><a href="../sources/">Sources</a><a class="star ext" href="https://github.com/edgible-org/cards" title="Star edgible-org/cards on GitHub, so others find it" target="_blank" rel="noopener noreferrer">&#9733; Star on GitHub<span class="sr-only"> (opens in a new tab)</span></a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumbs"><a href="../">Cards</a> / no-warranty</p>
+<h1>No warranty</h1>
+<article class="prose">
+<p>Edgible cards and the tools around them are free and open source, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>. That means you can run them, change them, and share them. It also means they come <strong>as is, with no warranty of any kind</strong>: if something goes wrong, nobody who wrote them is liable for it. The licence is the legal text; this page says what it means in practice.</p>
+<h2 id="what-this-covers">What this covers</h2>
+<ul>
+<li>Every card in this catalog, and the playbooks.</li>
+<li><a class="ext" href="https://github.com/edgible-org/card-kit" target="_blank" rel="noopener noreferrer">card-kit<span class="sr-only"> (opens in a new tab)</span></a>: the card format, its tools (such as <code>test-card</code>, <code>backup-card</code> and <code>status-page</code>), the edgible-cards skill for AI tools, and the <code>edgible-mcp</code> and <code>mcp-signin</code> servers.</li>
+<li>This site, cards.edgible.org.</li>
+</ul>
+<h2 id="what-it-means-for-you">What it means for you</h2>
+<ul>
+<li><strong>Your apps, your data, your call.</strong> You choose what to run and where. Keeping your data backed up, your machine secure, and your apps up to date is yours to do. Cards and the skill help with all three, but they don't do it for you or promise it worked.</li>
+<li><strong>Tested is not guaranteed.</strong> Each card is tested on a real machine every night. A pass means the card worked in that test, on that night. It doesn't mean it will work on your machine, keep your data safe, or suit what you use it for. Check an app does what you need before you rely on it, and test your backups by restoring them.</li>
+<li><strong>Each app is someone else's.</strong> The apps a card runs (WordPress, Memos, Vaultwarden and the rest) are made by their own projects, under their own licences (a card's page names it when known). Edgible doesn't make them or support them. Their bugs and security fixes come from those projects.</li>
+<li><strong>Your AI tool acts on your computer.</strong> With the skill, an AI tool runs commands on your computer: it installs software, starts apps, and changes settings. The skill tells it to ask before each step that needs your password or changes who can reach an app, but the AI tool is yours, and you decide what it may do. Read what it is about to run, and say no when you are unsure.</li>
+</ul>
+<h2 id="what-it-doesnt-cover">What it doesn't cover</h2>
+<p>Edgible's own service, the part that gives each app its address and handles sign-in at <a class="ext" href="https://www.edgible.com" target="_blank" rel="noopener noreferrer">www.edgible.com<span class="sr-only"> (opens in a new tab)</span></a>, is not open source and not covered by this page. Your Edgible account is under Edgible's terms.</p>
+<h2 id="found-a-problem">Found a problem?</h2>
+<p>Open an issue on <a class="ext" href="https://github.com/edgible-org/cards-submissions/issues" target="_blank" rel="noopener noreferrer">cards-submissions<span class="sr-only"> (opens in a new tab)</span></a> or <a class="ext" href="https://github.com/edgible-org/card-kit/issues" target="_blank" rel="noopener noreferrer">card-kit<span class="sr-only"> (opens in a new tab)</span></a>, or tell the card's steward. For a security problem, <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">contact Edgible<span class="sr-only"> (opens in a new tab)</span></a> rather than opening a public issue.</p>
+</article>
+<p><a href="../">Browse the cards &rarr;</a></p>
+
+</main>
+<script>(() => {
+  const bar = document.querySelector('header.top'), btn = bar && bar.querySelector('.menu-btn');
+  if (!btn) return;
+  const set = (open) => { bar.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => set(!bar.classList.contains('open')));
+  bar.addEventListener('click', (e) => { if (e.target.closest('nav a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (!bar.contains(e.target)) set(false); });
+})();</script>
+<footer>
+<div class="wrap foot">
+<div class="foot-legal"><span class="foot-lic">Free to run and share, under the <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<span class="sr-only"> (opens in a new tab)</span></a>, as is, with <a href="../no-warranty/">no warranty</a>.<br></span>&copy; 2026 Edgible and contributors<span class="foot-lic-short"> &middot; <a class="ext" href="https://github.com/edgible-org/cards/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a href="../no-warranty/">No warranty</a></span>.</div>
+<div class="foot-right">
+<div class="foot-links"><span><a href="../about/">About</a> &middot; <a href="../ai/">Using AI</a> &middot; <a href="../playbooks/">AI Playbooks</a> &middot; <a href="../sources/">Sources</a></span><span><a href="../add-your-app/">Add your app</a> &middot; <a class="ext" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer">Edgible<span class="sr-only"> (opens in a new tab)</span></a> &middot; <a class="ext" href="https://www.edgible.ai/contact/" target="_blank" rel="noopener noreferrer">Contact<span class="sr-only"> (opens in a new tab)</span></a></span></div>
+<a class="foot-logo" href="https://www.edgible.ai" target="_blank" rel="noopener noreferrer"><img src="../assets/images/edgible-symbol-white.png" alt="Edgible" height="32"></a>
+</div>
+</div>
+<!-- Built 2026-11-21 from edgible-org/cards 9f9727a -->
+</footer>
+</body>
+</html>
