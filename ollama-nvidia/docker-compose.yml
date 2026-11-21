@@ -10,7 +10,7 @@ name: ollama-nvidia
 
 services:
   ollama-nvidia:
-    image: ${OLLAMA_IMAGE:-ollama/ollama:0.40.15}
+    image: ${OLLAMA_IMAGE:-ollama/ollama:0.40.16}
     restart: unless-stopped
     # The NVIDIA container runtime: the docker snap sets it up itself when the NVIDIA driver is
     # installed; Docker from apt gets it from NVIDIA's container toolkit (nvidia-ctk runtime configure).
