@@ -1,0 +1,34 @@
+tested: 2026-11-21
+result: pass
+card-kit: "b36d557"
+edgible-cli: 1.4.35
+files: sha256:0d2b92d8efe0d43c
+machine: darwin/arm64, docker 29.4.3
+images:
+  - ghcr.io/zoriya/kyoo_api:5.3.0@sha256:719cca5a5817fc16e9a78f0738d4cbbe1db8ac4d71c1c4ac123d52f2bcb12373
+  - ghcr.io/zoriya/kyoo_auth:5.3.0@sha256:00d30f5a8f36680694daf814c84b5f6810e1b8fbd41c8c5707ba0e9862da8e84
+  - ghcr.io/zoriya/kyoo_front:5.3.0@sha256:8cc854d16c005fd8867e6e422f6af8e49e4ad2c271e1577a5b2b8193d837ffb4
+  - ghcr.io/zoriya/kyoo_scanner:5.3.0@sha256:a19d38b807501793e5b4ac1c2155eff039af95cd546d0e66b9cfc4326a87240c
+  - ghcr.io/zoriya/kyoo_transcoder:5.3.0@sha256:1171f5001e10a082db3da7e12f4b9ac958feb1e51d9a4a62a392c50a3e2fab4b
+  - postgres:18.3-alpine@sha256:54451ecb8ab38c24c3ec123f2fd501303a3a1856a5c66e98cecf2460d5e1e9d7
+  - traefik:v3.7.0@sha256:eb328e2c806c53aafbbace6c451fa54d268961261a85452fcf0fb752a30c17be
+image_facts:
+  ghcr.io/zoriya/kyoo_front:5.3.0: {user: "root", archs: ["amd64", "arm64"], healthcheck: false}
+steps:
+  check-env: pass
+  start: pass
+  publish: pass
+  verify:
+    kyoo: pass
+  checks:
+    api-needs-sign-in: pass
+  fingerprint: pass
+  teardown: pass
+fingerprint: {"tables": 37}
+measured:
+  kyoo:
+    memory: 302 MB
+    images: 953 MB
+    data: 51 MB
+duration: 4m
+by: agent

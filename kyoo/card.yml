@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Card
+metadata:
+  name: kyoo
+  description: Kyoo, your films, series and anime streamed to your browser and its apps, behind your org login
+  type: app
+  added: 2026-11-20
+  homepage: https://github.com/zoriya/kyoo
+  license: GPL-3.0-only
+  steward: edgible-org
+
+applications:
+  - name: kyoo
+    what: Kyoo web and API, with its scanner and transcoder
+    from: ghcr.io/zoriya/kyoo_front:5.3.0
+    database: postgres:18.3-alpine
+    port: 8901
+    protocol: https
+    subtype: existing
+    published: true
+    authModes: [org]
+    place: kyoo
+
+secrets:
+  KYOO_THEMOVIEDB_TOKEN:
+    kind: external
+    from: https://www.themoviedb.org/settings/api
+
+data:
+  volumes:
+    kyoo-db-data:
+      class: irreplaceable
+      dump:
+        service: kyoo-db
+        command: pg_dump -U kyoo -Fc kyoo
+        restore: pg_restore -U kyoo -d kyoo --clean --if-exists
+    kyoo-media:
+      class: irreplaceable
+    kyoo-images:
+      class: rebuildable
+    kyoo-profile-pictures:
+      class: irreplaceable
+    kyoo-transcoder-metadata:
+      class: cache
+    kyoo-transcode-cache:
+      class: cache
+  fingerprint:
+    service: kyoo-db
+    command: psql -U kyoo -d kyoo -tAc "select json_build_object('tables', (select count(*) from information_schema.tables where table_schema not in ('pg_catalog','information_schema')))"
+
+places:
+  kyoo:
+    memory: 2 GB
+    disk: 10 GB
+    arch: [amd64, arm64]
+    gpu: optional

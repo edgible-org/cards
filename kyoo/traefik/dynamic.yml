@@ -1,0 +1,62 @@
+# Kyoo's routes, from the labels in Kyoo's own docker-compose.yml, as a file so that Traefik
+# needs no Docker socket. The paths and middlewares are Kyoo's; only the service addresses are
+# this card's.
+http:
+  routers:
+    front:
+      rule: PathPrefix(`/`)
+      service: front
+    auth:
+      rule: PathPrefix(`/auth/`) || PathPrefix(`/.well-known/`)
+      middlewares: [strip-forwarded]
+      service: auth
+    swagger:
+      rule: PathPrefix(`/swagger`)
+      service: api
+    api:
+      rule: PathPrefix(`/api/`)
+      middlewares: [cors, phantom-token]
+      service: api
+    scanner:
+      rule: PathPrefix(`/scanner/`)
+      middlewares: [phantom-token]
+      service: scanner
+    transcoder:
+      rule: PathPrefix(`/video`)
+      middlewares: [cors, phantom-token]
+      service: transcoder
+
+  middlewares:
+    strip-forwarded:
+      headers:
+        customRequestHeaders:
+          X-Forwarded-Uri: ""
+          X-Forwarded-Method: ""
+    phantom-token:
+      forwardAuth:
+        address: http://kyoo-auth:4568/auth/jwt
+        authRequestHeaders: [Authorization, Cookie, X-Api-Key, Sec-WebSocket-Protocol]
+        authResponseHeaders: [Authorization]
+    cors:
+      headers:
+        accessControlAllowOriginList: ["*"]
+        accessControlAllowMethods: [GET, OPTIONS]
+        accessControlAllowHeaders: [Authorization, Content-Type, Range, X-Api-Key]
+        addVaryHeader: true
+
+  services:
+    front:
+      loadBalancer:
+        servers: [{url: "http://kyoo-front:8901"}]
+    auth:
+      loadBalancer:
+        servers: [{url: "http://kyoo-auth:4568"}]
+    api:
+      loadBalancer:
+        servers: [{url: "http://kyoo-api:3567"}]
+    scanner:
+      loadBalancer:
+        servers: [{url: "http://kyoo-scanner:4389"}]
+    transcoder:
+      loadBalancer:
+        servers: [{url: "http://kyoo-transcoder:7666"}]

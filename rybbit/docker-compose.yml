@@ -41,7 +41,7 @@ services:
       retries: 6
 
   rybbit-client:
-    image: ${RYBBIT_CLIENT_IMAGE:-ghcr.io/rybbit-io/rybbit-client:v2.9.2}
+    image: ${RYBBIT_CLIENT_IMAGE:-ghcr.io/rybbit-io/rybbit-client:v2.9.3}
     restart: unless-stopped
     depends_on:
       - rybbit-backend

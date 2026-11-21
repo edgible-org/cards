@@ -1,0 +1,130 @@
+# Compose file for the kyoo card, from Kyoo's own docker-compose.yml.
+# The host port and ORG_LABEL come from card.env. Kyoo's routes are written
+# in traefik/dynamic.yml, so Traefik needs no Docker socket. Start with:
+#   docker compose --env-file card.env -f docker-compose.yml up -d --wait
+
+name: kyoo
+
+x-kyoo-env: &kyoo-env
+  PGUSER: kyoo
+  PGDATABASE: kyoo
+  PGHOST: kyoo-db
+  PGPORT: "5432"
+  PUBLIC_URL: ${KYOO_URL:-https://kyoo.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+  JWT_ISSUER: ${KYOO_URL:-https://kyoo.${ORG_LABEL:?set ORG_LABEL in card.env}.${EDGIBLE_DOMAIN:-edgible.app}}
+  # New accounts browse and play. The first account is the admin.
+  EXTRA_CLAIMS: '{"permissions": ["core.read", "core.play"], "verified": false}'
+  FIRST_USER_CLAIMS: '{"permissions": ["users.read", "users.write", "users.delete", "apikeys.read", "apikeys.write", "core.read", "core.write", "core.play", "scanner.trigger", "scanner.guess", "scanner.search", "scanner.add"], "verified": true}'
+  # Nobody browses without an account.
+  GUEST_CLAIMS: ""
+  PROTECTED_CLAIMS: permissions,verified
+  KEIBI_APIKEY_SCANNER: lazy
+  KEIBI_APIKEY_SCANNER_CLAIMS: '{"permissions": ["core.read", "core.write"]}'
+  LAZY_APIKEYS_LOCAL_ONLY: "true"
+
+services:
+  kyoo-front:
+    image: ghcr.io/zoriya/kyoo_front:5.3.0
+    restart: unless-stopped
+    environment:
+      KYOO_URL: http://kyoo-api:3567/api
+
+  kyoo-auth:
+    image: ghcr.io/zoriya/kyoo_auth:5.3.0
+    restart: unless-stopped
+    environment:
+      <<: *kyoo-env
+      EXTRA_OIDC_REDIRECT_URLS: kyoo
+    volumes:
+      - kyoo-profile-pictures:/profile_pictures
+    depends_on:
+      kyoo-db:
+        condition: service_healthy
+
+  kyoo-api:
+    image: ghcr.io/zoriya/kyoo_api:5.3.0
+    restart: unless-stopped
+    environment:
+      <<: *kyoo-env
+      IMAGES_PATH: /images
+    volumes:
+      - kyoo-images:/images
+    depends_on:
+      kyoo-db:
+        condition: service_healthy
+
+  kyoo-scanner:
+    image: ghcr.io/zoriya/kyoo_scanner:5.3.0
+    restart: unless-stopped
+    environment:
+      <<: *kyoo-env
+      KYOO_URL: http://kyoo-traefik:8901/api
+      JWKS_URL: http://kyoo-auth:4568/.well-known/jwks.json
+      LIBRARY_IGNORE_PATTERN: ".*/[dD]ownloads?/.*"
+      THEMOVIEDB_API_ACCESS_TOKEN: ${KYOO_THEMOVIEDB_TOKEN:-}
+    volumes:
+      # Your films and shows, read-only. Kyoo never changes them.
+      - kyoo-media:/video:ro
+    depends_on:
+      - kyoo-auth
+
+  kyoo-transcoder:
+    image: ghcr.io/zoriya/kyoo_transcoder:5.3.0
+    restart: unless-stopped
+    environment:
+      <<: *kyoo-env
+      JWKS_URL: http://kyoo-auth:4568/.well-known/jwks.json
+      GOCODER_PRESET: fast
+    volumes:
+      - kyoo-media:/video:ro
+      - kyoo-transcode-cache:/cache
+      - kyoo-transcoder-metadata:/metadata
+
+  # The one door in: it sends each path to the service that answers it (traefik/dynamic.yml).
+  kyoo-traefik:
+    image: traefik:v3.7.0
+    restart: unless-stopped
+    command:
+      - --providers.file.directory=/etc/traefik/dynamic
+      - --entryPoints.web.address=:8901
+      - --ping=true
+    ports:
+      - "127.0.0.1:${KYOO_PORT:?set KYOO_PORT in card.env}:8901"
+    volumes:
+      - ./traefik:/etc/traefik/dynamic:ro
+    depends_on:
+      - kyoo-front
+      - kyoo-auth
+      - kyoo-api
+      - kyoo-scanner
+      - kyoo-transcoder
+    healthcheck:
+      test: ["CMD", "traefik", "healthcheck", "--ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  # Reachable only from the other services here: it publishes no port, so trust sign-in is safe.
+  kyoo-db:
+    image: postgres:18.3-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: kyoo
+      POSTGRES_USER: kyoo
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - kyoo-db-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kyoo -d kyoo"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  kyoo-media: {}
+  kyoo-db-data: {}
+  kyoo-images: {}
+  kyoo-profile-pictures: {}
+  kyoo-transcoder-metadata: {}
+  kyoo-transcode-cache: {}
