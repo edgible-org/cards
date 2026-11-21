@@ -1,11 +1,11 @@
-tested: 2026-11-01
+tested: 2026-11-21
 result: pass
-card-kit: "972ec6b"
-edgible-cli: 1.4.29
-files: sha256:ac6a2ef2d842b52f
+card-kit: "a8a72fc"
+edgible-cli: 1.4.35
+files: sha256:2f22c0b60af14c46
 machine: darwin/arm64, docker 29.4.3
 images:
-  - qdrant/qdrant:v1.20.0@sha256:9bfc89f9914fc14876a88c05270685921a55b8877b254a98bcc1cc2f0a424cd2
+  - qdrant/qdrant:v1.20.2@sha256:d277592721d2e3b73f9b797b53cf05e6a5bb2134f6d13fdbda4ca51782afbcac
 image_facts:
   qdrant/qdrant:v1.20.0: {user: "0:0", archs: ["amd64", "arm64"], healthcheck: false}
 steps:
@@ -22,8 +22,8 @@ steps:
 fingerprint: {"collections": 0}
 measured:
   qdrant:
-    memory: 222 MB
+    memory: 277 MB
     images: 72 MB
     data: 37 KB
-duration: 4m
-by: agent
+duration: 3m
+by: ci
