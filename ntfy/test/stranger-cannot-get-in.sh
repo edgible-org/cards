@@ -1,5 +1,5 @@
 #!/bin/sh
-# ntfy is public: a stranger may not make an account, publish or read, and the admin may.
+# Its API reaches anyone (for its apps and scripts): a stranger may not make an account, publish or read, and the admin may.
 set -eu
 B="https://$HOSTNAME_NTFY"
 code=$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' \

@@ -1,8 +1,8 @@
-tested: 2026-11-15
+tested: 2026-11-21
 result: pass
-card-kit: "07c71dd"
-edgible-cli: 1.4.34
-files: sha256:ac5e2364c27f7866
+card-kit: "490271c"
+edgible-cli: 1.4.35
+files: sha256:7adaf34737d06c1c
 machine: darwin/arm64, docker 29.4.3
 images:
   - neosmemo/memos:0.31.0@sha256:24c2707ddd8fbd2ceaa7a61ecab86a53cdcde640b24ce572b73da14b00b5785f
@@ -23,8 +23,8 @@ steps:
 fingerprint: {"admins": 1}
 measured:
   memos:
-    memory: 24 MB
+    memory: 65 MB
     images: 25 MB
     data: 254 KB
 duration: 3m
-by: agent
+by: person

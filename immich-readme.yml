@@ -3,13 +3,15 @@ why: >-
   expensive to keep there. [Immich](https://immich.app) is a photo and video library with phone
   apps that back up your camera roll, on a machine you own.
 what: >-
-  One app, `immich`, on the place `immich`, on `none`. That is deliberate: Immich's phone apps
-  cannot get past an Edgible sign-in, so `org` would stop them backing up. Immich's own login
-  protects it, and nobody can sign up: the first account is the admin, and the admin adds everyone
-  else. Until that first account exists, anyone who reaches Immich can make it, so the card
-  publishes it on `org` first: only your Edgible organization reaches its first page, where you
-  make the admin with your own email and password. Then you open it to everyone, for the phone
-  apps.
+  One app, `immich`, on the place `immich`, on `org`, with its API left to Immich's own login.
+  Immich's phone apps cannot get past an Edgible sign-in, so `/api/` (and `/.well-known/immich`,
+  where the apps find it) goes straight to Immich, where each call needs an Immich token or
+  password. The web app stays behind Edgible's sign-in, so anyone who uses it must be in your
+  Edgible organization. Shared links stay open to anyone with the link (`/share/` and the web
+  app's files it loads), so people outside your organization can open an album or photo you share
+  with them. Nobody can sign up: the first account is the admin, and the admin adds everyone
+  else. Until that first account exists, anyone who reaches Immich can make it, so the API opens
+  only after you make the admin on Immich's first page, in Set up.
 
 
   It runs four services, from the Compose file Immich publishes for v3.3.1: `immich-server`,
@@ -38,8 +40,7 @@ setup:
     template, which you can change later.
 verify:
   immich: >-
-    That prints `200`: the web app, with no Edgible sign-in, as the phone apps need. In the phone
-    app, set the server to `https://<immich hostname>` and sign in with the admin you made in Set
+    In the phone app, set the server to `https://<immich hostname>` and sign in with the admin you made in Set
     up.
 
 

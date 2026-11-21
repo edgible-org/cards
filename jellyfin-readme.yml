@@ -3,12 +3,14 @@ why: >-
   [Jellyfin](https://jellyfin.org) is a free media server that streams your own library to its TV,
   phone and desktop apps and to any browser, from a machine you own.
 what: >-
-  One app, `jellyfin`, on the place `jellyfin`, on `none`. That is deliberate: Jellyfin's TV, phone
-  and desktop apps cannot get past an Edgible sign-in, so `org` would stop them playing. Jellyfin's
-  own login protects it, and nobody can sign up: the admin adds everyone else. Until its setup
-  wizard is finished, anyone who reaches Jellyfin can make the admin, so the card publishes it on
-  `org` first: only your Edgible organization reaches the wizard, where you choose the language,
-  your admin and password, and your libraries. Then you open it to everyone.
+  One app, `jellyfin`, on the place `jellyfin`, on `org`, with the web app (`/web/`) behind
+  Edgible's sign-in and the rest of the site left to Jellyfin's own login. Jellyfin's TV, phone and
+  desktop apps call its API at paths all over the site and cannot get past an Edgible sign-in, so
+  those reach Jellyfin, where each call needs a Jellyfin token or password; anyone who uses the web
+  app must be in your Edgible organization. Nobody can sign up: the admin adds everyone else.
+  Until its setup wizard is finished, anyone who reaches Jellyfin can make the admin, so all of it
+  stays behind Edgible's sign-in until then: you choose the language, your admin and password, and
+  your libraries in the wizard, then open the paths for the apps.
 
 
   It runs one service, `jellyfin`, from the image Jellyfin publishes, pinned to
@@ -36,11 +38,10 @@ setup:
   jellyfin: >-
     Jellyfin's wizard asks for the language, your admin and password, and your libraries: add one
     pointing at `/media`, your `JELLYFIN_MEDIA_DIR`. Keep "Allow remote connections" on, or
-    Jellyfin turns away its own apps once it is public. Use a password manager for the password.
+    Jellyfin turns away its own apps once their paths are open. Use a password manager for the password.
 verify:
   jellyfin: >-
-    That prints `302`: Jellyfin sending you to its web app, with no Edgible sign-in, as its apps
-    need. In a Jellyfin app, set the server to `https://<jellyfin hostname>` and sign in with the
+    In a Jellyfin app, set the server to `https://<jellyfin hostname>` and sign in with the
     admin you made in Set up.
 
 
@@ -48,4 +49,6 @@ verify:
     says. When the admin is locked out and that does not work,
     [Jellyfin's troubleshooting page](https://jellyfin.org/docs/general/administration/troubleshooting/)
     unlocks it on the machine.
+probe:
+  jellyfin: /System/Info/Public
 docs: [Jellyfin, https://jellyfin.org/docs]

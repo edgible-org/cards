@@ -8,7 +8,7 @@ Your scripts, backups and self-hosted apps need a way to tell your phone that so
 
 ## What
 
-One ntfy container with its own message cache and login database, on one machine. It is published on auth mode `none`, because phone apps and scripts cannot sign in to Edgible. ntfy's own access control is on and denies everyone by default, self-sign-up is off, and `prepare.sh` makes one admin before Publish. Each sender and phone then gets its own login or token, and only the topics you grant. Notifications can show on a locked screen, so keep messages short and say only that something happened.
+One ntfy container with its own message cache and login database, on one machine. It is published on auth mode `org`, with its web app (`/`, `/app` and its account pages) behind Edgible's sign-in and the rest of the site left to ntfy's own login: phone apps and scripts publish and subscribe on each topic's own path and cannot sign in to Edgible. Anyone who uses the web app must be in your Edgible organization. ntfy's own access control is on and denies everyone by default, self-sign-up is off, and `prepare.sh` makes one admin before Publish. Each sender and phone then gets its own login or token, and only the topics you grant. Notifications can show on a locked screen, so keep messages short and say only that something happened.
 
 The volume `ntfy-data` holds the message cache, attachments and the login database (users, tokens and access rules). The admin's password is in the volume `ntfy-secrets`. Minimum recommended for the place `ntfy`: 128 MB of memory and 1 GB of disk, on an arm64, amd64 or 32-bit arm machine, with no GPU.
 
@@ -102,8 +102,10 @@ edgible app create existing \
   --name ntfy \
   --port "$NTFY_PORT" \
   --protocol https \
-  --auth-modes none \
+  --auth-modes org \
   --device-id "$device_id"
+curl -fsSLo app-paths.py https://raw.githubusercontent.com/edgible-org/card-kit/main/app-paths.py
+python3 app-paths.py ntfy ntfy
 edgible app list
 ```
 
@@ -111,13 +113,14 @@ edgible app list
 
 ## Verify
 
-`ntfy` uses `none`.
+`ntfy` uses `org`.
 
 ```bash
-curl -sS -o /dev/null -w '%{http_code}\n' "https://<ntfy hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<ntfy hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<ntfy hostname>/v1/health"
 ```
 
-The address answers with the ntfy web app. Publishing with no login (`curl -d hi https://<address>/test`) answers `403`, and signing in as the admin in the web app works.
+The first prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front of the web pages. The second prints `ntfy`'s own answer, with no sign-in address: Publish left the paths in `appPaths` ([card.yml](card.yml)) to its own login, so clients that cannot pass Edgible's sign-in still connect. Publishing with no login (`curl -d hi https://<ntfy hostname>/test`) answers `403`, and signing in as the admin in the web app, after Edgible's sign-in, works.
 
 The rest of the setup is in the [ntfy docs](https://docs.ntfy.sh).
 

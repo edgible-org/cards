@@ -6,7 +6,7 @@ Invoices, letters, contracts and statements pile up on paper and in mail attachm
 
 ## What
 
-One app, `paperless-ngx`, on `org`. A document archive is private, and a person uses it in a browser, so only members of your Edgible organisation reach it, and Paperless's own login still applies after that. The trade-off is that Paperless's phone apps and API clients cannot get past the Edgible sign-in; upload from the web interface, or from a scanner that writes to a folder on the machine. Four services run it: `paperless-ngx`, `paperless-ngx-db`, a Postgres, `paperless-ngx-redis`, a queue, and `paperless-ngx-secrets`, which makes the passwords and exits. Paperless makes the admin itself at its first start, with a password made on the machine, so there is no setup page to leave open. Inside the app, give each person their own user and set who sees which documents with its permissions and groups; for documents with client, patient or financial data, keep it on `org`, use those permissions, keep encrypted backups, and follow your profession's retention rules.
+One app, `paperless-ngx`, on `org`. A document archive is private, and a person uses it in a browser, so only members of your Edgible organisation reach the web pages, and Paperless's own login still applies after that. Paperless's phone apps and API clients cannot get past the Edgible sign-in, so its API (`/api/`) is left to Paperless's own login: each call needs a Paperless token or password. You can also upload from a scanner that writes to a folder on the machine. Four services run it: `paperless-ngx`, `paperless-ngx-db`, a Postgres, `paperless-ngx-redis`, a queue, and `paperless-ngx-secrets`, which makes the passwords and exits. Paperless makes the admin itself at its first start, with a password made on the machine, so there is no setup page to leave open. Inside the app, give each person their own user and set who sees which documents with its permissions and groups; for documents with client, patient or financial data, keep it on `org`, use those permissions, keep encrypted backups, and follow your profession's retention rules.
 
 Original and archived documents live in the volume `paperless-ngx-media`, the database in `paperless-ngx-db-data`; back those two up together. `paperless-ngx-data` holds the search index, which Paperless rebuilds, and `paperless-ngx-consume` is a drop folder. Minimum recommended for the place `paperless-ngx`: 3 GB of memory and 6 GB of disk, on an arm64 or amd64 machine, with no GPU.
 
@@ -73,6 +73,8 @@ edgible app create existing \
   --protocol https \
   --auth-modes org \
   --device-id "$device_id"
+curl -fsSLo app-paths.py https://raw.githubusercontent.com/edgible-org/card-kit/main/app-paths.py
+python3 app-paths.py paperless-ngx paperless-ngx
 edgible app list
 ```
 
@@ -84,9 +86,10 @@ edgible app list
 
 ```bash
 curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<paperless-ngx hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<paperless-ngx hostname>/api/"
 ```
 
-That prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front. That redirects to the Edgible sign-in, so nobody outside your organisation reaches the app. After you sign in to Edgible, sign in to Paperless as `PAPERLESS_NGX_ADMIN_USER` with the password the card made; see it with `docker compose --env-file paperless-ngx/card.env -f paperless-ngx/docker-compose.yml run --rm --no-deps paperless-ngx-secrets show PAPERLESS_NGX_ADMIN_PASSWORD`. Change it under your profile after.
+The first prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front of the web pages. The second prints `paperless-ngx`'s own answer, with no sign-in address: Publish left the paths in `appPaths` ([card.yml](card.yml)) to its own login, so clients that cannot pass Edgible's sign-in still connect. It answers `401`: nothing without a token or password. Nobody outside your organisation reaches the web pages. After you sign in to Edgible, sign in to Paperless as `PAPERLESS_NGX_ADMIN_USER` with the password the card made; see it with `docker compose --env-file paperless-ngx/card.env -f paperless-ngx/docker-compose.yml run --rm --no-deps paperless-ngx-secrets show PAPERLESS_NGX_ADMIN_PASSWORD`. Change it under your profile after.
 
 The rest of the setup is in the [Paperless-ngx docs](https://docs.paperless-ngx.com).
 

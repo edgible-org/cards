@@ -17,8 +17,10 @@ applications:
     protocol: https
     subtype: existing
     published: true
-    authModes: [none]
-    publicFor: ["its phone apps"]
+    authModes: [org]
+    appPaths:
+      - paths: [/api/v1/*, /file/*]
+        for: Memos' phone apps, their calls and attachments, each with a Memos token or password
     setup:
       behind: org
       done: curl -fsS "http://127.0.0.1:$MEMOS_PORT/api/v1/instance/profile" | grep -q '"admin"' && curl -fsS "http://127.0.0.1:$MEMOS_PORT/api/v1/instance/settings/GENERAL" | grep -q '"disallowUserRegistration":true'

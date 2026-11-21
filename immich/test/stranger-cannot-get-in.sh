@@ -1,5 +1,5 @@
 #!/bin/sh
-# immich is public: the first admin is made, so nobody else can become it.
+# Immich's API reaches anyone: the first admin is made, so nobody else can become it.
 set -eu
 B="https://$HOSTNAME_IMMICH"
 curl -fsS "$B/api/server/config" | grep -q '"isInitialized":true' || { echo "immich is not set up"; exit 1; }

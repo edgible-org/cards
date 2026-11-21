@@ -1,5 +1,5 @@
 # A check for test-card, run after Verify with card.env exported and HOSTNAME_<APP> set.
-# memos is on none, so this goes through the public hostname: a wrong password is refused,
+# /api/v1/* is left to Memos' own login, so this goes through the hostname as a phone app does: a wrong password is refused,
 # the admin test/setup.sh made signs in, and a stranger cannot register an account.
 set -eu
 B="https://$HOSTNAME_MEMOS"; H='Content-Type: application/json'

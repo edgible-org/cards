@@ -16,8 +16,10 @@ applications:
     protocol: https
     subtype: existing
     published: true
-    authModes: [none]
-    publicFor: ["its browser extension", "the community phone apps"]
+    authModes: [org]
+    appPaths:
+      - paths: [/api/*]
+        for: the linkding browser extension and phone apps, each with a linkding API token
     place: linkding
 
 secrets:

@@ -19,8 +19,13 @@ applications:
     protocol: https
     subtype: existing
     published: true
-    authModes: [none]
-    publicFor: ["its phone apps", "scripts that send notifications"]
+    authModes: [org]
+    appPaths:
+      - paths: ["/*"]
+        for: its phone apps and scripts, which publish and subscribe on each topic's own path, with ntfy's users and access rules
+    signInPaths:
+      - paths: [/, /app, /account, /settings, /login, /signup]
+        for: the web app
     place: ntfy
 
 secrets:

@@ -17,8 +17,13 @@ applications:
     protocol: https
     subtype: existing
     published: true
-    authModes: [none]
-    publicFor: ["its Android app", "scripts that send notifications"]
+    authModes: [org]
+    appPaths:
+      - paths: ["/*"]
+        for: its Android app and scripts that send notifications, which call its API all over the site, each with a Gotify token or password
+    signInPaths:
+      - paths: [/, /index.html]
+        for: the web app
     place: gotify
 
 secrets:

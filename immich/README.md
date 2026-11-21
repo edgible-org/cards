@@ -6,7 +6,7 @@ Your photos and videos are the data people least want on someone else's servers,
 
 ## What
 
-One app, `immich`, on the place `immich`, on `none`. That is deliberate: Immich's phone apps cannot get past an Edgible sign-in, so `org` would stop them backing up. Immich's own login protects it, and nobody can sign up: the first account is the admin, and the admin adds everyone else. Until that first account exists, anyone who reaches Immich can make it, so the card publishes it on `org` first: only your Edgible organization reaches its first page, where you make the admin with your own email and password. Then you open it to everyone, for the phone apps.
+One app, `immich`, on the place `immich`, on `org`, with its API left to Immich's own login. Immich's phone apps cannot get past an Edgible sign-in, so `/api/` (and `/.well-known/immich`, where the apps find it) goes straight to Immich, where each call needs an Immich token or password. The web app stays behind Edgible's sign-in, so anyone who uses it must be in your Edgible organization. Shared links stay open to anyone with the link (`/share/` and the web app's files it loads), so people outside your organization can open an album or photo you share with them. Nobody can sign up: the first account is the admin, and the admin adds everyone else. Until that first account exists, anyone who reaches Immich can make it, so the API opens only after you make the admin on Immich's first page, in Set up.
 
 It runs four services, from the Compose file Immich publishes for v3.3.1: `immich-server`, `immich-machine-learning` for face recognition and smart search, `immich-redis`, and `immich-db`, a Postgres with vector search. The images are pinned to `v3.3.1`, with the digests Immich publishes for Redis and Postgres. To run without machine learning, remove that service; Immich then skips those features.
 
@@ -53,7 +53,7 @@ docker compose --env-file immich/card.env -f immich/docker-compose.yml up -d --w
 docker compose --env-file immich/card.env -f immich/docker-compose.yml ps
 ```
 
-The first start downloads the app's images from the registries named in the Compose file: about 850 MB, a few minutes on a typical home connection. `pull` does that download on its own, so you can see it. The time is the download, not Edgible, and it happens once: later starts and upgrades reuse the images on the machine and fetch only what changed. `--wait` returns when each service is running, and healthy when it has a healthcheck.
+The first start downloads the app's images from the registries named in the Compose file: about 852 MB, a few minutes on a typical home connection. `pull` does that download on its own, so you can see it. The time is the download, not Edgible, and it happens once: later starts and upgrades reuse the images on the machine and fetch only what changed. `--wait` returns when each service is running, and healthy when it has a healthcheck.
 
 ### 5. Publish
 
@@ -96,21 +96,23 @@ COMPOSE="docker compose --env-file immich/card.env -f immich/docker-compose.yml"
 curl -fsS "http://127.0.0.1:$IMMICH_PORT/api/server/config" | grep -q '"isInitialized":true' && echo done
 ```
 
-Then switch it to `none`. Until then it stays on `org`, and nothing changes for you: a signed-in session stays signed in.
+Then leave the paths in `appPaths` ([card.yml](card.yml)) to the app's own login, for its apps, now that only the accounts you made can sign in. The web pages stay on `org`.
 
 ```bash
-edgible app update immich --auth-modes none
+curl -fsSLo app-paths.py https://raw.githubusercontent.com/edgible-org/card-kit/main/app-paths.py
+python3 app-paths.py immich immich
 ```
 
 ## Verify
 
-`immich` uses `none`.
+`immich` uses `org`.
 
 ```bash
-curl -sS -o /dev/null -w '%{http_code}\n' "https://<immich hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<immich hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<immich hostname>/api/"
 ```
 
-That prints `200`: the web app, with no Edgible sign-in, as the phone apps need. In the phone app, set the server to `https://<immich hostname>` and sign in with the admin you made in Set up.
+The first prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front of the web pages. The second prints `immich`'s own answer, with no sign-in address: Set up left the paths in `appPaths` ([card.yml](card.yml)) to its own login, so clients that cannot pass Edgible's sign-in still connect. In the phone app, set the server to `https://<immich hostname>` and sign in with the admin you made in Set up.
 
 For a forgotten admin password, Immich resets it on the machine: `docker compose --env-file immich/card.env -f immich/docker-compose.yml exec immich-server immich-admin reset-admin-password`.
 

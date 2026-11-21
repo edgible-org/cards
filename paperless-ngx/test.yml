@@ -1,8 +1,8 @@
-tested: 2026-11-20
+tested: 2026-11-21
 result: pass
-card-kit: "3697822"
+card-kit: "784d6ba"
 edgible-cli: 1.4.35
-files: sha256:894dbee858036dc5
+files: sha256:06bb80c9f245cdff
 machine: darwin/arm64, docker 29.4.3
 images:
   - docker.io/valkey/valkey:9@sha256:1c2b25b09f354c66fe994733acdf12fcfd4bdf6f3bd92b88a93a70378d884056
@@ -24,8 +24,8 @@ steps:
 fingerprint: {"users": 2, "documents": 0}
 measured:
   paperless-ngx:
-    memory: 802 MB
+    memory: 675 MB
     images: 943 MB
     data: 54 MB
 duration: 4m
-by: ci
+by: person

@@ -6,7 +6,7 @@ Bookmarks scattered across browsers and phones, and pages that vanish after you 
 
 ## What
 
-One app, `linkwarden`, on `none`: its browser extension and phone app cannot get past an Edgible sign-in, and the web pages sit on the same hostname, so the app's own login is the protection. Sign-up is closed, so only the admin and the people the admin adds can get in. The admin is the first account: you make it yourself on Linkwarden's own sign-up page, which is open only while the app is behind the Edgible sign-in, in [Set up Linkwarden](#6-set-up-linkwarden). Two containers run it: Linkwarden, which also runs its page-archiving worker and a headless browser, and Postgres. Search is Linkwarden's built-in one; its optional Meilisearch index is left out.
+One app, `linkwarden`, on `org`, with its API left to Linkwarden's own login: its browser extension and phone app cannot get past an Edgible sign-in, so `/api/v1/` goes straight to Linkwarden, where each call needs a Linkwarden token or password. The web pages stay behind Edgible's sign-in, so anyone who uses them must be in your Edgible organization. Sign-up is closed, so only the admin and the people the admin adds can get in. The admin is the first account: you make it yourself on Linkwarden's own sign-up page, which is open only while all of the app, its API too, is behind the Edgible sign-in, in [Set up Linkwarden](#6-set-up-linkwarden). Two containers run it: Linkwarden, which also runs its page-archiving worker and a headless browser, and Postgres. Search is Linkwarden's built-in one; its optional Meilisearch index is left out.
 
 The links are in the volume `linkwarden-db-data`. The saved screenshots, PDFs and page copies are in `linkwarden-data`. Both are irreplaceable, and so is `linkwarden-secrets`, which holds the passwords and the key that signs sessions. Minimum recommended for the place `linkwarden`: 2 GB of memory and 4 GB of disk, on an arm64 or amd64 machine, with no GPU.
 
@@ -94,23 +94,25 @@ Then start Linkwarden again with card.env as written, which closes sign-up. Your
 docker compose --env-file linkwarden/card.env -f linkwarden/docker-compose.yml up -d --wait
 ```
 
-Then switch `linkwarden` to `none`, so its browser extension and phone app reach it. Until then it stays on `org`, and nothing changes for you: a signed-in session stays signed in.
+Then leave the paths in `appPaths` ([card.yml](card.yml)) to Linkwarden's own login, so its browser extension and phone app reach it, now that only the accounts you made can sign in. The web pages stay on `org`.
 
 ```bash
-edgible app update linkwarden --auth-modes none
+curl -fsSLo app-paths.py https://raw.githubusercontent.com/edgible-org/card-kit/main/app-paths.py
+python3 app-paths.py linkwarden linkwarden
 ```
 
 **Without Edgible:** only Publish is Edgible's. The app listens on `127.0.0.1` at the port in `card.env`, so any reverse proxy or tunnel on the machine, such as Caddy, nginx, Cloudflare Tunnel or Tailscale, can publish it instead, and sign-in is then that tool's to provide. Every other step stays the same.
 
 ## Verify
 
-`linkwarden` uses `none`.
+`linkwarden` uses `org`.
 
 ```bash
-curl -sS -o /dev/null -w '%{http_code}\n' "https://<linkwarden hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<linkwarden hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<linkwarden hostname>/api/v1/"
 ```
 
-That prints `200`. The check proves a stranger cannot sign up, and that the admin signs in. Sign in at the hostname with the account you made in Set up, save a link, and open its saved copy. Add teammates under Admin Panel. The browser extension and phone app take the same address and the same login.
+The first prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front of the web pages. The second prints `linkwarden`'s own answer, with no sign-in address: Set up left the paths in `appPaths` ([card.yml](card.yml)) to its own login, so clients that cannot pass Edgible's sign-in still connect. The check proves a stranger cannot sign up, and that the admin signs in. Sign in at the hostname with the account you made in Set up, save a link, and open its saved copy. Add teammates under Admin Panel. The browser extension and phone app take the same address and the same login.
 
 The rest of the setup is in the [Linkwarden docs](https://docs.linkwarden.app).
 

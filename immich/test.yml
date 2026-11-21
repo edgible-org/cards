@@ -1,8 +1,8 @@
 tested: 2026-11-21
 result: pass
-card-kit: "3a4a229"
+card-kit: "490271c"
 edgible-cli: 1.4.35
-files: sha256:e3aa2037e3fd3749
+files: sha256:c11ebf7cdf136b04
 machine: darwin/arm64, docker 29.4.3
 images:
   - docker.io/valkey/valkey:9@sha256:1c2b25b09f354c66fe994733acdf12fcfd4bdf6f3bd92b88a93a70378d884056
@@ -22,13 +22,14 @@ steps:
     immich: pass
   checks:
     admin-signs-in: pass
+    shared-link-opens: pass
     stranger-cannot-get-in: pass
   teardown: pass
 measured:
   immich:
-    memory: 2.4 GB
+    memory: 2.2 GB
     images: 852 MB
     data: 347 MB
-duration: 4m
+duration: 5m
 by: person
 notes: the gateway serves immich's hostname openly, so it was published as test-immich.

@@ -1,8 +1,8 @@
-tested: 2026-11-15
+tested: 2026-11-21
 result: pass
-card-kit: "021554f"
-edgible-cli: 1.4.29
-files: sha256:de99bbeef5efb0d5
+card-kit: "490271c"
+edgible-cli: 1.4.35
+files: sha256:5b8c0e536dc8c058
 machine: darwin/arm64, docker 29.4.3
 images:
   - jellyfin/jellyfin:12.2.20261005-225228@sha256:357724bf0ae27a672c7cbaa899db2d9abeb13dbd8657ccce750258a4c059d037
@@ -21,8 +21,8 @@ steps:
   teardown: pass
 measured:
   jellyfin:
-    memory: 373 MB
+    memory: 555 MB
     images: 424 MB
     data: 1 MB
 duration: 3m
-by: agent
+by: person

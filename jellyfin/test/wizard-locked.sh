@@ -1,5 +1,5 @@
 # A check for test-card, run after Verify with card.env exported and HOSTNAME_<APP> set.
-# After the switch to none, the setup wizard refuses a new admin, and the admin
+# Once setup is done and its app paths are open, the setup wizard refuses a new admin, and the admin
 # test/setup.sh made signs in over the public hostname.
 set -eu
 B="https://$HOSTNAME_JELLYFIN"; H='Content-Type: application/json'

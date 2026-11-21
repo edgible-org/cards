@@ -18,7 +18,9 @@ applications:
     subtype: existing
     published: true
     authModes: [org]
-    publicFor: ["its phone apps", "API clients"]
+    appPaths:
+      - paths: [/api/*]
+        for: Paperless's phone apps and API clients, each with a Paperless token or password
     place: paperless-ngx
 
 data:

@@ -6,7 +6,7 @@ Your files, synced and shared from a server you control, instead of a hosted fil
 
 ## What
 
-One ownCloud Infinite Scale process, with its built-in sign-in, search and storage, so there is no separate database. The hostname is open (auth mode none), because the desktop and phone apps and WebDAV clients cannot get past an Edgible sign-in; ownCloud's own login protects it, and there is no public sign-up, so only accounts the admin creates can sign in.
+One ownCloud Infinite Scale process, with its built-in sign-in, search and storage, so there is no separate database. The hostname is on `org`, with the paths the desktop and phone apps and WebDAV clients call (WebDAV, its APIs and the sign-in tokens) left to ownCloud's own login: they cannot get past an Edgible sign-in, and each call needs an ownCloud token or password. The web interface stays behind Edgible's sign-in, so anyone who uses it must be in your Edgible organization; the apps open ownCloud's sign-in in a browser, where they sign in with Edgible first. Public links stay open to anyone with the link, so people outside your organization can open a file or folder you share. There is no public sign-up, so only accounts the admin creates can sign in.
 
 The config and keys are in the volume owncloud-config, and the files and users in owncloud-data. Both matter. The admin password the card makes on the machine is only read the first time. Minimum recommended for the place `owncloud`: 1 GB of memory and 3 GB of disk, on an arm64 or amd64 machine, with no GPU.
 
@@ -71,20 +71,23 @@ edgible app create existing \
   --name owncloud \
   --port "$OWNCLOUD_PORT" \
   --protocol https \
-  --auth-modes none \
+  --auth-modes org \
   --device-id "$device_id"
+curl -fsSLo app-paths.py https://raw.githubusercontent.com/edgible-org/card-kit/main/app-paths.py
+python3 app-paths.py owncloud owncloud
 edgible app list
 ```
 
 ## Verify
 
-`owncloud` uses `none`.
+`owncloud` uses `org`.
 
 ```bash
-curl -sS -o /dev/null -w '%{http_code}\n' "https://<owncloud hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<owncloud hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<owncloud hostname>/status.php"
 ```
 
-The hostname shows ownCloud's sign-in page. Sign in as admin, with the password the card made (`docker compose --env-file owncloud/card.env -f owncloud/docker-compose.yml run --rm --no-deps owncloud-secrets show OWNCLOUD_ADMIN_PASSWORD` prints it), then add users in the admin settings; there is no public sign-up.
+The first prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front of the web pages. The second prints `owncloud`'s own answer, with no sign-in address: Publish left the paths in `appPaths` ([card.yml](card.yml)) to its own login, so clients that cannot pass Edgible's sign-in still connect. After you sign in to Edgible, the hostname shows ownCloud's sign-in page. Sign in as admin, with the password the card made (`docker compose --env-file owncloud/card.env -f owncloud/docker-compose.yml run --rm --no-deps owncloud-secrets show OWNCLOUD_ADMIN_PASSWORD` prints it), then add users in the admin settings; there is no public sign-up.
 
 The rest of the setup is in the [ownCloud Infinite Scale docs](https://doc.owncloud.com/ocis/next/).
 

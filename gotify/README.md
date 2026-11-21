@@ -6,7 +6,7 @@ Your scripts, backups and self-hosted apps need a way to tell your phone that so
 
 ## What
 
-One Gotify container with its own users, application tokens and message store, on one machine. It is published on auth mode `none`, because the Android app and your scripts cannot sign in to Edgible. Gotify's own login is on, self-registration is off, and the admin is made on the first start with a password this machine generated, so Gotify's default login never exists and nobody can claim the first visit. Each sender then gets its own application token, and each phone its own user. Notifications can show on a locked screen, so keep messages short and say only that something happened.
+One Gotify container with its own users, application tokens and message store, on one machine. It is published on auth mode `org`, with its web interface (`/`) behind Edgible's sign-in and the rest of the site left to Gotify's own login: the Android app and your scripts call its API at paths all over the site and cannot sign in to Edgible. Anyone who uses the web interface must be in your Edgible organization. Gotify's own login is on, self-registration is off, and the admin is made on the first start with a password this machine generated, so Gotify's default login never exists and nobody can claim the first visit. Each sender then gets its own application token, and each phone its own user. Notifications can show on a locked screen, so keep messages short and say only that something happened.
 
 The volume `gotify-data` holds the database (users, application tokens, messages) and uploaded images. The admin's password is in the volume `gotify-secrets`. Minimum recommended for the place `gotify`: 64 MB of memory and 1 GB of disk, on an arm64, amd64 or 32-bit arm machine, with no GPU.
 
@@ -71,8 +71,10 @@ edgible app create existing \
   --name gotify \
   --port "$GOTIFY_PORT" \
   --protocol https \
-  --auth-modes none \
+  --auth-modes org \
   --device-id "$device_id"
+curl -fsSLo app-paths.py https://raw.githubusercontent.com/edgible-org/card-kit/main/app-paths.py
+python3 app-paths.py gotify gotify
 edgible app list
 ```
 
@@ -80,13 +82,14 @@ edgible app list
 
 ## Verify
 
-`gotify` uses `none`.
+`gotify` uses `org`.
 
 ```bash
-curl -sS -o /dev/null -w '%{http_code}\n' "https://<gotify hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<gotify hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<gotify hostname>/health"
 ```
 
-Publishing with no token (`curl -d message=hi https://<address>/message`) answers `401`, and signing in as the admin in the web interface works.
+The first prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front of the web pages. The second prints `gotify`'s own answer, with no sign-in address: Publish left the paths in `appPaths` ([card.yml](card.yml)) to its own login, so clients that cannot pass Edgible's sign-in still connect. Publishing with no token (`curl -d message=hi https://<gotify hostname>/message`) answers `401`, and signing in as the admin in the web interface, after Edgible's sign-in, works.
 
 The rest of the setup is in the [Gotify docs](https://gotify.net/docs/).
 

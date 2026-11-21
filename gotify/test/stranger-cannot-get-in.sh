@@ -1,5 +1,5 @@
 #!/bin/sh
-# Gotify is public: a stranger may not make an account, publish or read, the default login
+# Its API reaches anyone (for its apps and scripts): a stranger may not make an account, publish or read, the default login
 # does not work, and the admin, with the password the card made, may.
 set -eu
 B="https://$HOSTNAME_GOTIFY"

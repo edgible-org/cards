@@ -6,7 +6,7 @@ You want private notes you can reach from any device, or shared notes for a fami
 
 ## What
 
-One Memos container, with its notes and uploads in one volume. It is published on one hostname with auth mode `none`: Memos' phone apps and the web call the same address and cannot get past an Edgible sign-in, so Memos' own login is the protection. A new Memos lets its first visitor register as the admin, and anyone register after, so the card publishes it on `org` first: only your Edgible organization reaches it while you make the admin and close sign-up. Then you open it to everyone, and the admin adds family or team members under Settings, Members. If you only use the web and need no phone app, leave it on `org` instead of opening it.
+One Memos container, with its notes and uploads in one volume. It is published on one hostname on `org`, with the paths Memos' phone apps call (`/api/v1/` and attachments under `/file/`) left to Memos' own login: the apps cannot get past an Edgible sign-in, and each of their calls needs a Memos token or password. The web pages stay behind Edgible's sign-in, so anyone who uses them must be in your Edgible organization. A new Memos lets its first visitor register as the admin, and anyone register after, so those paths open only once you have made the admin and closed sign-up, in Set up. The admin adds family or team members under Settings, Members.
 
 The notes and uploads are in the `memos-data` volume. Minimum recommended for the place `memos`: 256 MB of memory and 1 GB of disk, on an arm64 or amd64 machine, with no GPU.
 
@@ -80,7 +80,7 @@ edgible app list
 
 ### 6. Set up memos
 
-Publish put `memos` on `org`, so only your Edgible organization reaches it. Open `https://<memos hostname>`, sign in with Edgible, and finish the app's own setup there. Its first page makes the admin: a username and a password from a password manager. Then, in Settings, turn on the setting that disallows user registration, so nobody else can make an account once it is public. The check below says `done` only when both are true.
+Publish put `memos` on `org`, so only your Edgible organization reaches it. Open `https://<memos hostname>`, sign in with Edgible, and finish the app's own setup there. Its first page makes the admin: a username and a password from a password manager. Then, in Settings, turn on the setting that disallows user registration, so nobody else can make an account once its app paths are open. The check below says `done` only when both are true.
 
 When it is finished, this prints `done`:
 
@@ -92,21 +92,23 @@ COMPOSE="docker compose --env-file memos/card.env -f memos/docker-compose.yml"
 curl -fsS "http://127.0.0.1:$MEMOS_PORT/api/v1/instance/profile" | grep -q '"admin"' && curl -fsS "http://127.0.0.1:$MEMOS_PORT/api/v1/instance/settings/GENERAL" | grep -q '"disallowUserRegistration":true' && echo done
 ```
 
-Then switch it to `none`. Until then it stays on `org`, and nothing changes for you: a signed-in session stays signed in.
+Then leave the paths in `appPaths` ([card.yml](card.yml)) to the app's own login, for its apps, now that only the accounts you made can sign in. The web pages stay on `org`.
 
 ```bash
-edgible app update memos --auth-modes none
+curl -fsSLo app-paths.py https://raw.githubusercontent.com/edgible-org/card-kit/main/app-paths.py
+python3 app-paths.py memos memos
 ```
 
 ## Verify
 
-`memos` uses `none`.
+`memos` uses `org`.
 
 ```bash
-curl -sS -o /dev/null -w '%{http_code}\n' "https://<memos hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<memos hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<memos hostname>/api/v1/"
 ```
 
-Answers with Memos itself, open to the internet, so the sign-in is the protection. In the phone app, give it the same address and the admin you made in Set up.
+The first prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front of the web pages. The second prints `memos`'s own answer, with no sign-in address: Set up left the paths in `appPaths` ([card.yml](card.yml)) to its own login, so clients that cannot pass Edgible's sign-in still connect. In the phone app, give it the same address and the admin you made in Set up.
 
 The rest of the setup is in the [Memos docs](https://usememos.com/docs).
 

@@ -1,8 +1,8 @@
 tested: 2026-11-21
 result: pass
-card-kit: "3a4a229"
+card-kit: "490271c"
 edgible-cli: 1.4.35
-files: sha256:c3b52b49a2521c73
+files: sha256:19e2039b095c8a3c
 machine: darwin/arm64, docker 29.4.3
 images:
   - getmeili/meilisearch:v1.55.0@sha256:ff546679970126f8822e15d1b6a06bfbff1f2ce2e43f810cfb5258012f92de5c
@@ -26,8 +26,9 @@ steps:
 fingerprint: {"asset_files": 0}
 measured:
   karakeep:
-    memory: 1.1 GB
+    memory: 806 MB
     images: 892 MB
     data: 848 KB
 duration: 4m
 by: person
+notes: karakeep's port 3000 was taken on the test machine, so it was tested on 3001.

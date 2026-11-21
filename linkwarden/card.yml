@@ -18,8 +18,10 @@ applications:
     protocol: https
     subtype: existing
     published: true
-    authModes: [none]
-    publicFor: ["its browser extension", "its phone app"]
+    authModes: [org]
+    appPaths:
+      - paths: [/api/v1/*]
+        for: the Linkwarden browser extension and phone app, each with a Linkwarden token or password
     setup:
       behind: org
       during: {LINKWARDEN_DISABLE_REGISTRATION: "false"}

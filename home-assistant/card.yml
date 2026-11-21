@@ -11,27 +11,16 @@ metadata:
 
 applications:
   - name: home-assistant
-    what: Home Assistant's web interface, behind the Edgible sign-in
+    what: Home Assistant's web interface behind the Edgible sign-in, and its API for the companion phone apps
     from: ghcr.io/home-assistant/home-assistant:2026.10.4
     port: 8123
     protocol: https
     subtype: existing
     published: true
     authModes: [org]
-    setup:
-      behind: org
-      done: curl -fsS "http://127.0.0.1:$HOME_ASSISTANT_PORT/api/onboarding" | tr -d ' ' | grep -q '"step":"user","done":true'
-    place: home-assistant
-
-  - name: home-assistant-app
-    what: The same Home Assistant, for its companion phone apps, which have only Home Assistant's own login
-    from: ghcr.io/home-assistant/home-assistant:2026.10.4
-    port: 8124
-    protocol: https
-    subtype: existing
-    published: true
-    authModes: [none]
-    publicFor: ["the Home Assistant companion phone apps"]
+    appPaths:
+      - paths: [/api/*, /auth/token]
+        for: the companion phone apps' calls, webhooks and live updates, each with a Home Assistant token
     setup:
       behind: org
       done: curl -fsS "http://127.0.0.1:$HOME_ASSISTANT_PORT/api/onboarding" | tr -d ' ' | grep -q '"step":"user","done":true'

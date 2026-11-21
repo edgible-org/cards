@@ -1,8 +1,9 @@
 # A check for test-card, run after Verify with card.env exported and HOSTNAME_<APP> set.
-# home-assistant-app is on none, so this goes through the public hostname: a wrong password is
-# refused, the admin test/setup.sh made signs in, and a caller with no sign-in cannot read the API.
+# Home Assistant's sign-in page is behind Edgible's, so this signs in on the machine: a wrong
+# password is refused and the admin test/setup.sh made signs in. Its API, left to its own login
+# for the companion apps, refuses a caller with no token through the hostname.
 set -eu
-B="https://$HOSTNAME_HOME_ASSISTANT_APP"
+B="http://127.0.0.1:$HOME_ASSISTANT_PORT"
 password=$(cat home-assistant-test-admin-password)
 login() {
   flow=$(curl -fsS -X POST "$B/auth/login_flow" -H 'Content-Type: application/json' \
@@ -13,5 +14,5 @@ login() {
 }
 login "wrong-$password" | grep -q '"create_entry"' && { echo "a wrong password signed in"; exit 1; }
 login "$password" | grep -q '"create_entry"' || { echo "the admin could not sign in"; exit 1; }
-[ "$(curl -s -o /dev/null -w '%{http_code}' "$B/api/")" = 401 ] || { echo "the API answered without a sign-in"; exit 1; }
+[ "$(curl -s -o /dev/null -w '%{http_code}' "https://$HOSTNAME_HOME_ASSISTANT/api/")" = 401 ] || { echo "the API answered without a sign-in"; exit 1; }
 exit 0

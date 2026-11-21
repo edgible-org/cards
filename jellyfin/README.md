@@ -6,7 +6,7 @@ Films, shows and music you already own shouldn't need a subscription to watch. [
 
 ## What
 
-One app, `jellyfin`, on the place `jellyfin`, on `none`. That is deliberate: Jellyfin's TV, phone and desktop apps cannot get past an Edgible sign-in, so `org` would stop them playing. Jellyfin's own login protects it, and nobody can sign up: the admin adds everyone else. Until its setup wizard is finished, anyone who reaches Jellyfin can make the admin, so the card publishes it on `org` first: only your Edgible organization reaches the wizard, where you choose the language, your admin and password, and your libraries. Then you open it to everyone.
+One app, `jellyfin`, on the place `jellyfin`, on `org`, with the web app (`/web/`) behind Edgible's sign-in and the rest of the site left to Jellyfin's own login. Jellyfin's TV, phone and desktop apps call its API at paths all over the site and cannot get past an Edgible sign-in, so those reach Jellyfin, where each call needs a Jellyfin token or password; anyone who uses the web app must be in your Edgible organization. Nobody can sign up: the admin adds everyone else. Until its setup wizard is finished, anyone who reaches Jellyfin can make the admin, so all of it stays behind Edgible's sign-in until then: you choose the language, your admin and password, and your libraries in the wizard, then open the paths for the apps.
 
 It runs one service, `jellyfin`, from the image Jellyfin publishes, pinned to `12.2.20261005-225228`. Your media folder is mounted read-only, so Jellyfin never changes your files. Hardware transcoding is optional: on Linux with an Intel or AMD GPU, uncomment the `devices:` lines in the Compose file. Without it, Jellyfin transcodes on the CPU, or not at all when the app plays the file as it is.
 
@@ -84,7 +84,7 @@ edgible app list
 
 ### 6. Set up jellyfin
 
-Publish put `jellyfin` on `org`, so only your Edgible organization reaches it. Open `https://<jellyfin hostname>`, sign in with Edgible, and finish the app's own setup there. Jellyfin's wizard asks for the language, your admin and password, and your libraries: add one pointing at `/media`, your `JELLYFIN_MEDIA_DIR`. Keep "Allow remote connections" on, or Jellyfin turns away its own apps once it is public. Use a password manager for the password.
+Publish put `jellyfin` on `org`, so only your Edgible organization reaches it. Open `https://<jellyfin hostname>`, sign in with Edgible, and finish the app's own setup there. Jellyfin's wizard asks for the language, your admin and password, and your libraries: add one pointing at `/media`, your `JELLYFIN_MEDIA_DIR`. Keep "Allow remote connections" on, or Jellyfin turns away its own apps once their paths are open. Use a password manager for the password.
 
 When it is finished, this prints `done`:
 
@@ -96,21 +96,23 @@ COMPOSE="docker compose --env-file jellyfin/card.env -f jellyfin/docker-compose.
 curl -fsS "http://127.0.0.1:$JELLYFIN_PORT/System/Info/Public" | grep -q '"StartupWizardCompleted":true' && echo done
 ```
 
-Then switch it to `none`. Until then it stays on `org`, and nothing changes for you: a signed-in session stays signed in.
+Then leave the paths in `appPaths` ([card.yml](card.yml)) to the app's own login, for its apps, now that only the accounts you made can sign in. The web pages stay on `org`.
 
 ```bash
-edgible app update jellyfin --auth-modes none
+curl -fsSLo app-paths.py https://raw.githubusercontent.com/edgible-org/card-kit/main/app-paths.py
+python3 app-paths.py jellyfin jellyfin
 ```
 
 ## Verify
 
-`jellyfin` uses `none`.
+`jellyfin` uses `org`.
 
 ```bash
-curl -sS -o /dev/null -w '%{http_code}\n' "https://<jellyfin hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<jellyfin hostname>/web/"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<jellyfin hostname>/System/Info/Public"
 ```
 
-That prints `302`: Jellyfin sending you to its web app, with no Edgible sign-in, as its apps need. In a Jellyfin app, set the server to `https://<jellyfin hostname>` and sign in with the admin you made in Set up.
+The first prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front of the web pages. The second prints `jellyfin`'s own answer, with no sign-in address: Set up left the paths in `appPaths` ([card.yml](card.yml)) to its own login, so clients that cannot pass Edgible's sign-in still connect. In a Jellyfin app, set the server to `https://<jellyfin hostname>` and sign in with the admin you made in Set up.
 
 For a forgotten password, use "Forgot Password" on Jellyfin's sign-in page and follow what it says. When the admin is locked out and that does not work, [Jellyfin's troubleshooting page](https://jellyfin.org/docs/general/administration/troubleshooting/) unlocks it on the machine.
 

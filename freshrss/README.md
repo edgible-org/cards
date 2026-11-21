@@ -6,7 +6,7 @@ Following news and blogs in one place usually means a hosted reader such as Feed
 
 ## What
 
-One app on two hostnames, both the same FreshRSS process on port `8080`. `freshrss` is on `org`, for people reading in a browser, so only members of your Edgible organization reach its sign-in page. `freshrss-app` is on `none`, because a phone reader app calls the API and cannot pass an Edgible sign-in. The API (`/api/greader.php`) asks for the admin's name and a separate API password, and everything else on that hostname is FreshRSS's own login page, so treat it as open to the internet: keep the passwords the card made, and leave sign-up closed. Give a reader app only the `freshrss-app` address. It keeps its data in SQLite in one volume, with no separate database, and refreshes every feed twice an hour.
+One app, `freshrss`, on `org`, with its API left to FreshRSS's own login. People reading in a browser sign in with Edgible first, so only members of your Edgible organization reach the web pages. A phone or desktop reader app calls the API (`/api/greader.php`) and cannot pass an Edgible sign-in, so `/api/` goes straight to FreshRSS, which asks for the admin's name and a separate API password: keep the passwords the card made, and leave sign-up closed. It keeps its data in SQLite in one volume, with no separate database, and refreshes every feed twice an hour.
 
 Your subscriptions, articles, and settings live in the volume `freshrss-data`. The passwords are in `freshrss-secrets`. Back up both: the passwords are made once. Minimum recommended for the place `freshrss`: 256 MB of memory and 1.5 GB of disk, on an arm64 or amd64 machine, with no GPU.
 
@@ -73,13 +73,8 @@ edgible app create existing \
   --protocol https \
   --auth-modes org \
   --device-id "$device_id"
-edgible app create existing \
-  --non-interactive \
-  --name freshrss-app \
-  --port "$FRESHRSS_PORT" \
-  --protocol https \
-  --auth-modes none \
-  --device-id "$device_id"
+curl -fsSLo app-paths.py https://raw.githubusercontent.com/edgible-org/card-kit/main/app-paths.py
+python3 app-paths.py freshrss freshrss
 edgible app list
 ```
 
@@ -91,17 +86,12 @@ edgible app list
 
 ```bash
 curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<freshrss hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<freshrss hostname>/api/greader.php"
 ```
 
-That prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front. Open the hostname in a browser, sign in to Edgible, then to FreshRSS as the admin with `FRESHRSS_ADMIN_PASSWORD`. Change the password under Configuration, Profile.
+The first prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front of the web pages. The second prints `freshrss`'s own answer, with no sign-in address: Publish left the paths in `appPaths` ([card.yml](card.yml)) to its own login, so clients that cannot pass Edgible's sign-in still connect. Open the hostname in a browser, sign in to Edgible, then to FreshRSS as the admin with `FRESHRSS_ADMIN_PASSWORD`. Change the password under Configuration, Profile.
 
-`freshrss-app` uses `none`.
-
-```bash
-curl -sS -o /dev/null -w '%{http_code}\n' "https://<freshrss-app hostname>"
-```
-
-The API sign-in answers `401` for a wrong API password and a token for the right one: `curl -sS --data-urlencode "Email=admin" --data-urlencode "Passwd=<API password>" https://<freshrss-app hostname>/api/greader.php/accounts/ClientLogin` prints a line starting `Auth=`. In a reader app, choose FreshRSS or Google Reader API, give the address `https://<freshrss-app hostname>/api/greader.php`, the admin's name, and the API password.
+The API sign-in answers `401` for a wrong API password and a token for the right one: `curl -sS --data-urlencode "Email=admin" --data-urlencode "Passwd=<API password>" https://<freshrss hostname>/api/greader.php/accounts/ClientLogin` prints a line starting `Auth=`. In a reader app, choose FreshRSS or Google Reader API, give the address `https://<freshrss hostname>/api/greader.php`, the admin's name, and the API password.
 
 The rest of the setup is in the [FreshRSS docs](https://freshrss.github.io/FreshRSS/en/).
 
@@ -113,7 +103,6 @@ Four steps, in this order. Step 1 runs wherever `edgible` is logged in. Steps 2 
 
 ```bash
 edgible app delete freshrss --yes
-edgible app delete freshrss-app --yes
 ```
 
 ### 2. Stop

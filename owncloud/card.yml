@@ -16,8 +16,12 @@ applications:
     protocol: https
     subtype: existing
     published: true
-    authModes: [none]
-    publicFor: ["its desktop and phone apps", "WebDAV clients"]
+    authModes: [org]
+    appPaths:
+      - paths: [/remote.php/*, /dav/*, /ocs/*, /graph/*, /api/*, /app/*, /data/*, /status.php, /.well-known/*, /konnect/v1/token, /konnect/v1/jwks.json, /konnect/v1/userinfo]
+        for: its desktop and phone apps and WebDAV clients, each with an ownCloud token or password
+      - paths: [/s/*, /js/*, /themes/*, /icons/*, /fonts/*, /config.json, /manifest.json]
+        for: public links, so people outside your organisation can open a file or folder shared with them
     place: owncloud
 
 secrets:

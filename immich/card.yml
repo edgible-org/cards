@@ -17,8 +17,12 @@ applications:
     protocol: https
     subtype: existing
     published: true
-    authModes: [none]
-    publicFor: ["its phone apps, which back up the camera roll"]
+    authModes: [org]
+    appPaths:
+      - paths: [/api/*, /.well-known/immich]
+        for: Immich's phone apps, which back up the camera roll, each with an Immich token or password
+      - paths: [/share/*, /_app/*, /custom.css]
+        for: shared links, so people outside your organisation can open an album or photo shared with them
     setup:
       behind: org
       done: curl -fsS "http://127.0.0.1:$IMMICH_PORT/api/server/config" | grep -q '"isInitialized":true'

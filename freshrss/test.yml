@@ -1,8 +1,8 @@
-tested: 2026-11-20
+tested: 2026-11-21
 result: pass
-card-kit: "85d88c9"
+card-kit: "490271c"
 edgible-cli: 1.4.35
-files: sha256:6fea4124c674868f
+files: sha256:667505eb5612a2b8
 machine: darwin/arm64, docker 29.4.3
 images:
   - freshrss/freshrss:1.30.4@sha256:af44385229541bee24aa9148d0ff8f3b40e095373c63a2c0f74e09a27d3c59df
@@ -15,7 +15,6 @@ steps:
   publish: pass
   verify:
     freshrss: pass
-    freshrss-app: pass
   checks:
     api-signs-in: pass
     stranger-cannot-get-in: pass
@@ -24,8 +23,8 @@ steps:
 fingerprint: {"users": 1, "feeds": 1}
 measured:
   freshrss:
-    memory: 74 MB
+    memory: 26 MB
     images: 92 MB
     data: 1 MB
-duration: 3m
-by: ci
+duration: 4m
+by: person

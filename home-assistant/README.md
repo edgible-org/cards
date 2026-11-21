@@ -6,7 +6,7 @@ Smart-home gear usually comes with a vendor's app and cloud: each brand of light
 
 ## What
 
-One Home Assistant container with its configuration and database in one volume, on two hostnames of the same process. `home-assistant` is the web interface, on `org`, so only members of your Edgible organization reach it. `home-assistant-app` is on `none`, because the Home Assistant companion phone apps cannot pass an Edgible sign-in; Home Assistant's own login is the protection there. A new Home Assistant lets its first visitor make the owner, so both hostnames start on `org` while you make the owner in Home Assistant's own onboarding; then only `home-assistant-app` opens. Use `home-assistant` in a browser, and give `home-assistant-app` only to the phone apps, or leave it unpublished if you use them only at home. A one-time container writes a first `configuration.yaml` that trusts the local proxy, only when the volume has none. This card uses neither the host network nor USB devices, so automatic discovery on the home network (mDNS and the like) and a USB radio such as a Zigbee or Z-Wave stick are out of reach; devices you add by address (MQTT, Hue, Shelly, Tasmota and many more) work. Home Assistant runs as root in its image.
+One Home Assistant container with its configuration and database in one volume, on one hostname, on `org`, with its API left to Home Assistant's own login. The web interface stays behind Edgible's sign-in, so only members of your Edgible organization reach it. The companion phone apps cannot pass an Edgible sign-in for their background calls, so `/api/` (their calls, webhooks and live updates) and `/auth/token` go straight to Home Assistant, where each call needs a Home Assistant token. The apps also show the dashboards as a web page inside the app, which is behind Edgible's sign-in: sign in with Edgible there once. A new Home Assistant lets its first visitor make the owner, so the API opens only after you make the owner in Home Assistant's own onboarding. A one-time container writes a first `configuration.yaml` that trusts the local proxy, only when the volume has none. This card uses neither the host network nor USB devices, so automatic discovery on the home network (mDNS and the like) and a USB radio such as a Zigbee or Z-Wave stick are out of reach; devices you add by address (MQTT, Hue, Shelly, Tasmota and many more) work. Home Assistant runs as root in its image.
 
 The configuration, database, and every integration's settings are in the `home-assistant-config` volume. Minimum recommended for the place `home-assistant`: 1 GB of memory and 4 GB of disk, on an arm64 or amd64 machine, with no GPU.
 
@@ -73,13 +73,6 @@ edgible app create existing \
   --protocol https \
   --auth-modes org \
   --device-id "$device_id"
-edgible app create existing \
-  --non-interactive \
-  --name home-assistant-app \
-  --port "$HOME_ASSISTANT_APP_PORT" \
-  --protocol https \
-  --auth-modes org \
-  --device-id "$device_id"
 edgible app list
 ```
 
@@ -87,7 +80,7 @@ edgible app list
 
 ### 6. Set up home-assistant
 
-Publish put `home-assistant` and `home-assistant-app` on `org`, so only your Edgible organization reaches them. Open `https://<home-assistant hostname>`, sign in with Edgible, and finish the app's own setup there. Its onboarding asks for the owner's name, username and password, then your home's name, location and units, and whether to share analytics. Use a password manager for the password: once `home-assistant-app` is open, Home Assistant's login is what protects it.
+Publish put `home-assistant` on `org`, so only your Edgible organization reaches it. Open `https://<home-assistant hostname>`, sign in with Edgible, and finish the app's own setup there. Its onboarding asks for the owner's name, username and password, then your home's name, location and units, and whether to share analytics. Use a password manager for the password: once the API is open, Home Assistant's login is what protects it.
 
 When it is finished, this prints `done`:
 
@@ -99,10 +92,11 @@ COMPOSE="docker compose --env-file home-assistant/card.env -f home-assistant/doc
 curl -fsS "http://127.0.0.1:$HOME_ASSISTANT_PORT/api/onboarding" | tr -d ' ' | grep -q '"step":"user","done":true' && echo done
 ```
 
-Then switch `home-assistant-app` to `none`; `home-assistant` stays on `org`. Until then they stay on `org`, and nothing changes for you: a signed-in session stays signed in.
+Then leave the paths in `appPaths` ([card.yml](card.yml)) to the app's own login, for its apps, now that only the accounts you made can sign in. The web pages stay on `org`.
 
 ```bash
-edgible app update home-assistant-app --auth-modes none
+curl -fsSLo app-paths.py https://raw.githubusercontent.com/edgible-org/card-kit/main/app-paths.py
+python3 app-paths.py home-assistant home-assistant
 ```
 
 ## Verify
@@ -111,17 +105,10 @@ edgible app update home-assistant-app --auth-modes none
 
 ```bash
 curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<home-assistant hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<home-assistant hostname>/api/"
 ```
 
-That prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front. The first sign-in: open the address as an organization member, then sign in to Home Assistant as the owner you made in Set up.
-
-`home-assistant-app` uses `none`.
-
-```bash
-curl -sS -o /dev/null -w '%{http_code}\n' "https://<home-assistant-app hostname>"
-```
-
-The check signs in as the owner through this hostname, so it also proves a wrong password is refused. In the companion app, enter this hostname's address and sign in with the same account.
+The first prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front of the web pages. The second prints `home-assistant`'s own answer, with no sign-in address: Set up left the paths in `appPaths` ([card.yml](card.yml)) to its own login, so clients that cannot pass Edgible's sign-in still connect. The first sign-in: open the address as an organization member, then sign in to Home Assistant as the owner you made in Set up. In the companion app, enter the same address, sign in with Edgible when the app shows its page, then with the same Home Assistant account.
 
 The rest of the setup is in the [Home Assistant docs](https://www.home-assistant.io/docs/).
 
@@ -133,7 +120,6 @@ Four steps, in this order. Step 1 runs wherever `edgible` is logged in. Steps 2 
 
 ```bash
 edgible app delete home-assistant --yes
-edgible app delete home-assistant-app --yes
 ```
 
 ### 2. Stop

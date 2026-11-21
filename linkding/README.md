@@ -6,7 +6,7 @@ Bookmarks kept in one browser's sync are tied to that browser and that company. 
 
 ## What
 
-One app, `linkding`, on the place `linkding`, on `none`. That is deliberate: the linkding browser extension and the community phone apps call its API with a token, and cannot get past an Edgible sign-in, so `org` would lock them out. linkding's own login takes its place: it has no sign-up page, so the only account is the admin made on first start, named `LINKDING_ADMIN_USER`, and the admin adds anyone else under **Admin**. Logins and saves come from the public hostname, so `LD_CSRF_TRUSTED_ORIGINS` is `https://linkding.<ORG_LABEL>.<EDGIBLE_DOMAIN>`, or `LINKDING_URL` on your own domain. The image is `ghcr.io/sissbruecker/linkding:1.47.0`, from GitHub's registry, with its own healthcheck. Its `-plus` variant adds Chromium for saving pages as HTML snapshots, at several times the size.
+One app, `linkding`, on the place `linkding`, on `org`, with its API left to linkding's own login. The linkding browser extension and the community phone apps call `/api/` with a token and cannot get past an Edgible sign-in, so that path goes straight to linkding; the web pages stay behind Edgible's sign-in, so anyone who uses them must be in your Edgible organization. linkding's own login applies as well: it has no sign-up page, so the only account is the admin made on first start, named `LINKDING_ADMIN_USER`, and the admin adds anyone else under **Admin**. Logins and saves come from the hostname, so `LD_CSRF_TRUSTED_ORIGINS` is `https://linkding.<ORG_LABEL>.<EDGIBLE_DOMAIN>`, or `LINKDING_URL` on your own domain. The image is `ghcr.io/sissbruecker/linkding:1.47.0`, from GitHub's registry, with its own healthcheck. Its `-plus` variant adds Chromium for saving pages as HTML snapshots, at several times the size.
 
 Bookmarks, tags, users and settings live in the SQLite database in the volume `linkding-data`. Back it up. Minimum recommended for the place `linkding`: 384 MB of memory and 1.5 GB of disk, on an arm64, amd64 or 32-bit arm machine, with no GPU.
 
@@ -71,20 +71,23 @@ edgible app create existing \
   --name linkding \
   --port "$LINKDING_PORT" \
   --protocol https \
-  --auth-modes none \
+  --auth-modes org \
   --device-id "$device_id"
+curl -fsSLo app-paths.py https://raw.githubusercontent.com/edgible-org/card-kit/main/app-paths.py
+python3 app-paths.py linkding linkding
 edgible app list
 ```
 
 ## Verify
 
-`linkding` uses `none`.
+`linkding` uses `org`.
 
 ```bash
-curl -sS -o /dev/null -w '%{http_code}\n' "https://<linkding hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<linkding hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<linkding hostname>/api/bookmarks/"
 ```
 
-The login page, with no Edgible sign-in, as the browser extension needs. Sign in as `LINKDING_ADMIN_USER` with the password `linkding-secrets` made on the machine at first start, and change it under **Settings**. See it with:
+The first prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front of the web pages. The second prints `linkding`'s own answer, with no sign-in address: Publish left the paths in `appPaths` ([card.yml](card.yml)) to its own login, so clients that cannot pass Edgible's sign-in still connect. It answers `401`: no bookmarks without a token. After you sign in to Edgible, sign in as `LINKDING_ADMIN_USER` with the password `linkding-secrets` made on the machine at first start, and change it under **Settings**. See it with:
 
 ```bash
 docker compose --env-file linkding/card.env -f linkding/docker-compose.yml run --rm --no-deps linkding-secrets show LINKDING_ADMIN_PASSWORD

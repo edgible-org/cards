@@ -16,8 +16,14 @@ applications:
     protocol: https
     subtype: existing
     published: true
-    authModes: [none]
-    publicFor: ["its TV, phone and desktop apps"]
+    authModes: [org]
+    verifyPath: /web/
+    appPaths:
+      - paths: ["/*"]
+        for: Jellyfin's TV, phone and desktop apps, which call its API all over the site, each with a Jellyfin token or password
+    signInPaths:
+      - paths: ["/web/*"]
+        for: the web app
     setup:
       behind: org
       done: curl -fsS "http://127.0.0.1:$JELLYFIN_PORT/System/Info/Public" | grep -q '"StartupWizardCompleted":true'

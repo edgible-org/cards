@@ -1,8 +1,9 @@
 # A check for test-card, run after Verify with card.env exported and HOSTNAME_<APP> set.
-# linkding is on none, so this signs in through the public hostname, which also proves
-# LD_CSRF_TRUSTED_ORIGINS: the admin from card.env, with the password the card made, gets in, and a wrong password does not.
+# linkding's web pages are behind Edgible's sign-in, so this signs in to the app on the
+# machine: the admin from card.env, with the password the card made, gets in, and a wrong
+# password does not.
 set -eu
-B="https://$HOSTNAME_LINKDING"
+B="http://localhost:$LINKDING_PORT"
 jar=$(mktemp); trap 'rm -f "$jar"' EXIT
 login() {
   rm -f "$jar"

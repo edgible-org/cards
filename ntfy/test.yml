@@ -1,14 +1,14 @@
-tested: 2026-11-20
+tested: 2026-11-21
 result: pass
-card-kit: "3697822"
+card-kit: "490271c"
 edgible-cli: 1.4.35
-files: sha256:b174e8ff5b559ff9
+files: sha256:0209d8e2dcf3cb70
 machine: darwin/arm64, docker 29.4.3
 images:
   - binwiederhier/ntfy:v2.37.2@sha256:1875ddcf815c8a3c981d6d78c67a93452d0abba79b1ab9520b1f5f5238902bd7
   - ghcr.io/edgible-org/card-secrets:0.1.3@sha256:e10e5779a454566d09219cabf9d81c01e89010c26c92db119a96a36fee7077bc
 image_facts:
-  binwiederhier/ntfy:v2.37.2: {user: "root", healthcheck: false}
+  binwiederhier/ntfy:v2.37.2: {user: "root", archs: ["amd64", "arm", "arm64"], healthcheck: false}
 steps:
   check-env: pass
   start: pass
@@ -20,8 +20,8 @@ steps:
   teardown: pass
 measured:
   ntfy:
-    memory: 57 MB
+    memory: 22 MB
     images: 40 MB
     data: 229 KB
 duration: 3m
-by: ci
+by: person

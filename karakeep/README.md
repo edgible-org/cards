@@ -6,7 +6,7 @@ Articles to read later, links from every browser and phone, and pages that vanis
 
 ## What
 
-One app, `karakeep`, on `none`: its browser extension and phone apps cannot get past an Edgible sign-in, and the web pages sit on the same hostname, so Karakeep's own login is the protection. Sign-up is closed, so only the admin and the accounts the admin makes can get in. The admin is the first account: you make it yourself on Karakeep's own sign-up page, which is open only while the app is behind the Edgible sign-in, in [Set up Karakeep](#6-set-up-karakeep). Three containers run it: Karakeep, which also runs its page-saving worker, a headless Chrome for screenshots and page copies, and Meilisearch for search. The optional AI tagging is left off; set its key in Karakeep's own settings if you want it. If you only save from a browser at home, you can keep the hostname on `org` instead of the last step of Set up, or move it back later with `edgible app update karakeep --auth-modes org`; the extension and phone apps then stop working.
+One app, `karakeep`, on `org`, with its API left to Karakeep's own login: its browser extension and phone apps cannot get past an Edgible sign-in, so `/api/` goes straight to Karakeep, where each call needs a Karakeep API key or password. The web pages stay behind Edgible's sign-in, so anyone who uses them must be in your Edgible organization. Sign-up is closed, so only the admin and the accounts the admin makes can get in. The admin is the first account: you make it yourself on Karakeep's own sign-up page, which is open only while all of the app, its API too, is behind the Edgible sign-in, in [Set up Karakeep](#6-set-up-karakeep). Three containers run it: Karakeep, which also runs its page-saving worker, a headless Chrome for screenshots and page copies, and Meilisearch for search. The optional AI tagging is left off; set its key in Karakeep's own settings if you want it. If you only save from a browser at home, you can skip the last step of Set up; the extension and phone apps then cannot connect.
 
 The bookmarks, the account and the saved page copies are in the volume `karakeep-data`. The search index in `karakeep-meili-data` is rebuilt from it, and the keys the card made are in `karakeep-secrets`. Copy `karakeep-data` and `karakeep-secrets`. Minimum recommended for the place `karakeep`: 2 GB of memory and 4 GB of disk, on an arm64 or amd64 machine, with no GPU.
 
@@ -94,23 +94,25 @@ Then start Karakeep again with card.env as written, which closes sign-up. Your a
 docker compose --env-file karakeep/card.env -f karakeep/docker-compose.yml up -d --wait
 ```
 
-Then switch `karakeep` to `none`, so its browser extension and phone apps reach it. Until then it stays on `org`, and nothing changes for you: a signed-in session stays signed in.
+Then leave the paths in `appPaths` ([card.yml](card.yml)) to Karakeep's own login, so its browser extension and phone apps reach it, now that only the accounts you made can sign in. The web pages stay on `org`.
 
 ```bash
-edgible app update karakeep --auth-modes none
+curl -fsSLo app-paths.py https://raw.githubusercontent.com/edgible-org/card-kit/main/app-paths.py
+python3 app-paths.py karakeep karakeep
 ```
 
 **Without Edgible:** only Publish is Edgible's. The app listens on `127.0.0.1` at the port in `card.env`, so any reverse proxy or tunnel on the machine, such as Caddy, nginx, Cloudflare Tunnel or Tailscale, can publish it instead, and sign-in is then that tool's to provide. Every other step stays the same.
 
 ## Verify
 
-`karakeep` uses `none`.
+`karakeep` uses `org`.
 
 ```bash
-curl -sS -o /dev/null -w '%{http_code}\n' "https://<karakeep hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<karakeep hostname>"
+curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://<karakeep hostname>/api/"
 ```
 
-Answers with Karakeep itself, open to the internet, so the sign-in is the protection. Sign in with the account you made in Set up. In the extension or phone app, give it the same address and the same account. Add people under Admin Settings, Users.
+The first prints `302` and an `edgible.com/application-access/` address, so the org sign-in is in front of the web pages. The second prints `karakeep`'s own answer, with no sign-in address: Set up left the paths in `appPaths` ([card.yml](card.yml)) to its own login, so clients that cannot pass Edgible's sign-in still connect. Sign in with the account you made in Set up. In the extension or phone app, give it the same address and the same account. Add people under Admin Settings, Users.
 
 The rest of the setup is in the [Karakeep docs](https://docs.karakeep.com).
 

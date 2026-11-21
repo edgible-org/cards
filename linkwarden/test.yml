@@ -1,8 +1,8 @@
 tested: 2026-11-21
 result: pass
-card-kit: "c7ddbed"
+card-kit: "490271c"
 edgible-cli: 1.4.35
-files: sha256:c4d085799fa10c3c
+files: sha256:9b8b83c6b4cd952c
 machine: darwin/arm64, docker 29.4.3
 images:
   - ghcr.io/edgible-org/card-secrets:0.1.3@sha256:e10e5779a454566d09219cabf9d81c01e89010c26c92db119a96a36fee7077bc
@@ -25,8 +25,8 @@ steps:
 fingerprint: {"users": 1, "links": 0}
 measured:
   linkwarden:
-    memory: 707 MB
+    memory: 570 MB
     images: 687 MB
     data: 49 MB
-duration: 4m
+duration: 3m
 by: person

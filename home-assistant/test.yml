@@ -1,8 +1,8 @@
-tested: 2026-11-17
+tested: 2026-11-21
 result: pass
-card-kit: "7682072"
-edgible-cli: 1.4.34
-files: sha256:5a74c16b90691d55
+card-kit: "490271c"
+edgible-cli: 1.4.35
+files: sha256:47b42288c5bc627a
 machine: darwin/arm64, docker 29.4.3
 images:
   - ghcr.io/home-assistant/home-assistant:2026.11.2@sha256:493a07e8f6530fc640223f4a0a5248f20a61ca2f718bb1d31efbf08a2c5ea28f
@@ -14,10 +14,8 @@ steps:
   publish: pass
   verify:
     home-assistant: pass
-    home-assistant-app: pass
   setup:
     home-assistant: pass
-    home-assistant-app: pass
   checks:
     admin-signs-in: pass
     stranger-cannot-get-in: pass
@@ -26,8 +24,8 @@ steps:
 fingerprint: {"users": 1, "devices": 2}
 measured:
   home-assistant:
-    memory: 498 MB
+    memory: 608 MB
     images: 1.3 GB
-    data: 905 KB
-duration: 6m
-by: ci
+    data: 918 KB
+duration: 3m
+by: person

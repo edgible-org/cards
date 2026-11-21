@@ -17,8 +17,10 @@ applications:
     protocol: https
     subtype: existing
     published: true
-    authModes: [none]
-    publicFor: ["its browser extension", "its phone apps"]
+    authModes: [org]
+    appPaths:
+      - paths: [/api/*]
+        for: the Karakeep browser extension and phone apps, each with a Karakeep API key or password
     setup:
       behind: org
       during: {KARAKEEP_DISABLE_SIGNUPS: "false"}
