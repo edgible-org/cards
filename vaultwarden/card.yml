@@ -11,13 +11,21 @@ metadata:
 applications:
   - name: vaultwarden
     what: Vaultwarden, for Bitwarden apps and the web vault
-    from: vaultwarden/server:1.37.4
+    from: vaultwarden/server:1.37.5
     port: 8222
     protocol: https
     subtype: existing
     published: true
-    authModes: [none]
-    publicFor: ["the Bitwarden phone and desktop apps", "the Bitwarden browser extensions"]
+    authModes: [org]
+    appPaths:
+      - paths: [/identity/connect/token, /identity/accounts/prelogin, /identity/accounts/prelogin/password]
+        for: the Bitwarden apps' sign-in, with each person's Vaultwarden password
+      - paths: [/api/*]
+        for: the Bitwarden apps' vault calls, each with a Vaultwarden token
+      - paths: [/notifications/*, /events/*]
+        for: the Bitwarden apps' live sync and events, each with a Vaultwarden token
+      - paths: [/icons/*]
+        for: site icons in the Bitwarden apps, with no vault data
     place: vaultwarden
 
 secrets:

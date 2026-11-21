@@ -1,0 +1,41 @@
+why: >-
+  A password manager is the one service whose data you most want on a machine you own.
+  [Vaultwarden](https://github.com/dani-garcia/vaultwarden) is a small server that the official
+  Bitwarden apps, browser extensions and web vault all talk to.
+what: >-
+  One app, `vaultwarden`, on the place `vaultwarden`, on `org`, with the paths the Bitwarden apps
+  call left to Vaultwarden's own login. The phone apps, desktop apps and browser extensions cannot
+  get past an Edgible sign-in, so those paths (sign-in, `/api/`, live sync, events and site icons)
+  go straight to Vaultwarden, where each call needs the person's own Vaultwarden password or token.
+  Everything else stays behind Edgible's sign-in: the web vault, sign-up and the `/admin` page. So
+  anyone who uses the web vault, such as someone you invite, must be in your Edgible organization;
+  the apps work for everyone with an account. Vaultwarden's own protections stay on as well: every
+  vault is encrypted with its owner's master password, sign-ups are off (`SIGNUPS_ALLOWED: "false"`),
+  so nobody can create an account unless you invite them, and `/admin` needs
+  `VAULTWARDEN_ADMIN_TOKEN`.
+
+
+  Vaultwarden must know its own address, so `DOMAIN` is
+  `https://vaultwarden.<ORG_LABEL>.<EDGIBLE_DOMAIN>`, or `VAULTWARDEN_URL` on your own domain. The
+  image is `vaultwarden/server:1.37.5`, with its own healthcheck.
+
+
+  The admin token is a long random string the card makes on the machine at first start, in the
+  volume `vaultwarden-secrets`; it never leaves the machine. Vaultwarden prints a notice
+  recommending an Argon2 hash of it instead.
+data: >-
+  Vaults, attachments and settings live in the volume `vaultwarden-data`. Back it up; it holds
+  everyone's encrypted vault.
+edit: >-
+  Set `DEVICE` to a name `edgible device list` prints, and `ORG_LABEL` to the part after the app
+  name in a hostname `edgible app list` prints. There is no token to fill: Start makes it on the
+  machine.
+start: The image's own healthcheck applies.
+verify:
+  vaultwarden: >-
+    Open `https://<vaultwarden hostname>/admin`, sign in with Edgible, enter the admin token
+    (`docker compose --env-file vaultwarden/card.env -f vaultwarden/docker-compose.yml run --rm
+    --no-deps vaultwarden-secrets show VAULTWARDEN_ADMIN_TOKEN` prints it), and invite yourself under
+    **Users**. With no mail server set up, the invited address can then create its account on the
+    web vault. Then point a Bitwarden app at `https://<vaultwarden hostname>` as a self-hosted server.
+docs: [Vaultwarden, https://github.com/dani-garcia/vaultwarden/wiki]
